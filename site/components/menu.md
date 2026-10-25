@@ -51,7 +51,8 @@ bottom sheet, since a menu is a few actions next to the button that opened them.
 anchor positioning shows it in the middle of the screen, where it still works.
 
 A text button opens it the same way, or with `commandfor` and `command="toggle-popover"`. To open
-it from script, call `showPopover({ source: button })`, so it knows its anchor.
+it from script, call `showPopover({ source: button })`, so it knows its anchor; without a
+`source` it has none and sits in the screen's start corner.
 
 ## Items
 
@@ -60,7 +61,8 @@ An item is a button, or with **`href`** a link. It takes an optional **`icon`** 
 hint is for the eye: it is hidden from assistive technology, so where the app has the shortcut,
 add `aria-keyshortcuts` to the item (`aria-keyshortcuts="Control+D"`).
 
-A link closes the menu by leaving the page. An app that routes without loading a page (Livewire's
+A submit button (`type="submit"`) in a form submits it and leaves the menu open; the app closes
+it with `hidePopover()` when it is done. A link closes the menu by leaving the page. An app that routes without loading a page (Livewire's
 `wire:navigate`, a Vue or React router) closes it with `hidePopover()`.
 
 ```blade example layout="stack"
@@ -170,7 +172,7 @@ land on the menu. React takes the Vue props, with the label as `children` and th
 
 An item's `menu` names the menu a button item closes; it is only needed for an item rendered
 outside its menu's component. In Blade an item takes `MenuItemTone::Danger` as well as its value.
-Vue's menu exposes `showPopover()` and `hidePopover()`; React's takes a `ref` to the `<div>`.
+Vue's menu exposes `showPopover({ source })` and `hidePopover()`; React's takes a `ref` to the `<div>`.
 
 ```blade tab="Blade"
 <x-plinth::icon-button label="More actions" variant="ghost" popovertarget="ticket-actions">…</x-plinth::icon-button>

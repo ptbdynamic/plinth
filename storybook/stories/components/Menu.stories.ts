@@ -68,7 +68,9 @@ const meta = {
           'Give the menu an id and its button `popovertarget` with that id; the browser opens and ' +
           'closes it, closes it on Escape or a click outside, and puts focus back on the button. ' +
           'Its items are buttons and links reached with Tab, not an ARIA `menu`. Name an icon-only ' +
-          'button (`aria-label`). Tone: ' +
+          'button (`aria-label`). A shortcut hint is for the eye: add `aria-keyshortcuts` to the item ' +
+          'that has one. A link item closes the menu by leaving the page; an app that routes without ' +
+          'loading a page closes it with `hidePopover()`. Tone: ' +
           menuItemTones.map((tone) => `\`${tone}\``).join(', ') +
           '.',
       },
@@ -83,12 +85,16 @@ type Story = StoryObj<MenuArgs>;
 export const Default: Story = {};
 
 export const LabelsOnly: Story = {
-  args: { entries: [item('Rename'), item('Move'), item('Share'), 'separator', item('Leave')] },
+  args: {
+    id: 'file-actions',
+    entries: [item('Rename'), item('Move'), item('Share'), 'separator', item('Leave')],
+  },
 };
 
 /** Groups under headings, each a `role="group"` named by its heading. */
 export const Groups: Story = {
   args: {
+    id: 'ticket-move',
     entries: [
       {
         label: 'Move to',
@@ -106,6 +112,7 @@ export const Groups: Story = {
 /** Items that navigate are links; they close the menu by leaving the page. */
 export const Links: Story = {
   args: {
+    id: 'ticket-links',
     entries: [
       item('Open in a new tab', { href: '#ticket' }),
       item('Print', { href: '#print', shortcut: '⌘P' }),
@@ -117,6 +124,7 @@ export const Links: Story = {
 
 export const Disabled: Story = {
   args: {
+    id: 'ticket-disabled',
     entries: [
       item('Assign to me', { icon: sampleIcons.user }),
       item('Merge', { disabled: true }),
@@ -130,6 +138,7 @@ export const Disabled: Story = {
 /** A label longer than the menu's widest wraps, and the shortcut keeps its place. */
 export const LongLabels: Story = {
   args: {
+    id: 'ticket-share',
     entries: [
       item('Send a copy of this conversation to everyone who follows the ticket', {
         shortcut: '⌘⇧S',
@@ -142,6 +151,7 @@ export const LongLabels: Story = {
 /** More items than the screen holds: the menu scrolls and stays on screen. */
 export const ManyItems: Story = {
   args: {
+    id: 'ticket-assign',
     entries: [
       {
         label: 'Assign to',
@@ -172,22 +182,26 @@ export const ManyItems: Story = {
 
 /** A button at the end of the row: the menu flips to the button's end edge to stay on screen. */
 export const AtTheEnd: Story = {
+  args: { id: 'ticket-actions-end' },
   render: (args) => stage(opener(args.id) + menu(args), 'end'),
 };
 
 /** A button near the bottom of the screen: the menu opens above it. */
 export const Above: Story = {
+  args: { id: 'ticket-actions-above' },
   render: (args) =>
     `<div style="display: flex; align-items: flex-end; block-size: 100dvb; box-sizing: border-box; padding: var(--plinth-space-4);">${opener(args.id)}${menu(args)}</div>`,
 };
 
 /** The same menu in right-to-left text: it starts at the button's right edge. */
 export const RightToLeft: Story = {
+  args: { id: 'ticket-actions-rtl' },
   render: (args) => `<div dir="rtl">${stage(opener(args.id) + menu(args))}</div>`,
 };
 
 /** A text button can open it too, with commandfor and command="toggle-popover". */
 export const FromAButton: Story = {
+  args: { id: 'ticket-actions-button' },
   render: (args) =>
     stage(
       button(
@@ -199,6 +213,7 @@ export const FromAButton: Story = {
 
 /** The page header's ⋯ overflow, at the end of its actions. */
 export const InPageHeader: Story = {
+  args: { id: 'inbox-actions' },
   render: (args) =>
     `<div style="min-block-size: 24rem;">${pageHeader({
       heading: 'Inbox',

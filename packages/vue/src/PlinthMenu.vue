@@ -19,8 +19,8 @@ provide(menuIdKey, menuId);
 const menu = ref<HTMLElement>();
 
 defineExpose({
-  /** Opens the menu; pass the button as `source` so the menu sits next to it. */
-  showPopover: (options?: { source?: HTMLElement }) => menu.value?.showPopover(options),
+  /** Opens the menu next to `source`, the button it belongs to. */
+  showPopover: (options: { source: HTMLElement }) => menu.value?.showPopover(options),
   /** Closes the menu. */
   hidePopover: () => menu.value?.hidePopover(),
 });

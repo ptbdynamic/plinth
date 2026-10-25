@@ -2664,8 +2664,8 @@
  * The root is a <div popover="auto"> with an id (required in Blade, Vue and React), which the
  * app's button names in popovertarget (or commandfor with command="toggle-popover"). The browser
  * opens and closes it (ADR 2): the top layer, a click outside or Escape closes it, focus goes back
- * to the button, and the button reports aria-expanded. The button is the app's own (an icon
- * button or a button); it is not part of the menu.
+ * to the button, and the browser tells assistive technology whether the button's menu is
+ * expanded. The button is the app's own (an icon button or a button); it is not part of the menu.
  *
  * It is not role="menu". The ARIA menu pattern needs arrow keys and a roving focus, which would be
  * script in every layer; this is a list of buttons and links, reached with Tab, as ADR 2 decides

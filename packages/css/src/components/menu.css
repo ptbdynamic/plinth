@@ -62,7 +62,8 @@
  * screen sideways it flips to the button's end edge. It is the same at every width; a phone gets no bottom sheet,
  * since a menu is a few actions next to the button that opened them (a long list belongs in a
  * sheet). A browser without anchor positioning shows the menu in the middle of the screen, where
- * it still works; so does a menu opened by showPopover() without a source.
+ * it still works. Script opens it with showPopover({ source: button }), so it has its anchor;
+ * without a source it has none, and sits in the screen's start corner.
  *
  * Size: --plinth-menu-min-width (192px) to --plinth-menu-max-width (320px), never wider than the
  * screen less a margin, and never taller than the room it has. Items are --plinth-touch-target

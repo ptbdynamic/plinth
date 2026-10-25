@@ -2240,6 +2240,58 @@ describe('parity with the stories', () => {
   });
 });
 
+describe('menu items', () => {
+  // The parity cases pass a menu's items as markup; here each layer nests its own components, so
+  // the items take the id of the menu around them (Blade's MenuContext, Vue's inject, React's
+  // context), through a group too.
+  it('take the id of the menu around them in every layer', async () => {
+    const markup = menu({
+      id: 'ticket-actions',
+      entries: [
+        menuItemDefaults,
+        'separator',
+        { label: 'Move to', items: [{ ...menuItemDefaults, label: 'Inbox' }] },
+        { ...menuItemDefaults, label: 'Print', href: '#print' },
+      ],
+    });
+    const [blade] = renderBlade([
+      {
+        template:
+          '<x-plinth::menu id="ticket-actions"><x-plinth::menu-item>Archive</x-plinth::menu-item>' +
+          '<x-plinth::menu-separator /><x-plinth::menu-group label="Move to">' +
+          '<x-plinth::menu-item>Inbox</x-plinth::menu-item></x-plinth::menu-group>' +
+          '<x-plinth::menu-item href="#print">Print</x-plinth::menu-item></x-plinth::menu>',
+      },
+    ]);
+    const vue = await renderToString(
+      h(PlinthMenu, { id: 'ticket-actions' }, () => [
+        h(PlinthMenuItem, null, () => 'Archive'),
+        h(PlinthMenuSeparator),
+        h(PlinthMenuGroup, { label: 'Move to' }, () => [h(PlinthMenuItem, null, () => 'Inbox')]),
+        h(PlinthMenuItem, { href: '#print' }, () => 'Print'),
+      ]),
+    );
+    const react = renderToStaticMarkup(
+      createElement(
+        ReactMenu,
+        { id: 'ticket-actions' },
+        createElement(ReactMenuItem, null, 'Archive'),
+        createElement(ReactMenuSeparator),
+        createElement(
+          ReactMenuGroup,
+          { label: 'Move to' },
+          createElement(ReactMenuItem, null, 'Inbox'),
+        ),
+        createElement(ReactMenuItem, { href: '#print' }, 'Print'),
+      ),
+    );
+
+    expect(normalize(blade!)).toBe(normalize(markup));
+    expect(normalize(vue)).toBe(normalize(markup));
+    expect(normalize(react)).toBe(normalize(markup));
+  });
+});
+
 describe('the React side', () => {
   it('has a React component for every Vue one', () => {
     expect(cases.filter((c) => !reactComponents.has(c.vue.component))).toEqual([]);

@@ -73,7 +73,7 @@ const renderScript = fileURLToPath(
 );
 
 /** Renders Blade components through packages/blade/tests/render.php, in one PHP process. */
-export function renderBlade(cases: BladeCase[]): string[] {
+export function renderBlade(cases: (BladeCase | { template: string })[]): string[] {
   const output = execFileSync('php', [renderScript], {
     input: JSON.stringify(cases),
     encoding: 'utf8',
