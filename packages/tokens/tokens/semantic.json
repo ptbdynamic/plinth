@@ -290,6 +290,14 @@
     "rail": {
       "$value": "{ref.size.56}",
       "$description": "The width of an app's rail, its sidebar with icons only (56 px)."
+    },
+    "list": {
+      "$value": "{ref.size.320}",
+      "$description": "The width of a list beside its detail, in a split view (320 px)."
+    },
+    "search": {
+      "$value": "{ref.size.320}",
+      "$description": "The most width of an app bar's search button (320 px)."
     }
   },
   "layer": {

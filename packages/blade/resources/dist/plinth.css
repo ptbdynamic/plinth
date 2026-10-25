@@ -206,6 +206,8 @@
     --plinth-size-menu-max: var(--plinth-ref-size-320);
     --plinth-size-sidebar: var(--plinth-ref-size-240);
     --plinth-size-rail: var(--plinth-ref-size-56);
+    --plinth-size-list: var(--plinth-ref-size-320);
+    --plinth-size-search: var(--plinth-ref-size-320);
     --plinth-layer-base: 0;
     --plinth-layer-sticky: 100;
     --plinth-layer-overlay: 200;
@@ -225,6 +227,10 @@
     --plinth-section-menu-item-height: var(--plinth-control-lg);
     --plinth-app-nav-width: var(--plinth-size-sidebar);
     --plinth-app-nav-rail-width: var(--plinth-size-rail);
+    --plinth-app-bar-height: var(--plinth-space-14);
+    --plinth-app-bar-search-width: var(--plinth-size-search);
+    --plinth-split-view-secondary-width: var(--plinth-size-sidebar);
+    --plinth-split-view-list-width: var(--plinth-size-list);
     --plinth-menu-min-width: var(--plinth-size-menu-min);
     --plinth-menu-max-width: var(--plinth-size-menu-max);
     --plinth-text-field-trailing-size: var(--plinth-control-md);
@@ -413,6 +419,169 @@
       --plinth-duration-fast: 0ms;
       --plinth-duration-normal: 0ms;
       --plinth-duration-slow: 0ms;
+    }
+  }
+}
+
+/* app-bar.css */
+/*
+ * App bar: the bar at the top of an app, to the end side of the app nav, from 768px: a search
+ * button that opens the app's search, then the actions and the account. On a phone it is not
+ * shown, and the page header is the top bar (docs/adr/0008).
+ *
+ * <header class="plinth-app-bar">
+ *   <div class="plinth-app-bar-start">
+ *     <button type="button" class="plinth-app-bar-search" commandfor="search"
+ *       command="show-modal" aria-keyshortcuts="Control+K Meta+K">
+ *       <span class="plinth-icon" data-size="sm" data-icon="search" aria-hidden="true"><svg>…</svg></span>
+ *       <span class="plinth-app-bar-search-label">Search</span>
+ *       <kbd class="plinth-app-bar-search-shortcut" aria-hidden="true">⌘K</kbd>
+ *     </button>
+ *   </div>
+ *   <div class="plinth-app-bar-actions">
+ *     <button type="button" class="plinth-button plinth-icon-button" data-variant="ghost"
+ *       data-size="md" aria-label="Notifications">…</button>
+ *   </div>
+ *   <div class="plinth-app-bar-account">
+ *     <button type="button" class="plinth-button plinth-icon-button" … aria-label="Account">
+ *       <span class="plinth-avatar" …>…</span>
+ *     </button>
+ *   </div>
+ * </header>
+ *
+ * The root is a <header>. Outside <main>, as in the app shell, it is the page's banner landmark,
+ * so a page has one app bar. Its parts, each printed only when it has content:
+ * - the start: the search button, as wide as --plinth-app-bar-search-width (320px) at most and
+ *   narrower when the bar is. It takes the rest of the bar, so the actions keep to the end.
+ * - the actions: icon buttons such as Notifications and Help, var(--plinth-space-2) apart. Each
+ *   needs its own name (label). Two or three at most; put the rest in a menu.
+ * - the account: the account's button or menu, usually an avatar in an icon button, after the
+ *   actions on the end edge.
+ *
+ * The search button is its own component (<x-plinth::app-bar-search>, PlinthAppBarSearch), so the
+ * app's attributes and listeners land on the <button> (ADR 2). It looks like a field but is a
+ * button: it opens the app's search, a dialog with commandfor and command="show-modal", or the
+ * app's own handler. Its label is its visible text and its name. The shortcut hint (optional) is
+ * a <kbd>, hidden from assistive technology; the app says the keys in aria-keyshortcuts and
+ * listens for them itself (Ctrl K, ⌘K), since Plinth ships no script. Plinth can't tell the
+ * platform apart either, so the app picks the hint's text. Hover, where the device can hover,
+ * strengthens its edge; the focus ring sits on :focus-visible.
+ *
+ * Its height is the app-bar.height component token (56px), the page header's and the app nav
+ * brand's, so the three line up. The inline padding clears the notch on a tablet or phone held
+ * sideways. Sides are logical: in right-to-left text the search is on the right and the account
+ * on the left.
+ *
+ * The app owns the state: the app bar has none of its own. What the buttons do is the app's.
+ */
+
+@layer plinth {
+  .plinth-app-bar {
+    display: none;
+  }
+
+  .plinth-app-bar-search {
+    box-sizing: border-box;
+    display: flex;
+    gap: var(--plinth-space-2);
+    align-items: center;
+    inline-size: 100%;
+    max-inline-size: var(--plinth-app-bar-search-width);
+    min-block-size: var(--plinth-touch-target);
+    padding-block: 0;
+    padding-inline: var(--plinth-space-3) var(--plinth-space-2);
+    margin: 0;
+    font-family: inherit;
+    font-size: var(--plinth-font-size-md);
+    line-height: var(--plinth-font-leading-tight);
+    color: var(--plinth-color-text-muted);
+    text-align: start;
+    cursor: pointer;
+    background-color: var(--plinth-color-surface-sunken);
+    border: var(--plinth-border-width-thin) solid var(--plinth-color-border-strong);
+    border-radius: var(--plinth-radius-control);
+    transition:
+      border-color var(--plinth-duration-fast) var(--plinth-easing-standard),
+      color var(--plinth-duration-fast) var(--plinth-easing-standard);
+  }
+
+  .plinth-app-bar-search-label {
+    flex: 1 1 auto;
+    min-inline-size: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .plinth-app-bar-search-shortcut {
+    box-sizing: border-box;
+    flex: none;
+    min-inline-size: var(--plinth-size-icon-md);
+    padding-block: 0;
+    padding-inline: var(--plinth-space-1);
+    font-family: var(--plinth-font-family-mono);
+    font-size: var(--plinth-font-size-xs);
+    line-height: var(--plinth-font-leading-normal);
+    color: var(--plinth-color-text-muted);
+    text-align: center;
+    border: var(--plinth-border-width-thin) solid var(--plinth-color-border-strong);
+    border-radius: var(--plinth-radius-control);
+  }
+
+  @media (hover: hover) {
+    .plinth-app-bar-search:hover {
+      color: var(--plinth-color-text);
+      border-color: var(--plinth-color-text-subtle);
+    }
+  }
+
+  .plinth-app-bar-search:active {
+    color: var(--plinth-color-text);
+    border-color: var(--plinth-color-text-subtle);
+  }
+
+  .plinth-app-bar-search:focus-visible {
+    outline: var(--plinth-focus-ring-width) solid var(--plinth-color-focus-ring);
+    outline-offset: var(--plinth-focus-ring-offset);
+  }
+
+  @media (min-width: 768px) {
+    .plinth-app-bar {
+      box-sizing: border-box;
+      display: flex;
+      gap: var(--plinth-space-4);
+      align-items: center;
+      min-block-size: var(--plinth-app-bar-height);
+      padding-inline: var(--plinth-space-4) max(var(--plinth-space-4), env(safe-area-inset-right));
+      margin: 0;
+      font-family: var(--plinth-font-family-body);
+      color: var(--plinth-color-text);
+      background-color: var(--plinth-color-surface);
+      border-block-end: var(--plinth-border-width-thin) solid var(--plinth-color-divider);
+    }
+
+    .plinth-app-bar:dir(rtl) {
+      padding-inline: var(--plinth-space-4) max(var(--plinth-space-4), env(safe-area-inset-left));
+    }
+
+    .plinth-app-bar-start {
+      display: flex;
+      flex: 1 1 auto;
+      align-items: center;
+      min-inline-size: 0;
+    }
+
+    .plinth-app-bar-actions,
+    .plinth-app-bar-account {
+      display: flex;
+      flex: none;
+      gap: var(--plinth-space-2);
+      align-items: center;
+    }
+
+    /* Without the start, the actions and the account still keep to the end edge. */
+    .plinth-app-bar > :first-child:not(.plinth-app-bar-start) {
+      margin-inline-start: auto;
     }
   }
 }
@@ -747,6 +916,102 @@
   @media (min-width: 1280px) and (forced-colors: active) {
     .plinth-app-nav-count {
       border: 0;
+    }
+  }
+}
+
+/* app-shell.css */
+/*
+ * App shell: the app's frame. The app nav full height on the start side, the app bar above the
+ * content, and the content scrolling on its own (docs/adr/0008).
+ *
+ * <div class="plinth-app-shell">
+ *   <div class="plinth-app-shell-nav">
+ *     <nav class="plinth-app-nav" aria-label="Main">…</nav>
+ *   </div>
+ *   <div class="plinth-app-shell-bar">
+ *     <header class="plinth-app-bar">…</header>
+ *   </div>
+ *   <main class="plinth-app-shell-main">
+ *     <header class="plinth-page-header">…</header>
+ *     …the page…
+ *   </main>
+ * </div>
+ *
+ * The root is a <div>; its parts, in source order:
+ * - the nav (optional): the app nav (app-nav.css), on the start side, as tall as the screen.
+ * - the bar (optional): the app bar (app-bar.css), above the content and beside the nav.
+ * - the main (always there): a <main>, the page's main landmark, holding the page: its page
+ *   header, then its content (a split view, a table, a form). The landmarks (navigation, banner,
+ *   main) let a screen reader skip the nav, so the shell has no skip link of its own.
+ * Each part is printed only when it has content, the main always.
+ *
+ * By width:
+ * - phone (below 768px): the nav and the bar are not shown (the app nav and the app bar hide too)
+ *   and the page is the screen: its page header, with data-top, is the top bar, and the document
+ *   scrolls, so the browser's toolbars can collapse. The app's menu sheet, which the page
+ *   header's menu button opens, holds the nav's items; put it inside the main or after the
+ *   shell, never in the nav part, which a phone doesn't render.
+ * - from 768px: a grid as tall as the screen (100dvh). The nav fills the start column from top to
+ *   bottom; the bar sits at the top of the other column and the main below it. The main scrolls
+ *   on its own (the screen doesn't), and it is a flex column, so a split view in it fills the
+ *   height left under the page header. A page header in it sticks to the main's top: leave
+ *   --plinth-page-header-offset at 0 and data-top off.
+ *
+ * Sides are logical: in right-to-left text the nav is on the right. The shell has no states; the
+ * app's layout state lives on its parts (aria-current on the nav's items, data-pane on a split
+ * view).
+ */
+
+@layer plinth {
+  .plinth-app-shell {
+    box-sizing: border-box;
+    min-block-size: 100dvh;
+    color: var(--plinth-color-text);
+    background-color: var(--plinth-color-surface);
+  }
+
+  .plinth-app-shell-nav,
+  .plinth-app-shell-bar {
+    display: none;
+  }
+
+  .plinth-app-shell-main {
+    display: block;
+    min-inline-size: 0;
+  }
+
+  @media (min-width: 768px) {
+    .plinth-app-shell {
+      display: grid;
+      grid-template:
+        'nav bar' auto
+        'nav main' minmax(0, 1fr)
+        / auto minmax(0, 1fr);
+      block-size: 100dvh;
+      overflow: hidden;
+    }
+
+    /* A flex row, so the app nav stretches to the shell's height and keeps its own width. */
+    .plinth-app-shell-nav {
+      display: flex;
+      grid-area: nav;
+      min-block-size: 0;
+    }
+
+    .plinth-app-shell-bar {
+      display: block;
+      grid-area: bar;
+      min-inline-size: 0;
+    }
+
+    .plinth-app-shell-main {
+      display: flex;
+      flex-direction: column;
+      grid-area: main;
+      min-block-size: 0;
+      overflow-y: auto;
+      overscroll-behavior-block: contain;
     }
   }
 }
@@ -4510,6 +4775,141 @@
       border-inline-start-width: 0;
       border-start-start-radius: var(--plinth-radius-container);
       border-start-end-radius: var(--plinth-radius-container);
+    }
+  }
+}
+
+/* split-view.css */
+/*
+ * Split view: up to three panes inside a page, a secondary column (folders), a list and a
+ * detail. A phone shows one pane, the one the app names; from 768px the list and the detail sit
+ * side by side, and from 1280px the secondary column too (docs/adr/0008).
+ *
+ * <div class="plinth-split-view" data-pane="detail">
+ *   <div class="plinth-split-view-secondary">
+ *     <nav id="folders" aria-label="Folders">…</nav>
+ *   </div>
+ *   <div class="plinth-split-view-list">…the tickets…</div>
+ *   <div class="plinth-split-view-detail">
+ *     …the open ticket…
+ *     <div class="plinth-split-view-footer">…the reply box…</div>
+ *   </div>
+ * </div>
+ *
+ * The root is a <div>, and so is each pane: what goes in them brings its own semantics (a <nav>
+ * of folders, a list of links, an <article>). Its parts, in source order:
+ * - the secondary (optional): a column before the list, such as folders or filters.
+ * - the list (always there): the items, such as the tickets, each a link to its detail.
+ * - the detail (always there): the open item, or an empty state when none is open.
+ * - the footer (optional), the detail's last child: held to the detail's bottom edge as its body
+ *   scrolls, such as a reply box. On a phone it clears the home indicator (safe area).
+ *
+ * State, set by the app (the split view doesn't remember or route; the app sets these from its
+ * URL or its own state):
+ * - data-pane="list" (the default, also when missing) or "detail": the one pane a phone shows,
+ *   usually "detail" when the URL names an item. From 768px both show, whichever it says.
+ * - data-secondary="closed": collapses the secondary column, for the page header's panel
+ *   button (aria-expanded on the button, aria-controls naming the column's content). Missing
+ *   means open.
+ *
+ * By width:
+ * - phone (below 768px): one pane, the list or the detail, in the page's flow; the document
+ *   scrolls, and the footer sticks to the bottom of the screen. The secondary isn't shown: offer
+ *   its content another way (a sheet, a pill row).
+ * - from 768px: the list (--plinth-split-view-list-width, 320px) and the detail beside it, which
+ *   takes the rest.
+ * - from 1280px: the secondary column (--plinth-split-view-secondary-width, 240px) before them,
+ *   unless data-secondary="closed".
+ * From 768px the split view fills the height its parent leaves it when the parent is a flex
+ * column, as the app shell's main is (elsewhere the app gives it a height), and each pane scrolls
+ * on its own. Panes are split by dividers on their end edges; sides are logical, so in
+ * right-to-left text the list is on the right. Nothing moves, so there is no motion to reduce.
+ */
+
+@layer plinth {
+  .plinth-split-view {
+    box-sizing: border-box;
+    display: block;
+    min-inline-size: 0;
+    color: var(--plinth-color-text);
+  }
+
+  .plinth-split-view-secondary {
+    display: none;
+  }
+
+  .plinth-split-view-list {
+    min-inline-size: 0;
+  }
+
+  .plinth-split-view-detail {
+    display: flex;
+    flex-direction: column;
+    min-inline-size: 0;
+  }
+
+  /* A phone shows one pane. Kept without weight, so the wider screens below can show both. */
+  :where(.plinth-split-view[data-pane='detail']) > .plinth-split-view-list,
+  :where(.plinth-split-view:not([data-pane='detail'])) > .plinth-split-view-detail {
+    display: none;
+  }
+
+  .plinth-split-view-footer {
+    position: sticky;
+    inset-block-end: 0;
+    z-index: var(--plinth-layer-sticky);
+    box-sizing: border-box;
+    flex: none;
+    padding-block: var(--plinth-space-3) max(var(--plinth-space-3), env(safe-area-inset-bottom));
+    padding-inline: var(--plinth-space-4);
+    margin-block-start: auto;
+    background-color: var(--plinth-color-surface);
+    border-block-start: var(--plinth-border-width-thin) solid var(--plinth-color-divider);
+  }
+
+  @media (min-width: 768px) {
+    .plinth-split-view {
+      display: flex;
+      flex: 1 1 auto;
+      min-block-size: 0;
+    }
+
+    .plinth-split-view-list,
+    .plinth-split-view-detail,
+    .plinth-split-view-secondary {
+      box-sizing: border-box;
+      min-block-size: 0;
+      overflow-y: auto;
+      overscroll-behavior-block: contain;
+    }
+
+    .plinth-split-view-list {
+      display: block;
+      flex: none;
+      inline-size: var(--plinth-split-view-list-width);
+      border-inline-end: var(--plinth-border-width-thin) solid var(--plinth-color-divider);
+    }
+
+    .plinth-split-view-detail {
+      display: flex;
+      flex: 1 1 0;
+    }
+
+    .plinth-split-view-footer {
+      padding-block-end: var(--plinth-space-3);
+    }
+  }
+
+  @media (min-width: 1280px) {
+    .plinth-split-view-secondary {
+      display: block;
+      flex: none;
+      inline-size: var(--plinth-split-view-secondary-width);
+      border-inline-end: var(--plinth-border-width-thin) solid var(--plinth-color-divider);
+    }
+
+    :where(.plinth-split-view[data-secondary='closed']) > .plinth-split-view-secondary {
+      display: none;
     }
   }
 }

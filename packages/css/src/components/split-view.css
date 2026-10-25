@@ -1,0 +1,133 @@
+/*
+ * Split view: up to three panes inside a page, a secondary column (folders), a list and a
+ * detail. A phone shows one pane, the one the app names; from 768px the list and the detail sit
+ * side by side, and from 1280px the secondary column too (docs/adr/0008).
+ *
+ * <div class="plinth-split-view" data-pane="detail">
+ *   <div class="plinth-split-view-secondary">
+ *     <nav id="folders" aria-label="Folders">…</nav>
+ *   </div>
+ *   <div class="plinth-split-view-list">…the tickets…</div>
+ *   <div class="plinth-split-view-detail">
+ *     …the open ticket…
+ *     <div class="plinth-split-view-footer">…the reply box…</div>
+ *   </div>
+ * </div>
+ *
+ * The root is a <div>, and so is each pane: what goes in them brings its own semantics (a <nav>
+ * of folders, a list of links, an <article>). Its parts, in source order:
+ * - the secondary (optional): a column before the list, such as folders or filters.
+ * - the list (always there): the items, such as the tickets, each a link to its detail.
+ * - the detail (always there): the open item, or an empty state when none is open.
+ * - the footer (optional), the detail's last child: held to the detail's bottom edge as its body
+ *   scrolls, such as a reply box. On a phone it clears the home indicator (safe area).
+ *
+ * State, set by the app (the split view doesn't remember or route; the app sets these from its
+ * URL or its own state):
+ * - data-pane="list" (the default, also when missing) or "detail": the one pane a phone shows,
+ *   usually "detail" when the URL names an item. From 768px both show, whichever it says.
+ * - data-secondary="closed": collapses the secondary column, for the page header's panel
+ *   button (aria-expanded on the button, aria-controls naming the column's content). Missing
+ *   means open.
+ *
+ * By width:
+ * - phone (below 768px): one pane, the list or the detail, in the page's flow; the document
+ *   scrolls, and the footer sticks to the bottom of the screen. The secondary isn't shown: offer
+ *   its content another way (a sheet, a pill row).
+ * - from 768px: the list (--plinth-split-view-list-width, 320px) and the detail beside it, which
+ *   takes the rest.
+ * - from 1280px: the secondary column (--plinth-split-view-secondary-width, 240px) before them,
+ *   unless data-secondary="closed".
+ * From 768px the split view fills the height its parent leaves it when the parent is a flex
+ * column, as the app shell's main is (elsewhere the app gives it a height), and each pane scrolls
+ * on its own. Panes are split by dividers on their end edges; sides are logical, so in
+ * right-to-left text the list is on the right. Nothing moves, so there is no motion to reduce.
+ */
+
+@layer plinth {
+  .plinth-split-view {
+    box-sizing: border-box;
+    display: block;
+    min-inline-size: 0;
+    color: var(--plinth-color-text);
+  }
+
+  .plinth-split-view-secondary {
+    display: none;
+  }
+
+  .plinth-split-view-list {
+    min-inline-size: 0;
+  }
+
+  .plinth-split-view-detail {
+    display: flex;
+    flex-direction: column;
+    min-inline-size: 0;
+  }
+
+  /* A phone shows one pane. Kept without weight, so the wider screens below can show both. */
+  :where(.plinth-split-view[data-pane='detail']) > .plinth-split-view-list,
+  :where(.plinth-split-view:not([data-pane='detail'])) > .plinth-split-view-detail {
+    display: none;
+  }
+
+  .plinth-split-view-footer {
+    position: sticky;
+    inset-block-end: 0;
+    z-index: var(--plinth-layer-sticky);
+    box-sizing: border-box;
+    flex: none;
+    padding-block: var(--plinth-space-3) max(var(--plinth-space-3), env(safe-area-inset-bottom));
+    padding-inline: var(--plinth-space-4);
+    margin-block-start: auto;
+    background-color: var(--plinth-color-surface);
+    border-block-start: var(--plinth-border-width-thin) solid var(--plinth-color-divider);
+  }
+
+  @media (min-width: 768px) {
+    .plinth-split-view {
+      display: flex;
+      flex: 1 1 auto;
+      min-block-size: 0;
+    }
+
+    .plinth-split-view-list,
+    .plinth-split-view-detail,
+    .plinth-split-view-secondary {
+      box-sizing: border-box;
+      min-block-size: 0;
+      overflow-y: auto;
+      overscroll-behavior-block: contain;
+    }
+
+    .plinth-split-view-list {
+      display: block;
+      flex: none;
+      inline-size: var(--plinth-split-view-list-width);
+      border-inline-end: var(--plinth-border-width-thin) solid var(--plinth-color-divider);
+    }
+
+    .plinth-split-view-detail {
+      display: flex;
+      flex: 1 1 0;
+    }
+
+    .plinth-split-view-footer {
+      padding-block-end: var(--plinth-space-3);
+    }
+  }
+
+  @media (min-width: 1280px) {
+    .plinth-split-view-secondary {
+      display: block;
+      flex: none;
+      inline-size: var(--plinth-split-view-secondary-width);
+      border-inline-end: var(--plinth-border-width-thin) solid var(--plinth-color-divider);
+    }
+
+    :where(.plinth-split-view[data-secondary='closed']) > .plinth-split-view-secondary {
+      display: none;
+    }
+  }
+}

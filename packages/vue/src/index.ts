@@ -1,6 +1,9 @@
 import type { App, Plugin } from 'vue';
+import PlinthAppBar from './PlinthAppBar.vue';
+import PlinthAppBarSearch from './PlinthAppBarSearch.vue';
 import PlinthAppNav from './PlinthAppNav.vue';
 import PlinthAppNavItem from './PlinthAppNavItem.vue';
+import PlinthAppShell from './PlinthAppShell.vue';
 import PlinthAvatar from './PlinthAvatar.vue';
 import PlinthBadge from './PlinthBadge.vue';
 import PlinthButton from './PlinthButton.vue';
@@ -31,13 +34,17 @@ import PlinthPillRow from './PlinthPillRow.vue';
 import PlinthSectionMenu from './PlinthSectionMenu.vue';
 import PlinthSectionMenuItem from './PlinthSectionMenuItem.vue';
 import PlinthSheet from './PlinthSheet.vue';
+import PlinthSplitView from './PlinthSplitView.vue';
 import PlinthStat from './PlinthStat.vue';
 import PlinthTextarea from './PlinthTextarea.vue';
 import PlinthTextField from './PlinthTextField.vue';
 
 export {
+  PlinthAppBar,
+  PlinthAppBarSearch,
   PlinthAppNav,
   PlinthAppNavItem,
+  PlinthAppShell,
   PlinthAvatar,
   PlinthBadge,
   PlinthButton,
@@ -68,6 +75,7 @@ export {
   PlinthSectionMenu,
   PlinthSectionMenuItem,
   PlinthSheet,
+  PlinthSplitView,
   PlinthStat,
   PlinthTextarea,
   PlinthTextField,
@@ -129,6 +137,7 @@ export {
 export { listRowChevron } from './list-row';
 export { menuIdKey, menuItemTone, menuItemTones, type MenuItemTone } from './menu';
 export { pageHeaderLevel, pageHeaderLevels, type PageHeaderLevel } from './page-header';
+export { splitViewPane, splitViewPanes, type SplitViewPane } from './split-view';
 export { sheetCloseIcon, sheetSide, sheetSidePhone, sheetSides, type SheetSide } from './sheet';
 export { fieldDescribedBy, textFieldSize, textFieldSizes, type TextFieldSize } from './text-field';
 export { swipeToClose, useSwipeToClose } from './swipe';
@@ -138,8 +147,11 @@ export { tones, type Tone } from './tones';
 /** Registers every Plinth component globally: `app.use(Plinth)`. */
 export const Plinth: Plugin = {
   install(app: App) {
+    app.component('PlinthAppBar', PlinthAppBar);
+    app.component('PlinthAppBarSearch', PlinthAppBarSearch);
     app.component('PlinthAppNav', PlinthAppNav);
     app.component('PlinthAppNavItem', PlinthAppNavItem);
+    app.component('PlinthAppShell', PlinthAppShell);
     app.component('PlinthAvatar', PlinthAvatar);
     app.component('PlinthBadge', PlinthBadge);
     app.component('PlinthButton', PlinthButton);
@@ -170,6 +182,7 @@ export const Plinth: Plugin = {
     app.component('PlinthSectionMenu', PlinthSectionMenu);
     app.component('PlinthSectionMenuItem', PlinthSectionMenuItem);
     app.component('PlinthSheet', PlinthSheet);
+    app.component('PlinthSplitView', PlinthSplitView);
     app.component('PlinthStat', PlinthStat);
     app.component('PlinthTextarea', PlinthTextarea);
     app.component('PlinthTextField', PlinthTextField);

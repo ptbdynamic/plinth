@@ -2,8 +2,11 @@ import { createApp } from 'vue';
 import { describe, expect, it } from 'vitest';
 import {
   Plinth,
+  PlinthAppBar,
+  PlinthAppBarSearch,
   PlinthAppNav,
   PlinthAppNavItem,
+  PlinthAppShell,
   PlinthAvatar,
   PlinthBadge,
   PlinthButton,
@@ -34,6 +37,7 @@ import {
   PlinthSectionMenu,
   PlinthSectionMenuItem,
   PlinthSheet,
+  PlinthSplitView,
   PlinthStat,
   PlinthTextarea,
   PlinthTextField,
@@ -44,8 +48,11 @@ describe('the Plinth plugin', () => {
     const app = createApp({});
     app.use(Plinth);
 
+    expect(app.component('PlinthAppBar')).toBe(PlinthAppBar);
+    expect(app.component('PlinthAppBarSearch')).toBe(PlinthAppBarSearch);
     expect(app.component('PlinthAppNav')).toBe(PlinthAppNav);
     expect(app.component('PlinthAppNavItem')).toBe(PlinthAppNavItem);
+    expect(app.component('PlinthAppShell')).toBe(PlinthAppShell);
     expect(app.component('PlinthAvatar')).toBe(PlinthAvatar);
     expect(app.component('PlinthBadge')).toBe(PlinthBadge);
     expect(app.component('PlinthButton')).toBe(PlinthButton);
@@ -76,6 +83,7 @@ describe('the Plinth plugin', () => {
     expect(app.component('PlinthSectionMenu')).toBe(PlinthSectionMenu);
     expect(app.component('PlinthSectionMenuItem')).toBe(PlinthSectionMenuItem);
     expect(app.component('PlinthSheet')).toBe(PlinthSheet);
+    expect(app.component('PlinthSplitView')).toBe(PlinthSplitView);
     expect(app.component('PlinthStat')).toBe(PlinthStat);
     expect(app.component('PlinthTextarea')).toBe(PlinthTextarea);
     expect(app.component('PlinthTextField')).toBe(PlinthTextField);

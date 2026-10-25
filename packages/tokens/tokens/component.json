@@ -78,6 +78,30 @@
       "$description": "The app nav's width as a rail, from 768px to 1279px (56px): a 40px item, the room around it and the divider."
     }
   },
+  "app-bar": {
+    "height": {
+      "$type": "dimension",
+      "$value": "{space.14}",
+      "$description": "The app bar's height (56px), the page header's and the app nav brand's, so the three line up."
+    },
+    "search-width": {
+      "$type": "dimension",
+      "$value": "{size.search}",
+      "$description": "The most width of the app bar's search button (320px); it narrows with the bar."
+    }
+  },
+  "split-view": {
+    "secondary-width": {
+      "$type": "dimension",
+      "$value": "{size.sidebar}",
+      "$description": "The split view's secondary column (folders), from 1280px (240px)."
+    },
+    "list-width": {
+      "$type": "dimension",
+      "$value": "{size.list}",
+      "$description": "The split view's list beside the detail, from 768px (320px)."
+    }
+  },
   "menu": {
     "min-width": {
       "$type": "dimension",

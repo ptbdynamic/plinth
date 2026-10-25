@@ -1,0 +1,94 @@
+/*
+ * App shell: the app's frame. The app nav full height on the start side, the app bar above the
+ * content, and the content scrolling on its own (docs/adr/0008).
+ *
+ * <div class="plinth-app-shell">
+ *   <div class="plinth-app-shell-nav">
+ *     <nav class="plinth-app-nav" aria-label="Main">…</nav>
+ *   </div>
+ *   <div class="plinth-app-shell-bar">
+ *     <header class="plinth-app-bar">…</header>
+ *   </div>
+ *   <main class="plinth-app-shell-main">
+ *     <header class="plinth-page-header">…</header>
+ *     …the page…
+ *   </main>
+ * </div>
+ *
+ * The root is a <div>; its parts, in source order:
+ * - the nav (optional): the app nav (app-nav.css), on the start side, as tall as the screen.
+ * - the bar (optional): the app bar (app-bar.css), above the content and beside the nav.
+ * - the main (always there): a <main>, the page's main landmark, holding the page: its page
+ *   header, then its content (a split view, a table, a form). The landmarks (navigation, banner,
+ *   main) let a screen reader skip the nav, so the shell has no skip link of its own.
+ * Each part is printed only when it has content, the main always.
+ *
+ * By width:
+ * - phone (below 768px): the nav and the bar are not shown (the app nav and the app bar hide too)
+ *   and the page is the screen: its page header, with data-top, is the top bar, and the document
+ *   scrolls, so the browser's toolbars can collapse. The app's menu sheet, which the page
+ *   header's menu button opens, holds the nav's items; put it inside the main or after the
+ *   shell, never in the nav part, which a phone doesn't render.
+ * - from 768px: a grid as tall as the screen (100dvh). The nav fills the start column from top to
+ *   bottom; the bar sits at the top of the other column and the main below it. The main scrolls
+ *   on its own (the screen doesn't), and it is a flex column, so a split view in it fills the
+ *   height left under the page header. A page header in it sticks to the main's top: leave
+ *   --plinth-page-header-offset at 0 and data-top off.
+ *
+ * Sides are logical: in right-to-left text the nav is on the right. The shell has no states; the
+ * app's layout state lives on its parts (aria-current on the nav's items, data-pane on a split
+ * view).
+ */
+
+@layer plinth {
+  .plinth-app-shell {
+    box-sizing: border-box;
+    min-block-size: 100dvh;
+    color: var(--plinth-color-text);
+    background-color: var(--plinth-color-surface);
+  }
+
+  .plinth-app-shell-nav,
+  .plinth-app-shell-bar {
+    display: none;
+  }
+
+  .plinth-app-shell-main {
+    display: block;
+    min-inline-size: 0;
+  }
+
+  @media (min-width: 768px) {
+    .plinth-app-shell {
+      display: grid;
+      grid-template:
+        'nav bar' auto
+        'nav main' minmax(0, 1fr)
+        / auto minmax(0, 1fr);
+      block-size: 100dvh;
+      overflow: hidden;
+    }
+
+    /* A flex row, so the app nav stretches to the shell's height and keeps its own width. */
+    .plinth-app-shell-nav {
+      display: flex;
+      grid-area: nav;
+      min-block-size: 0;
+    }
+
+    .plinth-app-shell-bar {
+      display: block;
+      grid-area: bar;
+      min-inline-size: 0;
+    }
+
+    .plinth-app-shell-main {
+      display: flex;
+      flex-direction: column;
+      grid-area: main;
+      min-block-size: 0;
+      overflow-y: auto;
+      overscroll-behavior-block: contain;
+    }
+  }
+}

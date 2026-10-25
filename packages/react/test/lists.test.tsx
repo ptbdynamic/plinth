@@ -11,6 +11,7 @@ import * as vuePageHeader from '../../vue/src/page-header.ts';
 import * as vueListRow from '../../vue/src/list-row.ts';
 import * as vueMenu from '../../vue/src/menu.ts';
 import * as vueSheet from '../../vue/src/sheet.ts';
+import * as vueSplitView from '../../vue/src/split-view.ts';
 import * as vueStat from '../../vue/src/stat.ts';
 import * as vueButton from '../../vue/src/button.ts';
 import * as vueIcon from '../../vue/src/icon.ts';
@@ -70,6 +71,8 @@ import {
   sheetSide,
   sheetSidePhone,
   sheetSides,
+  splitViewPane,
+  splitViewPanes,
   sizes,
   textFieldSize,
   textFieldSizes,
@@ -102,6 +105,7 @@ describe('the shared lists', () => {
     expect(statChevron).toBe(vueStat.statChevron);
     expect(menuItemTones).toEqual(vueMenu.menuItemTones);
     expect(sheetSides).toEqual(vueSheet.sheetSides);
+    expect(splitViewPanes).toEqual(vueSplitView.splitViewPanes);
     expect(sheetCloseIcon).toBe(vueSheet.sheetCloseIcon);
     expect(dialogSidePhones).toEqual(vueDialog.dialogSidePhones);
     expect(dialogCloseIcon).toBe(vueDialog.dialogCloseIcon);
@@ -134,6 +138,8 @@ describe('the shared lists', () => {
     expect(pageHeaderLevel('h3')).toBe('h3');
     expect(sheetSide('left')).toBe('end');
     expect(sheetSide('top')).toBe('top');
+    expect(splitViewPane('side')).toBe('list');
+    expect(splitViewPane('detail')).toBe('detail');
     expect(sheetSidePhone('left')).toBeUndefined();
     expect(sheetSidePhone('bottom')).toBe('bottom');
     expect(dialogSidePhone('top')).toBe('center');
