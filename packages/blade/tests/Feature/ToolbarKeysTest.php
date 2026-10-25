@@ -33,7 +33,13 @@ it('is the Vue and React layers\' toolbarKeys, as an Alpine x-data that cleans u
             ->and(ToolbarKeys::ALPINE)->toContain($alpine ?? $step);
     }
 
-    expect(ToolbarKeys::ALPINE)->toStartWith('((toolbar) => {')->toEndWith('}')
+    expect(ToolbarKeys::ALPINE)->toStartWith('(toolbar) => {')->toEndWith('}')
         ->and(ToolbarKeys::X_DATA)->toContain('init() { this.stop = ('.ToolbarKeys::ALPINE.')(this.$el); }')
         ->toContain('destroy() { this.stop(); }');
+});
+
+it('balances its brackets, so Alpine can read it', function () {
+    foreach ([['(', ')'], ['{', '}'], ['[', ']']] as [$open, $close]) {
+        expect(substr_count(ToolbarKeys::X_DATA, $open))->toBe(substr_count(ToolbarKeys::X_DATA, $close));
+    }
 });

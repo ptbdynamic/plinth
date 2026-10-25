@@ -12,7 +12,7 @@ final class ToolbarKeys
      * focused at tabindex 0 and the rest at -1, and skips disabled controls, controls the CSS
      * hides at this width and the items of a menu inside the toolbar.
      */
-    public const ALPINE = '((toolbar) => {'
+    public const ALPINE = '(toolbar) => {'
         .' let current;'
         .' const controls = () => [...toolbar.querySelectorAll(\'button, a[href]\')].filter((control) => {'
         .' const popover = control.closest(\'[popover]\');'
