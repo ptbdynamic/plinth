@@ -164,10 +164,10 @@ return [
             ],
         ],
 
-        'header' => [
-            'name' => 'Header',
+        'page-header' => [
+            'name' => 'Page header',
             'group' => 'Navigation',
-            'description' => 'The phone shell\'s top bar: a leading action, the title and a few actions.',
+            'description' => 'The bar at the top of a page: a leading action, the heading and a few actions.',
         ],
 
         'pill-row' => [
@@ -179,7 +179,7 @@ return [
         'section-menu' => [
             'name' => 'Section menu',
             'group' => 'Navigation',
-            'description' => 'The row under the header that switches between a page\'s sections.',
+            'description' => 'The row under the page header that switches between a page\'s sections.',
         ],
 
         'dialog' => [

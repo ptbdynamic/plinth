@@ -45,8 +45,8 @@ it('passes a slot of text, or of several nodes, as a React prop', function () {
 
     expect($markup->react('<x-plinth::callout><x-slot:title>Sent</x-slot:title>Done.</x-plinth::callout>'))
         ->toBe("<PlinthCallout title=\"Sent\">\n  Done.\n</PlinthCallout>")
-        ->and($markup->react('<x-plinth::header><x-slot:actions><x-plinth::badge>A</x-plinth::badge><x-plinth::badge>B</x-plinth::badge></x-slot:actions></x-plinth::header>'))
-        ->toBe('<PlinthHeader actions={<><PlinthBadge>A</PlinthBadge><PlinthBadge>B</PlinthBadge></>} />');
+        ->and($markup->react('<x-plinth::page-header><x-slot:actions><x-plinth::badge>A</x-plinth::badge><x-plinth::badge>B</x-plinth::badge></x-slot:actions></x-plinth::page-header>'))
+        ->toBe('<PlinthPageHeader actions={<><PlinthBadge>A</PlinthBadge><PlinthBadge>B</PlinthBadge></>} />');
 });
 
 it('writes bound props as expressions and keeps HTML elements\' own names', function () {

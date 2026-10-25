@@ -10,7 +10,7 @@
             <li>
                 <figure class="site-tile">
                     <div class="site-tile-frame" inert>
-                        <x-plinth::header class="site-preview-header" title="Inbox" />
+                        <x-plinth::page-header class="site-preview-header" heading="Inbox" />
                         <ul class="site-tile-list" role="list">
                             @foreach ([
                                 ['Sam Carter', 'Can we move the review to Thursday?', null],
@@ -43,7 +43,7 @@
             <li>
                 <figure class="site-tile">
                     <div class="site-tile-frame" inert>
-                        <x-plinth::header class="site-preview-header" title="Settings" />
+                        <x-plinth::page-header class="site-preview-header" heading="Settings" />
                         <x-plinth::section-menu label="Settings">
                             <x-plinth::section-menu-item href="#" current>Profile</x-plinth::section-menu-item>
                             <x-plinth::section-menu-item href="#">Team</x-plinth::section-menu-item>
@@ -76,11 +76,11 @@
             <li>
                 <figure class="site-tile">
                     <div class="site-tile-frame" inert>
-                        <x-plinth::header class="site-preview-header" title="Billing">
+                        <x-plinth::page-header class="site-preview-header" heading="Billing">
                             <x-slot:actions>
                                 <x-plinth::button variant="secondary" size="sm">Invoices</x-plinth::button>
                             </x-slot:actions>
-                        </x-plinth::header>
+                        </x-plinth::page-header>
                         <div class="site-tile-body">
                             <x-plinth::callout tone="warning" title="Your card expires next month">
                                 <x-slot:actions>

@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/html-vite';
 import { swipeToClose } from '@ptbdynamic/plinth-vue';
 import { samplePhoto } from './avatar.ts';
-import { header } from './header.ts';
+import { pageHeader } from './page-header.ts';
 import { iconButton } from './icon-button.ts';
 import { sampleIcons } from './icons.ts';
 import { listCard } from './list-card.ts';
@@ -14,7 +14,7 @@ import '@ptbdynamic/plinth-css/src/components/list-row.css';
 import '@ptbdynamic/plinth-css/src/components/list-card.css';
 import '@ptbdynamic/plinth-css/src/components/modal.css';
 import '@ptbdynamic/plinth-css/src/components/sheet.css';
-import '@ptbdynamic/plinth-css/src/components/header.css';
+import '@ptbdynamic/plinth-css/src/components/page-header.css';
 import '@ptbdynamic/plinth-css/src/components/menu-sheet.css';
 
 const row = (title: string, extra: Partial<ListRowArgs> = {}): ListRowArgs => ({
@@ -42,7 +42,7 @@ const account = listCard({
   rows: [row('Settings'), row('Sign out', { href: undefined, button: true })],
 });
 
-/** The header's menu button: it opens the menu sheet with no script. */
+/** The page header's menu button: it opens the menu sheet with no script. */
 const opener = (id: string) =>
   iconButton(
     {
@@ -152,10 +152,12 @@ export const LongName: Story = {
   },
 };
 
-/** The header's menu button opens the menu (commandfor="menu", command="show-modal"). */
-export const FromTheHeader: Story = {
+/** The page header's menu button opens the menu (commandfor="menu", command="show-modal"). */
+export const FromThePageHeader: Story = {
   parameters: { layout: 'fullscreen' },
-  render: (args) => header({ title: 'Inbox', leading: opener(args.id) }) + menuSheet(args),
+  render: (args) =>
+    pageHeader({ heading: 'Inbox', level: 'h1', top: true, leading: opener(args.id) }) +
+    menuSheet(args),
 };
 
 /** Right-to-left text: the panel opens on the left, and the chevron points left. */

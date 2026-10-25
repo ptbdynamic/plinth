@@ -64,7 +64,7 @@ it('shows the playground as the query string asks, in every layer', function () 
 });
 
 it('has no playground for a component without choices', function () {
-    $this->get('/components/header')
+    $this->get('/components/page-header')
         ->assertOk()
         ->assertDontSee('id="playground"', false)
         ->assertSee('HTML · Blade · Vue · React<', false);

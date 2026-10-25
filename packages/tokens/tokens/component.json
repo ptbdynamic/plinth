@@ -1,9 +1,15 @@
 {
   "$description": "Component tokens: only values a project may need to tune per component.",
-  "header": {
+  "page-header": {
     "height": {
       "$type": "dimension",
-      "$value": "{space.14}"
+      "$value": "{space.14}",
+      "$description": "The page header's height, without the safe area it adds as the screen's top bar."
+    },
+    "offset": {
+      "$type": "dimension",
+      "$value": "{space.0}",
+      "$description": "Where the page header sticks: 0, or an app bar's height when the page header sits under one."
     }
   },
   "data-table": {

@@ -7,6 +7,7 @@ import * as vueDialog from '../../vue/src/dialog.ts';
 import * as vueDrawer from '../../vue/src/drawer.ts';
 import * as vueSwipe from '../../vue/src/swipe.ts';
 import * as vueHeading from '../../vue/src/heading.ts';
+import * as vuePageHeader from '../../vue/src/page-header.ts';
 import * as vueListRow from '../../vue/src/list-row.ts';
 import * as vueSheet from '../../vue/src/sheet.ts';
 import * as vueButton from '../../vue/src/button.ts';
@@ -48,6 +49,8 @@ import {
   drawerSnaps,
   headingLevel,
   headingLevels,
+  pageHeaderLevel,
+  pageHeaderLevels,
   iconSizeFor,
   iconSizes,
   listRowChevron,
@@ -76,6 +79,7 @@ describe('the shared lists', () => {
     expect(dataTableCellKinds).toEqual(vueDataTable.dataTableCellKinds);
     expect(dataTableSortIcon).toBe(vueDataTable.dataTableSortIcon);
     expect(headingLevels).toEqual(vueHeading.headingLevels);
+    expect(pageHeaderLevels).toEqual(vuePageHeader.pageHeaderLevels);
     expect(listRowChevron).toBe(vueListRow.listRowChevron);
     expect(sheetSides).toEqual(vueSheet.sheetSides);
     expect(sheetCloseIcon).toBe(vueSheet.sheetCloseIcon);
@@ -104,6 +108,8 @@ describe('the shared lists', () => {
     expect(dataTableSort('sideways')).toBe('none');
     expect(dataTableCellKind('header')).toBe('field');
     expect(headingLevel('h1')).toBe('h2');
+    expect(pageHeaderLevel('h7')).toBe('h1');
+    expect(pageHeaderLevel('h3')).toBe('h3');
     expect(sheetSide('left')).toBe('end');
     expect(sheetSide('top')).toBe('top');
     expect(sheetSidePhone('left')).toBeUndefined();

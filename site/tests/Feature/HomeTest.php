@@ -25,7 +25,7 @@ it('shows the home page with every section', function () {
 it('builds the page from Plinth components', function () {
     $this->get('/')
         ->assertSee('class="plinth-button"', false)
-        ->assertSee('class="plinth-header site-preview-header"', false)
+        ->assertSee('class="plinth-page-header site-preview-header"', false)
         ->assertSee('class="plinth-pill-row"', false)
         ->assertSee('class="plinth-list-card"', false)
         ->assertSee('class="plinth-code-block"', false)

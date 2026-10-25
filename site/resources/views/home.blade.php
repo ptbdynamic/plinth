@@ -44,7 +44,7 @@
         </div>
 
         <figure class="site-preview">
-            <figcaption class="site-visually-hidden">An invoices screen built from Plinth's components: a header, status filters and a list of recent invoices.</figcaption>
+            <figcaption class="site-visually-hidden">An invoices screen built from Plinth's components: a page header, status filters and a list of recent invoices.</figcaption>
             <div class="site-preview-app" inert>
                 <div class="site-preview-side">
                     <span class="site-meta site-preview-side-heading">Billing</span>
@@ -54,14 +54,14 @@
                     <span class="site-preview-side-item">Team</span>
                 </div>
                 <div class="site-preview-main">
-                    <x-plinth::header class="site-preview-header" title="Invoices">
+                    <x-plinth::page-header class="site-preview-header" heading="Invoices">
                         <x-slot:leading>
                             <x-plinth::icon-button label="Back" mirror><x-site.glyph name="arrow-left" /></x-plinth::icon-button>
                         </x-slot:leading>
                         <x-slot:actions>
                             <x-plinth::button size="sm">New invoice</x-plinth::button>
                         </x-slot:actions>
-                    </x-plinth::header>
+                    </x-plinth::page-header>
                     <div class="site-preview-body">
                         <x-plinth::pill-row label="Status">
                             <x-plinth::pill count="24" selected>All</x-plinth::pill>

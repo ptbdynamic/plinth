@@ -7,7 +7,7 @@ only the middle one.
 | --------- | ------------------------------- | ------------------------------------------------------ |
 | Primitive | `--plinth-ref-color-neutral-50` | semantic tokens only: the raw scales, named by value   |
 | Semantic  | `--plinth-color-surface`        | components, named by role; **projects override these** |
-| Component | `--plinth-header-height`        | one component, for values a project may tune           |
+| Component | `--plinth-page-header-height`   | one component, for values a project may tune           |
 
 ## Primitives
 
@@ -23,7 +23,7 @@ the tier a brand overrides. See [Foundations](foundations.md) for all of them.
 
 ## Component tokens
 
-A few values a project may need to tune for one component, such as the header's height, a side
+A few values a project may need to tune for one component, such as the page header's height, a side
 sheet's width or a callout's tint. They are built from semantic tokens. See
 [Component tokens](component-tokens.md).
 

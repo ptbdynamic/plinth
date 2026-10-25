@@ -14,7 +14,7 @@ function fixtureTokens(): string
         ['path' => ['color', 'surface'], 'name' => '--plinth-color-surface', 'tier' => 'semantic', 'type' => 'color', 'value' => 'oklch(0.985 0.002 260)', 'dark' => 'oklch(0.18 0.005 260)', 'ref' => 'ref.color.neutral.50', 'darkRef' => 'ref.color.neutral.950'],
         ['path' => ['space', '1'], 'name' => '--plinth-space-1', 'tier' => 'semantic', 'type' => 'dimension', 'value' => '0.25rem', 'ref' => 'ref.space.1'],
         ['path' => ['font', 'family', 'body'], 'name' => '--plinth-font-family-body', 'tier' => 'semantic', 'type' => 'fontFamily', 'value' => 'Geist'],
-        ['path' => ['header', 'height'], 'name' => '--plinth-header-height', 'tier' => 'component', 'type' => 'dimension', 'value' => '3.5rem', 'ref' => 'space.14', 'description' => 'The header\'s height.'],
+        ['path' => ['page-header', 'height'], 'name' => '--plinth-page-header-height', 'tier' => 'component', 'type' => 'dimension', 'value' => '3.5rem', 'ref' => 'space.14', 'description' => 'The page header\'s height.'],
         'not a token',
     ]));
 

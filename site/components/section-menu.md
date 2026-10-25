@@ -1,9 +1,9 @@
 # Section menu
 
-The 56px row under the header that switches between the sections of a page: _Overview_, _Tasks_,
-_Files_, _Settings_. Its items are 40px tall, quiet muted text until one is current, which takes
-the selection tint inside a 2px accent edge. It never wraps: when the items don't fit, it scrolls
-sideways.
+The 56px row under the page header that switches between the sections of a page: _Overview_,
+_Tasks_, _Files_, _Settings_. Its items are 40px tall, quiet muted text until one is current, which
+takes the selection tint inside a 2px accent edge. It never wraps: when the items don't fit, it
+scrolls sideways.
 
 ## When not to use it
 
@@ -65,19 +65,21 @@ thin one. Tab and a swipe scroll it too. When the current section starts out of 
 scrolls its item into view (`scrollIntoView({ inline: 'nearest', block: 'nearest' })`); Plinth
 ships no script for it.
 
-## Under the header
+## Under the page header
 
-The menu sits under the [header](header.md) and shares its inline padding, so their content lines
-up. Where it sits is the app's: to keep it in view as the page scrolls, make it sticky below the
-header and add its height to the app's `scroll-padding-block-start`.
+The menu sits under the [page header](page-header.md) and shares its inline padding, so their
+content lines up. Where it sits is the app's: to keep it in view as the page scrolls, make it
+sticky below the page header and add its height to the app's `scroll-padding-block-start`.
 
 ```css
 .app-sections {
     position: sticky;
-    inset-block-start: calc(var(--plinth-header-height) + env(safe-area-inset-top));
+    inset-block-start: calc(var(--plinth-page-header-offset) + var(--plinth-page-header-height));
     z-index: var(--plinth-layer-sticky);
 }
 ```
+
+Under the screen's top bar (a page header with `top`), add `env(safe-area-inset-top)` to that.
 
 The row is `--plinth-section-menu-height` (56px) and its items `--plinth-section-menu-item-height`
 (40px). An item never gets shorter than the 40px touch target, whatever the token says.

@@ -11,6 +11,7 @@ use BDynamic\Plinth\Enums\DialogSidePhone;
 use BDynamic\Plinth\Enums\DrawerDesktop;
 use BDynamic\Plinth\Enums\DrawerSnap;
 use BDynamic\Plinth\Enums\HeadingLevel;
+use BDynamic\Plinth\Enums\PageHeaderLevel;
 use BDynamic\Plinth\Enums\SheetSide;
 use BDynamic\Plinth\Enums\Size;
 use BDynamic\Plinth\Enums\Tone;
@@ -28,6 +29,7 @@ it('defaults each choice the way the components do', function () {
         ->and(ButtonVariant::default())->toBe(ButtonVariant::Primary)
         ->and(Size::default())->toBe(Size::Medium)
         ->and(HeadingLevel::default())->toBe(HeadingLevel::Two)
+        ->and(PageHeaderLevel::default())->toBe(PageHeaderLevel::One)
         ->and(SheetSide::default())->toBe(SheetSide::End)
         ->and(DialogSidePhone::default())->toBe(DialogSidePhone::Center)
         ->and(DrawerDesktop::default())->toBe(DrawerDesktop::Dialog)
@@ -85,6 +87,9 @@ it('matches the lists the Vue layer and the stories use', function () {
     }
     foreach (HeadingLevel::values() as $value) {
         expect($vue('heading.ts'))->toContain("'{$value}'");
+    }
+    foreach (PageHeaderLevel::values() as $value) {
+        expect($vue('page-header.ts'))->toContain("'{$value}'");
     }
     foreach (SheetSide::values() as $value) {
         expect($vue('sheet.ts'))->toContain("'{$value}'");
