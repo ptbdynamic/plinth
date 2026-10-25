@@ -22,6 +22,7 @@ import PlinthEmptyState from './PlinthEmptyState.vue';
 import PlinthIcon from './PlinthIcon.vue';
 import PlinthIconButton from './PlinthIconButton.vue';
 import PlinthListCard from './PlinthListCard.vue';
+import PlinthListHeader from './PlinthListHeader.vue';
 import PlinthListRow from './PlinthListRow.vue';
 import PlinthMenu from './PlinthMenu.vue';
 import PlinthMenuGroup from './PlinthMenuGroup.vue';
@@ -66,6 +67,7 @@ export {
   PlinthIcon,
   PlinthIconButton,
   PlinthListCard,
+  PlinthListHeader,
   PlinthListRow,
   PlinthMenu,
   PlinthMenuGroup,
@@ -176,6 +178,7 @@ export const Plinth: Plugin = {
     app.component('PlinthIcon', PlinthIcon);
     app.component('PlinthIconButton', PlinthIconButton);
     app.component('PlinthListCard', PlinthListCard);
+    app.component('PlinthListHeader', PlinthListHeader);
     app.component('PlinthListRow', PlinthListRow);
     app.component('PlinthMenu', PlinthMenu);
     app.component('PlinthMenuGroup', PlinthMenuGroup);

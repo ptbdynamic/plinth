@@ -148,4 +148,53 @@ describe('PlinthListRow', () => {
     expect(row.getAttribute('data-testid')).toBe('sign-out');
     expect(ref.current).toBe(row);
   });
+
+  it('is a label with a checkbox while selecting, and never navigates', () => {
+    expect(
+      renderToStaticMarkup(
+        <PlinthListRow
+          href="/tickets/1"
+          chevron
+          selectable
+          name="tickets[]"
+          value="1"
+          leading={<i>avatar</i>}
+          onSelectedChange={() => {}}
+        >
+          Cannot export
+        </PlinthListRow>,
+      ),
+    ).toBe(
+      '<label class="plinth-list-row"><span class="plinth-list-row-leading"><input type="checkbox" class="plinth-list-row-checkbox" name="tickets[]" value="1"/></span><span class="plinth-list-row-content"><span class="plinth-list-row-title">Cannot export</span></span></label>',
+    );
+  });
+
+  it('checks a selected row, disables it, and reports the change', () => {
+    const changes: boolean[] = [];
+    const { container } = render(
+      <PlinthListRow selectable selected current onSelectedChange={(on) => changes.push(on)}>
+        Ticket
+      </PlinthListRow>,
+    );
+    const checkbox = container.querySelector('input')!;
+
+    expect(container.firstElementChild!.getAttribute('aria-current')).toBe('page');
+    expect(checkbox.checked).toBe(true);
+    expect(checkbox.hasAttribute('name')).toBe(false);
+    fireEvent.click(checkbox);
+    expect(changes).toEqual([false]);
+
+    const disabled = render(
+      <PlinthListRow selectable disabled>
+        Ticket
+      </PlinthListRow>,
+    );
+    expect(disabled.container.querySelector('input')!.disabled).toBe(true);
+  });
+
+  it('ignores a change without a callback', () => {
+    const { container } = render(<PlinthListRow selectable>Ticket</PlinthListRow>);
+
+    expect(() => fireEvent.click(container.querySelector('input')!)).not.toThrow();
+  });
 });

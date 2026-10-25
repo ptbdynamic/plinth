@@ -26,6 +26,13 @@
       "$description": "The list row's minimum height; a row with a description grows past it."
     }
   },
+  "list-header": {
+    "height": {
+      "$type": "dimension",
+      "$value": "{size.row}",
+      "$description": "The list header's height (44px), a list row's, so the bar and the rows under it line up."
+    }
+  },
   "pill": {
     "height": {
       "$type": "dimension",

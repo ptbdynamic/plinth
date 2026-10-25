@@ -21,6 +21,7 @@ export { PlinthEmptyState, type PlinthEmptyStateProps } from './PlinthEmptyState
 export { PlinthIcon, type PlinthIconProps } from './PlinthIcon';
 export { PlinthIconButton, type PlinthIconButtonProps } from './PlinthIconButton';
 export { PlinthListCard, type PlinthListCardProps } from './PlinthListCard';
+export { PlinthListHeader, type PlinthListHeaderProps } from './PlinthListHeader';
 export { PlinthListRow, type PlinthListRowProps } from './PlinthListRow';
 export { PlinthMenu, type PlinthMenuProps } from './PlinthMenu';
 export { PlinthMenuGroup, type PlinthMenuGroupProps } from './PlinthMenuGroup';

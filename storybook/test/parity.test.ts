@@ -21,6 +21,7 @@ import {
   PlinthIcon,
   PlinthIconButton,
   PlinthListCard,
+  PlinthListHeader,
   PlinthListRow,
   PlinthMenu,
   PlinthMenuGroup,
@@ -65,6 +66,7 @@ import {
   PlinthIcon as ReactIcon,
   PlinthIconButton as ReactIconButton,
   PlinthListCard as ReactListCard,
+  PlinthListHeader as ReactListHeader,
   PlinthListRow as ReactListRow,
   PlinthMenu as ReactMenu,
   PlinthMenuGroup as ReactMenuGroup,
@@ -159,6 +161,8 @@ import * as iconStories from '../stories/components/Icon.stories.ts';
 import { icon, type IconArgs } from '../stories/components/icon.ts';
 import * as listCardStories from '../stories/components/ListCard.stories.ts';
 import { listCard, listCardRows, type ListCardArgs } from '../stories/components/list-card.ts';
+import * as listHeaderStories from '../stories/components/ListHeader.stories.ts';
+import { listHeader, type ListHeaderArgs } from '../stories/components/list-header.ts';
 import * as listRowStories from '../stories/components/ListRow.stories.ts';
 import { listRow, type ListRowArgs } from '../stories/components/list-row.ts';
 import * as menuStories from '../stories/components/Menu.stories.ts';
@@ -274,6 +278,7 @@ const reactComponents = new Map<Component, unknown>([
   [PlinthIcon, ReactIcon],
   [PlinthIconButton, ReactIconButton],
   [PlinthListCard, ReactListCard],
+  [PlinthListHeader, ReactListHeader],
   [PlinthListRow, ReactListRow],
   [PlinthMenu, ReactMenu],
   [PlinthMenuGroup, ReactMenuGroup],
@@ -724,6 +729,50 @@ const cases: ParityCase[] = [
   listRowCase('List row/current button', { ...listRowDefaults, button: true, current: true }),
   listRowCase('List row/current static row', { ...listRowDefaults, current: true }),
   listRowCase('List row/disabled static row', { ...listRowDefaults, disabled: true }),
+  listRowCase(
+    'List row/selectable with extra attributes',
+    { ...listRowDefaults, selectable: true, name: 'tickets[]', value: '"><b>x</b>' },
+    { class: 'ms-2', id: 'ticket-1', 'data-testid': 'ticket', 'aria-describedby': 'ticket-help' },
+  ),
+  listRowCase(
+    'List row/selectable with a clashing attribute',
+    { ...listRowDefaults, selectable: true, current: true },
+    { 'aria-current': 'step' },
+  ),
+  listRowCase('List row/selectable button', {
+    ...listRowDefaults,
+    button: true,
+    chevron: true,
+    selectable: true,
+    selected: true,
+  }),
+  ...storyArgs<ListHeaderArgs>(listHeaderStories).map(([story, args]) =>
+    listHeaderCase(`List header/${story}`, args),
+  ),
+  listHeaderCase(
+    'List header/with extra attributes',
+    { heading: 'Open', count: '12' },
+    { class: 'mb-4', id: 'open', 'data-testid': 'open', 'aria-labelledby': 'open-title' },
+  ),
+  listHeaderCase(
+    'List header/with a clashing attribute',
+    { heading: 'Open', selection: '2 selected' },
+    { class: 'is-selecting' },
+  ),
+  listHeaderCase('List header/blank count and selection', {
+    heading: 'Open',
+    count: ' ',
+    selection: '  ',
+  }),
+  listHeaderCase('List header/unknown heading level', {
+    heading: 'Open',
+    headingLevel: 'h1' as ListHeaderArgs['headingLevel'],
+  }),
+  listHeaderCase('List header/escaped text', {
+    heading: '<b>Open</b>',
+    count: '<i>12</i>',
+    selection: '<b>2</b> selected',
+  }),
   ...storyArgs<ListCardArgs>(listCardStories).map(([story, args]) =>
     listCardCase(`List card/${story}`, args),
   ),
@@ -1609,6 +1658,10 @@ function listRowCase(story: string, args: ListRowArgs, attributes: Attributes = 
     button: args.button,
     current: args.current,
     disabled: args.disabled,
+    ...(args.selectable ? { selectable: true } : {}),
+    ...(args.selected ? { selected: true } : {}),
+    ...(args.name ? { name: args.name } : {}),
+    ...(args.value ? { value: args.value } : {}),
   };
   const named = {
     ...(args.leading ? { leading: args.leading } : {}),
@@ -1619,6 +1672,26 @@ function listRowCase(story: string, args: ListRowArgs, attributes: Attributes = 
     markup: listRow(args, attributes),
     vue: { component: PlinthListRow, props: { ...props, ...attributes }, slot: args.title, named },
     blade: { component: 'list-row', props, attributes, slot: args.title, named },
+  };
+}
+
+function listHeaderCase(
+  story: string,
+  args: ListHeaderArgs,
+  attributes: Attributes = {},
+): ParityCase {
+  const props = {
+    heading: args.heading,
+    ...(args.headingLevel ? { headingLevel: args.headingLevel } : {}),
+    ...(args.count !== undefined && args.count !== null ? { count: args.count } : {}),
+    ...(args.selection !== undefined ? { selection: args.selection } : {}),
+  };
+  const named = args.actions ? { actions: args.actions } : undefined;
+  return {
+    story,
+    markup: listHeader(args, attributes),
+    vue: { component: PlinthListHeader, props: { ...props, ...attributes }, slot: '', named },
+    blade: { component: 'list-header', props, attributes, slot: '', named },
   };
 }
 
@@ -2551,12 +2624,32 @@ describe('parity with the stories', () => {
       'List row/WithAction',
       'List row/LongText',
       'List row/LongValue',
+      'List row/Selectable',
+      'List row/Selected',
+      'List row/SelectableDisabled',
+      'List row/SelectableCurrent',
       'List row/with extra attributes',
       'List row/link with extra attributes',
       'List row/with a clashing attribute',
       'List row/current button',
       'List row/current static row',
       'List row/disabled static row',
+      'List row/selectable with extra attributes',
+      'List row/selectable with a clashing attribute',
+      'List row/selectable button',
+      'List header/Default',
+      'List header/WithoutCount',
+      'List header/ZeroCount',
+      'List header/WithoutActions',
+      'List header/HeadingLevel',
+      'List header/Selecting',
+      'List header/NothingSelected',
+      'List header/LongTitle',
+      'List header/with extra attributes',
+      'List header/with a clashing attribute',
+      'List header/blank count and selection',
+      'List header/unknown heading level',
+      'List header/escaped text',
       'List card/Default',
       'List card/WithoutHeading',
       'List card/WithFooter',

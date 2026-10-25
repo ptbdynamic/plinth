@@ -6,9 +6,13 @@
     'button' => false,
     'current' => false,
     'disabled' => false,
+    'selectable' => false,
+    'selected' => false,
+    'name' => null,
+    'value' => null,
 ])
 @php
-    $tag = filled($href) ? 'a' : ($button ? 'button' : 'div');
+    $tag = $selectable ? 'label' : (filled($href) ? 'a' : ($button ? 'button' : 'div'));
     $root = array_filter([
         'class' => 'plinth-list-row',
         'type' => $tag === 'button' ? 'button' : null,
@@ -18,11 +22,24 @@
         'role' => $tag === 'a' && $disabled ? 'link' : null,
         'aria-disabled' => $tag === 'a' && $disabled ? 'true' : null,
     ], fn ($value) => $value !== null);
+    // A selectable row opens nothing, so it has no chevron.
+    $chevron = $chevron && ! $selectable;
+    // merge() escapes the values, as $attributes->merge() does on the root.
+    $checkbox = (new \Illuminate\View\ComponentAttributeBag)->merge(array_filter([
+        'type' => 'checkbox',
+        'class' => 'plinth-list-row-checkbox',
+        'name' => filled($name) ? $name : null,
+        'value' => filled($value) ? $value : null,
+        'checked' => $selected ? '' : null,
+        'disabled' => $disabled ? '' : null,
+    ], fn ($value) => $value !== null));
 @endphp
 <{{ $tag }} {{ $attributes->merge($root) }}>
-    @isset($leading)
+    @if ($selectable)
+        <span class="plinth-list-row-leading"><input {{ $checkbox }}></span>
+    @elseif (isset($leading))
         <span class="plinth-list-row-leading">{{ $leading }}</span>
-    @endisset
+    @endif
     <span class="plinth-list-row-content">
         <span class="plinth-list-row-title">{{ $slot }}</span>
         @if (filled($description))

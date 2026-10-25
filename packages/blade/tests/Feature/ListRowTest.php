@@ -78,3 +78,34 @@ it('passes extra attributes to its root', function () {
         ->toContain('wire:click="signOut"')
         ->toContain('x-on:click="open = false"');
 });
+
+it('is a label with a checkbox while selecting, and never navigates', function () {
+    $html = squish(Blade::render(<<<'BLADE'
+        <x-plinth::list-row href="/tickets/1" chevron selectable name="tickets[]" value="1" description="Alex Kim">
+            <x-slot:leading><i>avatar</i></x-slot:leading>
+            Cannot export
+        </x-plinth::list-row>
+        BLADE));
+
+    expect($html)
+        ->toStartWith('<label class="plinth-list-row"><span class="plinth-list-row-leading"><input type="checkbox" class="plinth-list-row-checkbox" name="tickets[]" value="1"></span>')
+        ->not->toContain('href')
+        ->not->toContain('avatar')
+        ->not->toContain('plinth-list-row-chevron')
+        ->toEndWith('</label>');
+});
+
+it('checks a selected row and disables its checkbox', function () {
+    $html = Blade::render('<x-plinth::list-row selectable selected disabled current>Ticket</x-plinth::list-row>');
+
+    expect($html)
+        ->toStartWith('<label class="plinth-list-row" aria-current="page">')
+        ->toContain('<input type="checkbox" class="plinth-list-row-checkbox" checked="" disabled="">')
+        ->not->toContain('name=')
+        ->not->toContain('value=');
+});
+
+it('escapes the checkbox name and value', function () {
+    expect(Blade::render('<x-plinth::list-row selectable :value="$value">Ticket</x-plinth::list-row>', ['value' => '"><b>x</b>']))
+        ->toContain('value="&quot;&gt;&lt;b&gt;x&lt;/b&gt;"');
+});

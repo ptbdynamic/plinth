@@ -11,8 +11,18 @@ interface ListRowOptions {
   button?: boolean;
   /** The row for the page being shown: aria-current="page", on a link or static row. */
   current?: boolean;
-  /** Disables a link or button row. */
+  /** Disables a link or button row, or a selectable row's checkbox. */
   disabled?: boolean;
+  /** While the app is selecting: a <label> row with a checkbox in the leading slot. */
+  selectable?: boolean;
+  /** A selectable row that is selected: its checkbox is checked. */
+  selected?: boolean;
+  /** The checkbox's name, for a form. */
+  name?: string;
+  /** The checkbox's value, for a form. */
+  value?: string;
+  /** A selectable row's checkbox changed: whether it is now checked (Vue's `update:selected`). */
+  onSelectedChange?: (selected: boolean) => void;
   /** Before the title: an icon or an avatar (Vue's `leading` slot). */
   leading?: ReactNode;
   /** After the title: a value, a badge or a switch (Vue's `trailing` slot). */
@@ -20,8 +30,9 @@ interface ListRowOptions {
 }
 
 /**
- * A link with an `href`, a `<button>` with `button`, otherwise a static `<div>`. Without an
- * `href` the root may be either, so its `ref` is an HTMLElement.
+ * A `<label>` with `selectable`, a link with an `href`, a `<button>` with `button`, otherwise a
+ * static `<div>`. Without an `href` the root may be any of the others, so its `ref` is an
+ * HTMLElement.
  */
 export type PlinthListRowProps =
   | (ListRowOptions & Omit<ComponentProps<'a'>, keyof ListRowOptions> & { href: string })
@@ -38,15 +49,22 @@ export function PlinthListRow({
   button = false,
   current = false,
   disabled = false,
+  selectable = false,
+  selected = false,
+  name,
+  value,
+  onSelectedChange,
   leading,
   trailing,
   className,
   children,
   ...rest
 }: PlinthListRowProps) {
-  const tag = href ? 'a' : button ? 'button' : 'div';
+  const tag = selectable ? 'label' : href ? 'a' : button ? 'button' : 'div';
   const Tag = tag as ElementType;
   const hasTrailing = hasContent(trailing);
+  // A selectable row opens nothing, so it has no chevron.
+  const mark = chevron && !selectable;
 
   // The project's own attributes come after Plinth's and win, as in Blade and Vue; its class is
   // added to Plinth's.
@@ -61,16 +79,31 @@ export function PlinthListRow({
       {...rest}
       className={classNames('plinth-list-row', className)}
     >
-      {hasContent(leading) ? <span className="plinth-list-row-leading">{leading}</span> : null}
+      {selectable ? (
+        <span className="plinth-list-row-leading">
+          {/* The app owns the selection: the checkbox shows `selected` and reports changes. */}
+          <input
+            type="checkbox"
+            className="plinth-list-row-checkbox"
+            name={name || undefined}
+            value={value || undefined}
+            checked={selected}
+            disabled={disabled}
+            onChange={(event) => onSelectedChange?.(event.currentTarget.checked)}
+          />
+        </span>
+      ) : hasContent(leading) ? (
+        <span className="plinth-list-row-leading">{leading}</span>
+      ) : null}
       <span className="plinth-list-row-content">
         <span className="plinth-list-row-title">{children}</span>
         {description ? <span className="plinth-list-row-description">{description}</span> : null}
       </span>
       {/* The chevron is listRowChevron (list-row.ts), written out; parity keeps the copies equal. */}
-      {hasTrailing || chevron ? (
+      {hasTrailing || mark ? (
         <span className="plinth-list-row-trailing">
           {hasTrailing ? trailing : null}
-          {chevron ? (
+          {mark ? (
             <span
               className="plinth-icon plinth-list-row-chevron"
               data-size="sm"
