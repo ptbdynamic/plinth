@@ -13,6 +13,7 @@ import PlinthDataTableRow from './PlinthDataTableRow.vue';
 import PlinthDataTableSort from './PlinthDataTableSort.vue';
 import PlinthDialog from './PlinthDialog.vue';
 import PlinthDrawer from './PlinthDrawer.vue';
+import PlinthEmptyState from './PlinthEmptyState.vue';
 import PlinthIcon from './PlinthIcon.vue';
 import PlinthIconButton from './PlinthIconButton.vue';
 import PlinthListCard from './PlinthListCard.vue';
@@ -47,6 +48,7 @@ export {
   PlinthDataTableSort,
   PlinthDialog,
   PlinthDrawer,
+  PlinthEmptyState,
   PlinthIcon,
   PlinthIconButton,
   PlinthListCard,
@@ -137,6 +139,7 @@ export const Plinth: Plugin = {
     app.component('PlinthDataTableSort', PlinthDataTableSort);
     app.component('PlinthDialog', PlinthDialog);
     app.component('PlinthDrawer', PlinthDrawer);
+    app.component('PlinthEmptyState', PlinthEmptyState);
     app.component('PlinthIcon', PlinthIcon);
     app.component('PlinthIconButton', PlinthIconButton);
     app.component('PlinthListCard', PlinthListCard);

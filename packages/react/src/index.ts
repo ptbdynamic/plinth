@@ -12,6 +12,7 @@ export { PlinthDataTableRow, type PlinthDataTableRowProps } from './PlinthDataTa
 export { PlinthDataTableSort, type PlinthDataTableSortProps } from './PlinthDataTableSort';
 export { PlinthDialog, type PlinthDialogProps } from './PlinthDialog';
 export { PlinthDrawer, type PlinthDrawerProps } from './PlinthDrawer';
+export { PlinthEmptyState, type PlinthEmptyStateProps } from './PlinthEmptyState';
 export { PlinthIcon, type PlinthIconProps } from './PlinthIcon';
 export { PlinthIconButton, type PlinthIconButtonProps } from './PlinthIconButton';
 export { PlinthListCard, type PlinthListCardProps } from './PlinthListCard';

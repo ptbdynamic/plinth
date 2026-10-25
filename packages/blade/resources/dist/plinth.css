@@ -2249,6 +2249,121 @@
   }
 }
 
+/* empty-state.css */
+/*
+ * Empty state: a calm, centred message for a screen or a section with nothing to show yet, such
+ * as "No runs yet", often with one action.
+ *
+ * <div class="plinth-empty-state">
+ *   <div class="plinth-empty-state-icon">
+ *     <span class="plinth-icon" data-size="md" aria-hidden="true"><svg>…</svg></span>
+ *   </div>
+ *   <h2 class="plinth-empty-state-heading">No runs yet</h2>
+ *   <p class="plinth-empty-state-description">Runs show here once a workflow starts.</p>
+ *   <div class="plinth-empty-state-actions">
+ *     <a class="plinth-button" href="/runs/new" data-variant="primary" data-size="md">Start a run</a>
+ *   </div>
+ * </div>
+ *
+ * Parts:
+ * - the icon (optional): the project's own icon, decorative, in a round well. Printed only when
+ *   it has content. It needs icon.css.
+ * - the heading (required): what is empty, in plain words. An <h2> by default; pick the level
+ *   that fits the page (heading-level h2 to h6 in Blade, headingLevel in Vue and React). The
+ *   level doesn't change the look.
+ * - the description (optional): why it is empty, or what fills it.
+ * - the actions (optional): usually one button or link, at most two. Printed only when they
+ *   have content. A button needs button.css.
+ *
+ * Variant (the app picks it):
+ * - plain (the default): no surface of its own, for inside a card, a list card or a panel that
+ *   already has one.
+ * - data-framed: its own raised surface with a hairline, for a page section that has nothing
+ *   else around it.
+ *
+ * It fills the width it is given and centres its content in a column of reading width. Long
+ * words wrap. Inside a data table's empty cell (plinth-data-table-empty-cell) it drops its own
+ * padding, as the cell already has it, so a table's empty state and a page's look alike.
+ *
+ * The empty state has no state of its own: the app decides when to show it. It is not a live
+ * region; when it replaces results as the user types (a filter or a search with no match), the
+ * app adds role="status" to it, so screen readers announce it.
+ */
+
+@layer plinth {
+  .plinth-empty-state {
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-inline-size: 0;
+    padding-block: var(--plinth-space-8);
+    padding-inline: var(--plinth-space-4);
+    font-family: var(--plinth-font-family-body);
+    color: var(--plinth-color-text);
+    text-align: center;
+  }
+
+  .plinth-empty-state[data-framed] {
+    background-color: var(--plinth-color-surface-raised);
+    border: var(--plinth-border-width-thin) solid var(--plinth-color-border);
+    border-radius: var(--plinth-radius-container);
+  }
+
+  .plinth-data-table-empty-cell > .plinth-empty-state {
+    padding: 0;
+  }
+
+  .plinth-empty-state-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    inline-size: var(--plinth-control-lg);
+    block-size: var(--plinth-control-lg);
+    margin-block-end: var(--plinth-space-4);
+    color: var(--plinth-color-text-muted);
+    background-color: var(--plinth-color-surface-sunken);
+    border: var(--plinth-border-width-thin) solid var(--plinth-color-border);
+    border-radius: var(--plinth-radius-pill);
+  }
+
+  .plinth-empty-state-heading {
+    max-inline-size: 40ch;
+    margin: 0;
+    font-size: var(--plinth-font-size-lg);
+    font-weight: var(--plinth-font-weight-semibold);
+    line-height: var(--plinth-font-leading-normal);
+    letter-spacing: var(--plinth-font-tracking-snug);
+    overflow-wrap: anywhere;
+  }
+
+  .plinth-empty-state-description {
+    max-inline-size: 48ch;
+    margin: 0;
+    margin-block-start: var(--plinth-space-1);
+    font-size: var(--plinth-font-size-md);
+    line-height: var(--plinth-font-leading-normal);
+    color: var(--plinth-color-text-muted);
+    overflow-wrap: anywhere;
+  }
+
+  .plinth-empty-state-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--plinth-space-2);
+    justify-content: center;
+    margin-block-start: var(--plinth-space-5);
+  }
+
+  /* From 768px: a little more room around a framed or page-level message. */
+  @media (min-width: 768px) {
+    .plinth-empty-state {
+      padding-block: var(--plinth-space-12);
+      padding-inline: var(--plinth-space-6);
+    }
+  }
+}
+
 /* icon.css */
 /*
  * Icon: a project's own SVG, sized by Plinth.
