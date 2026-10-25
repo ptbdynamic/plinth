@@ -379,11 +379,31 @@ describe('Tailwind', () => {
     expect(theme).toContain('--text-sm: var(--plinth-font-size-sm);');
     expect(theme).toContain('--font-sans: var(--plinth-font-family-body);');
     expect(theme).toContain('--shadow-1: var(--plinth-elevation-1);');
-    expect(theme).toContain('--breakpoint-md: var(--plinth-breakpoint-md);');
     expect(theme).not.toContain('--plinth-ref-');
     for (const t of tier('semantic').filter((t) => t.type === 'color')) {
       expect(theme).toContain(`--color-${t.path[1]}: ${t.cssVar};`);
     }
+  });
+
+  it('emits breakpoints as literal values, since var() is invalid in media queries', () => {
+    expect(theme).toContain('--breakpoint-md: 768px;');
+    expect(theme).toContain('--breakpoint-lg: 1280px;');
+    const lines = theme.split('\n').filter((line) => line.includes('--breakpoint-'));
+    expect(lines).toHaveLength(2);
+    expect(lines.filter((line) => line.includes('var('))).toEqual([]);
+  });
+
+  it('compiles responsive variants to media queries', async () => {
+    const base = path.dirname(createRequire(import.meta.url).resolve('tailwindcss/package.json'));
+    const compiler = await compile(
+      `@import 'tailwindcss/theme';\n@import 'tailwindcss/utilities';\n${theme}`,
+      { base, onDependency: () => {} },
+    );
+    const out = compiler.build(['md:p-8', 'lg:p-8', 'container']);
+
+    expect(out).toMatch(/@media \(width >= 768px\)\s*\{[^@]*\.md\\:p-8/);
+    expect(out).toMatch(/@media \(width >= 1280px\)\s*\{[^@]*\.lg\\:p-8/);
+    expect(out).not.toContain('@media (width >= var(');
   });
 
   it('gives a project the utilities, built by Tailwind itself', async () => {
