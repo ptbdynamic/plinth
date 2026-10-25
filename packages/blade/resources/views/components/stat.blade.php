@@ -1,6 +1,6 @@
 {{-- Markup contract: packages/css/src/components/stat.css --}}
 @props([
-    'label' => '',
+    'label',
     'value' => null,
     'description' => null,
     'tone' => 'neutral',

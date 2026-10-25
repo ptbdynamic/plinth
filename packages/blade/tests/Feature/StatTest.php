@@ -81,3 +81,9 @@ it('keeps extra classes and attributes, and the project wins a clash', function 
         ->toContain('data-tone="warning"')
         ->not->toContain('data-tone="neutral"');
 });
+
+it('is no link with a blank href', function () {
+    expect(Blade::render('<x-plinth::stat label="Runs today" value="12" href=" " />'))
+        ->toStartWith('<div class="plinth-stat"')
+        ->not->toContain('href');
+});

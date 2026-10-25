@@ -426,11 +426,16 @@ const cases: ParityCase[] = [
       'aria-describedby': 'runs-note',
     },
   ),
-  statCase('Stat/with a clashing attribute', statDefaults, { 'data-tone': 'danger' }),
+  statCase(
+    'Stat/with a clashing attribute',
+    { ...statDefaults, description: 'Up 2 points', tone: 'success' },
+    { 'data-tone': 'danger' },
+  ),
   statCase('Stat/unknown tone and blank text', {
     ...statDefaults,
     value: ' ',
     description: ' ',
+    href: ' ',
     tone: 'loud' as StatArgs['tone'],
   }),
   statCase('Stat/escaped text', {

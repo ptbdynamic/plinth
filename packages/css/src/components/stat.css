@@ -27,7 +27,9 @@
  * colours the supporting line and puts the callout's icon for it before the text, a different
  * shape for each tone; the neutral line has no icon. The words carry the meaning ("Up 2 points",
  * "Over budget"): the colour and the icon only reinforce them, and the icon is hidden from
- * screen readers. A tile without a supporting line shows no tone.
+ * screen readers. A tile without a supporting line shows no tone. Set the tone through the
+ * component's tone (Blade, Vue, React), not a data-tone of the project's: the icon follows the
+ * tone, so a data-tone that overrides it changes the colour only.
  *
  * Empty: a value that isn't available yet prints an em dash for the eye and words for screen
  * readers, and the value takes is-empty:
@@ -49,7 +51,7 @@
     position: relative;
     box-sizing: border-box;
     display: grid;
-    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-columns: minmax(0, 1fr);
     gap: var(--plinth-space-1) var(--plinth-space-2);
     align-content: start;
     min-inline-size: 0;
@@ -67,7 +69,9 @@
     transition: background-color var(--plinth-duration-fast) var(--plinth-easing-standard);
   }
 
+  /* A second column for the chevron. */
   a.plinth-stat {
+    grid-template-columns: minmax(0, 1fr) auto;
     cursor: pointer;
   }
 

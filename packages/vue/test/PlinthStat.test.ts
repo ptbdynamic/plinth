@@ -113,4 +113,10 @@ describe('PlinthStat', () => {
     expect(wrapper.attributes('id')).toBe('runs');
     expect(wrapper.attributes('data-tone')).toBe('warning');
   });
+  it('is no link with a blank href', () => {
+    const wrapper = mount(PlinthStat, { props: { label: 'Runs today', value: '12', href: ' ' } });
+
+    expect(wrapper.element.tagName).toBe('DIV');
+    expect(wrapper.attributes('href')).toBeUndefined();
+  });
 });

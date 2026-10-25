@@ -107,4 +107,10 @@ describe('PlinthStat', () => {
     expect(root.getAttribute('data-tone')).toBe('warning');
     expect(ref.current).toBe(root);
   });
+  it('is no link with a blank href', () => {
+    const html = renderToStaticMarkup(<PlinthStat label="Runs today" value="12" href=" " />);
+
+    expect(html).toMatch(/^<div data-tone="neutral" class="plinth-stat">/);
+    expect(html).not.toContain('href');
+  });
 });

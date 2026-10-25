@@ -23,13 +23,14 @@ export function stat(
   { label, value, description, tone, href, emptyLabel }: StatArgs,
   attributes: Attributes = {},
 ): string {
-  const tag = href ? 'a' : 'div';
+  const link = href?.trim() ? href : undefined;
+  const tag = link ? 'a' : 'div';
   // An unknown tone falls back to the default, as in Blade, Vue and React.
   const dataTone = tones.includes(tone) ? tone : 'neutral';
   const { classes, extra } = rootAttributes('plinth-stat', attributes);
   const empty = value === undefined || value.trim() === '';
   return [
-    `<${tag} class="${classes}"${extra}${href ? ` href="${escape(href)}"` : ''} data-tone="${dataTone}">`,
+    `<${tag} class="${classes}"${extra}${link ? ` href="${escape(link)}"` : ''} data-tone="${dataTone}">`,
     `<span class="plinth-stat-label">${escape(label)}</span>`,
     empty
       ? '<span class="plinth-stat-value is-empty"><span aria-hidden="true">—</span>' +
@@ -42,7 +43,7 @@ export function stat(
           : `<span class="plinth-icon plinth-stat-tone" data-size="sm" aria-hidden="true">${calloutIcons[dataTone]}</span>`) +
         `${escape(description)}</span>`
       : '',
-    href ? statChevron : '',
+    link ? statChevron : '',
     `</${tag}>`,
   ].join('');
 }

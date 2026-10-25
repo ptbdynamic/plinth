@@ -108,7 +108,9 @@ Blade, Vue and React print exactly this markup, and the parity tests hold them t
 | `aria-hidden`      | the icons, the dash  | always `true`: they repeat what the text says | none      |
 
 A missing or unknown `data-tone` looks neutral, and Blade, Vue and React print `neutral` for a
-tone they don't know. A tile without a supporting line shows no tone.
+tone they don't know. A tile without a supporting line shows no tone. Set the tone with the
+`tone` prop, never a `data-tone` attribute of your own: the icon follows the prop, so an
+attribute that overrides `data-tone` would change the colour and leave the icon behind.
 
 ## Props
 

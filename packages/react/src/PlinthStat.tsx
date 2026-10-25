@@ -39,7 +39,8 @@ export function PlinthStat({
   className,
   ...rest
 }: PlinthStatProps) {
-  const Tag = (href ? 'a' : 'div') as ElementType;
+  const link = href?.trim() ? href : undefined;
+  const Tag = (link ? 'a' : 'div') as ElementType;
   const dataTone = toTone(tone);
   const empty = value === null || String(value).trim() === '';
 
@@ -47,7 +48,7 @@ export function PlinthStat({
   // added to Plinth's.
   return (
     <Tag
-      href={href || undefined}
+      href={link}
       data-tone={dataTone}
       {...rest}
       className={classNames('plinth-stat', className)}
@@ -75,7 +76,7 @@ export function PlinthStat({
         </span>
       ) : null}
       {/* The chevron is statChevron (stat.ts), written out; parity keeps the copies equal. */}
-      {href ? (
+      {link ? (
         <span
           className="plinth-icon plinth-stat-chevron"
           data-size="sm"

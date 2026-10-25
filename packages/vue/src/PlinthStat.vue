@@ -29,16 +29,12 @@ const props = withDefaults(
 );
 
 const dataTone = computed(() => toTone(props.tone));
+const link = computed(() => (props.href?.trim() ? props.href : undefined));
 const empty = computed(() => props.value === null || String(props.value).trim() === '');
 </script>
 
 <template>
-  <component
-    :is="href ? 'a' : 'div'"
-    class="plinth-stat"
-    :href="href || undefined"
-    :data-tone="dataTone"
-  >
+  <component :is="link ? 'a' : 'div'" class="plinth-stat" :href="link" :data-tone="dataTone">
     <span class="plinth-stat-label">{{ label }}</span>
     <span v-if="empty" class="plinth-stat-value is-empty"
       ><span aria-hidden="true">—</span
@@ -57,7 +53,7 @@ const empty = computed(() => props.value === null || String(props.value).trim() 
     >
     <!-- The chevron is statChevron (stat.ts), written out; parity keeps the copies equal. -->
     <span
-      v-if="href"
+      v-if="link"
       class="plinth-icon plinth-stat-chevron"
       data-size="sm"
       data-mirror
