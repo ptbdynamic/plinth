@@ -1581,7 +1581,8 @@
  * - the sort button's states: hover where the device can hover, pressed (:active) a surface step
  *   down, disabled (while a sort loads, say) dimmed with opacity.disabled.
  * - the empty state: one plinth-data-table-empty row in the body, whose plinth-data-table-empty-cell
- *   spans every column (colspan).
+ *   spans every column (colspan). The cell holds text, or a plinth-empty-state for a heading, an
+ *   icon or an action; empty-state.css drops the empty state's padding there, so keep the cell's.
  * Paging controls sit outside the table.
  *
  * From 768px up the actions sit at the start of their cell, under their column header.
@@ -2283,7 +2284,8 @@
  *
  * It fills the width it is given and centres its content in a column of reading width. Long
  * words wrap. Inside a data table's empty cell (plinth-data-table-empty-cell) it drops its own
- * padding, as the cell already has it, so a table's empty state and a page's look alike.
+ * padding and takes the cell's, and the cell's surface: raised on a phone's cards, the table's
+ * own from 768px.
  *
  * The empty state has no state of its own: the app decides when to show it. It is not a live
  * region: when it replaces results as the user types (a filter or a search with no match), the
@@ -2356,7 +2358,7 @@
     margin-block-start: var(--plinth-space-5);
   }
 
-  /* From 768px: a little more room around a framed or page-level message. */
+  /* From 768px: a little more room around every empty state (not in a data table's cell). */
   @media (min-width: 768px) {
     .plinth-empty-state {
       padding-block: var(--plinth-space-12);
