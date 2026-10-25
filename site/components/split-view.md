@@ -1,6 +1,6 @@
 # Split view
 
-Up to three panes inside a page: a **secondary** column (folders), a **list** (the tickets) and a
+Up to three panes inside a page: a **secondary** column (folders, a [nav list](nav-list.md)), a **list** (the tickets) and a
 **detail** (the open ticket). A phone shows one pane, the one the app names; from 768px the list
 and the detail sit side by side, and from 1280px the secondary column too. Each pane scrolls on its
 own, and the detail can hold a footer on its bottom edge, such as a reply box (docs/adr/0008).
@@ -21,13 +21,15 @@ to see one pane at a time.
 ```blade example layout="stack"
 <x-plinth::split-view style="block-size: 28rem; border: var(--plinth-border-width-thin) solid var(--plinth-color-border)">
     <x-slot:secondary>
-        <nav id="docs-folders" aria-label="Folders" style="padding: var(--plinth-space-3)">
-            <x-plinth::list-card>
-                <li><x-plinth::list-row href="#" current>Open</x-plinth::list-row></li>
-                <li><x-plinth::list-row href="#">Waiting</x-plinth::list-row></li>
-                <li><x-plinth::list-row href="#">Closed</x-plinth::list-row></li>
-            </x-plinth::list-card>
-        </nav>
+        <div style="padding: var(--plinth-space-3)">
+            <x-plinth::nav-list id="docs-folders" label="Folders">
+                <x-plinth::nav-list-group>
+                    <x-plinth::nav-list-item href="#" count="8" current>Open</x-plinth::nav-list-item>
+                    <x-plinth::nav-list-item href="#">Waiting</x-plinth::nav-list-item>
+                    <x-plinth::nav-list-item href="#">Closed</x-plinth::nav-list-item>
+                </x-plinth::nav-list-group>
+            </x-plinth::nav-list>
+        </div>
     </x-slot:secondary>
     <x-slot:list>
         <div style="padding: var(--plinth-space-3)">
