@@ -1,6 +1,6 @@
 {
   "name": "@bdynamic/plinth",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "The design system of BDynamic's projects: tokens, plain HTML and CSS components, and thin Blade, Vue and React layers.",
   "license": "MIT",
   "private": true,

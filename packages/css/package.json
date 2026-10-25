@@ -1,6 +1,6 @@
 {
   "name": "@bdynamic/plinth-css",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "private": true,
   "license": "MIT",
   "type": "module",
