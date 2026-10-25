@@ -64,11 +64,11 @@ site/       Plinth's website, a Laravel app built with Plinth (docs/adr/0007); n
   (such as the tests' `TestCase`) are the only exception.
 - CI (`.github/workflows/ci.yml`) runs parallel jobs: the packages (lint, tests, builds, the
   release dry run, the dist diff), the site, and the Storybook test runner in four shards
-  (`--shard=i/4`, which splits the docs-width check too; Storybook's lint and Vitest in the first). On a pull request
-  each runs only what `turbo ls --affected` names against `origin/main` (everything when `.github`
-  changes); `.turbo`, Composer's and Playwright's caches are kept by the Actions cache. Pest runs
-  with `--parallel`. A last job named `ci`, the check branch protection requires, fails if any
-  job failed.
+  (`--shard=i/4`, which splits the docs-width check too; Storybook's lint and Vitest in the
+  first). On a pull request each runs only what `turbo ls --affected` names against `origin/main`
+  (everything when `.github` changes); `.turbo`, Composer's and Playwright's caches are kept by
+  the Actions cache. Pest runs with `--parallel`. A last job named `ci`, the check branch
+  protection requires, fails if any job failed.
 - Published as npm `@ptbdynamic/plinth` (subpaths `tokens`, `tokens.css`, `css`, `vue`, `react`,
   `tailwind.css`) and Packagist `ptbdynamic/plinth` (Blade, Filament plugin, built CSS so Laravel
   needs no Node build). One version, one tag. Storybook, tests, token sources and tooling are not published.
