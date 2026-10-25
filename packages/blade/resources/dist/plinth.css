@@ -3832,7 +3832,8 @@
  * - error: aria-invalid="true" on the input and the error message under it; the edge turns
  *   danger and thick, so it isn't only a colour, and the message says what to fix.
  * - disabled: `disabled` on the input; the field is faded and can't be focused.
- * - read-only: `readonly` on the input; it keeps its text and focus, without the field's fill.
+ * - read-only: `readonly` on the input; it keeps its text and focus, without the field's fill
+ *   and with a dashed edge.
  * - the focus ring on the input's :focus-visible.
  */
 
@@ -3901,6 +3902,12 @@
     opacity: 1;
   }
 
+  @media (hover: hover) {
+    .plinth-text-field-input:hover:not(:disabled, :read-only, [aria-invalid='true']) {
+      border-color: var(--plinth-color-text-subtle);
+    }
+  }
+
   .plinth-text-field-input:focus-visible {
     outline: var(--plinth-focus-ring-width) solid var(--plinth-color-focus-ring);
     outline-offset: var(--plinth-focus-ring-offset);
@@ -3915,8 +3922,10 @@
     cursor: not-allowed;
   }
 
+  /* Without the fill, and with a dashed edge, so it doesn't read as a field to type in. */
   .plinth-text-field-input:read-only:not(:disabled) {
     background-color: transparent;
+    border-style: dashed;
   }
 
   .plinth-text-field-control:has(.plinth-text-field-input:disabled) {
@@ -4006,6 +4015,7 @@
     }
 
     .plinth-text-field-input:disabled {
+      color: GrayText;
       border-color: GrayText;
     }
   }
@@ -4048,7 +4058,8 @@
  * - error: aria-invalid="true" on the textarea and the error message under it; the edge turns
  *   danger and thick, so it isn't only a colour, and the message says what to fix.
  * - disabled: `disabled` on the textarea; the field is faded and can't be focused.
- * - read-only: `readonly` on the textarea; it keeps its text and focus, without the field's fill.
+ * - read-only: `readonly` on the textarea; it keeps its text and focus, without the field's fill
+ *   and with a dashed edge.
  * - the focus ring on the textarea's :focus-visible.
  */
 
@@ -4101,6 +4112,12 @@
     opacity: 1;
   }
 
+  @media (hover: hover) {
+    .plinth-textarea-input:hover:not(:disabled, :read-only, [aria-invalid='true']) {
+      border-color: var(--plinth-color-text-subtle);
+    }
+  }
+
   .plinth-textarea-input:focus-visible {
     outline: var(--plinth-focus-ring-width) solid var(--plinth-color-focus-ring);
     outline-offset: var(--plinth-focus-ring-offset);
@@ -4117,8 +4134,10 @@
     opacity: var(--plinth-opacity-disabled);
   }
 
+  /* Without the fill, and with a dashed edge, so it doesn't read as a field to type in. */
   .plinth-textarea-input:read-only:not(:disabled) {
     background-color: transparent;
+    border-style: dashed;
   }
 
   /*
@@ -4128,9 +4147,12 @@
   @supports (field-sizing: content) {
     .plinth-textarea-input[data-grow] {
       field-sizing: content;
-      min-block-size: calc(
-        var(--plinth-textarea-rows, 3) * 1lh + 2 * var(--plinth-space-2) + 2 *
-          var(--plinth-border-width-thin)
+      min-block-size: max(
+        var(--plinth-touch-target),
+        calc(
+          var(--plinth-textarea-rows, 3) * 1lh + 2 * var(--plinth-space-2) + 2 *
+            var(--plinth-border-width-thin)
+        )
       );
       max-block-size: calc(
         var(--plinth-textarea-max-rows, 8) * 1lh + 2 * var(--plinth-space-2) + 2 *

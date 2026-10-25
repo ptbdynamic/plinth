@@ -40,7 +40,8 @@
  * - error: aria-invalid="true" on the input and the error message under it; the edge turns
  *   danger and thick, so it isn't only a colour, and the message says what to fix.
  * - disabled: `disabled` on the input; the field is faded and can't be focused.
- * - read-only: `readonly` on the input; it keeps its text and focus, without the field's fill.
+ * - read-only: `readonly` on the input; it keeps its text and focus, without the field's fill
+ *   and with a dashed edge.
  * - the focus ring on the input's :focus-visible.
  */
 
@@ -109,6 +110,12 @@
     opacity: 1;
   }
 
+  @media (hover: hover) {
+    .plinth-text-field-input:hover:not(:disabled, :read-only, [aria-invalid='true']) {
+      border-color: var(--plinth-color-text-subtle);
+    }
+  }
+
   .plinth-text-field-input:focus-visible {
     outline: var(--plinth-focus-ring-width) solid var(--plinth-color-focus-ring);
     outline-offset: var(--plinth-focus-ring-offset);
@@ -123,8 +130,10 @@
     cursor: not-allowed;
   }
 
+  /* Without the fill, and with a dashed edge, so it doesn't read as a field to type in. */
   .plinth-text-field-input:read-only:not(:disabled) {
     background-color: transparent;
+    border-style: dashed;
   }
 
   .plinth-text-field-control:has(.plinth-text-field-input:disabled) {
@@ -214,6 +223,7 @@
     }
 
     .plinth-text-field-input:disabled {
+      color: GrayText;
       border-color: GrayText;
     }
   }

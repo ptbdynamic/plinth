@@ -22,6 +22,8 @@ export interface TextFieldArgs {
   readonly: boolean;
   /** The project's own SVG for the leading icon (trusted, not escaped). */
   icon?: string;
+  /** A keyboard shortcut that focuses the field, as aria-keyshortcuts on the input. */
+  shortcut?: string;
   /** The trailing slot's markup: a small icon button or a keyboard hint (trusted, not escaped). */
   trailing?: string;
 }
@@ -63,6 +65,7 @@ export function textField(
     readonly,
     icon,
     trailing,
+    shortcut,
   }: TextFieldArgs,
   attributes: Attributes = {},
 ): string {
@@ -73,6 +76,7 @@ export function textField(
     ...others,
     ...(placeholder ? { placeholder } : {}),
     ...(value !== undefined ? { value } : {}),
+    ...(shortcut ? { 'aria-keyshortcuts': shortcut } : {}),
   });
   const state = [
     describedBy(id, description, error),

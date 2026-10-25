@@ -7,7 +7,7 @@ import { PlinthTextField, fieldDescribedBy, type PlinthTextFieldProps } from '..
 const field = (props: Partial<PlinthTextFieldProps> = {}) =>
   renderToStaticMarkup(<PlinthTextField id="email" label="Email" {...props} />);
 
-const rendered = (props: Partial<PlinthTextFieldProps> = {}) =>
+const rendered = (props: Partial<PlinthTextFieldProps> & Record<`data-${string}`, string> = {}) =>
   render(<PlinthTextField id="email" label="Email" {...props} />).container;
 
 describe('PlinthTextField', () => {

@@ -90,7 +90,7 @@ in when the field takes focus; from 768px up it is 14px (md) or 13px (sm).
 
 **Disabled** fades the field, and it can't be focused or sent with the form. Prefer explaining why
 something can't be changed. **Read-only** keeps the value readable, focusable and selectable, and
-sent with the form, without the field's fill: for an ID the person copies.
+sent with the form, without the field's fill and with a dashed edge: for an ID the person copies.
 
 ```blade example
 <x-plinth::text-field id="docs-disabled" label="Email" value="sam@example.com" disabled />
@@ -150,7 +150,7 @@ can; React takes the Vue props, with the slots as props that take a node.
 only `class` goes on the root, added to Plinth's. Vue does the same with the attributes that fall
 through, and React with its props: `className` on the root, and `value`, `onChange`, `name`, `ref`
 and every other prop on the input. An attribute that clashes with one Plinth sets on the input
-(`aria-describedby`) wins. Vue emits `update:modelValue` as the person types, and the input's own
+(`aria-describedby`) wins; a project that sets its own `aria-describedby` lists the error's id (`<id>-error`) in it too, so the error is still read. Vue emits `update:modelValue` as the person types, and the input's own
 `input` and `change` events reach your listeners.
 
 ```blade tab="Blade"

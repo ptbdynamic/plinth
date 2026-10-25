@@ -48,7 +48,7 @@ and thicker, so colour isn't the only cue.
 ## Disabled and read-only
 
 **Disabled** fades the field, and it can't be focused or sent with the form. **Read-only** keeps
-the text readable, focusable and selectable, without the field's fill.
+the text readable, focusable and selectable, without the field's fill and with a dashed edge.
 
 ```blade example
 <x-plinth::textarea id="docs-disabled" label="Reply" placeholder="Replies are closed" disabled />
@@ -105,7 +105,7 @@ can; React takes the Vue props.
 text. Vue does the same with the attributes that fall through, and React with its props:
 `className` on the root, and `value`, `onChange`, `name`, `ref` and every other prop on the
 textarea. A `style` is added after the grow's custom properties; any other attribute that clashes
-with one Plinth sets wins. Vue emits `update:modelValue` as the person types.
+with one Plinth sets wins; a project that sets its own `aria-describedby` lists the error's id (`<id>-error`) in it too. Vue emits `update:modelValue` as the person types.
 
 ```blade tab="Blade"
 <x-plinth::textarea

@@ -44,6 +44,7 @@ const meta = {
     readonly: { control: 'boolean' },
     icon: { control: 'text' },
     trailing: { control: 'text' },
+    shortcut: { control: 'text' },
   },
   parameters: {
     docs: {
@@ -89,6 +90,7 @@ export const WithKeyboardHint: Story = {
     placeholder: 'Search',
     icon: sampleIcons.search,
     trailing: '<kbd aria-hidden="true">/</kbd>',
+    shortcut: '/',
   },
 };
 export const Disabled: Story = { args: { value: 'sam@example.com', disabled: true } };

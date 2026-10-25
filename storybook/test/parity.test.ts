@@ -1028,6 +1028,11 @@ const cases: ParityCase[] = [
     description: ' ',
     error: '',
   }),
+  textFieldCase('Text field/with a description and an error', {
+    ...textFieldDefaults,
+    description: 'Receipts go to this address.',
+    error: 'Enter an email address.',
+  }),
   textFieldCase('Text field/escaped text', {
     ...textFieldDefaults,
     label: 'Name <b>',
@@ -1054,6 +1059,11 @@ const cases: ParityCase[] = [
     { ...textareaDefaults, grow: true, rows: 4, maxRows: 2 },
     { style: 'color: red;' },
   ),
+  textareaCase('Textarea/with a description and an error', {
+    ...textareaDefaults,
+    description: 'The customer sees this reply.',
+    error: 'Write a reply first.',
+  }),
   textareaCase('Textarea/escaped text', {
     ...textareaDefaults,
     label: 'Note <b>',
@@ -1604,6 +1614,7 @@ function textFieldCase(
   const input = {
     ...(args.placeholder ? { placeholder: args.placeholder } : {}),
     ...(args.value !== undefined ? { value: args.value } : {}),
+    ...(args.shortcut ? { 'aria-keyshortcuts': args.shortcut } : {}),
     ...attributes,
   };
   const named = {
@@ -2013,6 +2024,7 @@ describe('parity with the stories', () => {
       'Text field/with extra attributes',
       'Text field/with a clashing attribute',
       'Text field/unknown size and blank messages',
+      'Text field/with a description and an error',
       'Text field/escaped text',
       'Textarea/Default',
       'Textarea/WithDescription',
@@ -2025,6 +2037,7 @@ describe('parity with the stories', () => {
       'Textarea/with extra attributes',
       'Textarea/with a clashing attribute',
       'Textarea/growing with its own style',
+      'Textarea/with a description and an error',
       'Textarea/escaped text',
     ]);
   });
