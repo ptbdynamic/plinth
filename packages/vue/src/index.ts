@@ -1,4 +1,6 @@
 import type { App, Plugin } from 'vue';
+import PlinthAppNav from './PlinthAppNav.vue';
+import PlinthAppNavItem from './PlinthAppNavItem.vue';
 import PlinthAvatar from './PlinthAvatar.vue';
 import PlinthBadge from './PlinthBadge.vue';
 import PlinthButton from './PlinthButton.vue';
@@ -34,6 +36,8 @@ import PlinthTextarea from './PlinthTextarea.vue';
 import PlinthTextField from './PlinthTextField.vue';
 
 export {
+  PlinthAppNav,
+  PlinthAppNavItem,
   PlinthAvatar,
   PlinthBadge,
   PlinthButton,
@@ -134,6 +138,8 @@ export { tones, type Tone } from './tones';
 /** Registers every Plinth component globally: `app.use(Plinth)`. */
 export const Plinth: Plugin = {
   install(app: App) {
+    app.component('PlinthAppNav', PlinthAppNav);
+    app.component('PlinthAppNavItem', PlinthAppNavItem);
     app.component('PlinthAvatar', PlinthAvatar);
     app.component('PlinthBadge', PlinthBadge);
     app.component('PlinthButton', PlinthButton);

@@ -282,6 +282,14 @@
         "$value": "{ref.size.320}",
         "$description": "The most width of a menu (320 px); a longer label wraps."
       }
+    },
+    "sidebar": {
+      "$value": "{ref.size.240}",
+      "$description": "The width of an app's sidebar (240 px)."
+    },
+    "rail": {
+      "$value": "{ref.size.56}",
+      "$description": "The width of an app's rail, its sidebar with icons only (56 px)."
     }
   },
   "layer": {

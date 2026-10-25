@@ -97,6 +97,8 @@ describe('tiers', () => {
       'drawer.peek-height',
       'section-menu.height',
       'section-menu.item-height',
+      'app-nav.width',
+      'app-nav.rail-width',
       'menu.min-width',
       'menu.max-width',
       'text-field.trailing-size',
