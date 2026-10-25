@@ -85,14 +85,19 @@ describe('PlinthEmptyState', () => {
   it('keeps extra classes and attributes on the root', () => {
     const wrapper = mount(PlinthEmptyState, {
       props: { heading: 'No runs yet' },
-      attrs: { class: 'app-empty', id: 'runs-empty', role: 'status', 'data-testid': 'empty' },
+      attrs: {
+        class: 'app-empty',
+        id: 'runs-empty',
+        'aria-describedby': 'runs-help',
+        'data-testid': 'empty',
+      },
       slots: { actions: () => h('a', { href: '/runs/new' }, 'Start a run') },
     });
 
     expect(wrapper.classes()).toEqual(['plinth-empty-state', 'app-empty']);
     expect(wrapper.attributes()).toMatchObject({
       id: 'runs-empty',
-      role: 'status',
+      'aria-describedby': 'runs-help',
       'data-testid': 'empty',
     });
   });

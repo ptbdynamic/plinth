@@ -71,8 +71,8 @@ already has one. **`framed`** gives it a raised surface with a hairline (it prin
 ## In a data table
 
 A [data table](data-table.md) with no rows holds its empty state in one empty row. Put an empty
-state in it when the table needs more than one line of text: it drops its own padding there, as
-the cell already has it, so a table's empty state and a page's look alike.
+state in it when the table needs more than one line of text: there it drops its own padding and
+takes the cell's, and the cell's surface (raised on a phone's cards).
 
 ```blade example layout="stack"
 <x-plinth::data-table caption="Orders">

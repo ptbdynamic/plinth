@@ -2286,8 +2286,9 @@
  * padding, as the cell already has it, so a table's empty state and a page's look alike.
  *
  * The empty state has no state of its own: the app decides when to show it. It is not a live
- * region; when it replaces results as the user types (a filter or a search with no match), the
- * app adds role="status" to it, so screen readers announce it.
+ * region: when it replaces results as the user types (a filter or a search with no match), the
+ * app puts it in a container with role="status" that stays on the page, so screen readers
+ * announce it.
  */
 
 @layer plinth {

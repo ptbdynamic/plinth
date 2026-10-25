@@ -84,13 +84,13 @@ describe('PlinthEmptyState', () => {
         heading="No runs yet"
         className="app-empty"
         id="runs-empty"
-        role="status"
+        aria-describedby="runs-help"
       />,
     );
 
     expect(element.className).toBe('plinth-empty-state app-empty');
     expect(element.id).toBe('runs-empty');
-    expect(element.getAttribute('role')).toBe('status');
+    expect(element.getAttribute('aria-describedby')).toBe('runs-help');
     expect(ref.current).toBe(element);
   });
 

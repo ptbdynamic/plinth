@@ -108,7 +108,7 @@ const columns: DataTableColumnArgs[] = ['Order', 'Customer', 'Total'].map((label
   hideOnPhone: false,
 }));
 
-/** In a data table's empty cell: the cell's padding is the empty state's, so both look alike. */
+/** In a data table's empty cell: the empty state takes the cell's padding and surface. */
 export const InADataTable: Story = {
   render: (args) =>
     dataTableShell(

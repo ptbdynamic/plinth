@@ -986,9 +986,8 @@ const cases: ParityCase[] = [
     {
       class: 'app-empty',
       id: 'runs-empty',
-      role: 'status',
       'data-testid': 'empty',
-      'aria-label': 'Runs',
+      'aria-describedby': 'runs-help',
     },
   ),
   emptyStateCase(

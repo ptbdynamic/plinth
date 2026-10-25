@@ -70,17 +70,17 @@ it('escapes the heading and the description', function () {
 
 it('keeps extra classes and attributes on the root', function () {
     $html = Blade::render(
-        '<x-plinth::empty-state heading="No runs yet" class="app-empty" id="runs-empty" role="status" wire:key="empty" x-show="!runs.length" data-testid="empty" aria-live="polite" />'
+        '<x-plinth::empty-state heading="No runs yet" class="app-empty" id="runs-empty" aria-describedby="runs-help" wire:key="empty" x-show="!runs.length" data-testid="empty" aria-label="Runs" />'
     );
 
     expect($html)
         ->toContain('class="plinth-empty-state app-empty"')
         ->toContain('id="runs-empty"')
-        ->toContain('role="status"')
+        ->toContain('aria-describedby="runs-help"')
         ->toContain('wire:key="empty"')
         ->toContain('x-show="!runs.length"')
         ->toContain('data-testid="empty"')
-        ->toContain('aria-live="polite"');
+        ->toContain('aria-label="Runs"');
 });
 
 it('lets a project\'s data-framed win over its own', function () {

@@ -31,7 +31,8 @@
  *
  * It fills the width it is given and centres its content in a column of reading width. Long
  * words wrap. Inside a data table's empty cell (plinth-data-table-empty-cell) it drops its own
- * padding, as the cell already has it, so a table's empty state and a page's look alike.
+ * padding and takes the cell's, and the cell's surface: raised on a phone's cards, the table's
+ * own from 768px.
  *
  * The empty state has no state of its own: the app decides when to show it. It is not a live
  * region: when it replaces results as the user types (a filter or a search with no match), the
@@ -104,7 +105,7 @@
     margin-block-start: var(--plinth-space-5);
   }
 
-  /* From 768px: a little more room around a framed or page-level message. */
+  /* From 768px: a little more room around every empty state (not in a data table's cell). */
   @media (min-width: 768px) {
     .plinth-empty-state {
       padding-block: var(--plinth-space-12);
