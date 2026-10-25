@@ -27,6 +27,18 @@ const meta = {
 export default meta;
 type Story = StoryObj<IconArgs>;
 
+/**
+ * Fails when the icon's glyph isn't flipped, as when a build rewrites :dir(rtl) into :lang()
+ * selectors that a bare dir="rtl" doesn't match (#151).
+ */
+const expectFlipped: Story['play'] = ({ canvasElement }) => {
+  const svg = canvasElement.querySelector('.plinth-icon > svg');
+  const transform = svg ? getComputedStyle(svg).transform : 'no svg';
+  if (transform !== 'matrix(-1, 0, 0, 1, 0, 0)') {
+    throw new Error(`The icon isn't flipped right to left: transform is ${transform}`);
+  }
+};
+
 export const Default: Story = {};
 export const Small: Story = { args: { size: 'sm' } };
 export const Large: Story = { args: { size: 'lg' } };
@@ -36,6 +48,7 @@ export const Filled: Story = { args: { svg: sampleIcons.star } };
 export const Mirrored: Story = {
   args: { svg: sampleIcons.arrow, mirror: true },
   decorators: [(story) => `<div dir="rtl">${story() as string}</div>`],
+  play: expectFlipped,
 };
 
 /** A built-in glyph by name, instead of an SVG in the slot. */
@@ -44,6 +57,7 @@ export const Glyph: Story = { args: { name: 'menu' } };
 export const DirectionalGlyph: Story = {
   args: { name: 'back' },
   decorators: [(story) => `<div dir="rtl">${story() as string}</div>`],
+  play: expectFlipped,
 };
 
 /** Every built-in glyph, with its name. */

@@ -27,6 +27,11 @@ const config: StorybookConfig = {
   // shows a stale build after main moves (the component CSS already comes from source).
   viteFinal(config) {
     config.plugins = [...(config.plugins ?? []), vue()];
+    // Vite's default CSS target predates :dir(), so its minifier rewrites :dir(rtl) into a list of
+    // :lang() selectors and nothing flips under a bare dir="rtl" (#151). Plinth's own target
+    // (Baseline newly available) keeps it.
+    config.build ??= {};
+    config.build.cssTarget = ['chrome120', 'edge120', 'firefox114', 'safari16.4', 'ios16.4'];
     config.resolve ??= {};
     const existing = config.resolve.alias ?? [];
     config.resolve.alias = [
