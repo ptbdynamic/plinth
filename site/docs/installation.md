@@ -58,3 +58,16 @@ Plinth targets Baseline "newly available": the current releases of Chrome, Edge,
 Safari. Native `<dialog>`, `popover`, `<details>`, `:has()` and invoker commands are all there.
 Projects that need older browsers bring their own polyfills
 ([ADR 2](../../docs/adr/0002-behaviour-state-and-forwarding.md#2-browser-support)).
+
+Set your bundler's CSS target to the same browsers. Vite's default (Baseline "widely
+available") predates `:dir()`, so its minifier rewrites `:dir(rtl)` into a list of
+right-to-left `:lang()` selectors, and under `dir="rtl"` without a right-to-left `lang`, mirrored
+icons, sheets and drawers keep their left-to-right direction:
+
+```js label="vite.config.js"
+export default defineConfig({
+    build: {
+        cssTarget: ['chrome120', 'edge120', 'firefox114', 'safari16.4', 'ios16.4'],
+    },
+});
+```

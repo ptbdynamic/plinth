@@ -90,7 +90,8 @@ that name.
 
 Set `mirror` on icons that point a direction (arrows, chevrons, back, send), so they flip in
 right-to-left text; it changes nothing in left-to-right text. The built-in glyphs that point a
-direction (`back`, `chevron-left`, `chevron-right`, `sign-out`) flip without it.
+direction (`back`, `chevron-left`, `chevron-right`, `sign-out`) flip without it. The flip
+needs a build that keeps `:dir()`; see [browser support](../docs/installation.md#browser-support).
 
 ```blade example
 <x-plinth::icon mirror><x-site.glyph name="arrow-right" /></x-plinth::icon>
