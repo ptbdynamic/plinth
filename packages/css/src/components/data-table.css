@@ -74,7 +74,8 @@
  * - the sort button's states: hover where the device can hover, pressed (:active) a surface step
  *   down, disabled (while a sort loads, say) dimmed with opacity.disabled.
  * - the empty state: one plinth-data-table-empty row in the body, whose plinth-data-table-empty-cell
- *   spans every column (colspan).
+ *   spans every column (colspan). The cell holds text, or a plinth-empty-state for a heading, an
+ *   icon or an action; empty-state.css drops the empty state's padding there, so keep the cell's.
  * Paging controls sit outside the table.
  *
  * From 768px up the actions sit at the start of their cell, under their column header.

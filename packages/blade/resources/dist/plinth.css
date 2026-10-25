@@ -1581,7 +1581,8 @@
  * - the sort button's states: hover where the device can hover, pressed (:active) a surface step
  *   down, disabled (while a sort loads, say) dimmed with opacity.disabled.
  * - the empty state: one plinth-data-table-empty row in the body, whose plinth-data-table-empty-cell
- *   spans every column (colspan).
+ *   spans every column (colspan). The cell holds text, or a plinth-empty-state for a heading, an
+ *   icon or an action; empty-state.css drops the empty state's padding there, so keep the cell's.
  * Paging controls sit outside the table.
  *
  * From 768px up the actions sit at the start of their cell, under their column header.
@@ -2245,6 +2246,123 @@
 
     .plinth-drawer[data-snap-points] :is(.plinth-drawer-handle, .plinth-drawer-header) {
       scroll-snap-align: none;
+    }
+  }
+}
+
+/* empty-state.css */
+/*
+ * Empty state: a calm, centred message for a screen or a section with nothing to show yet, such
+ * as "No runs yet", often with one action.
+ *
+ * <div class="plinth-empty-state">
+ *   <div class="plinth-empty-state-icon">
+ *     <span class="plinth-icon" data-size="md" aria-hidden="true"><svg>…</svg></span>
+ *   </div>
+ *   <h2 class="plinth-empty-state-heading">No runs yet</h2>
+ *   <p class="plinth-empty-state-description">Runs show here once a workflow starts.</p>
+ *   <div class="plinth-empty-state-actions">
+ *     <a class="plinth-button" href="/runs/new" data-variant="primary" data-size="md">Start a run</a>
+ *   </div>
+ * </div>
+ *
+ * Parts:
+ * - the icon (optional): the project's own icon, decorative, in a round well. Printed only when
+ *   it has content. It needs icon.css.
+ * - the heading (required): what is empty, in plain words. An <h2> by default; pick the level
+ *   that fits the page (heading-level h2 to h6 in Blade, headingLevel in Vue and React). The
+ *   level doesn't change the look.
+ * - the description (optional): why it is empty, or what fills it.
+ * - the actions (optional): usually one button or link, at most two. Printed only when they
+ *   have content. A button needs button.css.
+ *
+ * Variant (the app picks it):
+ * - plain (the default): no surface of its own, for inside a card, a list card or a panel that
+ *   already has one.
+ * - data-framed: its own raised surface with a hairline, for a page section that has nothing
+ *   else around it.
+ *
+ * It fills the width it is given and centres its content in a column of reading width. Long
+ * words wrap. Inside a data table's empty cell (plinth-data-table-empty-cell) it drops its own
+ * padding and takes the cell's, and the cell's surface: raised on a phone's cards, the table's
+ * own from 768px.
+ *
+ * The empty state has no state of its own: the app decides when to show it. It is not a live
+ * region: when it replaces results as the user types (a filter or a search with no match), the
+ * app puts it in a container with role="status" that stays on the page, so screen readers
+ * announce it.
+ */
+
+@layer plinth {
+  .plinth-empty-state {
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-inline-size: 0;
+    padding-block: var(--plinth-space-8);
+    padding-inline: var(--plinth-space-4);
+    font-family: var(--plinth-font-family-body);
+    color: var(--plinth-color-text);
+    text-align: center;
+  }
+
+  .plinth-empty-state[data-framed] {
+    background-color: var(--plinth-color-surface-raised);
+    border: var(--plinth-border-width-thin) solid var(--plinth-color-border);
+    border-radius: var(--plinth-radius-container);
+  }
+
+  .plinth-data-table-empty-cell > .plinth-empty-state {
+    padding: 0;
+  }
+
+  .plinth-empty-state-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    inline-size: var(--plinth-control-lg);
+    block-size: var(--plinth-control-lg);
+    margin-block-end: var(--plinth-space-4);
+    color: var(--plinth-color-text-muted);
+    background-color: var(--plinth-color-surface-sunken);
+    border: var(--plinth-border-width-thin) solid var(--plinth-color-border);
+    border-radius: var(--plinth-radius-pill);
+  }
+
+  .plinth-empty-state-heading {
+    max-inline-size: 40ch;
+    margin: 0;
+    font-size: var(--plinth-font-size-lg);
+    font-weight: var(--plinth-font-weight-semibold);
+    line-height: var(--plinth-font-leading-normal);
+    letter-spacing: var(--plinth-font-tracking-snug);
+    overflow-wrap: anywhere;
+  }
+
+  .plinth-empty-state-description {
+    max-inline-size: 48ch;
+    margin: 0;
+    margin-block-start: var(--plinth-space-1);
+    font-size: var(--plinth-font-size-md);
+    line-height: var(--plinth-font-leading-normal);
+    color: var(--plinth-color-text-muted);
+    overflow-wrap: anywhere;
+  }
+
+  .plinth-empty-state-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--plinth-space-2);
+    justify-content: center;
+    margin-block-start: var(--plinth-space-5);
+  }
+
+  /* From 768px: a little more room around every empty state (not in a data table's cell). */
+  @media (min-width: 768px) {
+    .plinth-empty-state {
+      padding-block: var(--plinth-space-12);
+      padding-inline: var(--plinth-space-6);
     }
   }
 }

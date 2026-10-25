@@ -23,6 +23,7 @@ import {
   PlinthMenuSeparator,
   PlinthMenuSheet,
   PlinthPageHeader,
+  PlinthEmptyState,
   PlinthPill,
   PlinthPillRow,
   PlinthSectionMenu,
@@ -57,6 +58,7 @@ import {
   PlinthMenuSeparator as ReactMenuSeparator,
   PlinthMenuSheet as ReactMenuSheet,
   PlinthPageHeader as ReactPageHeader,
+  PlinthEmptyState as ReactEmptyState,
   PlinthPill as ReactPill,
   PlinthPillRow as ReactPillRow,
   PlinthSectionMenu as ReactSectionMenu,
@@ -126,6 +128,8 @@ import {
 } from '../stories/components/menu.ts';
 import * as menuSheetStories from '../stories/components/MenuSheet.stories.ts';
 import { menuSheet, type MenuSheetArgs } from '../stories/components/menu-sheet.ts';
+import * as emptyStateStories from '../stories/components/EmptyState.stories.ts';
+import { emptyState, type EmptyStateArgs } from '../stories/components/empty-state.ts';
 import * as pageHeaderStories from '../stories/components/PageHeader.stories.ts';
 import {
   pageHeader,
@@ -223,6 +227,7 @@ const reactComponents = new Map<Component, unknown>([
   [PlinthMenuSeparator, ReactMenuSeparator],
   [PlinthMenuSheet, ReactMenuSheet],
   [PlinthPageHeader, ReactPageHeader],
+  [PlinthEmptyState, ReactEmptyState],
   [PlinthPill, ReactPill],
   [PlinthPillRow, ReactPillRow],
   [PlinthSectionMenu, ReactSectionMenu],
@@ -278,6 +283,12 @@ const statDefaults: StatArgs = {
 };
 
 const pageHeaderDefaults: PageHeaderArgs = { heading: 'Inbox', level: 'h1', top: false };
+
+const emptyStateDefaults: EmptyStateArgs = {
+  heading: 'No runs yet',
+  headingLevel: 'h2',
+  framed: false,
+};
 
 const listRowDefaults: ListRowArgs = {
   title: 'Notifications',
@@ -966,6 +977,36 @@ const cases: ParityCase[] = [
     ...pageHeaderDefaults,
     level: 'h7' as PageHeaderLevel,
   }),
+  ...storyArgs<EmptyStateArgs>(emptyStateStories).map(([story, args]) =>
+    emptyStateCase(`Empty state/${story}`, args),
+  ),
+  emptyStateCase(
+    'Empty state/with extra attributes',
+    { ...emptyStateDefaults, actions: '<a href="/runs/new">Start a run</a>' },
+    {
+      class: 'app-empty',
+      id: 'runs-empty',
+      'data-testid': 'empty',
+      'aria-describedby': 'runs-help',
+    },
+  ),
+  emptyStateCase(
+    'Empty state/with a clashing attribute',
+    { ...emptyStateDefaults, framed: true },
+    { 'data-framed': 'project' },
+  ),
+  emptyStateCase('Empty state/blank parts', {
+    ...emptyStateDefaults,
+    description: ' ',
+    icon: '  ',
+    actions: ' ',
+  }),
+  emptyStateCase('Empty state/unknown level and escaped text', {
+    ...emptyStateDefaults,
+    heading: '<b>No runs</b> & "more"',
+    description: "<i>Runs</i> show 'here'",
+    headingLevel: 'h1' as EmptyStateArgs['headingLevel'],
+  }),
   ...storyArgs<DataTableArgs>(dataTableStories).map(([story, args]) =>
     dataTableCase(`Data table/${story}`, args),
   ),
@@ -1309,6 +1350,29 @@ function listCardCase(story: string, args: ListCardArgs, attributes: Attributes 
     markup: listCard(args, attributes),
     vue: { component: PlinthListCard, props: { ...props, ...attributes }, slot, html: true },
     blade: { component: 'list-card', props, attributes, slot },
+  };
+}
+
+function emptyStateCase(
+  story: string,
+  args: EmptyStateArgs,
+  attributes: Attributes = {},
+): ParityCase {
+  const props = {
+    heading: args.heading,
+    headingLevel: args.headingLevel,
+    framed: args.framed,
+    ...(args.description !== undefined ? { description: args.description } : {}),
+  };
+  const named = {
+    ...(args.icon ? { icon: args.icon } : {}),
+    ...(args.actions ? { actions: args.actions } : {}),
+  };
+  return {
+    story,
+    markup: emptyState(args, attributes),
+    vue: { component: PlinthEmptyState, props: { ...props, ...attributes }, slot: '', named },
+    blade: { component: 'empty-state', props, attributes, slot: '', named },
   };
 }
 
@@ -2188,6 +2252,18 @@ describe('parity with the stories', () => {
       'Page header/with a clashing attribute',
       'Page header/blank slots',
       'Page header/unknown level',
+      'Empty state/Default',
+      'Empty state/HeadingOnly',
+      'Empty state/WithoutIcon',
+      'Empty state/WithoutAction',
+      'Empty state/Framed',
+      'Empty state/TwoActions',
+      'Empty state/HeadingLevel',
+      'Empty state/LongText',
+      'Empty state/with extra attributes',
+      'Empty state/with a clashing attribute',
+      'Empty state/blank parts',
+      'Empty state/unknown level and escaped text',
       'Data table/Default',
       'Data table/Sorted',
       'Data table/SortedAscending',

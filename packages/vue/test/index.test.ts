@@ -16,6 +16,7 @@ import {
   PlinthDataTableSort,
   PlinthDialog,
   PlinthDrawer,
+  PlinthEmptyState,
   PlinthIcon,
   PlinthIconButton,
   PlinthListCard,
@@ -55,6 +56,7 @@ describe('the Plinth plugin', () => {
     expect(app.component('PlinthDataTableSort')).toBe(PlinthDataTableSort);
     expect(app.component('PlinthDialog')).toBe(PlinthDialog);
     expect(app.component('PlinthDrawer')).toBe(PlinthDrawer);
+    expect(app.component('PlinthEmptyState')).toBe(PlinthEmptyState);
     expect(app.component('PlinthIcon')).toBe(PlinthIcon);
     expect(app.component('PlinthIconButton')).toBe(PlinthIconButton);
     expect(app.component('PlinthListCard')).toBe(PlinthListCard);

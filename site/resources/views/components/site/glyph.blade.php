@@ -50,6 +50,9 @@
         @case('copy')
             <rect x="8" y="8" width="12" height="12" rx="2"></rect><path d="M16 8V5a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h3"></path>
             @break
+        @case('inbox')
+            <path d="M4 13l2.5-8h11L20 13v6H4z"></path><path d="M4 13h4.5a3.5 3.5 0 0 0 7 0H20"></path>
+            @break
         @case('archive')
             <rect x="3" y="4" width="18" height="4" rx="1"></rect><path d="M5 8v11h14V8M10 12h4"></path>
             @break
