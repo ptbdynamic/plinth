@@ -97,6 +97,8 @@ describe('tiers', () => {
       'drawer.peek-height',
       'section-menu.height',
       'section-menu.item-height',
+      'menu.min-width',
+      'menu.max-width',
       'text-field.trailing-size',
       ...['neutral', 'info', 'success', 'warning', 'danger'].flatMap((tone) => [
         `callout.${tone}-surface`,

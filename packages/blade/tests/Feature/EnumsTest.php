@@ -11,6 +11,7 @@ use BDynamic\Plinth\Enums\DialogSidePhone;
 use BDynamic\Plinth\Enums\DrawerDesktop;
 use BDynamic\Plinth\Enums\DrawerSnap;
 use BDynamic\Plinth\Enums\HeadingLevel;
+use BDynamic\Plinth\Enums\MenuItemTone;
 use BDynamic\Plinth\Enums\PageHeaderLevel;
 use BDynamic\Plinth\Enums\SheetSide;
 use BDynamic\Plinth\Enums\Size;
@@ -38,7 +39,8 @@ it('defaults each choice the way the components do', function () {
         ->and(CalloutTone::default())->toBe(CalloutTone::Neutral)
         ->and(CalloutRole::default())->toBe(CalloutRole::Note)
         ->and(ConfirmDialogKind::default())->toBe(ConfirmDialogKind::Simple)
-        ->and(ConfirmDialogTone::default())->toBe(ConfirmDialogTone::Neutral);
+        ->and(ConfirmDialogTone::default())->toBe(ConfirmDialogTone::Neutral)
+        ->and(MenuItemTone::default())->toBe(MenuItemTone::Neutral);
 });
 
 it('resolves an optional side to a case or nothing', function () {
@@ -118,6 +120,9 @@ it('matches the lists the Vue layer and the stories use', function () {
     }
     foreach ([...DataTableSort::values(), ...DataTableCellKind::values()] as $value) {
         expect($vue('data-table.ts'))->toContain("'{$value}'");
+    }
+    foreach (MenuItemTone::values() as $value) {
+        expect($vue('menu.ts'))->toContain("'{$value}'");
     }
 });
 

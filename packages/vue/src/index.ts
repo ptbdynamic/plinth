@@ -17,6 +17,10 @@ import PlinthIcon from './PlinthIcon.vue';
 import PlinthIconButton from './PlinthIconButton.vue';
 import PlinthListCard from './PlinthListCard.vue';
 import PlinthListRow from './PlinthListRow.vue';
+import PlinthMenu from './PlinthMenu.vue';
+import PlinthMenuGroup from './PlinthMenuGroup.vue';
+import PlinthMenuItem from './PlinthMenuItem.vue';
+import PlinthMenuSeparator from './PlinthMenuSeparator.vue';
 import PlinthMenuSheet from './PlinthMenuSheet.vue';
 import PlinthPageHeader from './PlinthPageHeader.vue';
 import PlinthPill from './PlinthPill.vue';
@@ -46,6 +50,10 @@ export {
   PlinthIconButton,
   PlinthListCard,
   PlinthListRow,
+  PlinthMenu,
+  PlinthMenuGroup,
+  PlinthMenuItem,
+  PlinthMenuSeparator,
   PlinthMenuSheet,
   PlinthPageHeader,
   PlinthPill,
@@ -102,6 +110,7 @@ export { headingLevel, headingLevels, type HeadingLevel } from './heading';
 export { controlSizes, iconSizeFor, resolveSize, sizes, type ControlSize, type Size } from './size';
 export { iconSizes, type IconSize } from './icon';
 export { listRowChevron } from './list-row';
+export { menuIdKey, menuItemTone, menuItemTones, type MenuItemTone } from './menu';
 export { pageHeaderLevel, pageHeaderLevels, type PageHeaderLevel } from './page-header';
 export { sheetCloseIcon, sheetSide, sheetSidePhone, sheetSides, type SheetSide } from './sheet';
 export { fieldDescribedBy, textFieldSize, textFieldSizes, type TextFieldSize } from './text-field';
@@ -129,6 +138,10 @@ export const Plinth: Plugin = {
     app.component('PlinthIconButton', PlinthIconButton);
     app.component('PlinthListCard', PlinthListCard);
     app.component('PlinthListRow', PlinthListRow);
+    app.component('PlinthMenu', PlinthMenu);
+    app.component('PlinthMenuGroup', PlinthMenuGroup);
+    app.component('PlinthMenuItem', PlinthMenuItem);
+    app.component('PlinthMenuSeparator', PlinthMenuSeparator);
     app.component('PlinthMenuSheet', PlinthMenuSheet);
     app.component('PlinthPageHeader', PlinthPageHeader);
     app.component('PlinthPill', PlinthPill);

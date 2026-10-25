@@ -16,6 +16,10 @@ export { PlinthIcon, type PlinthIconProps } from './PlinthIcon';
 export { PlinthIconButton, type PlinthIconButtonProps } from './PlinthIconButton';
 export { PlinthListCard, type PlinthListCardProps } from './PlinthListCard';
 export { PlinthListRow, type PlinthListRowProps } from './PlinthListRow';
+export { PlinthMenu, type PlinthMenuProps } from './PlinthMenu';
+export { PlinthMenuGroup, type PlinthMenuGroupProps } from './PlinthMenuGroup';
+export { PlinthMenuItem, type PlinthMenuItemProps } from './PlinthMenuItem';
+export { PlinthMenuSeparator, type PlinthMenuSeparatorProps } from './PlinthMenuSeparator';
 export { PlinthMenuSheet, type PlinthMenuSheetProps } from './PlinthMenuSheet';
 export { PlinthPageHeader, type PlinthPageHeaderProps } from './PlinthPageHeader';
 export { PlinthPill, type PlinthPillProps } from './PlinthPill';
@@ -66,6 +70,7 @@ export { headingLevel, headingLevels, type HeadingLevel } from './heading';
 export { controlSizes, iconSizeFor, resolveSize, sizes, type ControlSize, type Size } from './size';
 export { iconSizes, type IconSize } from './icon';
 export { listRowChevron } from './list-row';
+export { MenuIdContext, menuItemTone, menuItemTones, type MenuItemTone } from './menu';
 export { pageHeaderLevel, pageHeaderLevels, type PageHeaderLevel } from './page-header';
 export {
   drawerCloseIcon,

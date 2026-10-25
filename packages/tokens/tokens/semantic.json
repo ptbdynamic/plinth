@@ -272,6 +272,16 @@
     "peek": {
       "$value": "{ref.size.160}",
       "$description": "How much of a drawer shows at its peek snap point (160 px)."
+    },
+    "menu": {
+      "min": {
+        "$value": "{ref.size.192}",
+        "$description": "The least width of a menu (192 px)."
+      },
+      "max": {
+        "$value": "{ref.size.320}",
+        "$description": "The most width of a menu (320 px); a longer label wraps."
+      }
     }
   },
   "layer": {
