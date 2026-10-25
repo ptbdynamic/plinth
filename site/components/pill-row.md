@@ -108,7 +108,7 @@ to Plinth's class, and the `ref`.
 ```
 
 ```tsx tab="React"
-import { PlinthPill, PlinthPillRow } from '@bdynamic/plinth/react';
+import { PlinthPill, PlinthPillRow } from '@ptbdynamic/plinth/react';
 
 <PlinthPillRow label="Status">
     {statuses.map((status) => (

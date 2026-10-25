@@ -5,7 +5,7 @@ The React 19 components print the same markup as the Blade and Vue ones, from th
 component has one.
 
 ```bash
-npm install @bdynamic/plinth
+npm install @ptbdynamic/plinth
 ```
 
 ## Set it up
@@ -13,12 +13,12 @@ npm install @bdynamic/plinth
 Load the fonts and the CSS once, then import the components where you use them:
 
 ```tsx label="src/main.tsx"
-import '@bdynamic/plinth/fonts.css';
-import '@bdynamic/plinth/css';
+import '@ptbdynamic/plinth/fonts.css';
+import '@ptbdynamic/plinth/css';
 ```
 
 ```tsx label="InvoiceActions.tsx"
-import { PlinthButton } from '@bdynamic/plinth/react';
+import { PlinthButton } from '@ptbdynamic/plinth/react';
 
 export function InvoiceActions({ onSave }: { onSave: () => void }) {
     return (

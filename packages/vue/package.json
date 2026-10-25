@@ -1,5 +1,5 @@
 {
-  "name": "@bdynamic/plinth-vue",
+  "name": "@ptbdynamic/plinth-vue",
   "version": "0.1.0",
   "private": true,
   "license": "MIT",
@@ -16,7 +16,7 @@
     "test": "vitest run --coverage"
   },
   "dependencies": {
-    "@bdynamic/plinth-css": "*"
+    "@ptbdynamic/plinth-css": "*"
   },
   "peerDependencies": {
     "vue": "^3.5.0"

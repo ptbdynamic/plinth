@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/html-vite';
-import { sheetSides, swipeToClose } from '@bdynamic/plinth-vue';
+import { sheetSides, swipeToClose } from '@ptbdynamic/plinth-vue';
 import { badge } from './badge.ts';
 import { button } from './button.ts';
 import { icon } from './icon.ts';
@@ -7,13 +7,13 @@ import { sampleIcons } from './icons.ts';
 import { listCard } from './list-card.ts';
 import type { ListRowArgs } from './list-row.ts';
 import { sheet, type SheetArgs } from './sheet.ts';
-import '@bdynamic/plinth-css/src/components/icon.css';
-import '@bdynamic/plinth-css/src/components/button.css';
-import '@bdynamic/plinth-css/src/components/badge.css';
-import '@bdynamic/plinth-css/src/components/list-row.css';
-import '@bdynamic/plinth-css/src/components/list-card.css';
-import '@bdynamic/plinth-css/src/components/modal.css';
-import '@bdynamic/plinth-css/src/components/sheet.css';
+import '@ptbdynamic/plinth-css/src/components/icon.css';
+import '@ptbdynamic/plinth-css/src/components/button.css';
+import '@ptbdynamic/plinth-css/src/components/badge.css';
+import '@ptbdynamic/plinth-css/src/components/list-row.css';
+import '@ptbdynamic/plinth-css/src/components/list-card.css';
+import '@ptbdynamic/plinth-css/src/components/modal.css';
+import '@ptbdynamic/plinth-css/src/components/sheet.css';
 
 const action = (label: string, variant: 'primary' | 'secondary' | 'danger', extra = {}) =>
   button({ label, variant, size: 'md', disabled: false, busy: false }, extra);

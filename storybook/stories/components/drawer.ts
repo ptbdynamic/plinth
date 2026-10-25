@@ -5,7 +5,7 @@ import {
   drawerSnapPoints,
   type DrawerDesktop,
   type DrawerSnap,
-} from '@bdynamic/plinth-vue';
+} from '@ptbdynamic/plinth-vue';
 import { iconButton } from './icon-button.ts';
 import { escape, rootAttributes, type Attributes } from './markup.ts';
 

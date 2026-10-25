@@ -3,7 +3,7 @@
  *
  * It builds everything, then makes the tag `v<version>` and pushes it (Packagist reads the
  * Composer package, `ptbdynamic/plinth`, from the root composer.json at that tag, and its version
- * from the tag), and publishes `@bdynamic/plinth` to npm with the same version. While the root
+ * from the tag), and publishes `@ptbdynamic/plinth` to npm with the same version. While the root
  * package.json is private, the npm step is skipped.
  *
  * `npm run release -- --dry-run` changes nothing: it checks the version and the Composer package

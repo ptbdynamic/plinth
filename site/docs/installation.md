@@ -10,10 +10,10 @@ Install the one your stack needs, or both.
 
 ## The packages
 
-| Package             | Registry  | Holds                                                                           |
-| ------------------- | --------- | ------------------------------------------------------------------------------- |
-| `@bdynamic/plinth`  | npm       | the tokens, the CSS and fonts, the Tailwind theme, and the Vue and React layers |
-| `ptbdynamic/plinth` | Packagist | the Blade components, the Filament plugin, and the built CSS and fonts          |
+| Package              | Registry  | Holds                                                                           |
+| -------------------- | --------- | ------------------------------------------------------------------------------- |
+| `@ptbdynamic/plinth` | npm       | the tokens, the CSS and fonts, the Tailwind theme, and the Vue and React layers |
+| `ptbdynamic/plinth`  | Packagist | the Blade components, the Filament plugin, and the built CSS and fonts          |
 
 The Composer package carries the built CSS, so a Laravel app needs no Node build to use Plinth.
 
@@ -22,20 +22,20 @@ composer require ptbdynamic/plinth
 ```
 
 ```bash tab="Vue or React"
-npm install @bdynamic/plinth
+npm install @ptbdynamic/plinth
 ```
 
 ## What the npm package exports
 
-| Import                          | What it is                                                     |
-| ------------------------------- | -------------------------------------------------------------- |
-| `@bdynamic/plinth/css`          | every component's CSS and the tokens, in one stylesheet        |
-| `@bdynamic/plinth/fonts.css`    | Geist and Geist Mono, the default typefaces, self-hosted       |
-| `@bdynamic/plinth/tokens.css`   | the tokens alone, as CSS custom properties                     |
-| `@bdynamic/plinth/tokens`       | the tokens as a JS and TypeScript export                       |
-| `@bdynamic/plinth/tailwind.css` | a Tailwind v4 theme, so page code gets the tokens as utilities |
-| `@bdynamic/plinth/vue`          | the Vue 3 components                                           |
-| `@bdynamic/plinth/react`        | the React 19 components                                        |
+| Import                            | What it is                                                     |
+| --------------------------------- | -------------------------------------------------------------- |
+| `@ptbdynamic/plinth/css`          | every component's CSS and the tokens, in one stylesheet        |
+| `@ptbdynamic/plinth/fonts.css`    | Geist and Geist Mono, the default typefaces, self-hosted       |
+| `@ptbdynamic/plinth/tokens.css`   | the tokens alone, as CSS custom properties                     |
+| `@ptbdynamic/plinth/tokens`       | the tokens as a JS and TypeScript export                       |
+| `@ptbdynamic/plinth/tailwind.css` | a Tailwind v4 theme, so page code gets the tokens as utilities |
+| `@ptbdynamic/plinth/vue`          | the Vue 3 components                                           |
+| `@ptbdynamic/plinth/react`        | the React 19 components                                        |
 
 Vue and React are optional peer dependencies: install the one your app uses.
 
@@ -45,8 +45,8 @@ Every page needs the fonts (unless your brand sets its own typefaces) and the st
 your own CSS:
 
 ```ts label="resources/js/app.ts"
-import '@bdynamic/plinth/fonts.css';
-import '@bdynamic/plinth/css';
+import '@ptbdynamic/plinth/fonts.css';
+import '@ptbdynamic/plinth/css';
 ```
 
 Laravel apps without a Node build publish the files instead; see

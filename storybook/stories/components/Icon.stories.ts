@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/html-vite';
 import { icon, iconSizes, type IconArgs } from './icon.ts';
 import { sampleIcons } from './icons.ts';
-import '@bdynamic/plinth-css/src/components/icon.css';
+import '@ptbdynamic/plinth-css/src/components/icon.css';
 
 const meta = {
   title: 'Components/Icon',

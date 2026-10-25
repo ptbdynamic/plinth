@@ -4,17 +4,17 @@
   "commit": false,
   "fixed": [
     [
-      "@bdynamic/plinth-tokens",
-      "@bdynamic/plinth-css",
-      "@bdynamic/plinth-vue",
-      "@bdynamic/plinth-react",
-      "@bdynamic/plinth-blade"
+      "@ptbdynamic/plinth-tokens",
+      "@ptbdynamic/plinth-css",
+      "@ptbdynamic/plinth-vue",
+      "@ptbdynamic/plinth-react",
+      "@ptbdynamic/plinth-blade"
     ]
   ],
   "linked": [],
   "access": "public",
   "baseBranch": "main",
   "updateInternalDependencies": "patch",
-  "ignore": ["@bdynamic/plinth-storybook", "@bdynamic/plinth-site"],
+  "ignore": ["@ptbdynamic/plinth-storybook", "@ptbdynamic/plinth-site"],
   "privatePackages": { "version": true, "tag": false }
 }

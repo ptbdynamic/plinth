@@ -163,7 +163,7 @@ React, the **`ref`** is the `<dialog>` itself, and **`onClose`** is its close ev
 
 ```tsx tab="React"
 import { useRef } from 'react';
-import { PlinthButton, PlinthDrawer } from '@bdynamic/plinth/react';
+import { PlinthButton, PlinthDrawer } from '@ptbdynamic/plinth/react';
 
 const route = useRef<HTMLDialogElement>(null);
 

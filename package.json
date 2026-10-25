@@ -1,9 +1,8 @@
 {
-  "name": "@bdynamic/plinth",
+  "name": "@ptbdynamic/plinth",
   "version": "0.1.0",
   "description": "The design system of BDynamic's projects: tokens, plain HTML and CSS components, and thin Blade, Vue and React layers.",
   "license": "MIT",
-  "private": true,
   "type": "module",
   "packageManager": "npm@10.9.9",
   "engines": {
@@ -95,5 +94,8 @@
   },
   "overrides": {
     "jest-runtime": "30.4.2"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

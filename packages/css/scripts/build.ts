@@ -8,10 +8,10 @@ import { createRequire } from 'node:module';
  * want only some of them on top of dist/tokens.css.
  */
 const require = createRequire(import.meta.url);
-const tokensCss = require.resolve('@bdynamic/plinth-tokens/tokens.css');
+const tokensCss = require.resolve('@ptbdynamic/plinth-tokens/tokens.css');
 const tokenNames = new Set(
   (
-    JSON.parse(readFileSync(require.resolve('@bdynamic/plinth-tokens/tokens.json'), 'utf8')) as {
+    JSON.parse(readFileSync(require.resolve('@ptbdynamic/plinth-tokens/tokens.json'), 'utf8')) as {
       name: string;
     }[]
   ).map((token) => token.name),

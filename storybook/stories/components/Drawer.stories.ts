@@ -1,15 +1,15 @@
 import type { Meta, StoryObj } from '@storybook/html-vite';
-import { drawerDesktops, drawerSnaps, swipeToClose } from '@bdynamic/plinth-vue';
+import { drawerDesktops, drawerSnaps, swipeToClose } from '@ptbdynamic/plinth-vue';
 import { button } from './button.ts';
 import { drawer, type DrawerArgs } from './drawer.ts';
 import { listCard } from './list-card.ts';
 import type { ListRowArgs } from './list-row.ts';
-import '@bdynamic/plinth-css/src/components/icon.css';
-import '@bdynamic/plinth-css/src/components/button.css';
-import '@bdynamic/plinth-css/src/components/list-row.css';
-import '@bdynamic/plinth-css/src/components/list-card.css';
-import '@bdynamic/plinth-css/src/components/modal.css';
-import '@bdynamic/plinth-css/src/components/drawer.css';
+import '@ptbdynamic/plinth-css/src/components/icon.css';
+import '@ptbdynamic/plinth-css/src/components/button.css';
+import '@ptbdynamic/plinth-css/src/components/list-row.css';
+import '@ptbdynamic/plinth-css/src/components/list-card.css';
+import '@ptbdynamic/plinth-css/src/components/modal.css';
+import '@ptbdynamic/plinth-css/src/components/drawer.css';
 
 const action = (label: string, variant: 'primary' | 'secondary', extra = {}) =>
   button({ label, variant, size: 'md', disabled: false, busy: false }, extra);

@@ -16,7 +16,7 @@ exists to prevent.
 
 ### 1. A React package, built and tested like the Vue one
 
-`packages/react` (workspace `@bdynamic/plinth-react`) holds React function components, built with
+`packages/react` (workspace `@ptbdynamic/plinth-react`) holds React function components, built with
 Vite in library mode to ESM with type declarations. It holds no styles: projects load Plinth's
 CSS as with every other layer.
 
@@ -50,7 +50,7 @@ as for Blade and Vue. A component is not done until its Blade, Vue and React out
 
 ### 5. Published in the one package, at the one version
 
-The build goes out as the `./react` subpath of `@bdynamic/plinth`, next to `./vue`, with `react`
+The build goes out as the `./react` subpath of `@ptbdynamic/plinth`, next to `./vue`, with `react`
 and `react-dom` as optional peer dependencies. The workspace joins the Changesets `fixed` group,
 so it carries the same version as everything else (ADR 4). Turborepo builds it after the CSS,
 alongside Vue and Blade, and before Storybook.

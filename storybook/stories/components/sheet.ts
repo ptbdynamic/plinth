@@ -1,4 +1,4 @@
-import { sheetCloseIcon, sheetSide, sheetSidePhone, type SheetSide } from '@bdynamic/plinth-vue';
+import { sheetCloseIcon, sheetSide, sheetSidePhone, type SheetSide } from '@ptbdynamic/plinth-vue';
 import { iconButton } from './icon-button.ts';
 import { escape, rootAttributes, type Attributes } from './markup.ts';
 

@@ -102,7 +102,7 @@ decorative, and about a status without its label.
 ```
 
 ```tsx tab="React"
-import { PlinthAvatar } from '@bdynamic/plinth/react';
+import { PlinthAvatar } from '@ptbdynamic/plinth/react';
 
 <PlinthAvatar name={user.name} src={user.photoUrl} status="success" statusLabel="Online" />;
 ```

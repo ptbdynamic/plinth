@@ -95,7 +95,7 @@ describe('sharedVersion', () => {
     const root = mkdtempSync(join(tmpdir(), 'plinth-release-'));
     writeFileSync(
       join(root, 'package.json'),
-      JSON.stringify({ name: '@bdynamic/plinth', version: '0.0.0' }),
+      JSON.stringify({ name: '@ptbdynamic/plinth', version: '0.0.0' }),
     );
     versioned.forEach((dir, index) => {
       mkdirSync(join(root, dir), { recursive: true });
@@ -110,7 +110,7 @@ describe('sharedVersion', () => {
   it('returns the version the packages share', () => {
     const root = workspace(['0.2.0', '0.2.0', '0.2.0', '0.2.0', '0.2.0']);
     expect(sharedVersion(root)).toBe('0.2.0');
-    expect(readPackage(root)).toEqual({ name: '@bdynamic/plinth', version: '0.0.0' });
+    expect(readPackage(root)).toEqual({ name: '@ptbdynamic/plinth', version: '0.0.0' });
   });
 
   it('refuses packages that have drifted apart', () => {

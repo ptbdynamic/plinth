@@ -1,6 +1,6 @@
 # Typography
 
-Geist and Geist Mono by default, self-hosted: load `@bdynamic/plinth/fonts.css`, or let the
+Geist and Geist Mono by default, self-hosted: load `@ptbdynamic/plinth/fonts.css`, or let the
 Composer package and the Filament plugin bring them. A project sets its own typefaces by
 overriding `--plinth-font-family-body` and `--plinth-font-family-mono`.
 

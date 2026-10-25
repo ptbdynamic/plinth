@@ -1,8 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/html-vite';
 import { button, controlSizes, buttonVariants, type ButtonArgs } from './button.ts';
 import { sampleIcons } from './icons.ts';
-import '@bdynamic/plinth-css/src/components/icon.css';
-import '@bdynamic/plinth-css/src/components/button.css';
+import '@ptbdynamic/plinth-css/src/components/icon.css';
+import '@ptbdynamic/plinth-css/src/components/button.css';
 
 const meta = {
   title: 'Components/Button',

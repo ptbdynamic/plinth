@@ -190,7 +190,7 @@ async function check(event: SubmitEvent) {
 
 ```tsx tab="React"
 import { useRef, useState } from 'react';
-import { PlinthConfirmDialog } from '@bdynamic/plinth/react';
+import { PlinthConfirmDialog } from '@ptbdynamic/plinth/react';
 
 const billing = useRef<HTMLDialogElement>(null);
 const [checking, setChecking] = useState(false);

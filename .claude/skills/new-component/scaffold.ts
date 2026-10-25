@@ -58,7 +58,7 @@ export function ${camel}({ label }: ${Name}Args, attributes: Record<string, stri
 
   [`storybook/stories/components/${Name}.stories.ts`]: `import type { Meta, StoryObj } from '@storybook/html-vite';
 import { ${camel}, type ${Name}Args } from './${name}.ts';
-import '@bdynamic/plinth-css/src/components/${name}.css';
+import '@ptbdynamic/plinth-css/src/components/${name}.css';
 
 const meta = {
   title: 'Components/${title}',
@@ -125,7 +125,7 @@ TODO which attributes reach which element, the events Vue emits and React's \`on
 \`\`\`
 
 \`\`\`tsx tab="React"
-import { Plinth${Name} } from '@bdynamic/plinth/react';
+import { Plinth${Name} } from '@ptbdynamic/plinth/react';
 
 <Plinth${Name} className="ms-2">Content</Plinth${Name}>;
 \`\`\`

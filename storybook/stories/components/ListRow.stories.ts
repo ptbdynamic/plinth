@@ -5,11 +5,11 @@ import { icon } from './icon.ts';
 import { iconButton } from './icon-button.ts';
 import { sampleIcons } from './icons.ts';
 import { listRow, type ListRowArgs } from './list-row.ts';
-import '@bdynamic/plinth-css/src/components/icon.css';
-import '@bdynamic/plinth-css/src/components/avatar.css';
-import '@bdynamic/plinth-css/src/components/badge.css';
-import '@bdynamic/plinth-css/src/components/button.css';
-import '@bdynamic/plinth-css/src/components/list-row.css';
+import '@ptbdynamic/plinth-css/src/components/icon.css';
+import '@ptbdynamic/plinth-css/src/components/avatar.css';
+import '@ptbdynamic/plinth-css/src/components/badge.css';
+import '@ptbdynamic/plinth-css/src/components/button.css';
+import '@ptbdynamic/plinth-css/src/components/list-row.css';
 
 const leadingIcon = (svg: string) => icon({ size: 'md', mirror: false, svg });
 const person = avatar({ name: 'Ana Lima', size: 'md', decorative: true });

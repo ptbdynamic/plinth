@@ -24,7 +24,7 @@ import {
   PlinthSectionMenu,
   PlinthSectionMenuItem,
   PlinthSheet,
-} from '@bdynamic/plinth-vue';
+} from '@ptbdynamic/plinth-vue';
 import {
   PlinthAvatar as ReactAvatar,
   PlinthBadge as ReactBadge,
@@ -51,7 +51,7 @@ import {
   PlinthSectionMenu as ReactSectionMenu,
   PlinthSectionMenuItem as ReactSectionMenuItem,
   PlinthSheet as ReactSheet,
-} from '@bdynamic/plinth-react';
+} from '@ptbdynamic/plinth-react';
 import { createElement, type ComponentType } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { createStaticVNode, h, type Component } from 'vue';

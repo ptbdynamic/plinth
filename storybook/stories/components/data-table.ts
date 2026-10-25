@@ -6,7 +6,7 @@ import {
   dataTableSorts,
   type DataTableCellKind,
   type DataTableSort,
-} from '@bdynamic/plinth-vue';
+} from '@ptbdynamic/plinth-vue';
 import { escape, rootAttributes, type Attributes } from './markup.ts';
 
 export { dataTableCellKinds, dataTableSorts, type DataTableCellKind, type DataTableSort };

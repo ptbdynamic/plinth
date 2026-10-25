@@ -5,13 +5,13 @@ import { sampleIcons } from './icons.ts';
 import { listCard } from './list-card.ts';
 import type { ListRowArgs } from './list-row.ts';
 import { sheet } from './sheet.ts';
-import '@bdynamic/plinth-css/src/components/icon.css';
-import '@bdynamic/plinth-css/src/components/button.css';
-import '@bdynamic/plinth-css/src/components/list-row.css';
-import '@bdynamic/plinth-css/src/components/list-card.css';
-import '@bdynamic/plinth-css/src/components/modal.css';
-import '@bdynamic/plinth-css/src/components/sheet.css';
-import '@bdynamic/plinth-css/src/components/header.css';
+import '@ptbdynamic/plinth-css/src/components/icon.css';
+import '@ptbdynamic/plinth-css/src/components/button.css';
+import '@ptbdynamic/plinth-css/src/components/list-row.css';
+import '@ptbdynamic/plinth-css/src/components/list-card.css';
+import '@ptbdynamic/plinth-css/src/components/modal.css';
+import '@ptbdynamic/plinth-css/src/components/sheet.css';
+import '@ptbdynamic/plinth-css/src/components/header.css';
 
 const action = (
   label: string,

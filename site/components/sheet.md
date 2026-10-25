@@ -154,7 +154,7 @@ own types don't list them yet.
 ```
 
 ```tsx tab="React"
-import { PlinthButton, PlinthSheet } from '@bdynamic/plinth/react';
+import { PlinthButton, PlinthSheet } from '@ptbdynamic/plinth/react';
 
 <PlinthButton variant="secondary" commandfor="filters" command="show-modal">
     Filters

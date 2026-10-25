@@ -1,5 +1,5 @@
 {
-  "name": "@bdynamic/plinth-storybook",
+  "name": "@ptbdynamic/plinth-storybook",
   "version": "0.0.0",
   "private": true,
   "license": "MIT",
@@ -12,11 +12,11 @@
     "test:stories": "node scripts/test-stories.ts"
   },
   "dependencies": {
-    "@bdynamic/plinth-blade": "*",
-    "@bdynamic/plinth-css": "*",
-    "@bdynamic/plinth-react": "*",
-    "@bdynamic/plinth-tokens": "*",
-    "@bdynamic/plinth-vue": "*"
+    "@ptbdynamic/plinth-blade": "*",
+    "@ptbdynamic/plinth-css": "*",
+    "@ptbdynamic/plinth-react": "*",
+    "@ptbdynamic/plinth-tokens": "*",
+    "@ptbdynamic/plinth-vue": "*"
   },
   "devDependencies": {
     "@storybook/addon-a11y": "^10.6.2",

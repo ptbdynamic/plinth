@@ -113,7 +113,7 @@ layer; React takes the Vue props, with the label as `children`.
 ```
 
 ```tsx tab="React"
-import { PlinthSectionMenu, PlinthSectionMenuItem } from '@bdynamic/plinth/react';
+import { PlinthSectionMenu, PlinthSectionMenuItem } from '@ptbdynamic/plinth/react';
 
 <PlinthSectionMenu label="View" nav={false}>
     <PlinthSectionMenuItem current={view === 'day'} onClick={() => setView('day')}>

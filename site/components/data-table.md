@@ -197,7 +197,7 @@ import {
     PlinthDataTableEmpty,
     PlinthDataTableRow,
     PlinthDataTableSort,
-} from '@bdynamic/plinth/react';
+} from '@ptbdynamic/plinth/react';
 
 <PlinthDataTable
     caption="Invoices"

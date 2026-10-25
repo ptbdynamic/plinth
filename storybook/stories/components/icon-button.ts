@@ -1,4 +1,4 @@
-import { iconSizeFor, type ControlSize, type ButtonVariant } from '@bdynamic/plinth-vue';
+import { iconSizeFor, type ControlSize, type ButtonVariant } from '@ptbdynamic/plinth-vue';
 import { escape, rootAttributes, type Attributes } from './markup.ts';
 
 export interface IconButtonArgs {

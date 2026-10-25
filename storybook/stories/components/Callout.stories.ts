@@ -2,9 +2,9 @@ import type { Meta, StoryObj } from '@storybook/html-vite';
 import { button } from './button.ts';
 import { callout, calloutRoles, calloutTones, type CalloutArgs } from './callout.ts';
 import { sampleIcons } from './icons.ts';
-import '@bdynamic/plinth-css/src/components/button.css';
-import '@bdynamic/plinth-css/src/components/callout.css';
-import '@bdynamic/plinth-css/src/components/icon.css';
+import '@ptbdynamic/plinth-css/src/components/button.css';
+import '@ptbdynamic/plinth-css/src/components/callout.css';
+import '@ptbdynamic/plinth-css/src/components/icon.css';
 
 const action = (label: string, variant: 'secondary' | 'ghost' | 'danger') =>
   button({ label, variant, size: 'sm', disabled: false, busy: false });

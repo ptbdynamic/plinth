@@ -4,7 +4,7 @@ The Vue 3 components print the same markup as the Blade and React ones, from the
 hold no styles and no state the app should own.
 
 ```bash
-npm install @bdynamic/plinth
+npm install @ptbdynamic/plinth
 ```
 
 ## Set it up
@@ -12,13 +12,13 @@ npm install @bdynamic/plinth
 Load the fonts and the CSS once, then import the components where you use them:
 
 ```ts label="src/main.ts"
-import '@bdynamic/plinth/fonts.css';
-import '@bdynamic/plinth/css';
+import '@ptbdynamic/plinth/fonts.css';
+import '@ptbdynamic/plinth/css';
 ```
 
 ```vue label="InvoiceStatus.vue"
 <script setup lang="ts">
-import { PlinthBadge } from '@bdynamic/plinth/vue';
+import { PlinthBadge } from '@ptbdynamic/plinth/vue';
 </script>
 
 <template>
@@ -30,7 +30,7 @@ Or register every component globally with the plugin:
 
 ```ts label="src/main.ts"
 import { createApp } from 'vue';
-import { Plinth } from '@bdynamic/plinth/vue';
+import { Plinth } from '@ptbdynamic/plinth/vue';
 import App from './App.vue';
 
 createApp(App).use(Plinth).mount('#app');

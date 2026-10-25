@@ -1,5 +1,5 @@
 {
-    "name": "@bdynamic/plinth-site",
+    "name": "@ptbdynamic/plinth-site",
     "version": "0.0.0",
     "private": true,
     "license": "MIT",
@@ -12,8 +12,8 @@
         "test": "composer test"
     },
     "dependencies": {
-        "@bdynamic/plinth-blade": "*",
-        "@bdynamic/plinth-tokens": "*"
+        "@ptbdynamic/plinth-blade": "*",
+        "@ptbdynamic/plinth-tokens": "*"
     },
     "devDependencies": {
         "alpinejs": "^3.15.0",
