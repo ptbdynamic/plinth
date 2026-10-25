@@ -17,6 +17,10 @@ import {
   PlinthIconButton,
   PlinthListCard,
   PlinthListRow,
+  PlinthMenu,
+  PlinthMenuGroup,
+  PlinthMenuItem,
+  PlinthMenuSeparator,
   PlinthMenuSheet,
   PlinthPageHeader,
   PlinthPill,
@@ -46,6 +50,10 @@ import {
   PlinthIconButton as ReactIconButton,
   PlinthListCard as ReactListCard,
   PlinthListRow as ReactListRow,
+  PlinthMenu as ReactMenu,
+  PlinthMenuGroup as ReactMenuGroup,
+  PlinthMenuItem as ReactMenuItem,
+  PlinthMenuSeparator as ReactMenuSeparator,
   PlinthMenuSheet as ReactMenuSheet,
   PlinthPageHeader as ReactPageHeader,
   PlinthPill as ReactPill,
@@ -104,6 +112,16 @@ import * as listCardStories from '../stories/components/ListCard.stories.ts';
 import { listCard, listCardRows, type ListCardArgs } from '../stories/components/list-card.ts';
 import * as listRowStories from '../stories/components/ListRow.stories.ts';
 import { listRow, type ListRowArgs } from '../stories/components/list-row.ts';
+import * as menuStories from '../stories/components/Menu.stories.ts';
+import {
+  menu,
+  menuEntries,
+  menuGroup,
+  menuItem,
+  menuSeparator,
+  type MenuArgs,
+  type MenuItemArgs,
+} from '../stories/components/menu.ts';
 import * as menuSheetStories from '../stories/components/MenuSheet.stories.ts';
 import { menuSheet, type MenuSheetArgs } from '../stories/components/menu-sheet.ts';
 import * as pageHeaderStories from '../stories/components/PageHeader.stories.ts';
@@ -194,6 +212,10 @@ const reactComponents = new Map<Component, unknown>([
   [PlinthIconButton, ReactIconButton],
   [PlinthListCard, ReactListCard],
   [PlinthListRow, ReactListRow],
+  [PlinthMenu, ReactMenu],
+  [PlinthMenuGroup, ReactMenuGroup],
+  [PlinthMenuItem, ReactMenuItem],
+  [PlinthMenuSeparator, ReactMenuSeparator],
   [PlinthMenuSheet, ReactMenuSheet],
   [PlinthPageHeader, ReactPageHeader],
   [PlinthPill, ReactPill],
@@ -305,6 +327,8 @@ const menuSheetDefaults: MenuSheetArgs = {
 };
 
 const pillDefaults: PillArgs = { label: 'Open', selected: false, disabled: false };
+const menuItemDefaults: MenuItemArgs = { label: 'Archive', tone: 'neutral', disabled: false };
+
 const sectionMenuItemDefaults: SectionMenuItemArgs = {
   label: 'Tasks',
   href: '#tasks',
@@ -645,6 +669,64 @@ const cases: ParityCase[] = [
     { ...sectionMenuItemDefaults, current: true },
     { 'aria-current': 'location' },
   ),
+  ...storyArgs<MenuArgs>(menuStories).map(([story, args]) => menuCase(`Menu/${story}`, args)),
+  menuCase(
+    'Menu/with extra attributes',
+    { id: 'ticket-actions', entries: [menuItemDefaults] },
+    { class: 'is-wide', 'data-testid': 'actions', 'aria-busy': 'true' },
+  ),
+  menuCase(
+    'Menu/with a clashing attribute',
+    { id: 'ticket-actions', entries: [menuItemDefaults] },
+    { popover: 'manual' },
+  ),
+  menuCase('Menu/id with spaces', { id: 'ticket-actions', entries: [] }, {}, ' ticket-actions '),
+  menuItemCase('Menu item/Default', menuItemDefaults),
+  menuItemCase('Menu item/Link', { ...menuItemDefaults, href: '#print' }),
+  menuItemCase('Menu item/Danger', { ...menuItemDefaults, tone: 'danger' }),
+  menuItemCase('Menu item/WithIcon', { ...menuItemDefaults, icon: sampleIcons.archive }),
+  menuItemCase('Menu item/WithShortcut', { ...menuItemDefaults, shortcut: '⌘E' }),
+  menuItemCase('Menu item/Disabled', { ...menuItemDefaults, disabled: true }),
+  menuItemCase('Menu item/DisabledLink', { ...menuItemDefaults, href: '#print', disabled: true }),
+  menuItemCase('Menu item/in a menu', menuItemDefaults, {}, 'ticket-actions'),
+  menuItemCase(
+    'Menu item/link in a menu',
+    { ...menuItemDefaults, href: '#print' },
+    {},
+    'ticket-actions',
+  ),
+  menuItemCase('Menu item/blank href and shortcut', {
+    ...menuItemDefaults,
+    href: ' ',
+    shortcut: ' ',
+  }),
+  menuItemCase('Menu item/unknown tone', { ...menuItemDefaults, tone: 'loud' as 'danger' }),
+  menuItemCase(
+    'Menu item/with extra attributes',
+    menuItemDefaults,
+    { class: 'is-busy', 'data-testid': 'archive', 'aria-keyshortcuts': 'E', type: 'submit' },
+    'ticket-actions',
+  ),
+  menuItemCase(
+    'Menu item/with a clashing attribute',
+    menuItemDefaults,
+    { command: '--archive' },
+    'ticket-actions',
+  ),
+  menuGroupCase('Menu group/Default', 'Move to'),
+  menuGroupCase('Menu group/blank label', ' '),
+  menuGroupCase('Menu group/with extra attributes', 'Move to', {
+    class: 'is-compact',
+    'data-testid': 'move',
+    'aria-describedby': 'move-help',
+  }),
+  menuGroupCase('Menu group/with a clashing attribute', 'Move to', { role: 'none' }),
+  menuSeparatorCase('Menu separator/Default'),
+  menuSeparatorCase('Menu separator/with extra attributes', {
+    class: 'is-wide',
+    'data-testid': 'separator',
+    'aria-hidden': 'true',
+  }),
   ...storyArgs<SheetArgs>(sheetStories).map(([story, args]) => sheetCase(`Sheet/${story}`, args)),
   sheetCase(
     'Sheet/with extra attributes',
@@ -1274,6 +1356,66 @@ function sectionMenuCase(
   };
 }
 
+/** The menu's parity; its entries are markup, passed in as the slot. */
+function menuCase(
+  story: string,
+  args: MenuArgs,
+  attributes: Attributes = {},
+  id: string = args.id,
+): ParityCase {
+  const props = { id };
+  const slot = menuEntries(args.entries, args.id);
+  return {
+    story,
+    markup: menu(args, attributes),
+    vue: { component: PlinthMenu, props: { ...props, ...attributes }, slot, html: true },
+    blade: { component: 'menu', props, attributes, slot },
+  };
+}
+
+/** An item on its own, or with `menu` the id of the menu it closes. */
+function menuItemCase(
+  story: string,
+  args: MenuItemArgs,
+  attributes: Attributes = {},
+  menuId?: string,
+): ParityCase {
+  const props = {
+    ...(args.href !== undefined ? { href: args.href } : {}),
+    tone: args.tone,
+    ...(args.shortcut !== undefined ? { shortcut: args.shortcut } : {}),
+    disabled: args.disabled,
+    ...(menuId ? { menu: menuId } : {}),
+  };
+  const named = args.icon ? { icon: args.icon } : undefined;
+  return {
+    story,
+    markup: menuItem(args, attributes, menuId),
+    vue: { component: PlinthMenuItem, props: { ...props, ...attributes }, slot: args.label, named },
+    blade: { component: 'menu-item', props, attributes, slot: args.label, named },
+  };
+}
+
+/** A group, with one item's markup as its slot. */
+function menuGroupCase(story: string, label: string, attributes: Attributes = {}): ParityCase {
+  const slot = menuItem(menuItemDefaults);
+  return {
+    story,
+    markup: menuGroup({ label }, slot, attributes),
+    vue: { component: PlinthMenuGroup, props: { label, ...attributes }, slot, html: true },
+    blade: { component: 'menu-group', props: { label }, attributes, slot },
+  };
+}
+
+function menuSeparatorCase(story: string, attributes: Attributes = {}): ParityCase {
+  return {
+    story,
+    markup: menuSeparator(attributes),
+    vue: { component: PlinthMenuSeparator, props: { ...attributes }, slot: '' },
+    blade: { component: 'menu-separator', props: {}, attributes, slot: '' },
+  };
+}
+
 /** The menu sheet's parity; its nav and account are markup, passed in as the slots. */
 function menuSheetCase(
   story: string,
@@ -1850,6 +1992,35 @@ describe('parity with the stories', () => {
       'Section menu item/with extra attributes',
       'Section menu item/button with extra attributes',
       'Section menu item/with a clashing attribute',
+      'Menu/Default',
+      'Menu/LabelsOnly',
+      'Menu/Groups',
+      'Menu/Links',
+      'Menu/Disabled',
+      'Menu/LongLabels',
+      'Menu/ManyItems',
+      'Menu/with extra attributes',
+      'Menu/with a clashing attribute',
+      'Menu/id with spaces',
+      'Menu item/Default',
+      'Menu item/Link',
+      'Menu item/Danger',
+      'Menu item/WithIcon',
+      'Menu item/WithShortcut',
+      'Menu item/Disabled',
+      'Menu item/DisabledLink',
+      'Menu item/in a menu',
+      'Menu item/link in a menu',
+      'Menu item/blank href and shortcut',
+      'Menu item/unknown tone',
+      'Menu item/with extra attributes',
+      'Menu item/with a clashing attribute',
+      'Menu group/Default',
+      'Menu group/blank label',
+      'Menu group/with extra attributes',
+      'Menu group/with a clashing attribute',
+      'Menu separator/Default',
+      'Menu separator/with extra attributes',
       'Sheet/Default',
       'Sheet/Start',
       'Sheet/Top',
