@@ -656,6 +656,9 @@
  *   <span class="plinth-icon" data-size="md" data-mirror aria-hidden="true"><svg>…</svg></span>
  * </a>
  *
+ * Its icon is the project's SVG in the slot, or a built-in glyph by name (`icon="menu"` in Blade,
+ * Vue and React), printed as the icon's is, with data-icon (icon.css).
+ *
  * aria-label is required: it is the only name the button has. A toggle has aria-pressed
  * ("true" or "false"), and pressed shows the selection tint (accent-subtle, accent-text) inside
  * a 2px accent edge (border-width.thick), so colour is not its only cue; it still answers hover
@@ -2369,7 +2372,7 @@
 
 /* icon.css */
 /*
- * Icon: a project's own SVG, sized by Plinth.
+ * Icon: a built-in glyph or a project's own SVG, sized by Plinth.
  *
  * Decorative (the default), hidden from assistive technology:
  * <span class="plinth-icon" data-size="md" aria-hidden="true">
@@ -2383,12 +2386,24 @@
  *   <svg viewBox="0 0 24 24">…</svg>
  * </span>
  *
+ * A built-in glyph, by name (`name` on the icon, `icon` on the icon button), instead of the slot:
+ * <span class="plinth-icon" data-size="md" data-icon="menu" aria-hidden="true">
+ *   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+ *     stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M4 12h16M4 17h16"></path></svg>
+ * </span>
+ * The glyphs: menu, close, back, chevron-left, chevron-right, chevron-up, chevron-down, check,
+ * plus, search, more, external, sign-out, sun, moon, system, info, warning. They are drawn on a
+ * 24 × 24 grid with a 2-unit round stroke; the paths are in iconGlyphs (Vue and React) and the
+ * Glyph enum (Blade). An unknown name shows the slot. back, the side chevrons and sign-out point
+ * a direction and get data-mirror without `mirror`. Not a general icon library: brand and domain
+ * icons stay in the app, in the slot.
+ *
  * Sizes (data-size): sm 16px, md 20px (default, also when the attribute is missing or unknown),
  * lg 24px. data-mirror flips the icon in right-to-left text, for icons that point a direction.
  *
- * The SVG comes from the project, inline or as <use href="sprite.svg#name">. It should draw with
- * currentColor; Plinth sets no fill or stroke, so outline and filled icon sets both keep theirs.
- * The icon takes its colour from the text around it.
+ * The project's SVG goes in the slot, inline or as <use href="sprite.svg#name">. It should draw
+ * with currentColor; Plinth sets no fill or stroke in CSS, so outline and filled icon sets both
+ * keep theirs. The icon takes its colour from the text around it.
  */
 
 @layer plinth {

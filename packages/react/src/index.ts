@@ -73,6 +73,7 @@ export { controlSizes, iconSizeFor, resolveSize, sizes, type ControlSize, type S
 export {
   iconGlyph,
   iconGlyphs,
+  iconName,
   iconNames,
   iconSizes,
   mirroredIconNames,

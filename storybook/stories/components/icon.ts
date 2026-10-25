@@ -1,5 +1,6 @@
 import {
   iconGlyph,
+  iconName,
   iconNames,
   iconSizes,
   mirroredIconNames,
@@ -21,18 +22,13 @@ export interface IconArgs {
   svg?: string;
 }
 
-/** A built-in glyph's name, or nothing when it is not one. */
-export function glyphName(name: string | undefined): IconName | undefined {
-  return iconNames.includes(name as IconName) ? (name as IconName) : undefined;
-}
-
 /** What goes inside an icon's span: the glyph's data-icon, data-mirror and SVG, or the slot. */
 export function iconInside(
   name: string | undefined,
   mirror: boolean | undefined,
   svg: string | undefined,
 ): { attributes: string; svg: string } {
-  const glyph = glyphName(name);
+  const glyph = iconName(name);
   const mirrored = mirror || (glyph !== undefined && mirroredIconNames.includes(glyph));
   return {
     attributes: `${glyph ? ` data-icon="${glyph}"` : ''}${mirrored ? ' data-mirror' : ''}`,

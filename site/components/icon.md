@@ -49,7 +49,7 @@ round stroke, so they line up with each other and with Plinth's sizes. Use one b
 | `info`, `warning`                                             | a note, a caution                               |
 
 The set is small on purpose: it is not an icon library. Brand and domain icons (a product's logo,
-an invoice, a tractor) stay in the app and go in the slot. A name Plinth doesn't know shows the
+an invoice, a calendar) stay in the app and go in the slot. A name Plinth doesn't know shows the
 slot instead, and with a name the slot is ignored. In Blade, `name` also takes a `Glyph` case.
 
 ## Sizes
@@ -134,6 +134,25 @@ The glyphs' names are `iconNames` in Vue and React (with the `IconName` type), a
 `iconGlyph(name)`.
 
 Extra attributes (`class`, `id`, `data-*`) reach the `<span>`; in React, `className` and `ref` do.
+
+```blade tab="Blade"
+<x-plinth::icon name="external" size="sm" class="ms-1" />
+<x-plinth::icon label="Invoice"><svg>…</svg></x-plinth::icon>
+```
+
+```vue tab="Vue"
+<PlinthIcon name="external" size="sm" class="ms-1" />
+<PlinthIcon label="Invoice"><svg>…</svg></PlinthIcon>
+```
+
+```tsx tab="React"
+import { PlinthIcon } from '@ptbdynamic/plinth/react';
+
+<PlinthIcon name="external" size="sm" className="ms-1" />;
+<PlinthIcon label="Invoice">
+    <InvoiceIcon />
+</PlinthIcon>;
+```
 
 ## Accessibility
 

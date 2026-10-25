@@ -119,6 +119,7 @@ types don't list them yet.
 ```
 
 ```vue tab="Vue"
+<PlinthIconButton label="Open menu" icon="menu" @click="openMenu" />
 <PlinthIconButton label="Favourite" :pressed="isFavourite" @click="toggle">
   <svg>…</svg>
 </PlinthIconButton>
@@ -127,6 +128,7 @@ types don't list them yet.
 ```tsx tab="React"
 import { PlinthIconButton } from '@ptbdynamic/plinth/react';
 
+<PlinthIconButton label="Open menu" icon="menu" onClick={openMenu} />;
 <PlinthIconButton label="Favourite" pressed={favourite} onClick={toggle}>
     <StarIcon />
 </PlinthIconButton>;
