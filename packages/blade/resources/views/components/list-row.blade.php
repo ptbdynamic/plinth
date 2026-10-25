@@ -50,6 +50,6 @@
         @endif
     </span>
     @if (isset($trailing) || $chevron)
-        <span class="plinth-list-row-trailing">{{ $trailing ?? '' }}@if ($chevron)<span class="plinth-icon plinth-list-row-chevron" data-size="sm" data-mirror aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"></path></svg></span>@endif</span>
+        <span class="plinth-list-row-trailing">{{ $trailing ?? '' }}@if ($chevron)<x-plinth::icon class="plinth-list-row-chevron" name="chevron-right" size="sm" />@endif</span>
     @endif
 </{{ $tag }}>

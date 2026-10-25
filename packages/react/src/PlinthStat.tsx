@@ -2,6 +2,7 @@
 import type { ComponentProps, ElementType, Ref } from 'react';
 import { calloutIcons } from './callout';
 import { classNames } from './markup';
+import { PlinthIcon } from './PlinthIcon';
 import { tone as toTone, type Tone } from './tones';
 
 interface StatOptions {
@@ -75,26 +76,7 @@ export function PlinthStat({
           {description}
         </span>
       ) : null}
-      {/* The chevron is statChevron (stat.ts), written out; parity keeps the copies equal. */}
-      {link ? (
-        <span
-          className="plinth-icon plinth-stat-chevron"
-          data-size="sm"
-          data-mirror=""
-          aria-hidden="true"
-        >
-          <svg
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <path d="M9 6l6 6-6 6"></path>
-          </svg>
-        </span>
-      ) : null}
+      {link ? <PlinthIcon className="plinth-stat-chevron" name="chevron-right" size="sm" /> : null}
     </Tag>
   );
 }

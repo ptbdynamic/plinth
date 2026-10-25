@@ -91,15 +91,15 @@ page widens, usually as a list:
 
 Blade, Vue and React print exactly this markup, and the parity tests hold them to it.
 
-| Part                       | Element            | Required | What it is                                                                                |
-| -------------------------- | ------------------ | -------- | ----------------------------------------------------------------------------------------- |
-| `.plinth-stat`             | `<div>` or `<a>`   | yes      | The root, the tile. An `<a href>` with `href`. Takes `data-tone` and forwarded attributes |
-| `.plinth-stat-label`       | `<span>`           | yes      | What the number is                                                                        |
-| `.plinth-stat-value`       | `<span>`           | yes      | The value, or the em dash and the empty label                                             |
-| `.plinth-stat-empty`       | `<span>`           | no       | The empty label, for screen readers only; the dash before it is `aria-hidden`             |
-| `.plinth-stat-description` | `<span>`           | no       | The supporting line                                                                       |
-| `.plinth-stat-tone`        | `<span>` (an icon) | no       | The tone's icon, first in the supporting line; not for neutral                            |
-| `.plinth-stat-chevron`     | `<span>` (an icon) | no       | The link's chevron, last in the tile; `data-mirror` flips it in right-to-left text        |
+| Part                       | Element            | Required | What it is                                                                                                           |
+| -------------------------- | ------------------ | -------- | -------------------------------------------------------------------------------------------------------------------- |
+| `.plinth-stat`             | `<div>` or `<a>`   | yes      | The root, the tile. An `<a href>` with `href`. Takes `data-tone` and forwarded attributes                            |
+| `.plinth-stat-label`       | `<span>`           | yes      | What the number is                                                                                                   |
+| `.plinth-stat-value`       | `<span>`           | yes      | The value, or the em dash and the empty label                                                                        |
+| `.plinth-stat-empty`       | `<span>`           | no       | The empty label, for screen readers only; the dash before it is `aria-hidden`                                        |
+| `.plinth-stat-description` | `<span>`           | no       | The supporting line                                                                                                  |
+| `.plinth-stat-tone`        | `<span>` (an icon) | no       | The tone's icon, first in the supporting line; not for neutral                                                       |
+| `.plinth-stat-chevron`     | `<span>` (an icon) | no       | The link's chevron, the icon's `chevron-right` glyph, last in the tile; `data-mirror` flips it in right-to-left text |
 
 | Attribute or class | On                   | Values                                        | Default   |
 | ------------------ | -------------------- | --------------------------------------------- | --------- |

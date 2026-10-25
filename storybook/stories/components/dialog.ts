@@ -1,4 +1,4 @@
-import { dialogCloseIcon, dialogSidePhone, type DialogSidePhone } from '@ptbdynamic/plinth-vue';
+import { dialogSidePhone, type DialogSidePhone } from '@ptbdynamic/plinth-vue';
 import { iconButton } from './icon-button.ts';
 import { escape, rootAttributes, type Attributes } from './markup.ts';
 
@@ -46,7 +46,7 @@ export function dialog(
           size: 'md',
           disabled: false,
           busy: false,
-          svg: dialogCloseIcon,
+          icon: 'close',
         },
         { class: 'plinth-dialog-close', commandfor: id, command: 'close' },
       )

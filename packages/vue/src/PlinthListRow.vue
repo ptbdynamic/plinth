@@ -1,6 +1,7 @@
 <script setup lang="ts">
 // Markup contract: packages/css/src/components/list-row.css
 import { computed } from 'vue';
+import PlinthIcon from './PlinthIcon.vue';
 
 const props = withDefaults(
   defineProps<{
@@ -83,23 +84,12 @@ function change(event: Event) {
       <span class="plinth-list-row-title"><slot /></span>
       <span v-if="description" class="plinth-list-row-description">{{ description }}</span>
     </span>
-    <!-- The chevron is listRowChevron (list-row.ts), written out; parity keeps the copies equal. -->
     <span v-if="$slots.trailing || mark" class="plinth-list-row-trailing"
-      ><slot name="trailing" /><span
+      ><slot name="trailing" /><PlinthIcon
         v-if="mark"
-        class="plinth-icon plinth-list-row-chevron"
-        data-size="sm"
-        data-mirror
-        aria-hidden="true"
-        ><svg
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        >
-          <path d="M9 6l6 6-6 6"></path></svg></span
-    ></span>
+        class="plinth-list-row-chevron"
+        name="chevron-right"
+        size="sm"
+    /></span>
   </component>
 </template>

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 // Markup contract: packages/css/src/components/stat.css
 import { computed } from 'vue';
+import PlinthIcon from './PlinthIcon.vue';
 import { calloutIcons } from './callout';
 import { tone as toTone, type Tone } from './tones';
 
@@ -51,22 +52,6 @@ const empty = computed(() => props.value === null || String(props.value).trim() 
       ></span
       >{{ description }}</span
     >
-    <!-- The chevron is statChevron (stat.ts), written out; parity keeps the copies equal. -->
-    <span
-      v-if="link"
-      class="plinth-icon plinth-stat-chevron"
-      data-size="sm"
-      data-mirror
-      aria-hidden="true"
-      ><svg
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="2"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-      >
-        <path d="M9 6l6 6-6 6"></path></svg
-    ></span>
+    <PlinthIcon v-if="link" class="plinth-stat-chevron" name="chevron-right" size="sm" />
   </component>
 </template>

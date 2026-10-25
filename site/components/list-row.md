@@ -19,8 +19,8 @@ it (ADR 2):
 - a row that navigates gets an **`href`** and becomes an `<a>`;
 - a row that acts (sign out, open a sheet) gets **`button`** and becomes a `<button type="button">`.
 
-Set **`chevron`** on a row that opens another page or a sheet. It points the other way in
-right-to-left text.
+Set **`chevron`** on a row that opens another page or a sheet: the icon's `chevron-right` glyph. It
+points the other way in right-to-left text.
 
 ```blade example layout="stack"
 <x-plinth::list-card>

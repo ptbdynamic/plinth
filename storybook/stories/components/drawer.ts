@@ -1,5 +1,4 @@
 import {
-  drawerCloseIcon,
   drawerDesktop,
   drawerSnap,
   drawerSnapPoints,
@@ -48,7 +47,7 @@ export function drawer(
       size: 'md',
       disabled: false,
       busy: false,
-      svg: drawerCloseIcon,
+      icon: 'close',
     },
     { class: 'plinth-drawer-close', commandfor: id, command: 'close' },
   );

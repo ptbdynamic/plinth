@@ -1,4 +1,4 @@
-import { sheetCloseIcon, sheetSide, sheetSidePhone, type SheetSide } from '@ptbdynamic/plinth-vue';
+import { sheetSide, sheetSidePhone, type SheetSide } from '@ptbdynamic/plinth-vue';
 import { iconButton } from './icon-button.ts';
 import { escape, rootAttributes, type Attributes } from './markup.ts';
 
@@ -38,7 +38,7 @@ export function sheet(
       size: 'md',
       disabled: false,
       busy: false,
-      svg: sheetCloseIcon,
+      icon: 'close',
     },
     { class: 'plinth-sheet-close', commandfor: id, command: 'close' },
   );

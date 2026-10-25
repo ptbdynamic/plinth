@@ -6,7 +6,7 @@ import { PlinthDialog, dialogCloseIcon, type DialogSidePhone } from '../src/inde
 
 const close =
   '<button type="button" class="plinth-button plinth-icon-button plinth-dialog-close" data-variant="ghost" data-size="md" aria-label="Close" commandfor="project" command="close">' +
-  `<span class="plinth-icon" data-size="md" aria-hidden="true">${dialogCloseIcon}</span></button>`;
+  `<span class="plinth-icon" data-size="md" data-icon="close" aria-hidden="true">${dialogCloseIcon}</span></button>`;
 
 const root = (element: ReactElement) =>
   render(element).container.firstElementChild! as HTMLDialogElement;
