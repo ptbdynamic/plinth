@@ -106,6 +106,8 @@ describe('tiers', () => {
       'split-view.list-width',
       'menu.min-width',
       'menu.max-width',
+      'toolbar.height',
+      'toolbar.search-width',
       'text-field.trailing-size',
       ...['neutral', 'info', 'success', 'warning', 'danger'].flatMap((tone) => [
         `callout.${tone}-surface`,

@@ -42,6 +42,11 @@ import PlinthSplitView from './PlinthSplitView.vue';
 import PlinthStat from './PlinthStat.vue';
 import PlinthTextarea from './PlinthTextarea.vue';
 import PlinthTextField from './PlinthTextField.vue';
+import PlinthToolbar from './PlinthToolbar.vue';
+import PlinthToolbarAction from './PlinthToolbarAction.vue';
+import PlinthToolbarGroup from './PlinthToolbarGroup.vue';
+import PlinthToolbarScope from './PlinthToolbarScope.vue';
+import PlinthToolbarSearch from './PlinthToolbarSearch.vue';
 
 export {
   PlinthAppBar,
@@ -87,6 +92,11 @@ export {
   PlinthStat,
   PlinthTextarea,
   PlinthTextField,
+  PlinthToolbar,
+  PlinthToolbarAction,
+  PlinthToolbarGroup,
+  PlinthToolbarScope,
+  PlinthToolbarSearch,
 };
 export { avatarGlyph, avatarSizes, initialsFrom, type AvatarSize } from './avatar';
 export { buttonVariants, type ButtonVariant } from './button';
@@ -151,6 +161,7 @@ export { fieldDescribedBy, textFieldSize, textFieldSizes, type TextFieldSize } f
 export { swipeToClose, useSwipeToClose } from './swipe';
 export { statChevron } from './stat';
 export { tones, type Tone } from './tones';
+export { toolbarKeys, useToolbarKeys } from './toolbar';
 
 /** Registers every Plinth component globally: `app.use(Plinth)`. */
 export const Plinth: Plugin = {
@@ -198,5 +209,10 @@ export const Plinth: Plugin = {
     app.component('PlinthStat', PlinthStat);
     app.component('PlinthTextarea', PlinthTextarea);
     app.component('PlinthTextField', PlinthTextField);
+    app.component('PlinthToolbar', PlinthToolbar);
+    app.component('PlinthToolbarAction', PlinthToolbarAction);
+    app.component('PlinthToolbarGroup', PlinthToolbarGroup);
+    app.component('PlinthToolbarScope', PlinthToolbarScope);
+    app.component('PlinthToolbarSearch', PlinthToolbarSearch);
   },
 };

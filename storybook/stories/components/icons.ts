@@ -33,6 +33,9 @@ export const sampleIcons = {
     '<rect x="3" y="4" width="18" height="4" rx="1"/><path d="M5 8v11h14V8M10 12h4"/>',
   ),
   inbox: outline('<path d="M4 13l2.5-8h11L20 13v6H4z"/><path d="M4 13h4.5a3.5 3.5 0 0 0 7 0H20"/>'),
+  clock: outline('<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>'),
+  flag: outline('<path d="M5 21V4M5 4h11l-2 4 2 4H5"/>'),
+  spam: outline('<circle cx="12" cy="12" r="9"/><path d="M5.6 5.6l12.8 12.8"/>'),
   trash: outline('<path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/>'),
   file: outline('<path d="M6 3h8l4 4v14H6z"/><path d="M14 3v4h4M9 12h6M9 16h6"/>'),
   image: outline(

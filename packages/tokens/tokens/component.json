@@ -121,6 +121,18 @@
       "$description": "A menu's most width (320px), and never more than the screen less a margin."
     }
   },
+  "toolbar": {
+    "height": {
+      "$type": "dimension",
+      "$value": "{size.row}",
+      "$description": "The toolbar's height (44px), a list header's."
+    },
+    "search-width": {
+      "$type": "dimension",
+      "$value": "{size.search}",
+      "$description": "The most width of the toolbar's search field with its scope (320px); it narrows with the toolbar."
+    }
+  },
   "text-field": {
     "trailing-size": {
       "$type": "dimension",
