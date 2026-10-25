@@ -9,48 +9,115 @@ concurrency:
   group: ci-${{ github.ref }}
   cancel-in-progress: true
 
+# Three jobs run side by side: the packages, the site, and the Storybook tests in shards. On a
+# pull request each checks only what Turborepo counts affected (what changed and what depends on
+# it); on main, everything. The `ci` job at the end is the check branch protection requires.
 jobs:
-  ci:
+  packages:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
         with:
           fetch-depth: 0
 
-      - uses: shivammathur/setup-php@v2
+      - uses: ./.github/actions/setup
         with:
-          php-version: '8.4'
-          tools: composer
-          coverage: pcov
+          cache: packages
 
-      - uses: actions/setup-node@v5
-        with:
-          node-version-file: .nvmrc
-          cache: npm
-
-      - name: Restore the Turborepo cache
-        uses: actions/cache@v4
-        with:
-          path: .turbo
-          key: turbo-${{ runner.os }}-${{ github.sha }}
-          restore-keys: turbo-${{ runner.os }}-
-
-      # Also runs `composer install` in packages/blade (its postinstall).
-      - run: npm ci
-
-      - name: Install Chromium for the Storybook test runner
-        run: npx playwright install --with-deps chromium
-
-      - name: Lint, test and build what the pull request touches, and what depends on it
+      - name: Lint, test and build the packages the pull request touches, and what depends on them
         if: github.event_name == 'pull_request'
-        run: npx turbo run lint test build build-storybook --filter="...[origin/${{ github.base_ref }}]"
+        run: >-
+          npx turbo run lint test build
+          --filter="...[origin/${{ github.base_ref }}]"
+          --filter="!@ptbdynamic/plinth-site" --filter="!@ptbdynamic/plinth-storybook"
 
-      - name: Lint, test and build everything
+      - name: Lint, test and build every package
         if: github.event_name != 'pull_request'
-        run: npx turbo run lint test build build-storybook
+        run: >-
+          npx turbo run lint test build
+          --filter="!@ptbdynamic/plinth-site" --filter="!@ptbdynamic/plinth-storybook"
 
       - name: A release dry run gives npm and Packagist one version
         run: npm run release -- --dry-run
 
       - name: The CSS shipped in packages/blade is up to date
         run: git diff --exit-code -- packages/blade/resources/dist
+
+  site:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+
+      - id: affected
+        uses: ./.github/actions/affected
+        with:
+          package: '@ptbdynamic/plinth-site'
+
+      - if: steps.affected.outputs.run == 'true'
+        uses: ./.github/actions/setup
+        with:
+          cache: site
+
+      - name: Lint, test and build the site
+        if: steps.affected.outputs.run == 'true'
+        run: npx turbo run lint test build --filter=@ptbdynamic/plinth-site
+
+  storybook:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [1, 2, 3, 4]
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+
+      - id: affected
+        uses: ./.github/actions/affected
+        with:
+          package: '@ptbdynamic/plinth-storybook'
+
+      - if: steps.affected.outputs.run == 'true'
+        uses: ./.github/actions/setup
+        with:
+          cache: storybook-${{ matrix.shard }}
+
+      - name: Restore Playwright's browsers
+        if: steps.affected.outputs.run == 'true'
+        id: playwright
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+
+      # The runner image already has what Chromium needs from apt.
+      - name: Install Chromium for the Storybook test runner
+        if: steps.affected.outputs.run == 'true' && steps.playwright.outputs.cache-hit != 'true'
+        run: npx playwright install chromium
+
+      - name: Build Storybook
+        if: steps.affected.outputs.run == 'true'
+        run: npx turbo run build-storybook --filter=@ptbdynamic/plinth-storybook
+
+      # The rest of the workspace's `test` and its `lint`, in one shard only.
+      - name: Lint Storybook and run its Vitest tests
+        if: steps.affected.outputs.run == 'true' && matrix.shard == 1
+        run: |
+          npx turbo run lint --filter=@ptbdynamic/plinth-storybook
+          npm exec --workspace=@ptbdynamic/plinth-storybook -- vitest run
+
+      - name: Test the stories (shard ${{ matrix.shard }} of 4)
+        if: steps.affected.outputs.run == 'true'
+        run: npm run test:stories --workspace=@ptbdynamic/plinth-storybook -- --shard=${{ matrix.shard }}/4
+
+  ci:
+    if: always()
+    needs: [packages, site, storybook]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Every job passed or had nothing to check
+        if: contains(needs.*.result, 'failure') || contains(needs.*.result, 'cancelled')
+        run: exit 1

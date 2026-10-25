@@ -46,7 +46,7 @@
             "phpstan analyse --no-progress --memory-limit=1G"
         ],
         "format": "pint",
-        "test": "pest --coverage --min=100",
+        "test": "pest --parallel --coverage --min=100",
         "post-autoload-dump": [
             "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
             "@php artisan package:discover --ansi"

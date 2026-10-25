@@ -5,6 +5,9 @@
  * A fixed port collides when two checkouts (or two agents in separate worktrees) test at the
  * same time, and a crashed run can leave its server holding the port. Here the system picks the
  * port, and the server always stops when the run ends. Extra arguments go to test-storybook.
+ *
+ * With `--shard=i/n` (CI splits the stories over parallel jobs), the docs check runs in the
+ * first shard only.
  */
 import { spawn } from 'node:child_process';
 import { createRequire } from 'node:module';
@@ -18,6 +21,9 @@ const { createServer } = require('http-server') as {
   };
 };
 
+const args = process.argv.slice(2);
+const shard = args.join(' ').match(/--shard[= ](\d+)\//)?.[1];
+
 const { server } = createServer({ root: 'storybook-static', cache: -1, silent: true });
 await new Promise<void>((resolve) => server.listen(0, '127.0.0.1', resolve));
 const { port } = server.address() as AddressInfo;
@@ -30,7 +36,7 @@ const runner = spawn(
     `http://127.0.0.1:${port}`,
     '--testTimeout',
     '60000',
-    ...process.argv.slice(2),
+    ...args,
   ],
   { stdio: 'inherit' },
 );
@@ -41,7 +47,7 @@ process.on('SIGTERM', stop);
 let code = await new Promise<number>((resolve) => runner.on('exit', (c) => resolve(c ?? 1)));
 
 // The runner visits stories only, so the docs pages get their own check.
-if (code === 0) {
+if (code === 0 && (shard === undefined || shard === '1')) {
   const failures = await checkDocsWidth(`http://127.0.0.1:${port}`);
   for (const failure of failures) console.error(`Docs page too wide: ${failure}`);
   if (failures.length > 0) code = 1;
