@@ -2,7 +2,7 @@
 
 - Status: proposed | accepted | superseded by [ADR M](000M-….md)
 - Date: YYYY-MM-DD
-- Issue: [#n](https://github.com/bdynamicpt/plinth/issues/n)
+- Issue: [#n](https://github.com/ptbdynamic/plinth/issues/n)
 
 ## Context
 

@@ -96,7 +96,7 @@ To try it locally, run it in a fresh clone: it swaps `vendor/` for one without t
 
 Set up once by the repository's owner:
 
-- **Application:** created from the GitHub repository `bdynamicpt/plinth`, with `site` as its root
+- **Application:** created from the GitHub repository `ptbdynamic/plinth`, with `site` as its root
   directory (Cloud lists the top-level directories of a monorepo). The rest of the repository is
   there during the build; only `site/` ships.
 - **Environment:** `production`, on the branch `main`, with push to deploy on. PHP 8.4 and Node 22

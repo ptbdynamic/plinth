@@ -1,6 +1,6 @@
 <?php
 
-$repository = 'https://github.com/bdynamicpt/plinth';
+$repository = 'https://github.com/ptbdynamic/plinth';
 
 return [
 

@@ -2,7 +2,7 @@
 
 - Status: accepted
 - Date: 2026-10-18
-- Issue: [#34](https://github.com/bdynamicpt/plinth/issues/34)
+- Issue: [#34](https://github.com/ptbdynamic/plinth/issues/34)
 
 ## Context
 

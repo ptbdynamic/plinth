@@ -2,7 +2,7 @@
 
 - Status: accepted
 - Date: 2026-10-19
-- Issue: [#5](https://github.com/bdynamicpt/plinth/issues/5)
+- Issue: [#5](https://github.com/ptbdynamic/plinth/issues/5)
 
 ## Context
 
@@ -70,7 +70,7 @@ token's pull requests don't start other workflows).
 - Contributors add a changeset to each pull request that changes the packages; reviewers check
   it is there and that its bump is right.
 - Packagist reads `composer.json` at the repository root, and Plinth's is in `packages/blade/`.
-  Until that is settled ([#56](https://github.com/bdynamicpt/plinth/issues/56)), the tags carry
+  Until that is settled ([#56](https://github.com/ptbdynamic/plinth/issues/56)), the tags carry
   the version Packagist will use, but Packagist can't read the package.
 - npm publishing waits for the `@bdynamic` scope; removing `"private": true` from the root
   `package.json` turns it on.

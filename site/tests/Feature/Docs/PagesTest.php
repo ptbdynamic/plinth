@@ -26,7 +26,7 @@ it('lays a guide out with its breadcrumb, lead, contents, previous and next, and
         ->assertSee('On this page')
         ->assertSee('href="#override-the-semantic-tokens"', false)
         ->assertSeeInOrder(['Previous', 'Tailwind v4', 'Next', 'Dark mode'])
-        ->assertSee('href="https://github.com/bdynamicpt/plinth/edit/main/site/docs/branding.md"', false)
+        ->assertSee('href="https://github.com/ptbdynamic/plinth/edit/main/site/docs/branding.md"', false)
         ->assertSee('<a class="site-header-link" href="/docs/introduction"  aria-current="page" >Docs</a>', false);
 });
 
@@ -53,7 +53,7 @@ it('renders CONTRIBUTING.md from the repository as the component rules', functio
     $this->get('/docs/contributing')
         ->assertOk()
         ->assertSee('Contributing to Plinth')
-        ->assertSee('href="https://github.com/bdynamicpt/plinth/edit/main/CONTRIBUTING.md"', false)
+        ->assertSee('href="https://github.com/ptbdynamic/plinth/edit/main/CONTRIBUTING.md"', false)
         ->assertSee('href="/docs/focus-ring"', false);
 });
 
@@ -97,7 +97,7 @@ it('shows a decision with its number, summary, sections and neighbours', functio
         ->assertSeeInOrder(['ADR 3', 'Visual direction', 'A dense, quiet look, dark first.'])
         ->assertSee('href="#context"', false)
         ->assertSeeInOrder(['Previous', 'ADR 2: Behaviour through native elements', 'Next', 'ADR 4: One version for npm and Packagist'])
-        ->assertSee('href="https://github.com/bdynamicpt/plinth/edit/main/docs/adr/0003-visual-direction.md"', false);
+        ->assertSee('href="https://github.com/ptbdynamic/plinth/edit/main/docs/adr/0003-visual-direction.md"', false);
 });
 
 it('goes back to the list from the first decision, and has no next after the last', function () {
