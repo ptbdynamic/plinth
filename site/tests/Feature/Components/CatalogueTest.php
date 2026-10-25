@@ -9,7 +9,7 @@ it('lists the components by group, in the groups\' order', function () {
 
     expect($catalogue->groups()->keys()->all())->toBe(['Actions', 'Forms', 'Content', 'Navigation', 'Overlays'])
         ->and($catalogue->all()->first()?->slug)->toBe('button')
-        ->and($catalogue->all())->toHaveCount(21);
+        ->and($catalogue->all())->toHaveCount(22);
 });
 
 it('finds a component, and the one before and after it', function () {

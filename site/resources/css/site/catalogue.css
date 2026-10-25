@@ -243,6 +243,16 @@
         align-items: stretch;
     }
 
+    /* Tiles in the page's grid: one column on a phone, more as the stage widens. */
+    .site-demo-stage[data-layout='grid'] {
+        display: grid;
+        grid-template-columns: repeat(
+            auto-fill,
+            minmax(min(100%, calc(var(--plinth-space-16) * 3)), 1fr)
+        );
+        align-items: stretch;
+    }
+
     /* A phone's screen: the shell's components at the width they are made for. */
     .site-demo-stage[data-layout='phone'] {
         flex-flow: column nowrap;

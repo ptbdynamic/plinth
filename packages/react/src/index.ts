@@ -27,6 +27,7 @@ export { PlinthPillRow, type PlinthPillRowProps } from './PlinthPillRow';
 export { PlinthSectionMenu, type PlinthSectionMenuProps } from './PlinthSectionMenu';
 export { PlinthSectionMenuItem, type PlinthSectionMenuItemProps } from './PlinthSectionMenuItem';
 export { PlinthSheet, type PlinthSheetProps } from './PlinthSheet';
+export { PlinthStat, type PlinthStatProps } from './PlinthStat';
 export { PlinthTextarea, type PlinthTextareaProps } from './PlinthTextarea';
 export { PlinthTextField, type PlinthTextFieldProps } from './PlinthTextField';
 export { avatarGlyph, avatarSizes, initialsFrom, type AvatarSize } from './avatar';
@@ -85,4 +86,5 @@ export {
 export { swipeToClose, useSwipeToClose } from './swipe';
 export { fieldDescribedBy, textFieldSize, textFieldSizes, type TextFieldSize } from './text-field';
 export { sheetCloseIcon, sheetSide, sheetSidePhone, sheetSides, type SheetSide } from './sheet';
+export { statChevron } from './stat';
 export { tones, type Tone } from './tones';

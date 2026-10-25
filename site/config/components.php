@@ -217,6 +217,37 @@ return [
             'description' => 'The row under the page header that switches between a page\'s sections.',
         ],
 
+        'stat' => [
+            'name' => 'Stat',
+            'group' => 'Content',
+            'description' => 'One metric on a tile for a dashboard: a label, the value and a supporting line.',
+            'playground' => [
+                'template' => '<x-plinth::stat label="Success rate"{attributes} description="{description}" />',
+                'options' => [
+                    'tone' => [
+                        'values' => ['neutral', 'success', 'warning', 'danger'],
+                        'default' => 'neutral',
+                        'content' => [
+                            'neutral' => ['{description}' => 'Target 90%'],
+                            'success' => ['{description}' => 'Up 2 points this week'],
+                            'warning' => ['{description}' => 'Down 3 points this week'],
+                            'danger' => ['{description}' => 'Below the 90% target'],
+                        ],
+                    ],
+                    'value' => [
+                        'values' => ['shown', 'empty'],
+                        'default' => 'shown',
+                        'print' => ['shown' => 'value="94%"', 'empty' => ''],
+                    ],
+                    'link' => [
+                        'values' => ['none', 'shown'],
+                        'default' => 'none',
+                        'print' => ['shown' => 'href="#"'],
+                    ],
+                ],
+            ],
+        ],
+
         'dialog' => [
             'name' => 'Dialog',
             'group' => 'Overlays',

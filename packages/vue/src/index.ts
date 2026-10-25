@@ -28,6 +28,7 @@ import PlinthPillRow from './PlinthPillRow.vue';
 import PlinthSectionMenu from './PlinthSectionMenu.vue';
 import PlinthSectionMenuItem from './PlinthSectionMenuItem.vue';
 import PlinthSheet from './PlinthSheet.vue';
+import PlinthStat from './PlinthStat.vue';
 import PlinthTextarea from './PlinthTextarea.vue';
 import PlinthTextField from './PlinthTextField.vue';
 
@@ -61,6 +62,7 @@ export {
   PlinthSectionMenu,
   PlinthSectionMenuItem,
   PlinthSheet,
+  PlinthStat,
   PlinthTextarea,
   PlinthTextField,
 };
@@ -115,6 +117,7 @@ export { pageHeaderLevel, pageHeaderLevels, type PageHeaderLevel } from './page-
 export { sheetCloseIcon, sheetSide, sheetSidePhone, sheetSides, type SheetSide } from './sheet';
 export { fieldDescribedBy, textFieldSize, textFieldSizes, type TextFieldSize } from './text-field';
 export { swipeToClose, useSwipeToClose } from './swipe';
+export { statChevron } from './stat';
 export { tones, type Tone } from './tones';
 
 /** Registers every Plinth component globally: `app.use(Plinth)`. */
@@ -149,6 +152,7 @@ export const Plinth: Plugin = {
     app.component('PlinthSectionMenu', PlinthSectionMenu);
     app.component('PlinthSectionMenuItem', PlinthSectionMenuItem);
     app.component('PlinthSheet', PlinthSheet);
+    app.component('PlinthStat', PlinthStat);
     app.component('PlinthTextarea', PlinthTextarea);
     app.component('PlinthTextField', PlinthTextField);
   },

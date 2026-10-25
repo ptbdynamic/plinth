@@ -28,6 +28,7 @@ import {
   PlinthSectionMenu,
   PlinthSectionMenuItem,
   PlinthSheet,
+  PlinthStat,
   PlinthTextarea,
   PlinthTextField,
 } from '@ptbdynamic/plinth-vue';
@@ -61,6 +62,7 @@ import {
   PlinthSectionMenu as ReactSectionMenu,
   PlinthSectionMenuItem as ReactSectionMenuItem,
   PlinthSheet as ReactSheet,
+  PlinthStat as ReactStat,
   PlinthTextarea as ReactTextarea,
   PlinthTextField as ReactTextField,
 } from '@ptbdynamic/plinth-react';
@@ -143,6 +145,8 @@ import * as drawerStories from '../stories/components/Drawer.stories.ts';
 import { drawer, type DrawerArgs } from '../stories/components/drawer.ts';
 import * as sheetStories from '../stories/components/Sheet.stories.ts';
 import { sheet, type SheetArgs } from '../stories/components/sheet.ts';
+import * as statStories from '../stories/components/Stat.stories.ts';
+import { stat, type StatArgs } from '../stories/components/stat.ts';
 import * as textareaStories from '../stories/components/Textarea.stories.ts';
 import { textarea, type TextareaArgs } from '../stories/components/textarea.ts';
 import * as textFieldStories from '../stories/components/TextField.stories.ts';
@@ -196,6 +200,7 @@ interface ParityCase {
 const reactComponents = new Map<Component, unknown>([
   [PlinthAvatar, ReactAvatar],
   [PlinthBadge, ReactBadge],
+  [PlinthStat, ReactStat],
   [PlinthButton, ReactButton],
   [PlinthCallout, ReactCallout],
   [PlinthCodeBlock, ReactCodeBlock],
@@ -263,6 +268,13 @@ const buttonDefaults: ButtonArgs = {
   size: 'md',
   disabled: false,
   busy: false,
+};
+
+const statDefaults: StatArgs = {
+  label: 'Runs today',
+  value: '12',
+  tone: 'neutral',
+  emptyLabel: 'Not available',
 };
 
 const pageHeaderDefaults: PageHeaderArgs = { heading: 'Inbox', level: 'h1', top: false };
@@ -403,6 +415,38 @@ const cases: ParityCase[] = [
     { label: 'Paid', tone: 'success', dot: false },
     { 'data-tone': 'danger' },
   ),
+  ...storyArgs<StatArgs>(statStories).map(([story, args]) => statCase(`Stat/${story}`, args)),
+  statCase(
+    'Stat/with extra attributes',
+    { ...statDefaults, description: 'Up 2 points', tone: 'success', href: '#runs' },
+    {
+      class: 'ms-2',
+      id: 'runs-today',
+      'data-testid': 'runs-today',
+      'aria-describedby': 'runs-note',
+    },
+  ),
+  statCase(
+    'Stat/with a clashing attribute',
+    { ...statDefaults, description: 'Up 2 points', tone: 'success' },
+    { 'data-tone': 'danger' },
+  ),
+  statCase('Stat/unknown tone and blank text', {
+    ...statDefaults,
+    value: ' ',
+    description: ' ',
+    href: ' ',
+    tone: 'loud' as StatArgs['tone'],
+  }),
+  statCase('Stat/escaped text', {
+    label: '<b>"Runs"</b>',
+    value: '<i>12</i>',
+    description: "Ana's & Rui's",
+    tone: 'warning',
+    href: '/runs?a=1&b="2"',
+    emptyLabel: 'Not available',
+  }),
+  statCase('Stat/escaped empty label', { ...statDefaults, value: '', emptyLabel: '<b>None</b>' }),
   ...storyArgs<IconArgs>(iconStories).map(([story, args]) => iconCase(`Icon/${story}`, args)),
   iconCase(
     'Icon/with extra attributes',
@@ -1830,6 +1874,23 @@ function calloutCase(story: string, args: CalloutArgs, attributes: Attributes = 
   };
 }
 
+function statCase(story: string, args: StatArgs, attributes: Attributes = {}): ParityCase {
+  const props = {
+    label: args.label,
+    ...(args.value !== undefined ? { value: args.value } : {}),
+    ...(args.description !== undefined ? { description: args.description } : {}),
+    tone: args.tone,
+    ...(args.href ? { href: args.href } : {}),
+    emptyLabel: args.emptyLabel,
+  };
+  return {
+    story,
+    markup: stat(args, attributes),
+    vue: { component: PlinthStat, props: { ...props, ...attributes }, slot: '' },
+    blade: { component: 'stat', props, attributes, slot: '' },
+  };
+}
+
 function badgeCase(story: string, args: BadgeArgs, attributes: Attributes = {}): ParityCase {
   return {
     story,
@@ -1860,6 +1921,20 @@ describe('parity with the stories', () => {
       'Badge/WithDot',
       'Badge/with extra attributes',
       'Badge/with a clashing attribute',
+      'Stat/Default',
+      'Stat/WithDescription',
+      'Stat/Success',
+      'Stat/Warning',
+      'Stat/Danger',
+      'Stat/Empty',
+      'Stat/Link',
+      'Stat/LinkWithTone',
+      'Stat/LongText',
+      'Stat/with extra attributes',
+      'Stat/with a clashing attribute',
+      'Stat/unknown tone and blank text',
+      'Stat/escaped text',
+      'Stat/escaped empty label',
       'Icon/Default',
       'Icon/Small',
       'Icon/Large',

@@ -1,0 +1,157 @@
+/*
+ * Stat: one metric on a tile, for a dashboard. A label, the value, and an optional supporting
+ * line with a tone.
+ *
+ * <div class="plinth-stat" data-tone="success">
+ *   <span class="plinth-stat-label">Success rate</span>
+ *   <span class="plinth-stat-value">94%</span>
+ *   <span class="plinth-stat-description">
+ *     <span class="plinth-icon plinth-stat-tone" data-size="sm" aria-hidden="true"><svg>…</svg></span>
+ *     Up 2 points this week
+ *   </span>
+ * </div>
+ *
+ * The root is the element the app talks to (ADR 2):
+ * - a static tile is a <div>;
+ * - a tile that leads to the detail behind the number is <a class="plinth-stat" href="…">, with
+ *   the tile's own chevron as its last child, so the link shows without hover:
+ *   <span class="plinth-icon plinth-stat-chevron" data-size="sm" data-mirror
+ *     aria-hidden="true"><svg>…</svg></span>
+ *   Its accessible name is its text: "Success rate 94% Up 2 points this week". It holds no other
+ *   control.
+ *
+ * The value is text the app formats ("12", "94%", "€38"). The supporting line is optional: a
+ * change, a target, or "of €150".
+ *
+ * Tones: neutral (default, also when data-tone is missing), success, warning, danger. The tone
+ * colours the supporting line and puts the callout's icon for it before the text, a different
+ * shape for each tone; the neutral line has no icon. The words carry the meaning ("Up 2 points",
+ * "Over budget"): the colour and the icon only reinforce them, and the icon is hidden from
+ * screen readers. A tile without a supporting line shows no tone. Set the tone through the
+ * component's tone (Blade, Vue, React), not a data-tone of the project's: the icon follows the
+ * tone, so a data-tone that overrides it changes the colour only.
+ *
+ * Empty: a value that isn't available yet prints an em dash for the eye and words for screen
+ * readers, and the value takes is-empty:
+ *   <span class="plinth-stat-value is-empty">
+ *     <span aria-hidden="true">—</span>
+ *     <span class="plinth-stat-empty">Not available</span>
+ *   </span>
+ * so a screen reader says "Runs today, Not available" rather than "dash".
+ *
+ * The tile has no width of its own: it fills the column the page gives it, and the page lays the
+ * tiles out in a grid (one column on a phone, more from 768px). It fills the height of its grid
+ * cell, so the tiles in a row line up. Long labels and values wrap.
+ * A link tile tints on hover where the device can hover, and shows the focus ring on
+ * :focus-visible.
+ */
+
+@layer plinth {
+  .plinth-stat {
+    position: relative;
+    box-sizing: border-box;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--plinth-space-1) var(--plinth-space-2);
+    align-content: start;
+    min-inline-size: 0;
+    block-size: 100%;
+    padding: var(--plinth-space-4);
+    font-family: var(--plinth-font-family-body);
+    font-size: var(--plinth-font-size-md);
+    font-weight: var(--plinth-font-weight-regular);
+    line-height: var(--plinth-font-leading-normal);
+    color: var(--plinth-color-text);
+    text-decoration: none;
+    background-color: var(--plinth-color-surface-raised);
+    border: var(--plinth-border-width-thin) solid var(--plinth-color-border);
+    border-radius: var(--plinth-radius-container);
+    transition: background-color var(--plinth-duration-fast) var(--plinth-easing-standard);
+  }
+
+  /* A second column for the chevron. */
+  a.plinth-stat {
+    grid-template-columns: minmax(0, 1fr) auto;
+    cursor: pointer;
+  }
+
+  @media (hover: hover) {
+    a.plinth-stat:hover {
+      background-color: var(--plinth-color-surface-hover);
+    }
+  }
+
+  a.plinth-stat:active {
+    background-color: var(--plinth-color-surface-sunken);
+  }
+
+  .plinth-stat:focus-visible {
+    outline: var(--plinth-focus-ring-width) solid var(--plinth-color-focus-ring);
+    outline-offset: var(--plinth-focus-ring-offset);
+  }
+
+  .plinth-stat-label {
+    grid-row: 1;
+    grid-column: 1;
+    font-size: var(--plinth-font-size-sm);
+    color: var(--plinth-color-text-muted);
+    overflow-wrap: anywhere;
+  }
+
+  .plinth-stat-chevron {
+    grid-row: 1;
+    grid-column: 2;
+    align-self: center;
+    color: var(--plinth-color-text-subtle);
+  }
+
+  .plinth-stat-value {
+    grid-column: 1 / -1;
+    font-size: var(--plinth-font-size-2xl);
+    font-weight: var(--plinth-font-weight-semibold);
+    font-variant-numeric: tabular-nums;
+    line-height: var(--plinth-font-leading-tight);
+    letter-spacing: var(--plinth-font-tracking-tight);
+    overflow-wrap: anywhere;
+  }
+
+  .plinth-stat-value.is-empty {
+    color: var(--plinth-color-text-subtle);
+  }
+
+  /* Visually hidden, still read by screen readers. */
+  .plinth-stat-empty {
+    position: absolute;
+    inline-size: 1px;
+    block-size: 1px;
+    overflow: hidden;
+    white-space: nowrap;
+    clip-path: inset(50%);
+  }
+
+  .plinth-stat-description {
+    display: flex;
+    grid-column: 1 / -1;
+    gap: var(--plinth-space-1);
+    align-items: center;
+    font-size: var(--plinth-font-size-sm);
+    color: var(--plinth-color-text-muted);
+    overflow-wrap: anywhere;
+  }
+
+  .plinth-stat[data-tone='success'] .plinth-stat-description {
+    color: var(--plinth-color-success-text);
+  }
+
+  .plinth-stat[data-tone='warning'] .plinth-stat-description {
+    color: var(--plinth-color-warning-text);
+  }
+
+  .plinth-stat[data-tone='danger'] .plinth-stat-description {
+    color: var(--plinth-color-danger-text);
+  }
+
+  .plinth-stat-tone {
+    flex: none;
+  }
+}
