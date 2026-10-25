@@ -222,22 +222,22 @@ return [
             'group' => 'Content',
             'description' => 'One metric on a tile for a dashboard: a label, the value and a supporting line.',
             'playground' => [
-                'template' => '<x-plinth::stat label="{label}"{attributes} description="{description}" />',
+                'template' => '<x-plinth::stat label="Success rate"{attributes} description="{description}" />',
                 'options' => [
                     'tone' => [
                         'values' => ['neutral', 'success', 'warning', 'danger'],
                         'default' => 'neutral',
                         'content' => [
-                            'neutral' => ['{label}' => 'Spend this month', '{value}' => '€38', '{description}' => 'of €150'],
-                            'success' => ['{label}' => 'Success rate', '{value}' => '94%', '{description}' => 'Up 2 points this week'],
-                            'warning' => ['{label}' => 'Spend this month', '{value}' => '€128', '{description}' => '85% of the budget'],
-                            'danger' => ['{label}' => 'Failed runs', '{value}' => '7', '{description}' => 'Up from 1 yesterday'],
+                            'neutral' => ['{description}' => 'Target 90%'],
+                            'success' => ['{description}' => 'Up 2 points this week'],
+                            'warning' => ['{description}' => 'Down 3 points this week'],
+                            'danger' => ['{description}' => 'Below the 90% target'],
                         ],
                     ],
                     'value' => [
                         'values' => ['shown', 'empty'],
                         'default' => 'shown',
-                        'print' => ['shown' => 'value="{value}"', 'empty' => ''],
+                        'print' => ['shown' => 'value="94%"', 'empty' => ''],
                     ],
                     'link' => [
                         'values' => ['none', 'shown'],
