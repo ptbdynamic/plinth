@@ -32,7 +32,7 @@ const item = (label: string, extra: Partial<MenuItemArgs> = {}): MenuItemArgs =>
   ...extra,
 });
 
-/** Assign, Solve, Snooze and Priority; then Spam and Delete, which overflow below 1280px. */
+/** Assign, Solve, Snooze and Priority; then Spam and Delete, which overflow below 1024px. */
 const sampleGroups = (extra: Partial<ToolbarActionArgs> = {}): ToolbarGroupArgs[] => [
   {
     actions: [
@@ -50,7 +50,7 @@ const sampleGroups = (extra: Partial<ToolbarActionArgs> = {}): ToolbarGroupArgs[
   },
 ];
 
-/** The ⋯ button and its menu: Spam and Delete below 1280px, then Merge and Print. */
+/** The ⋯ button and its menu: Spam and Delete below 1024px, then Merge and Print. */
 const sampleMore = (id = 'ticket-more') =>
   [
     iconButton(
@@ -103,7 +103,7 @@ const meta = {
     docs: {
       description: {
         component:
-          'The row of actions under a page header, as in a mail app: a search field with its scope (_In: Open_), what the actions act on (_2 selected_, _#1042_), the actions in groups, then a ⋯ menu. It shows from 768px; on a phone the actions go in the page header. From 1280px each action shows its icon and label, below its icon alone, with the label still its name. Mark an action `overflow` to hide it below 1280px, and put it in the ⋯ menu too with `data-overflow` on the item: the menu shows it only there. In Blade, Vue and React the actions are one tab stop and the arrow keys move between them (the stories have no script, so Tab goes through each). Name the toolbar with `label`, and the search field with its own `label`.',
+          "The row of actions under a page header, as in a mail app: a search field with its scope (_In: Open_), what the actions act on (_2 selected_, _#1042_), the actions in groups, then a ⋯ menu. It shows from 768px; on a phone the actions go in the page header. In a toolbar with 1024px of room or more each action shows its icon and label, below its icon alone, with the label still its name: the toolbar follows its own width, not the screen's. Mark an action `overflow` to hide it below 1024px, and put it in the ⋯ menu too with `data-overflow` on the item: the menu shows it only there. The search narrows first, and the target is cut short only when the search is at its least (160px). In Blade, Vue and React the actions are one tab stop and the arrow keys move between them (the stories have no script, so Tab goes through each). Name the toolbar with `label`, and the search field with its own `label`.",
       },
     },
   },
@@ -178,6 +178,15 @@ export const NoOverflow: Story = {
         'ticket-more-plain',
       )}</div>`,
   },
+};
+
+/**
+ * In a column 800px wide, as over one pane of a wide screen: the toolbar follows its own width,
+ * so the actions show their icons alone and the target keeps its text at every screen width.
+ */
+export const InAColumn: Story = {
+  render: (args) => `<div style="max-inline-size: 50rem">${toolbar(args)}</div>`,
+  args: { target: '12 selected' },
 };
 
 /** Under the page header, as in the support inbox; on a phone only the page header shows. */

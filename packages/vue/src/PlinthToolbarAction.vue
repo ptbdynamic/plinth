@@ -5,11 +5,11 @@ import { iconGlyphs, iconName, mirroredIconNames, type IconName } from './icon';
 
 const props = withDefaults(
   defineProps<{
-    /** The action's name, shown beside its icon from 1280px. */
+    /** The action's name, shown beside its icon with 1024px of room in the toolbar. */
     label: string;
     /** A built-in glyph; the slot shows when it is missing or not one. */
     icon?: IconName;
-    /** Hidden below 1280px, where the app shows it in the ⋯ menu instead. */
+    /** Hidden below 1024px of room in the toolbar, where the app shows it in the ⋯ menu instead. */
     overflow?: boolean;
     disabled?: boolean;
   }>(),

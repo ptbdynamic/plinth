@@ -34,11 +34,12 @@ final class ToolbarKeys
         .' const observer = new MutationObserver(update);'
         .' observer.observe(toolbar, { subtree: true, childList: true,'
         .' attributes: true, attributeFilter: [\'disabled\', \'hidden\', \'data-overflow\', \'class\', \'style\'] });'
-        .' window.addEventListener(\'resize\', update);'
+        .' const resize = new ResizeObserver(update);'
+        .' resize.observe(toolbar.parentElement ?? toolbar);'
         .' toolbar.addEventListener(\'focusin\', focus);'
         .' toolbar.addEventListener(\'keydown\', keydown);'
         .' update();'
-        .' return () => { observer.disconnect(); window.removeEventListener(\'resize\', update);'
+        .' return () => { observer.disconnect(); resize.disconnect();'
         .' toolbar.removeEventListener(\'focusin\', focus); toolbar.removeEventListener(\'keydown\', keydown); };'
         .' }';
 

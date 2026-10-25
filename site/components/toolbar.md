@@ -22,8 +22,16 @@ The actions go in the default slot: `<x-plinth::toolbar-group>`s of
 **`icon`**, or the project's SVG in the slot), then the ⋯ icon button and its menu. A hairline
 divider sits between two groups.
 
-From 1280px each action shows its icon and its label; below, its icon alone, and the label stays
-its name for a screen reader.
+In a toolbar with 1024px of room or more, each action shows its icon and its label; in a
+narrower one, its icon alone, and the label stays its name for a screen reader. The toolbar
+follows its own width, not the screen's, so over one pane of a wide screen it gives way as on a
+narrow one. Its width never comes from its content: it fills the width its parent gives it, so
+don't put it in a row that sizes it to fit, and it is the containing block of anything fixed
+inside it.
+
+The target stays readable: the search narrows first, then the actions drop their labels and what
+overflows moves into the ⋯ menu, and the target is cut short only when the search is at its
+least (`--plinth-toolbar-search-min-width`, 160px).
 
 ```blade example layout="stack"
 <x-plinth::toolbar label="Ticket actions" target="2 selected">
@@ -57,12 +65,12 @@ its name for a screen reader.
 
 ## Overflow
 
-Plinth doesn't measure the toolbar: the app picks what gives way. Mark an action **`overflow`**
-and it is hidden below 1280px; put the same action in the ⋯ menu with `data-overflow` on its item
-(and on a separator next to them), and inside a toolbar the menu shows those only below 1280px. A
-group whose actions all overflow is hidden with them, and so is its divider. From 1280px the ⋯
-button is hidden when every entry of the menu right after it overflows, so it never opens an
-empty menu.
+Plinth doesn't measure the actions: the app picks what gives way. Mark an action **`overflow`**
+and it is hidden in a toolbar narrower than 1024px; put the same action in the ⋯ menu with
+`data-overflow` on its item (and on a separator next to them), and inside a toolbar the menu shows
+those only below 1024px. A group whose actions all overflow is hidden with them, and so is its
+divider. From 1024px the ⋯ button is hidden when every entry of the menu right after it
+overflows, so it never opens an empty menu.
 
 ```blade example layout="stack"
 <x-plinth::toolbar label="Ticket actions" target="#1042">
@@ -128,13 +136,14 @@ Blade, Vue and React print exactly this markup, and the parity tests hold them t
 | ------------------ | ---------------------- | --------------------------------------------------- | --------- |
 | `aria-label`       | the toolbar            | the label                                           | `Actions` |
 | `aria-label`       | the field              | the search's label                                  | `Search`  |
-| `data-overflow`    | an action              | hidden below 1280px                                 | none      |
-| `data-overflow`    | a ⋯ menu's item        | shown only below 1280px                             | none      |
+| `data-overflow`    | an action              | hidden in a toolbar narrower than 1024px            | none      |
+| `data-overflow`    | a ⋯ menu's item        | shown only in a toolbar narrower than 1024px        | none      |
 | `disabled`         | an action              | can't be used, and skipped by the arrow keys        | none      |
 | `tabindex`         | the toolbar's controls | set by the layer's script: 0 on one, -1 on the rest | none      |
 
 Its height is `--plinth-toolbar-height` (44px, a list header's), with a hairline divider under
-it; the search is `--plinth-toolbar-search-width` (320px) at most and narrows with the toolbar.
+it; the search is `--plinth-toolbar-search-width` (320px) at most and narrows with the toolbar
+to `--plinth-toolbar-search-min-width` (160px).
 It needs `button.css`, `icon.css` and `menu.css` for its parts.
 
 ## Props
@@ -259,8 +268,8 @@ import {
 - The actions are a `role="toolbar"` named by its `label`; name it for what it acts on (_Ticket
   actions_). A group takes a `label` when it has a name of its own.
 - One tab stop, and the arrow keys, Home and End move between the actions (see Keyboard).
-- Every action has a visible label from 1280px, and below keeps it as its name; the icon is
-  decorative.
+- Every action has a visible label in a toolbar 1024px wide or more, and below keeps it as its
+  name; the icon is decorative.
 - The search field has no visible label, so its `label` is its name; the search icon is
   decorative. The scope button's text is its name, and says where the search looks.
 - The target is plain text, not a live region: the list that changes the selection announces it

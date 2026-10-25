@@ -26,7 +26,9 @@ it('is the Vue and React layers\' toolbarKeys, as an Alpine x-data that cleans u
         'event.preventDefault();' => null,
         'next.focus();' => null,
         "attributeFilter: ['disabled', 'hidden', 'data-overflow', 'class', 'style']" => null,
-        "addEventListener('resize', update)" => null,
+        'const resize = new ResizeObserver(update);' => null,
+        'resize.observe(toolbar.parentElement ?? toolbar);' => null,
+        'resize.disconnect();' => null,
     ] as $step => $alpine) {
         expect($vue)->toContain($step)
             ->and($react)->toContain($step)
