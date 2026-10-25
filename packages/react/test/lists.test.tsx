@@ -11,6 +11,7 @@ import * as vuePageHeader from '../../vue/src/page-header.ts';
 import * as vueListRow from '../../vue/src/list-row.ts';
 import * as vueMenu from '../../vue/src/menu.ts';
 import * as vueSheet from '../../vue/src/sheet.ts';
+import * as vueStat from '../../vue/src/stat.ts';
 import * as vueButton from '../../vue/src/button.ts';
 import * as vueIcon from '../../vue/src/icon.ts';
 import * as vueSize from '../../vue/src/size.ts';
@@ -56,6 +57,7 @@ import {
   iconSizeFor,
   iconSizes,
   listRowChevron,
+  statChevron,
   menuItemTone,
   menuItemTones,
   resolveSize,
@@ -88,6 +90,7 @@ describe('the shared lists', () => {
     expect(headingLevels).toEqual(vueHeading.headingLevels);
     expect(pageHeaderLevels).toEqual(vuePageHeader.pageHeaderLevels);
     expect(listRowChevron).toBe(vueListRow.listRowChevron);
+    expect(statChevron).toBe(vueStat.statChevron);
     expect(menuItemTones).toEqual(vueMenu.menuItemTones);
     expect(sheetSides).toEqual(vueSheet.sheetSides);
     expect(sheetCloseIcon).toBe(vueSheet.sheetCloseIcon);
