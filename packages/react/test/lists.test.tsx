@@ -18,6 +18,7 @@ import * as vueSize from '../../vue/src/size.ts';
 import * as vueTones from '../../vue/src/tones.ts';
 import * as vueTextField from '../../vue/src/text-field.ts';
 import { buttonVariant } from '../src/button.ts';
+import { iconName } from '../src/icon.ts';
 import { swipeToClose } from '../src/swipe.ts';
 import { classNames, hasContent } from '../src/markup.ts';
 import {
@@ -54,8 +55,12 @@ import {
   headingLevels,
   pageHeaderLevel,
   pageHeaderLevels,
+  iconGlyph,
+  iconGlyphs,
+  iconNames,
   iconSizeFor,
   iconSizes,
+  mirroredIconNames,
   listRowChevron,
   statChevron,
   menuItemTone,
@@ -79,6 +84,10 @@ describe('the shared lists', () => {
     expect(controlSizes).toEqual(vueSize.controlSizes);
     expect(textFieldSizes).toEqual(vueTextField.textFieldSizes);
     expect(iconSizes).toEqual(vueIcon.iconSizes);
+    expect(iconNames).toEqual(vueIcon.iconNames);
+    expect(iconGlyphs).toEqual(vueIcon.iconGlyphs);
+    expect(mirroredIconNames).toEqual(vueIcon.mirroredIconNames);
+    expect(iconGlyph('menu')).toBe(vueIcon.iconGlyph('menu'));
     expect(calloutTones).toEqual(vueCallout.calloutTones);
     expect(calloutRoles).toEqual(vueCallout.calloutRoles);
     expect(calloutIcons).toEqual(vueCallout.calloutIcons);
@@ -137,6 +146,8 @@ describe('the shared lists', () => {
     expect(confirmDialogTone('loud')).toBe('neutral');
     expect(confirmDialogTone('danger')).toBe('danger');
     expect(menuItemTone('loud')).toBe(vueMenu.menuItemTone('loud'));
+    expect(iconName('rocket')).toBe(vueIcon.iconName('rocket'));
+    expect(iconName('sun')).toBe('sun');
     expect(sizes.map(iconSizeFor)).toEqual(['sm', 'sm', 'md', 'md', 'md']);
   });
 });

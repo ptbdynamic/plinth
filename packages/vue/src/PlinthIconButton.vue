@@ -2,6 +2,7 @@
 // Markup contract: packages/css/src/components/button.css (icon button)
 import { computed, useAttrs } from 'vue';
 import { buttonVariant, type ButtonVariant } from './button';
+import { iconGlyphs, iconName, mirroredIconNames, type IconName } from './icon';
 import { controlSizes, iconSizeFor, resolveSize, type ControlSize } from './size';
 
 defineOptions({ inheritAttrs: false });
@@ -10,6 +11,8 @@ const props = withDefaults(
   defineProps<{
     /** The accessible name: required, since the button has no visible text. */
     label: string;
+    /** A built-in glyph; the slot shows when it is missing or not one. */
+    icon?: IconName;
     variant?: ButtonVariant;
     size?: ControlSize;
     href?: string;
@@ -20,6 +23,7 @@ const props = withDefaults(
     mirror?: boolean;
   }>(),
   {
+    icon: undefined,
     variant: 'ghost',
     size: 'md',
     href: undefined,
@@ -34,6 +38,11 @@ const attrs = useAttrs();
 const dataVariant = computed(() => buttonVariant(props.variant));
 const dataSize = computed(() => resolveSize(props.size, controlSizes, 'md'));
 const iconSize = computed(() => iconSizeFor(dataSize.value));
+// The glyph's SVG is iconGlyph(icon) (icon.ts), written out; parity keeps the copies equal.
+const glyph = computed(() => iconName(props.icon));
+const mirrored = computed(
+  () => props.mirror || (glyph.value !== undefined && mirroredIconNames.includes(glyph.value)),
+);
 const isBusy = computed(() => props.busy && !props.disabled);
 const name = computed(() => props.label || (attrs['aria-label'] as string | undefined));
 // The project's own attributes are bound last, so they win over Plinth's (docs/adr/0002).
@@ -60,9 +69,20 @@ const rest = computed(() =>
       v-else
       class="plinth-icon"
       :data-size="iconSize"
-      :data-mirror="mirror ? '' : undefined"
+      :data-icon="glyph"
+      :data-mirror="mirrored ? '' : undefined"
       aria-hidden="true"
-      ><slot
+      ><svg
+        v-if="glyph"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        v-html="iconGlyphs[glyph]"
+      ></svg
+      ><slot v-else
     /></span>
   </a>
   <button
@@ -83,9 +103,20 @@ const rest = computed(() =>
       v-else
       class="plinth-icon"
       :data-size="iconSize"
-      :data-mirror="mirror ? '' : undefined"
+      :data-icon="glyph"
+      :data-mirror="mirrored ? '' : undefined"
       aria-hidden="true"
-      ><slot
+      ><svg
+        v-if="glyph"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        v-html="iconGlyphs[glyph]"
+      ></svg
+      ><slot v-else
     /></span>
   </button>
 </template>

@@ -2,7 +2,15 @@ import { render } from '@testing-library/react';
 import { createRef, type ReactElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
-import { iconSizes, PlinthIcon, type IconSize } from '../src/index.ts';
+import {
+  iconGlyph,
+  iconNames,
+  iconSizes,
+  mirroredIconNames,
+  PlinthIcon,
+  type IconName,
+  type IconSize,
+} from '../src/index.ts';
 
 const svg = (
   <svg viewBox="0 0 24 24">
@@ -80,5 +88,27 @@ describe('PlinthIcon', () => {
     const icon = root(<PlinthIcon aria-hidden="false">{svg}</PlinthIcon>);
 
     expect(icon.getAttribute('aria-hidden')).toBe('false');
+  });
+
+  it('prints a built-in glyph by name instead of its children', () => {
+    expect(renderToStaticMarkup(<PlinthIcon name="check">{svg}</PlinthIcon>)).toBe(
+      `<span class="plinth-icon" data-size="md" data-icon="check" aria-hidden="true">${iconGlyph('check')}</span>`,
+    );
+  });
+
+  it.each(iconNames)('prints the %s glyph', (name) => {
+    const html = renderToStaticMarkup(<PlinthIcon name={name} />);
+
+    expect(html).toContain(` data-icon="${name}"`);
+    expect(html).toContain(iconGlyph(name));
+    expect(html.includes(' data-mirror=""')).toBe(mirroredIconNames.includes(name));
+  });
+
+  it('shows its children for a glyph it does not know', () => {
+    // An unknown glyph, as a project might pass from untyped data.
+    const icon = root(<PlinthIcon name={'rocket' as IconName}>{svg}</PlinthIcon>);
+
+    expect(icon.hasAttribute('data-icon')).toBe(false);
+    expect(icon.querySelector('path')?.getAttribute('d')).toBe('M5 12l5 5L19 7');
   });
 });

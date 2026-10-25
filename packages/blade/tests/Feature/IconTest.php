@@ -1,5 +1,6 @@
 <?php
 
+use BDynamic\Plinth\Enums\Glyph;
 use BDynamic\Plinth\Enums\Size;
 use Illuminate\Support\Facades\Blade;
 
@@ -60,4 +61,21 @@ it("lets the project's attribute win over its own", function () use ($svg) {
     expect(Blade::render("<x-plinth::icon aria-hidden=\"false\">{$svg}</x-plinth::icon>"))
         ->toContain('aria-hidden="false"')
         ->not->toContain('aria-hidden="true"');
+});
+
+it('prints a built-in glyph by name instead of the slot', function () use ($svg) {
+    expect(squish(Blade::render("<x-plinth::icon name=\"check\">{$svg}</x-plinth::icon>")))
+        ->toBe('<span class="plinth-icon" data-size="md" data-icon="check" aria-hidden="true">'.Glyph::Check->svg().'</span>');
+});
+
+it('prints every glyph, and mirrors the ones that point a direction', function (Glyph $glyph) {
+    $html = Blade::render('<x-plinth::icon :name="$glyph" />', ['glyph' => $glyph]);
+
+    expect($html)->toContain("data-icon=\"{$glyph->value}\"")->toContain($glyph->svg());
+    expect(str_contains($html, 'data-mirror'))->toBe($glyph->mirrors());
+})->with(Glyph::cases());
+
+it('shows the slot for a glyph it does not know', function () use ($svg) {
+    expect(squish(Blade::render("<x-plinth::icon name=\"rocket\">{$svg}</x-plinth::icon>")))
+        ->toBe('<span class="plinth-icon" data-size="md" aria-hidden="true">'.$svg.'</span>');
 });

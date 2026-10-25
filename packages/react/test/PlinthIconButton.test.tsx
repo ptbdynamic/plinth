@@ -2,7 +2,13 @@ import { fireEvent, render } from '@testing-library/react';
 import { createRef, type ReactElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it, vi } from 'vitest';
-import { buttonVariants, controlSizes, PlinthIconButton } from '../src/index.ts';
+import {
+  buttonVariants,
+  controlSizes,
+  iconGlyph,
+  PlinthIconButton,
+  type IconName,
+} from '../src/index.ts';
 
 const svg = (
   <svg viewBox="0 0 24 24">
@@ -187,5 +193,38 @@ describe('PlinthIconButton', () => {
         {svg}
       </PlinthIconButton>,
     );
+  });
+
+  it('prints a built-in glyph by name instead of its children', () => {
+    expect(
+      renderToStaticMarkup(
+        <PlinthIconButton label="Close" icon="close">
+          {svg}
+        </PlinthIconButton>,
+      ),
+    ).toContain(
+      `<span class="plinth-icon" data-size="md" data-icon="close" aria-hidden="true">${iconGlyph('close')}</span>`,
+    );
+  });
+
+  it('mirrors a glyph that points a direction, on a link too', () => {
+    const button = root(<PlinthIconButton label="Back" icon="back" />);
+    const link = root(<PlinthIconButton label="Back" icon="back" href="/" />);
+
+    expect(button.querySelector('.plinth-icon')!.getAttribute('data-mirror')).toBe('');
+    expect(link.querySelector('.plinth-icon')!.getAttribute('data-mirror')).toBe('');
+    expect(link.querySelector('.plinth-icon')!.getAttribute('data-icon')).toBe('back');
+  });
+
+  it('shows its children for a glyph it does not know', () => {
+    // An unknown glyph, as a project might pass from untyped data.
+    const button = root(
+      <PlinthIconButton label="Close" icon={'rocket' as IconName}>
+        {svg}
+      </PlinthIconButton>,
+    );
+
+    expect(button.querySelector('.plinth-icon')!.hasAttribute('data-icon')).toBe(false);
+    expect(button.querySelector('path')!.getAttribute('d')).toBe('M6 6l12 12M18 6L6 18');
   });
 });

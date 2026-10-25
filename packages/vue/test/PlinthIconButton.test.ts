@@ -1,6 +1,6 @@
 import { mount } from '@vue/test-utils';
 import { describe, expect, it } from 'vitest';
-import { controlSizes, buttonVariants, PlinthIconButton } from '../src/index.ts';
+import { controlSizes, buttonVariants, iconGlyph, PlinthIconButton } from '../src/index.ts';
 
 const svg = '<svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"></path></svg>';
 const slots = { default: svg };
@@ -138,5 +138,34 @@ describe('PlinthIconButton', () => {
 
     expect(button.attributes('aria-pressed')).toBe('mixed');
     expect(link.attributes('role')).toBe('button');
+  });
+
+  it('prints a built-in glyph by name instead of the slot', () => {
+    const wrapper = mount(PlinthIconButton, { props: { label: 'Close', icon: 'close' }, slots });
+
+    expect(wrapper.get('.plinth-icon').html()).toBe(
+      `<span class="plinth-icon" data-size="md" data-icon="close" aria-hidden="true">${iconGlyph('close')}</span>`,
+    );
+  });
+
+  it('mirrors a glyph that points a direction, on a link too', () => {
+    const button = mount(PlinthIconButton, { props: { label: 'Back', icon: 'back' } });
+    const link = mount(PlinthIconButton, { props: { label: 'Back', icon: 'back', href: '/' } });
+
+    expect(button.get('.plinth-icon').attributes('data-mirror')).toBe('');
+    expect(link.get('.plinth-icon').attributes()).toMatchObject({
+      'data-icon': 'back',
+      'data-mirror': '',
+    });
+    expect(link.html()).toContain(iconGlyph('back'));
+  });
+
+  it('shows the slot for a glyph it does not know', () => {
+    // @ts-expect-error: an unknown glyph, as a project might pass from untyped data.
+    const wrapper = mount(PlinthIconButton, { props: { label: 'Close', icon: 'rocket' }, slots });
+
+    expect(wrapper.get('.plinth-icon').html()).toBe(
+      `<span class="plinth-icon" data-size="md" aria-hidden="true">${svg}</span>`,
+    );
   });
 });

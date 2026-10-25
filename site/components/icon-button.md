@@ -22,9 +22,23 @@ browser's). Blade refuses to render an icon button without one, Vue warns, and R
 require the prop. A blank `label` falls back to an `aria-label` attribute in every layer.
 
 ```blade example
-<x-plinth::icon-button label="Search"><x-site.glyph name="search" /></x-plinth::icon-button>
-<x-plinth::icon-button label="More actions"><x-site.glyph name="more" /></x-plinth::icon-button>
-<x-plinth::icon-button label="Close" variant="secondary"><x-site.glyph name="close" /></x-plinth::icon-button>
+<x-plinth::icon-button label="Search" icon="search" />
+<x-plinth::icon-button label="More actions" icon="more" />
+<x-plinth::icon-button label="Close" icon="close" variant="secondary" />
+```
+
+## The icon
+
+Pass one of the [icon](icon.md)'s built-in glyphs by name as `icon` (menu, close, back, the
+chevrons, check, plus, search, more, external, sign-out, sun, moon, system, info, warning), or the
+project's own SVG in the slot. A glyph that points a direction (back, the side chevrons, sign-out)
+flips in right-to-left text on its own; a name Plinth doesn't know shows the slot instead.
+
+```blade example
+<x-plinth::icon-button label="Open menu" icon="menu" />
+<x-plinth::icon-button label="Back" icon="back" href="#" />
+<x-plinth::icon-button label="Switch to dark" icon="moon" />
+<x-plinth::icon-button label="Notifications"><x-site.glyph name="bell" /></x-plinth::icon-button>
 ```
 
 ## Variants
@@ -37,9 +51,9 @@ dialog; **primary** or **accent** rarely, for the one main action in a compact p
 
 ```blade example
 <x-plinth::icon-button label="Notifications"><x-site.glyph name="bell" /></x-plinth::icon-button>
-<x-plinth::icon-button label="Close" variant="secondary"><x-site.glyph name="close" /></x-plinth::icon-button>
-<x-plinth::icon-button label="New project" variant="primary"><x-site.glyph name="plus" /></x-plinth::icon-button>
-<x-plinth::icon-button label="Remove" variant="danger-ghost"><x-site.glyph name="close" /></x-plinth::icon-button>
+<x-plinth::icon-button label="Close" icon="close" variant="secondary" />
+<x-plinth::icon-button label="New project" icon="plus" variant="primary" />
+<x-plinth::icon-button label="Remove" icon="close" variant="danger-ghost" />
 ```
 
 ## Toggles
@@ -61,9 +75,9 @@ is on.
 small icon buttons in a row are still easy to hit; leave a little space between them all the same.
 
 ```blade example
-<x-plinth::icon-button label="Search" variant="secondary" size="sm"><x-site.glyph name="search" /></x-plinth::icon-button>
-<x-plinth::icon-button label="Search" variant="secondary"><x-site.glyph name="search" /></x-plinth::icon-button>
-<x-plinth::icon-button label="Search" variant="secondary" size="lg"><x-site.glyph name="search" /></x-plinth::icon-button>
+<x-plinth::icon-button label="Search" icon="search" variant="secondary" size="sm" />
+<x-plinth::icon-button label="Search" icon="search" variant="secondary" />
+<x-plinth::icon-button label="Search" icon="search" variant="secondary" size="lg" />
 ```
 
 ## Links, states and direction
@@ -92,7 +106,8 @@ The same names in every layer. React takes the Vue props, with the icon as `chil
 | busy     | `busy` or `:busy="$saving"`                       | `busy` or `:busy="saving"` | `busy={saving}`       | off     |
 | pressed  | `:pressed="$favourite"`, a toggle                 | `:pressed="favourite"`     | `pressed={favourite}` | not set |
 | mirror   | `mirror`                                          | `mirror`                   | `mirror`              | off     |
-| icon     | the slot                                          | the default slot           | `children`            | none    |
+| icon     | `icon="menu"` (or a `Glyph` case)                 | `icon="menu"`              | `icon="menu"`         | none    |
+| SVG      | the slot, without an `icon`                       | the default slot           | `children`            | none    |
 
 `class`, `wire:*`, `x-*` and `@click` reach the button or link; in React, `className`, `onClick`,
 `ref` and every other prop do.
@@ -100,12 +115,11 @@ A button (not a link) also takes `commandfor` and `command`, typed in React sinc
 types don't list them yet.
 
 ```blade tab="Blade"
-<x-plinth::icon-button label="Close" variant="secondary" wire:click="close">
-    <svg>…</svg>
-</x-plinth::icon-button>
+<x-plinth::icon-button label="Close" icon="close" variant="secondary" wire:click="close" />
 ```
 
 ```vue tab="Vue"
+<PlinthIconButton label="Open menu" icon="menu" @click="openMenu" />
 <PlinthIconButton label="Favourite" :pressed="isFavourite" @click="toggle">
   <svg>…</svg>
 </PlinthIconButton>
@@ -114,6 +128,7 @@ types don't list them yet.
 ```tsx tab="React"
 import { PlinthIconButton } from '@ptbdynamic/plinth/react';
 
+<PlinthIconButton label="Open menu" icon="menu" onClick={openMenu} />;
 <PlinthIconButton label="Favourite" pressed={favourite} onClick={toggle}>
     <StarIcon />
 </PlinthIconButton>;

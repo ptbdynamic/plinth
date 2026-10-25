@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/html-vite';
 import { controlSizes, buttonVariants } from './button.ts';
 import { iconButton, type IconButtonArgs } from './icon-button.ts';
+import { iconNames } from './icon.ts';
 import { sampleIcons } from './icons.ts';
 import '@ptbdynamic/plinth-css/src/components/icon.css';
 import '@ptbdynamic/plinth-css/src/components/button.css';
@@ -17,6 +18,7 @@ const meta = {
     svg: sampleIcons.more,
   },
   argTypes: {
+    icon: { control: 'select', options: [undefined, ...iconNames] },
     variant: { control: 'inline-radio', options: buttonVariants },
     size: { control: 'inline-radio', options: controlSizes },
     href: { control: 'text' },
@@ -28,7 +30,7 @@ const meta = {
     docs: {
       description: {
         component:
-          'A button with only an icon, for toolbars, headers and closing a sheet. It always has a label. With `pressed` (true or false) it is a toggle and prints `aria-pressed`; pressed shows the selection tint inside a 2px accent edge. With an `href` it is a link instead, which is never a toggle, so `pressed` is ignored there.',
+          'A button with only an icon, for toolbars, headers and closing a sheet. It always has a label. Its icon is one of Plinth’s built-in glyphs by `icon` (as the icon’s `name`), or the project’s own SVG in the slot. With `pressed` (true or false) it is a toggle and prints `aria-pressed`; pressed shows the selection tint inside a 2px accent edge. With an `href` it is a link instead, which is never a toggle, so `pressed` is ignored there.',
       },
     },
   },
@@ -64,6 +66,8 @@ export const Link: Story = {
     mirror: true,
   },
 };
+/** A built-in glyph by name, instead of an SVG in the slot. */
+export const WithGlyph: Story = { args: { label: 'Open menu', icon: 'menu' } };
 export const Disabled: Story = { args: { disabled: true } };
 export const DisabledPressed: Story = {
   args: { label: 'Favourite', svg: sampleIcons.star, pressed: true, disabled: true },

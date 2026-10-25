@@ -1,12 +1,15 @@
 // Markup contract: packages/css/src/components/button.css (icon button)
 import type { ComponentProps } from 'react';
 import { buttonVariant, type ButtonVariant, type InvokerCommandProps } from './button';
+import { iconGlyphs, iconName, mirroredIconNames, type IconName } from './icon';
 import { classNames } from './markup';
 import { controlSizes, iconSizeFor, resolveSize, type ControlSize } from './size';
 
 interface IconButtonOptions {
   /** The accessible name: required, since the button has no visible text. */
   label: string;
+  /** A built-in glyph; `children` show when it is missing or not one. */
+  icon?: IconName;
   variant?: ButtonVariant;
   size?: ControlSize;
   disabled?: boolean;
@@ -31,6 +34,7 @@ export type PlinthIconButtonProps =
 
 export function PlinthIconButton({
   label,
+  icon,
   href,
   variant = 'ghost',
   size,
@@ -45,6 +49,7 @@ export function PlinthIconButton({
 }: PlinthIconButtonProps) {
   const dataSize = resolveSize(size, controlSizes, 'md');
   const isBusy = busy && !disabled;
+  const glyph = iconName(icon);
   const common = {
     className: classNames('plinth-button plinth-icon-button', className),
     'data-variant': buttonVariant(variant),
@@ -58,10 +63,26 @@ export function PlinthIconButton({
     <span
       className="plinth-icon"
       data-size={iconSizeFor(dataSize)}
-      data-mirror={mirror ? '' : undefined}
+      data-icon={glyph}
+      data-mirror={
+        mirror || (glyph !== undefined && mirroredIconNames.includes(glyph)) ? '' : undefined
+      }
       aria-hidden="true"
     >
-      {children}
+      {glyph ? (
+        // The glyph is iconGlyph(icon) (icon.ts), written out; parity keeps the copies equal.
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          dangerouslySetInnerHTML={{ __html: iconGlyphs[glyph] }}
+        />
+      ) : (
+        children
+      )}
     </span>
   );
 
