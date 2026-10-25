@@ -213,6 +213,12 @@ return [
             ],
         ],
 
+        'app-nav' => [
+            'name' => 'App nav',
+            'group' => 'Navigation',
+            'description' => 'The app\'s main navigation: a sidebar from 1280px, a rail of icons from 768px.',
+        ],
+
         'page-header' => [
             'name' => 'Page header',
             'group' => 'Navigation',
