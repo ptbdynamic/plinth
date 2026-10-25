@@ -1864,7 +1864,7 @@ function timelinePostCase(
       optional.filter((name) => args[name] !== undefined).map((name) => [name, args[name]]),
     ),
   };
-  const named = args.actions !== undefined ? { actions: args.actions } : {};
+  const named: Record<string, string> = args.actions !== undefined ? { actions: args.actions } : {};
   return {
     story,
     markup: timelinePost(args, attributes),
