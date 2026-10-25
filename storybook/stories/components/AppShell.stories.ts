@@ -27,6 +27,7 @@ import '@ptbdynamic/plinth-css/src/components/page-header.css';
 import '@ptbdynamic/plinth-css/src/components/app-nav.css';
 import '@ptbdynamic/plinth-css/src/components/app-bar.css';
 import '@ptbdynamic/plinth-css/src/components/split-view.css';
+import '@ptbdynamic/plinth-css/src/components/nav-list.css';
 import '@ptbdynamic/plinth-css/src/components/app-shell.css';
 
 /** The support inbox: the page header, then the folders, the tickets and the open ticket. */

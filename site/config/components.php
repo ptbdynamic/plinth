@@ -225,6 +225,16 @@ return [
             'description' => 'The bar at the top of an app, from 768px: the search, a few actions and the account.',
         ],
 
+        'nav-list' => [
+            'name' => 'Nav list',
+            'group' => 'Navigation',
+            'description' => 'A page\'s own navigation: links with counts, in groups with headings.',
+            'playground' => [
+                'template' => "<x-plinth::nav-list label=\"Folders\" style=\"inline-size: 15rem\">\n    <x-plinth::nav-list-group heading=\"Views\">\n        <x-plinth::nav-list-item href=\"#\" count=\"5\"{attributes}>Assigned to me</x-plinth::nav-list-item>\n    </x-plinth::nav-list-group>\n</x-plinth::nav-list>",
+                'states' => ['current'],
+            ],
+        ],
+
         'page-header' => [
             'name' => 'Page header',
             'group' => 'Navigation',

@@ -13,6 +13,7 @@ import { sampleIcons } from './icons.ts';
 import { listCard } from './list-card.ts';
 import type { ListRowArgs } from './list-row.ts';
 import { menuSheet } from './menu-sheet.ts';
+import { navList, type NavListGroupArgs, type NavListItemArgs } from './nav-list.ts';
 import { pageHeader } from './page-header.ts';
 import { textarea } from './textarea.ts';
 
@@ -125,18 +126,32 @@ const row = (title: string, extra: Partial<ListRowArgs> = {}): ListRowArgs => ({
 
 const pane = (content: string) => `<div style="padding: var(--plinth-space-3)">${content}</div>`;
 
-/** The folders, in the secondary column. */
-export const sampleFolders = pane(
-  `<nav id="folders" aria-label="Folders">${listCard({
-    heading: 'Folders',
-    headingLevel: 'h2',
-    rows: [
-      row('Open', { current: true, trailing: '8' }),
-      row('Assigned to me', { trailing: '3' }),
-      row('Waiting'),
-      row('Closed'),
+const folder = (label: string, extra: Partial<NavListItemArgs> = {}): NavListItemArgs => ({
+  label,
+  href: `#${label.toLowerCase().replace(/\s+/g, '-')}`,
+  current: false,
+  ...extra,
+});
+
+/** The folders and the saved views; Open is current. */
+export const sampleFolderGroups: NavListGroupArgs[] = [
+  {
+    items: [
+      folder('Open', { count: 12, current: true }),
+      folder('Pending', { count: 3 }),
+      folder('Solved'),
+      folder('Spam'),
     ],
-  })}</nav>`,
+  },
+  {
+    heading: 'Views',
+    items: [folder('Assigned to me', { count: 5 }), folder('Unassigned', { count: 4 })],
+  },
+];
+
+/** The folders, a nav list in the secondary column. */
+export const sampleFolders = pane(
+  navList({ label: 'Folders', groups: sampleFolderGroups }, { id: 'folders' }),
 );
 
 const subjects = [
