@@ -91,7 +91,7 @@ The tokens are in `packages/tokens/tokens/`, in three tiers ([ADR 1](docs/adr/00
 | --------- | ------------------------------------------------------ | ------------------------------- | ----------------------------------- |
 | Primitive | `primitives.json`                                      | `--plinth-ref-color-neutral-50` | semantic tokens only                |
 | Semantic  | `semantic.json`, `semantic.light.json`, `.dark.json`   | `--plinth-color-surface`        | components; projects override these |
-| Component | `component.json`, `component.light.json`, `.dark.json` | `--plinth-header-height`        | one component                       |
+| Component | `component.json`, `component.light.json`, `.dark.json` | `--plinth-page-header-height`   | one component                       |
 
 The website has a page for each under **Foundations** (colour, typography, spacing and sizes,
 radii and elevation, layers and breakpoints, motion, the focus ring and component tokens), each

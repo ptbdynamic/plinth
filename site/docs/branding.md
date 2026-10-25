@@ -36,7 +36,7 @@ The same accent, before and after:
 | --------- | ------------------------------- | -------------------------- |
 | Primitive | `--plinth-ref-color-neutral-50` | No                         |
 | Semantic  | `--plinth-color-surface`        | Yes: this is your brand    |
-| Component | `--plinth-header-height`        | Only to tune one component |
+| Component | `--plinth-page-header-height`   | Only to tune one component |
 
 See [Token tiers](token-tiers.md) for what each tier is for, and [Colour](colour.md) for every
 semantic colour.

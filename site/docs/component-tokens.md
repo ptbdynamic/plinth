@@ -5,7 +5,7 @@ tokens, so a brand's overrides still reach them.
 
 ## Sizes
 
-<!-- tokens: component header -->
+<!-- tokens: component page-header -->
 
 <!-- tokens: component data-table -->
 
@@ -36,7 +36,7 @@ a [brand](branding.md): `light-dark()` picks the one for the theme the page is i
 
 ```css label="resources/css/brand.css"
 :root {
-    --plinth-header-height: 4rem;
+    --plinth-page-header-height: 4rem;
     --plinth-callout-info-border: light-dark(rgb(37 99 235 / 0.4), rgb(96 165 250 / 0.4));
 }
 ```

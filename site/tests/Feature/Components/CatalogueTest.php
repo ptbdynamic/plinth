@@ -26,7 +26,7 @@ it('finds a component, and the one before and after it', function () {
 
 it('knows its files, its stories, its layers and its playground', function () {
     $iconButton = app(Catalogue::class)->find('icon-button');
-    $header = app(Catalogue::class)->find('header');
+    $pageHeader = app(Catalogue::class)->find('page-header');
 
     expect($iconButton?->files)->toBe([
         'packages/css/src/components/button.css',
@@ -38,7 +38,7 @@ it('knows its files, its stories, its layers and its playground', function () {
         ->and($iconButton?->stories())->toBe('/storybook/?path=/docs/components-icon-button--docs')
         ->and($iconButton?->layers())->toBe(['HTML', 'Blade', 'Vue', 'React'])
         ->and($iconButton?->playground)->toBeInstanceOf(Playground::class)
-        ->and($header?->layers())->toBe(['HTML', 'Blade', 'Vue', 'React'])
-        ->and($header?->files)->toContain('packages/react/src/PlinthHeader.tsx')
-        ->and($header?->playground)->toBeNull();
+        ->and($pageHeader?->layers())->toBe(['HTML', 'Blade', 'Vue', 'React'])
+        ->and($pageHeader?->files)->toContain('packages/react/src/PlinthPageHeader.tsx')
+        ->and($pageHeader?->playground)->toBeNull();
 });

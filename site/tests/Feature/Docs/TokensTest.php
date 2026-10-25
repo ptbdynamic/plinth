@@ -10,7 +10,7 @@ it('reads the tokens build and groups the tokens by tier and path', function () 
     expect($tokens->group('semantic', 'color')->pluck('name')->all())->toBe(['--plinth-color-surface'])
         ->and($tokens->group('semantic')->count())->toBe(3)
         ->and($tokens->group('primitive', 'ref', 'space')->first()?->value)->toBe('0.25rem')
-        ->and($tokens->group('component')->first()?->description)->toBe('The header\'s height.');
+        ->and($tokens->group('component')->first()?->description)->toBe('The page header\'s height.');
 });
 
 it('has no tokens when the build is missing or not a list', function () {
@@ -75,6 +75,6 @@ it('prints colours in light and dark, and other values with what they are built 
         ->toContain('0.25rem · 4px')
         ->toContain('>Built from</th>')
         ->toContain('data-preview="bar"')
-        ->toContain('The header&#039;s height.')
+        ->toContain('The page header&#039;s height.')
         ->and(substr_count($html, 'class="plinth-data-table site-docs-table site-tokens"'))->toBe(4);
 });

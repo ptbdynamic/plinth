@@ -1,8 +1,9 @@
 # Menu sheet
 
 The app shell's menu: a [sheet](sheet.md) with the signed-in user, the navigation and the account
-actions. The header's menu button opens it. It is a sheet with `side="end" side-phone="bottom"`: on
-a phone it slides up from the bottom; from 768px up it is a full-height panel on the end edge.
+actions. The [page header](page-header.md)'s menu button opens it. It is a sheet with
+`side="end" side-phone="bottom"`: on a phone it slides up from the bottom; from 768px up it is a
+full-height panel on the end edge.
 
 ## When not to use it
 
@@ -39,8 +40,8 @@ The menu stays closed until you press its button.
 | `.plinth-menu-sheet-account` | `<div>`          | no       | A list card of account actions, on the bottom edge of the panel                        |
 
 - Everything the sheet does holds: the browser traps focus, closes it on Escape or a tap on the
-  backdrop, and returns focus to the menu button. Give it an **`id`** and point the header's menu
-  button at it with `commandfor` and `command="show-modal"`.
+  backdrop, and returns focus to the menu button. Give it an **`id`** and point the page header's
+  menu button at it with `commandfor` and `command="show-modal"`.
 - The **title** is _Menu_ by default; set it, and **`close-label`**, in the page's language. It
   names the sheet and the navigation.
 - The user row is optional. Give it a **`user-href`** and it links to the profile, with a chevron.

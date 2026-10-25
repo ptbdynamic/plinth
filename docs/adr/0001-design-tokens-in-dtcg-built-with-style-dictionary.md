@@ -35,7 +35,7 @@ major, which keeps the same DTCG support and API.
    these.
 3. **Component** (`component.json`, and `component.light.json` / `component.dark.json` for what
    changes with the theme): only values a project may need to tune for one component, such as
-   `header.height` or the callout's tints. Built from semantic tokens: a reference, or a value
+   `page-header.height` or the callout's tints. Built from semantic tokens: a reference, or a value
    such as a `color-mix()` whose references the build writes as `var()`s.
 
 A semantic token that only points at another token is written as `var()` of it, so changing a
