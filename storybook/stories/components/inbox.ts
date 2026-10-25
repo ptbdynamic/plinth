@@ -61,9 +61,12 @@ export const sampleSearch = appBarSearch(
   { 'aria-keyshortcuts': 'Meta+K Control+K' },
 );
 export const sampleActions = action('Notifications', { svg: sampleIcons.bell });
-/** The account: the person's avatar in a ghost icon button, named by its label. */
+/**
+ * The account: an avatar in a ghost icon button, named by its label. The avatar shows the person
+ * glyph: initials would be visible text the name doesn't contain.
+ */
 export const sampleAccount = `<button type="button" class="plinth-button plinth-icon-button" data-variant="ghost" data-size="md" aria-label="Account">${avatar(
-  { name: 'Sam Lee', size: 'md', decorative: true },
+  { size: 'md', decorative: true },
 )}</button>`;
 
 export const sampleBar = appBar({
@@ -93,12 +96,13 @@ export const sampleMenuSheet = menuSheet({
 
 /**
  * The Inbox's page header: the menu button (or, with a ticket open, a back link to the list),
- * the panel button for the folders and New ticket.
+ * the panel button for the folders (when there are folders) and New ticket.
  */
 export function inboxHeader({
   back = false,
   secondaryOpen = true,
-}: { back?: boolean; secondaryOpen?: boolean } = {}): string {
+  secondary = true,
+}: { back?: boolean; secondaryOpen?: boolean; secondary?: boolean } = {}): string {
   const leading = back
     ? action('Back to the tickets', { icon: 'back', href: '#inbox' })
     : action('Menu', { icon: 'menu' }, { commandfor: 'app-menu', command: 'show-modal' });
@@ -119,7 +123,7 @@ export function inboxHeader({
     level: 'h1',
     top: true,
     leading,
-    actions: panel + newTicket,
+    actions: (secondary ? panel : '') + newTicket,
   });
 }
 

@@ -27,8 +27,11 @@ import '@ptbdynamic/plinth-css/src/components/app-shell.css';
 const page = (args: SplitViewArgs) =>
   appShell({
     main:
-      inboxHeader({ back: args.pane === 'detail', secondaryOpen: !args.secondaryClosed }) +
-      splitView(args),
+      inboxHeader({
+        back: args.pane === 'detail',
+        secondaryOpen: !args.secondaryClosed,
+        secondary: Boolean(args.secondary?.trim()),
+      }) + splitView(args),
   }) + sampleMenuSheet;
 
 const meta = {

@@ -10,6 +10,7 @@ import {
   sampleTicket,
   sampleTickets,
 } from './inbox.ts';
+import { listCard } from './list-card.ts';
 import { pageHeader } from './page-header.ts';
 import { splitView } from './split-view.ts';
 import '@ptbdynamic/plinth-css/src/components/icon.css';
@@ -43,11 +44,19 @@ const inbox =
 /** A plain page, longer than the screen: the main scrolls on its own, under the app bar. */
 const longPage =
   pageHeader({ heading: 'Settings', level: 'h1', top: true }) +
-  `<div style="padding: var(--plinth-space-4); line-height: var(--plinth-font-leading-normal)">${Array.from(
-    { length: 24 },
-    (_, index) =>
-      `<p>Section ${index + 1}. The page scrolls inside the main, and the app nav and the app bar stay where they are.</p>`,
-  ).join('')}</div>`;
+  `<div style="padding: var(--plinth-space-4)">${listCard({
+    heading: 'Every setting',
+    headingLevel: 'h2',
+    rows: Array.from({ length: 24 }, (_, index) => ({
+      title: `Setting ${index + 1}`,
+      description: 'The page scrolls inside the main; the nav and the bar stay put.',
+      href: `#setting-${index + 1}`,
+      chevron: true,
+      button: false,
+      current: false,
+      disabled: false,
+    })),
+  })}</div>`;
 
 const meta = {
   title: 'Components/App Shell',
