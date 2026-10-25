@@ -175,7 +175,9 @@ function buildTailwindTheme(tokens: Token[]): string {
     ['--spacing', space1.cssVar],
     ...entries('radius', group('radius')),
     ...entries('shadow', group('elevation')),
-    ...entries('breakpoint', group('breakpoint')),
+    // Literal values: breakpoints end up in media queries, where var() is invalid, so Tailwind
+    // would drop every md:/lg: variant and lightningcss would reject `container`.
+    ...group('breakpoint').map((t): [string, string] => [`--breakpoint-${t.path.at(-1)}`, t.value]),
     ...entries('ease', group('easing')),
   ];
   return `${banner}\n@theme inline {\n${lines.map(([n, v]) => `  ${n}: ${v};`).join('\n')}\n}\n`;
