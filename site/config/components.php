@@ -17,7 +17,7 @@ return [
 
     'path' => base_path('components'),
 
-    'groups' => ['Actions', 'Forms', 'Content', 'Navigation', 'Overlays'],
+    'groups' => ['Actions', 'Forms', 'Content', 'Navigation', 'Layout', 'Overlays'],
 
     'components' => [
 
@@ -219,6 +219,12 @@ return [
             'description' => 'The app\'s main navigation: a sidebar from 1280px, a rail of icons from 768px.',
         ],
 
+        'app-bar' => [
+            'name' => 'App bar',
+            'group' => 'Navigation',
+            'description' => 'The bar at the top of an app, from 768px: the search, a few actions and the account.',
+        ],
+
         'page-header' => [
             'name' => 'Page header',
             'group' => 'Navigation',
@@ -266,6 +272,18 @@ return [
                     ],
                 ],
             ],
+        ],
+
+        'app-shell' => [
+            'name' => 'App shell',
+            'group' => 'Layout',
+            'description' => 'The app\'s frame: the app nav, the app bar and the page, which scrolls on its own.',
+        ],
+
+        'split-view' => [
+            'name' => 'Split view',
+            'group' => 'Layout',
+            'description' => 'A list beside its detail, and folders from 1280px; one pane on a phone.',
         ],
 
         'dialog' => [

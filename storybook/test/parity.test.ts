@@ -1,6 +1,9 @@
 import {
+  PlinthAppBar,
+  PlinthAppBarSearch,
   PlinthAppNav,
   PlinthAppNavItem,
+  PlinthAppShell,
   PlinthAvatar,
   PlinthBadge,
   PlinthButton,
@@ -31,13 +34,17 @@ import {
   PlinthSectionMenu,
   PlinthSectionMenuItem,
   PlinthSheet,
+  PlinthSplitView,
   PlinthStat,
   PlinthTextarea,
   PlinthTextField,
 } from '@ptbdynamic/plinth-vue';
 import {
+  PlinthAppBar as ReactAppBar,
+  PlinthAppBarSearch as ReactAppBarSearch,
   PlinthAppNav as ReactAppNav,
   PlinthAppNavItem as ReactAppNavItem,
+  PlinthAppShell as ReactAppShell,
   PlinthAvatar as ReactAvatar,
   PlinthBadge as ReactBadge,
   PlinthButton as ReactButton,
@@ -68,6 +75,7 @@ import {
   PlinthSectionMenu as ReactSectionMenu,
   PlinthSectionMenuItem as ReactSectionMenuItem,
   PlinthSheet as ReactSheet,
+  PlinthSplitView as ReactSplitView,
   PlinthStat as ReactStat,
   PlinthTextarea as ReactTextarea,
   PlinthTextField as ReactTextField,
@@ -77,6 +85,17 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import { createStaticVNode, h, type Component } from 'vue';
 import { renderToString } from 'vue/server-renderer';
 import { describe, expect, it } from 'vitest';
+import * as appBarStories from '../stories/components/AppBar.stories.ts';
+import {
+  appBar,
+  appBarSearch,
+  type AppBarArgs,
+  type AppBarSearchArgs,
+} from '../stories/components/app-bar.ts';
+import * as appShellStories from '../stories/components/AppShell.stories.ts';
+import { appShell, type AppShellArgs } from '../stories/components/app-shell.ts';
+import * as splitViewStories from '../stories/components/SplitView.stories.ts';
+import { splitView, type SplitViewArgs } from '../stories/components/split-view.ts';
 import * as appNavStories from '../stories/components/AppNav.stories.ts';
 import {
   appNav,
@@ -184,8 +203,8 @@ import {
  * Each component also has a case with extra attributes, as a project adds them (a class, an id,
  * data-* and aria-*), so attribute forwarding cannot drift between the layers either, and a case
  * with an attribute that clashes with one the component sets on its root, where the project's
- * value wins (docs/adr/0002). The list card and code block set no attribute on their root
- * but the class (the code block's id is a prop), so they have no clashing case.
+ * value wins (docs/adr/0002). The list card, code block and app shell set no attribute on their
+ * root but the class (the code block's id is a prop), so they have no clashing case.
  *
  * React takes the same props as Vue (docs/adr/0006), so a case's React side is its Vue side
  * with slots as `children` and node props.
@@ -213,7 +232,11 @@ interface ParityCase {
 
 /** Each Vue component and its React one. */
 const reactComponents = new Map<Component, unknown>([
+  [PlinthAppBar, ReactAppBar],
+  [PlinthAppBarSearch, ReactAppBarSearch],
   [PlinthAppNav, ReactAppNav],
+  [PlinthAppShell, ReactAppShell],
+  [PlinthSplitView, ReactSplitView],
   [PlinthAppNavItem, ReactAppNavItem],
   [PlinthAvatar, ReactAvatar],
   [PlinthBadge, ReactBadge],
@@ -790,6 +813,67 @@ const cases: ParityCase[] = [
     { ...appNavItemDefaults, current: true },
     { 'aria-current': 'location' },
   ),
+  ...storyArgs<AppShellArgs>(appShellStories).map(([story, args]) =>
+    appShellCase(`App shell/${story}`, args),
+  ),
+  appShellCase(
+    'App shell/with extra attributes',
+    { main: '<p>Page</p>' },
+    { class: 'is-wide', id: 'app', 'data-testid': 'shell', 'aria-busy': 'true' },
+  ),
+  appShellCase('App shell/blank nav and bar', { nav: ' ', bar: ' ', main: '<p>Page</p>' }),
+  ...storyArgs<AppBarArgs>(appBarStories).map(([story, args]) =>
+    appBarCase(`App bar/${story}`, args),
+  ),
+  appBarCase(
+    'App bar/with extra attributes',
+    { actions: '<button type="button">Help</button>' },
+    { class: 'is-raised', id: 'bar', 'data-testid': 'bar', 'aria-describedby': 'bar-help' },
+  ),
+  appBarCase('App bar/with a clashing attribute', { account: '<i>me</i>' }, { role: 'toolbar' }),
+  appBarCase('App bar/blank parts', { search: ' ', actions: ' ', account: ' ' }),
+  appBarSearchCase('App bar search/Default', { label: 'Search' }),
+  appBarSearchCase('App bar search/WithShortcut', { label: 'Search', shortcut: '⌘K' }),
+  appBarSearchCase('App bar search/blank shortcut', { label: 'Find', shortcut: ' ' }),
+  appBarSearchCase('App bar search/escaped text', { label: '<b>Find</b>', shortcut: '"K"' }),
+  appBarSearchCase(
+    'App bar search/with extra attributes',
+    { label: 'Search', shortcut: 'Ctrl K' },
+    {
+      class: 'is-wide',
+      id: 'search',
+      'data-testid': 'search',
+      'aria-keyshortcuts': 'Control+K',
+      commandfor: 'search-dialog',
+      command: 'show-modal',
+    },
+  ),
+  appBarSearchCase(
+    'App bar search/with a clashing attribute',
+    { label: 'Search' },
+    { type: 'submit' },
+  ),
+  ...storyArgs<SplitViewArgs>(splitViewStories).map(([story, args]) =>
+    splitViewCase(`Split view/${story}`, args),
+  ),
+  splitViewCase(
+    'Split view/with extra attributes',
+    { pane: 'detail', secondaryClosed: false, list: '<p>List</p>', detail: '<p>Detail</p>' },
+    { class: 'is-tall', id: 'inbox', 'data-testid': 'inbox', 'aria-busy': 'true' },
+  ),
+  splitViewCase(
+    'Split view/with a clashing attribute',
+    { pane: 'list', secondaryClosed: true, list: '<p>List</p>', detail: '<p>Detail</p>' },
+    { 'data-pane': 'detail', 'data-secondary': 'open' },
+  ),
+  splitViewCase('Split view/unknown pane and blank slots', {
+    pane: 'side' as SplitViewArgs['pane'],
+    secondaryClosed: false,
+    secondary: ' ',
+    list: '<p>List</p>',
+    detail: '<p>Detail</p>',
+    footer: ' ',
+  }),
   ...storyArgs<SectionMenuArgs>(sectionMenuStories).map(([story, args]) =>
     sectionMenuCase(`Section menu/${story}`, args),
   ),
@@ -1599,6 +1683,84 @@ function appNavCase(story: string, args: AppNavArgs, attributes: Attributes = {}
   };
 }
 
+/** The shell's parity; the nav, the bar and the page are markup, passed in as slots. */
+function appShellCase(story: string, args: AppShellArgs, attributes: Attributes = {}): ParityCase {
+  const named = {
+    ...(args.nav !== undefined ? { nav: args.nav } : {}),
+    ...(args.bar !== undefined ? { bar: args.bar } : {}),
+  };
+  return {
+    story,
+    markup: appShell(args, attributes),
+    vue: {
+      component: PlinthAppShell,
+      props: { ...attributes },
+      slot: args.main,
+      html: true,
+      named,
+    },
+    blade: { component: 'app-shell', props: {}, attributes, slot: args.main, named },
+  };
+}
+
+/** The bar's parity; the search is the default slot, the actions and the account named ones. */
+function appBarCase(story: string, args: AppBarArgs, attributes: Attributes = {}): ParityCase {
+  const named = {
+    ...(args.actions !== undefined ? { actions: args.actions } : {}),
+    ...(args.account !== undefined ? { account: args.account } : {}),
+  };
+  const slot = args.search ?? '';
+  return {
+    story,
+    markup: appBar(args, attributes),
+    vue: { component: PlinthAppBar, props: { ...attributes }, slot, html: true, named },
+    blade: { component: 'app-bar', props: {}, attributes, slot, named },
+  };
+}
+
+function appBarSearchCase(
+  story: string,
+  args: AppBarSearchArgs,
+  attributes: Attributes = {},
+): ParityCase {
+  const props = {
+    label: args.label,
+    ...(args.shortcut !== undefined ? { shortcut: args.shortcut } : {}),
+  };
+  return {
+    story,
+    markup: appBarSearch(args, attributes),
+    vue: { component: PlinthAppBarSearch, props: { ...props, ...attributes }, slot: '' },
+    blade: { component: 'app-bar-search', props, attributes, slot: '' },
+  };
+}
+
+/** The split view's parity; the detail is the default slot, the other panes named ones. */
+function splitViewCase(
+  story: string,
+  args: SplitViewArgs,
+  attributes: Attributes = {},
+): ParityCase {
+  const props = { pane: args.pane, secondaryClosed: args.secondaryClosed };
+  const named = {
+    ...(args.secondary !== undefined ? { secondary: args.secondary } : {}),
+    list: args.list,
+    ...(args.footer !== undefined ? { footer: args.footer } : {}),
+  };
+  return {
+    story,
+    markup: splitView(args, attributes),
+    vue: {
+      component: PlinthSplitView,
+      props: { ...props, ...attributes },
+      slot: args.detail,
+      html: true,
+      named,
+    },
+    blade: { component: 'split-view', props, attributes, slot: args.detail, named },
+  };
+}
+
 function sectionMenuItemCase(
   story: string,
   args: SectionMenuItemArgs,
@@ -2306,6 +2468,37 @@ describe('parity with the stories', () => {
       'App nav item/escaped text',
       'App nav item/with extra attributes',
       'App nav item/with a clashing attribute',
+      'App shell/Default',
+      'App shell/WithoutBar',
+      'App shell/WithoutNav',
+      'App shell/PageOnly',
+      'App shell/LongPage',
+      'App shell/with extra attributes',
+      'App shell/blank nav and bar',
+      'App bar/Default',
+      'App bar/SearchLabel',
+      'App bar/WithoutShortcut',
+      'App bar/WithoutSearch',
+      'App bar/AccountOnly',
+      'App bar/with extra attributes',
+      'App bar/with a clashing attribute',
+      'App bar/blank parts',
+      'App bar search/Default',
+      'App bar search/WithShortcut',
+      'App bar search/blank shortcut',
+      'App bar search/escaped text',
+      'App bar search/with extra attributes',
+      'App bar search/with a clashing attribute',
+      'Split view/List',
+      'Split view/Detail',
+      'Split view/SecondaryClosed',
+      'Split view/WithoutSecondary',
+      'Split view/NothingOpen',
+      'Split view/LongDetail',
+      'Split view/ShortList',
+      'Split view/with extra attributes',
+      'Split view/with a clashing attribute',
+      'Split view/unknown pane and blank slots',
       'Section menu/Default',
       'Section menu/WithCounts',
       'Section menu/Buttons',

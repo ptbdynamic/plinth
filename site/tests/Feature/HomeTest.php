@@ -18,7 +18,7 @@ it('shows the home page with every section', function () {
             'Same components. Your colour, your corners, your theme.',
             'Every decision, written down.',
             'An inbox, a settings page, billing, a landing page.',
-            '24 components today, each with its contract.',
+            '27 components today, each with its contract.',
         ]);
 });
 
@@ -68,9 +68,9 @@ it('shows the header and footer links', function () {
 
 it('shows the latest four decisions, newest first, with the newest announced in the hero', function () {
     $this->get('/')
-        ->assertSee('New · ADR 7, the Plinth website')
-        ->assertSeeInOrder(['ADR 7', 'The Plinth website', 'ADR 6', 'A React layer', 'ADR 5', 'Dialogs, sheets and drawers', 'ADR 4'])
-        ->assertDontSee('ADR 3</span>', false);
+        ->assertSee('New · ADR 8, the app shell')
+        ->assertSeeInOrder(['ADR 8', 'The app shell', 'ADR 7', 'The Plinth website', 'ADR 6', 'A React layer', 'ADR 5'])
+        ->assertDontSee('ADR 4</span>', false);
 });
 
 it('leaves the decisions out when the ADRs are not there', function () {

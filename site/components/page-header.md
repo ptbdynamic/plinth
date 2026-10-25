@@ -91,7 +91,9 @@ this page are `h3`s, since the page already has its `<h1>` and its sections.
 When the page header is the very top of a phone's screen, set **`top`** (it prints `data-top`).
 On a phone that draws under the status bar and the notch (`viewport-fit=cover` in the viewport
 meta) the page header then adds `env(safe-area-inset-top)` above its height. Leave it off when
-the page header sits under an app bar: the app sets it, the page header doesn't guess.
+the page header sits under an app bar of your own: the app sets it, the page header doesn't
+guess. In the [app shell](app-shell.md), set it: the page header is the phone's top bar, and from
+768px the shell drops the safe area under its app bar.
 
 ```blade
 <x-plinth::page-header heading="Inbox" top>…</x-plinth::page-header>
@@ -104,9 +106,10 @@ can tune. Its inline padding clears the notch on a phone held sideways.
 
 The page header is `position: sticky` on the **`--plinth-layer-sticky`** z-index: above the
 page's content, below sheets and menus, which sit in the browser's top layer. It sticks
-**`--plinth-page-header-offset`** from the top of its scrolling parent: 0 by default. In a shell
-with an app bar that stays at the top, set the offset to the bar's height, and the page header
-sticks just below it.
+**`--plinth-page-header-offset`** from the top of its scrolling parent: 0 by default. In the
+[app shell](app-shell.md) leave it at 0: from 768px the shell's main scrolls under its app bar.
+With an app bar of your own that stays at the top of the document, set the offset to the bar's
+height, and the page header sticks just below it.
 
 ```css
 .app-shell {
@@ -116,7 +119,8 @@ sticks just below it.
 
 Content scrolls under the page header, so a focused element or the target of an in-page link can
 land behind it. Set `scroll-padding-block-start` on the page's scrolling element to keep them
-clear (add `env(safe-area-inset-top)` for the screen's top bar):
+clear (add `env(safe-area-inset-top)` for the screen's top bar). The app shell does this for its
+main from 768px; below 768px the document scrolls, so set it on `html`:
 
 ```css
 html {

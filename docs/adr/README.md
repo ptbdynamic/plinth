@@ -12,6 +12,7 @@ from it. They are numbered in the order they were made and never renumbered.
 | [5](0005-dialogs-sheets-and-drawers.md)                        | Dialogs, sheets and drawers: one base, named by what they are for       |
 | [6](0006-a-react-layer.md)                                     | A React layer, the third thin layer over the markup contract            |
 | [7](0007-the-plinth-website.md)                                | The Plinth website: a Laravel app in the repository, built with Plinth  |
+| [8](0008-the-app-shell.md)                                     | The app shell: the document scrolls on a phone, the panes from 768px    |
 
 ## Writing one
 

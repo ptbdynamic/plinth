@@ -77,6 +77,9 @@
         @case('help')
             <circle cx="12" cy="12" r="9"></circle><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.7.3-1 .9-1 1.7M12 17v.01"></path>
             @break
+        @case('panel')
+            <rect x="3" y="4" width="18" height="16" rx="2"></rect><path d="M9 4v16"></path>
+            @break
         @case('harbour')
             <rect x="3" y="3" width="18" height="18" rx="5"></rect><path d="M7 11c1.7 0 1.7-1.5 3.3-1.5s1.7 1.5 3.4 1.5 1.6-1.5 3.3-1.5M7 15c1.7 0 1.7-1.5 3.3-1.5s1.7 1.5 3.4 1.5 1.6-1.5 3.3-1.5"></path>
             @break

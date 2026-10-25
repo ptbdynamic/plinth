@@ -34,15 +34,17 @@
  * Variant (the app sets it, the page header doesn't guess):
  * - data-top: the page header is the screen's top bar, at the very top of a phone's screen. It
  *   adds env(safe-area-inset-top) above its height, which pads it below the status bar and the
- *   notch on a phone that draws under them (viewport-fit=cover). Leave it off under an app bar.
+ *   notch on a phone that draws under them (viewport-fit=cover). Leave it off under an app bar in the document's flow; in the app
+ *   shell, set it for the phone, and the shell drops the safe area under its app bar.
  *
  * Its height is the page-header.height component token (56px). The inline padding clears the
  * notch on a phone held sideways. It is sticky on the layer.sticky z-index, so it sits above the
  * page and below sheets and menus (the top layer), and it sticks --plinth-page-header-offset from
- * the top: 0 by default, or the app bar's height in a shell that has one. Content scrolls under
- * it, so the app sets scroll-padding-block-start on its scrolling element (the offset plus the
- * height, plus env(safe-area-inset-top) with data-top) to keep a focused element or an anchor's
- * target from landing under the page header.
+ * the top: 0 by default (and in the app shell, whose main scrolls under its app bar), or the app
+ * bar's height when the bar sits in the document's flow above it. Content scrolls under it, so
+ * the app sets scroll-padding-block-start on its scrolling element (the offset plus the height,
+ * plus env(safe-area-inset-top) with data-top) to keep a focused element or an anchor's target
+ * from landing under the page header; the app shell sets it on its main from 768px.
  *
  * The actions sit var(--plinth-space-2) apart, so on a touch screen the 40px hit areas of 32px
  * icon buttons don't overlap.
