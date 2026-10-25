@@ -18,6 +18,7 @@ import * as vueIcon from '../../vue/src/icon.ts';
 import * as vueSize from '../../vue/src/size.ts';
 import * as vueTones from '../../vue/src/tones.ts';
 import * as vueTextField from '../../vue/src/text-field.ts';
+import * as vueTimeline from '../../vue/src/timeline.ts';
 import { buttonVariant } from '../src/button.ts';
 import { iconName } from '../src/icon.ts';
 import { swipeToClose } from '../src/swipe.ts';
@@ -76,6 +77,9 @@ import {
   sizes,
   textFieldSize,
   textFieldSizes,
+  timelineHeadingLevel,
+  timelineKind,
+  timelineKinds,
   tones,
 } from '../src/index.ts';
 
@@ -106,6 +110,7 @@ describe('the shared lists', () => {
     expect(menuItemTones).toEqual(vueMenu.menuItemTones);
     expect(sheetSides).toEqual(vueSheet.sheetSides);
     expect(splitViewPanes).toEqual(vueSplitView.splitViewPanes);
+    expect(timelineKinds).toEqual(vueTimeline.timelineKinds);
     expect(sheetCloseIcon).toBe(vueSheet.sheetCloseIcon);
     expect(dialogSidePhones).toEqual(vueDialog.dialogSidePhones);
     expect(dialogCloseIcon).toBe(vueDialog.dialogCloseIcon);
@@ -134,6 +139,10 @@ describe('the shared lists', () => {
     expect(dataTableSort('sideways')).toBe('none');
     expect(dataTableCellKind('header')).toBe('field');
     expect(headingLevel('h1')).toBe('h2');
+    expect(timelineKind('admin')).toBe('team');
+    expect(timelineKind('note')).toBe('note');
+    expect(timelineHeadingLevel('h1')).toBe('h3');
+    expect(timelineHeadingLevel('h4')).toBe('h4');
     expect(pageHeaderLevel('h7')).toBe('h1');
     expect(pageHeaderLevel('h3')).toBe('h3');
     expect(sheetSide('left')).toBe('end');

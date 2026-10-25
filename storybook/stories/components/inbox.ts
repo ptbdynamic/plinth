@@ -17,6 +17,7 @@ import { menuSheet } from './menu-sheet.ts';
 import { navList, type NavListGroupArgs, type NavListItemArgs } from './nav-list.ts';
 import { pageHeader } from './page-header.ts';
 import { textarea } from './textarea.ts';
+import { timeline, type TimelineEntry } from './timeline.ts';
 
 type SampleIcon = keyof typeof sampleIcons;
 
@@ -190,18 +191,66 @@ export function sampleTickets(current = true, count: number = subjects.length): 
   )}`;
 }
 
-const paragraphs = [
-  'Hi, when I export the March report the download starts and then stops with an error. February works fine.',
-  'I tried two browsers and cleared the cache. The report has about four thousand rows.',
-  'Could you have a look? We need it for a meeting on Friday.',
+/** A post's quiet actions: Reply, Quote and Copy link. */
+export const samplePostActions = [
+  button({ label: 'Reply', variant: 'ghost', size: 'sm', disabled: false, busy: false }),
+  button({ label: 'Quote', variant: 'ghost', size: 'sm', disabled: false, busy: false }),
+  action('Copy link', { svg: sampleIcons.copy, size: 'sm' }),
+].join('');
+
+/** The open ticket's thread: the customer's post, events, a reply and an internal note. */
+export const sampleThread: TimelineEntry[] = [
+  {
+    type: 'post',
+    author: 'Alex Kim',
+    kind: 'customer',
+    detail: 'alex.kim@example.com',
+    time: '09:02',
+    datetime: '2026-10-25T09:02',
+    reference: '#4821',
+    body: '<p>Hi, when I export the March report the download starts and then stops with an error. February works fine.</p><p>I tried two browsers and cleared the cache. The report has about four thousand rows.</p>',
+    actions: samplePostActions,
+  },
+  {
+    type: 'event',
+    text: 'Sam Lee assigned it to themselves',
+    time: '09:14',
+    datetime: '2026-10-25T09:14',
+  },
+  {
+    type: 'post',
+    author: 'Sam Lee',
+    kind: 'note',
+    detail: 'Support team',
+    time: '09:16',
+    datetime: '2026-10-25T09:16',
+    reference: '#4822',
+    body: '<p>Same error on our side with any report over 3,000 rows. Asking the reports team.</p>',
+    actions: samplePostActions,
+  },
+  {
+    type: 'post',
+    author: 'Sam Lee',
+    kind: 'team',
+    detail: 'Support team',
+    time: '09:21',
+    datetime: '2026-10-25T09:21',
+    reference: '#4823',
+    body: '<p>Thanks, Alex. We can see the error and are on it. Until it is fixed, exporting the report a week at a time works.</p>',
+    actions: samplePostActions,
+  },
+  {
+    type: 'event',
+    text: 'Sam Lee set the status to <strong>Pending</strong>',
+    time: '09:22',
+    datetime: '2026-10-25T09:22',
+  },
 ];
 
 /** The open ticket, in the detail; `long` repeats the thread so the detail scrolls. */
 export function sampleTicket(long = false): string {
-  const thread = (long ? [...paragraphs, ...paragraphs, ...paragraphs, ...paragraphs] : paragraphs)
-    .map((text) => `<p>${text}</p>`)
-    .join('');
-  return `<article style="padding: var(--plinth-space-4); line-height: var(--plinth-font-leading-normal)"><h2 style="margin: 0; font-size: var(--plinth-font-size-lg)">Cannot export the March report</h2><p style="color: var(--plinth-color-text-muted)">Alex Kim · 10 min ago</p>${thread}</article>`;
+  const entries = long ? [...sampleThread, ...sampleThread, ...sampleThread] : sampleThread;
+  return `<article style="padding: var(--plinth-space-4)"><h2 style="margin: 0 0 var(--plinth-space-2); font-size: var(--plinth-font-size-lg)">Cannot export the March report</h2>${timeline({ label: 'Conversation', entries })}</article>`;
 }
 
 /** Nothing open yet, in the detail on a wide screen. */
