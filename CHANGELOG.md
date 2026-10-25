@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.1.1 (2026-10-25)
+
+### Fixes
+
+- The npm package is `@ptbdynamic/plinth` (`npm install @ptbdynamic/plinth`), under the same name as the GitHub organisation and the Composer package. Its subpaths are unchanged: `@ptbdynamic/plinth/vue`, `/react`, `/tokens`, `/css` and the rest.
+
 ## 0.1.0 (2026-10-25)
 
 ### New
