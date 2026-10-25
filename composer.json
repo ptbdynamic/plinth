@@ -1,0 +1,40 @@
+{
+  "name": "ptbdynamic/plinth",
+  "description": "Plinth, the design system of BDynamic's projects: Blade components, a Filament plugin and the built CSS.",
+  "type": "library",
+  "license": "MIT",
+  "keywords": [
+    "laravel",
+    "blade",
+    "filament",
+    "design-system"
+  ],
+  "homepage": "https://plinth.bdynamic.pt",
+  "support": {
+    "issues": "https://github.com/ptbdynamic/plinth/issues",
+    "source": "https://github.com/ptbdynamic/plinth",
+    "docs": "https://plinth.bdynamic.pt/docs"
+  },
+  "require": {
+    "php": "^8.3",
+    "illuminate/support": "^12.0|^13.0",
+    "illuminate/view": "^12.0|^13.0"
+  },
+  "suggest": {
+    "filament/filament": "To register Plinth's CSS in a Filament panel with PlinthPlugin."
+  },
+  "autoload": {
+    "psr-4": {
+      "BDynamic\\Plinth\\": "packages/blade/src/"
+    }
+  },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "BDynamic\\Plinth\\PlinthServiceProvider"
+      ]
+    }
+  },
+  "minimum-stability": "stable",
+  "prefer-stable": true
+}

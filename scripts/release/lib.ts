@@ -73,3 +73,82 @@ export function sharedVersion(root: string): string {
   }
   return [...distinct][0] as string;
 }
+
+/** A composer.json, as far as the release checks read it. */
+export interface ComposerJson {
+  name?: string;
+  version?: string;
+  require?: Record<string, string>;
+  autoload?: { 'psr-4'?: Record<string, string> };
+  extra?: { laravel?: { providers?: string[] } };
+}
+
+/**
+ * What is wrong between the root composer.json, which Packagist reads, and the one in
+ * packages/blade, which the tests and the site's path repository use. They must name the same
+ * package with the same runtime requirements and provider, the root's autoload must point into
+ * packages/blade, and neither may have a version: Packagist takes it from the tag.
+ */
+export function composerProblems(root: ComposerJson, blade: ComposerJson): string[] {
+  const problems: string[] = [];
+  for (const [file, json] of [
+    ['composer.json', root],
+    ['packages/blade/composer.json', blade],
+  ] as const) {
+    if ('version' in json) {
+      problems.push(`${file} must not have a version: Packagist takes it from the tag.`);
+    }
+  }
+  if (root.name !== blade.name) {
+    problems.push(`composer.json names ${root.name}, packages/blade/composer.json ${blade.name}.`);
+  }
+  const same = (a: unknown, b: unknown) => JSON.stringify(a) === JSON.stringify(b);
+  if (!same(root.require, blade.require)) {
+    problems.push('composer.json and packages/blade/composer.json require different packages.');
+  }
+  if (!same(root.extra?.laravel?.providers, blade.extra?.laravel?.providers)) {
+    problems.push('composer.json and packages/blade/composer.json register different providers.');
+  }
+  const autoload = Object.entries(blade.autoload?.['psr-4'] ?? {}).map(
+    ([namespace, dir]) => [namespace, `packages/blade/${dir}`] as const,
+  );
+  if (!same(Object.entries(root.autoload?.['psr-4'] ?? {}), autoload)) {
+    problems.push("composer.json's autoload must point at packages/blade's.");
+  }
+  return problems;
+}
+
+/** What the Composer package ships, out of GitHub's archive of a tag (see .gitattributes). */
+export const composerDist = [
+  'composer.json',
+  'LICENSE',
+  'README.md',
+  'CHANGELOG.md',
+  'packages/blade/src/',
+  'packages/blade/resources/views/',
+  'packages/blade/resources/dist/',
+];
+
+/** The files a `composer require` cannot do without. */
+const composerNeeds = [
+  'composer.json',
+  'packages/blade/src/PlinthServiceProvider.php',
+  'packages/blade/resources/dist/plinth.css',
+  'packages/blade/resources/dist/fonts/index.css',
+];
+
+/**
+ * What is wrong with an archive's file list (`git archive` piped to `tar -t`): files the
+ * Composer package should not ship, and files it needs that are missing.
+ */
+export function archiveProblems(paths: string[]): string[] {
+  const files = paths.filter((path) => !path.endsWith('/'));
+  const shipped = (path: string) =>
+    composerDist.some((entry) => (entry.endsWith('/') ? path.startsWith(entry) : path === entry));
+  return [
+    ...files.filter((path) => !shipped(path)).map((path) => `The archive should not ship ${path}.`),
+    ...composerNeeds
+      .filter((path) => !files.includes(path))
+      .map((path) => `The archive is missing ${path}.`),
+  ];
+}

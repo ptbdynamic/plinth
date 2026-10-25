@@ -1,0 +1,14 @@
+# Packagist installs Plinth from this repository's root (composer.json), and a `composer require`
+# downloads GitHub's archive of the tag, which leaves out everything marked export-ignore. Only the
+# Blade package's code, views and built CSS and fonts ship; `npm run release -- --dry-run` checks it.
+/* export-ignore
+/composer.json -export-ignore
+/LICENSE -export-ignore
+/README.md -export-ignore
+/CHANGELOG.md -export-ignore
+/packages -export-ignore
+/packages/* export-ignore
+/packages/blade -export-ignore
+/packages/blade/* export-ignore
+/packages/blade/src -export-ignore
+/packages/blade/resources -export-ignore
