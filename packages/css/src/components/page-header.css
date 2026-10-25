@@ -17,12 +17,12 @@
  *   </div>
  * </header>
  *
- * The root is a <header>. At the top of the page (not inside <main>, <article> or <section>) it is
- * the page's banner landmark, so a page has one there; inside <main>, as in an app shell, it is no
- * landmark, only the page's header. The heading is required: an <h1> by default, or <h2> to <h6>
- * (level) when the page sits beside another page's <h1>, such as an open ticket beside the list on
- * a wide screen. The level doesn't change the look. The heading stays on one line and ends in an
- * ellipsis when it doesn't fit.
+ * The root is a <header>. At the top of the page (not inside <main>, <article>, <section>, <aside>
+ * or <nav>) it is the page's banner landmark, so a page has one there; inside <main>, as in an app
+ * shell, it is no landmark, only the page's header. The heading is required: an <h1> by default, or
+ * <h2> to <h6> (level) when the page sits beside another page's <h1>, such as an open ticket beside
+ * the list on a wide screen. The level doesn't change the look. The heading stays on one line and
+ * ends in an ellipsis when it doesn't fit.
  *
  * The leading part holds one action, usually an icon button: a menu button that opens a sheet
  * (commandfor and command="show-modal") on a top-level page, or a back link (with data-mirror on

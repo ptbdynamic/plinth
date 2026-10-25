@@ -24,7 +24,8 @@ export function pageHeader(
   const { classes, extra } = rootAttributes('plinth-page-header', attributes);
   const element = pageHeaderLevel(level);
   return [
-    `<header class="${classes}"${extra}${top ? ' data-top' : ''}>`,
+    // A project's data-top wins over the page header's own.
+    `<header class="${classes}"${extra}${top && !('data-top' in attributes) ? ' data-top' : ''}>`,
     leading?.trim() ? `<div class="plinth-page-header-leading">${leading}</div>` : '',
     `<${element} class="plinth-page-header-heading">${escape(heading)}</${element}>`,
     actions?.trim() ? `<div class="plinth-page-header-actions">${actions}</div>` : '',

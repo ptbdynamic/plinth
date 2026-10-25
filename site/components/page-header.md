@@ -7,13 +7,14 @@ the sidebar, under the app bar. It sticks to the top while the content scrolls u
 ## When not to use it
 
 - For the app bar itself, with the logo, the search or the account: that is the app's layout.
-- For a heading inside a page or a card: use a heading. A page has one page header.
+- For a heading inside a page or a card: use a heading. A page, or each pane of a split view, has
+  one page header.
 - For more than three icon buttons: put the rest behind a _More_ button that opens a menu.
 
 ## The parts
 
 ```blade example layout="phone"
-<x-plinth::page-header heading="Invoices">
+<x-plinth::page-header heading="Invoices" level="h3">
     <x-slot:leading>
         <x-plinth::icon-button label="Menu"><x-site.glyph name="menu" /></x-plinth::icon-button>
     </x-slot:leading>
@@ -46,7 +47,7 @@ A page further down opens with a back link; a top-level page with nothing to go 
 the leading part out, and a page with no actions shows just its heading.
 
 ```blade example layout="phone"
-<x-plinth::page-header heading="Invoice 1042">
+<x-plinth::page-header heading="Invoice 1042" level="h3">
     <x-slot:leading>
         <x-plinth::icon-button label="Back" href="#" mirror><x-site.glyph name="arrow-left" /></x-plinth::icon-button>
     </x-slot:leading>
@@ -54,7 +55,7 @@ the leading part out, and a page with no actions shows just its heading.
         <x-plinth::icon-button label="Download"><x-site.glyph name="download" /></x-plinth::icon-button>
     </x-slot:actions>
 </x-plinth::page-header>
-<x-plinth::page-header heading="Settings" />
+<x-plinth::page-header heading="Settings" level="h3" />
 ```
 
 ## A primary action
@@ -63,7 +64,7 @@ Instead of icon buttons, the actions can hold the page's one main action as a pr
 [button](button.md), on the right.
 
 ```blade example layout="phone"
-<x-plinth::page-header heading="Inbox">
+<x-plinth::page-header heading="Inbox" level="h3">
     <x-slot:actions>
         <x-plinth::button>New ticket</x-plinth::button>
     </x-slot:actions>
@@ -74,10 +75,11 @@ Instead of icon buttons, the actions can hold the page's one main action as a pr
 
 The heading is the page's `<h1>` by default. When two pages sit side by side on a wide screen,
 such as a list and the item open beside it, the second one's heading is an `<h2>` under the
-first's `<h1>`: set **`level`** (`h2` to `h6`). The level doesn't change the look.
+first's `<h1>`: set **`level`** (`h2` to `h6`). The level doesn't change the look. The examples on
+this page are `h3`s, since the page already has its `<h1>` and its sections.
 
 ```blade example layout="phone"
-<x-plinth::page-header heading="Ticket 1042" level="h2">
+<x-plinth::page-header heading="Ticket 1042" level="h3">
     <x-slot:leading>
         <x-plinth::icon-button label="Back" href="#" mirror><x-site.glyph name="arrow-left" /></x-plinth::icon-button>
     </x-slot:leading>
@@ -129,8 +131,8 @@ points right.
 
 ## Landmarks
 
-The root is a `<header>`. At the top of the page, outside `<main>`, `<article>` and `<section>`,
-it is the page's **banner** landmark, as on a phone where it is the top bar. Inside `<main>`, as
+The root is a `<header>`. At the top of the page, outside `<main>`, `<article>`, `<section>`,
+`<aside>` and `<nav>`, it is the page's **banner** landmark, as on a phone where it is the top bar. Inside `<main>`, as
 in an app shell where the app bar is the banner, it is no landmark: only the page's header, with
 the page's heading in it.
 
@@ -203,8 +205,8 @@ import { PlinthIconButton, PlinthPageHeader } from '@ptbdynamic/plinth/react';
 
 - The heading is the page's `<h1>`, or a lower level when the page sits beside another page's
   `<h1>`.
-- The page header is the banner landmark when it sits outside `<main>`, `<article>` and
-  `<section>`, and no landmark inside `<main>`.
+- The page header is the banner landmark when it sits outside `<main>`, `<article>`,
+  `<section>`, `<aside>` and `<nav>`, and no landmark inside `<main>`.
 - Every icon button in it has its own accessible name, in the page's language.
 - The leading and trailing parts follow the reading order, so they swap sides in right-to-left
   text and a mirrored back arrow points the right way.
