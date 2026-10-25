@@ -45,6 +45,9 @@ import {
   PlinthStat,
   PlinthTextarea,
   PlinthTextField,
+  PlinthTimeline,
+  PlinthTimelineEvent,
+  PlinthTimelinePost,
   PlinthToolbar,
   PlinthToolbarAction,
   PlinthToolbarGroup,
@@ -100,6 +103,9 @@ describe('the Plinth plugin', () => {
     expect(app.component('PlinthStat')).toBe(PlinthStat);
     expect(app.component('PlinthTextarea')).toBe(PlinthTextarea);
     expect(app.component('PlinthTextField')).toBe(PlinthTextField);
+    expect(app.component('PlinthTimeline')).toBe(PlinthTimeline);
+    expect(app.component('PlinthTimelineEvent')).toBe(PlinthTimelineEvent);
+    expect(app.component('PlinthTimelinePost')).toBe(PlinthTimelinePost);
     expect(app.component('PlinthToolbar')).toBe(PlinthToolbar);
     expect(app.component('PlinthToolbarAction')).toBe(PlinthToolbarAction);
     expect(app.component('PlinthToolbarGroup')).toBe(PlinthToolbarGroup);

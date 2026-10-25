@@ -16,6 +16,7 @@ import { splitView } from './split-view.ts';
 import '@ptbdynamic/plinth-css/src/components/icon.css';
 import '@ptbdynamic/plinth-css/src/components/button.css';
 import '@ptbdynamic/plinth-css/src/components/avatar.css';
+import '@ptbdynamic/plinth-css/src/components/badge.css';
 import '@ptbdynamic/plinth-css/src/components/list-row.css';
 import '@ptbdynamic/plinth-css/src/components/list-card.css';
 import '@ptbdynamic/plinth-css/src/components/list-header.css';
@@ -28,6 +29,7 @@ import '@ptbdynamic/plinth-css/src/components/page-header.css';
 import '@ptbdynamic/plinth-css/src/components/app-nav.css';
 import '@ptbdynamic/plinth-css/src/components/app-bar.css';
 import '@ptbdynamic/plinth-css/src/components/split-view.css';
+import '@ptbdynamic/plinth-css/src/components/timeline.css';
 import '@ptbdynamic/plinth-css/src/components/nav-list.css';
 import '@ptbdynamic/plinth-css/src/components/app-shell.css';
 

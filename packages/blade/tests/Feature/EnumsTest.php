@@ -17,6 +17,7 @@ use BDynamic\Plinth\Enums\PageHeaderLevel;
 use BDynamic\Plinth\Enums\SheetSide;
 use BDynamic\Plinth\Enums\Size;
 use BDynamic\Plinth\Enums\SplitViewPane;
+use BDynamic\Plinth\Enums\TimelineKind;
 use BDynamic\Plinth\Enums\Tone;
 use Illuminate\Support\Facades\Blade;
 
@@ -43,7 +44,8 @@ it('defaults each choice the way the components do', function () {
         ->and(ConfirmDialogKind::default())->toBe(ConfirmDialogKind::Simple)
         ->and(ConfirmDialogTone::default())->toBe(ConfirmDialogTone::Neutral)
         ->and(MenuItemTone::default())->toBe(MenuItemTone::Neutral)
-        ->and(SplitViewPane::default())->toBe(SplitViewPane::List);
+        ->and(SplitViewPane::default())->toBe(SplitViewPane::List)
+        ->and(TimelineKind::default())->toBe(TimelineKind::Team);
 });
 
 it('resolves an optional side to a case or nothing', function () {
@@ -129,6 +131,9 @@ it('matches the lists the Vue layer and the stories use', function () {
     }
     foreach (SplitViewPane::values() as $value) {
         expect($vue('split-view.ts'))->toContain("'{$value}'");
+    }
+    foreach (TimelineKind::values() as $value) {
+        expect($vue('timeline.ts'))->toContain("'{$value}'");
     }
     foreach (Glyph::cases() as $glyph) {
         // The glyph's paths, as Vue writes them in iconGlyphs, and the glyphs it mirrors.

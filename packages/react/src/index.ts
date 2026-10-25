@@ -41,6 +41,9 @@ export { PlinthSplitView, type PlinthSplitViewProps } from './PlinthSplitView';
 export { PlinthStat, type PlinthStatProps } from './PlinthStat';
 export { PlinthTextarea, type PlinthTextareaProps } from './PlinthTextarea';
 export { PlinthTextField, type PlinthTextFieldProps } from './PlinthTextField';
+export { PlinthTimeline, type PlinthTimelineProps } from './PlinthTimeline';
+export { PlinthTimelineEvent, type PlinthTimelineEventProps } from './PlinthTimelineEvent';
+export { PlinthTimelinePost, type PlinthTimelinePostProps } from './PlinthTimelinePost';
 export { PlinthToolbar, type PlinthToolbarProps } from './PlinthToolbar';
 export { PlinthToolbarAction, type PlinthToolbarActionProps } from './PlinthToolbarAction';
 export { PlinthToolbarGroup, type PlinthToolbarGroupProps } from './PlinthToolbarGroup';
@@ -114,4 +117,5 @@ export { fieldDescribedBy, textFieldSize, textFieldSizes, type TextFieldSize } f
 export { splitViewPane, splitViewPanes, type SplitViewPane } from './split-view';
 export { sheetCloseIcon, sheetSide, sheetSidePhone, sheetSides, type SheetSide } from './sheet';
 export { statChevron } from './stat';
+export { timelineHeadingLevel, timelineKind, timelineKinds, type TimelineKind } from './timeline';
 export { tones, type Tone } from './tones';

@@ -42,6 +42,9 @@ import PlinthSplitView from './PlinthSplitView.vue';
 import PlinthStat from './PlinthStat.vue';
 import PlinthTextarea from './PlinthTextarea.vue';
 import PlinthTextField from './PlinthTextField.vue';
+import PlinthTimeline from './PlinthTimeline.vue';
+import PlinthTimelineEvent from './PlinthTimelineEvent.vue';
+import PlinthTimelinePost from './PlinthTimelinePost.vue';
 import PlinthToolbar from './PlinthToolbar.vue';
 import PlinthToolbarAction from './PlinthToolbarAction.vue';
 import PlinthToolbarGroup from './PlinthToolbarGroup.vue';
@@ -92,6 +95,9 @@ export {
   PlinthStat,
   PlinthTextarea,
   PlinthTextField,
+  PlinthTimeline,
+  PlinthTimelineEvent,
+  PlinthTimelinePost,
   PlinthToolbar,
   PlinthToolbarAction,
   PlinthToolbarGroup,
@@ -160,6 +166,7 @@ export { sheetCloseIcon, sheetSide, sheetSidePhone, sheetSides, type SheetSide }
 export { fieldDescribedBy, textFieldSize, textFieldSizes, type TextFieldSize } from './text-field';
 export { swipeToClose, useSwipeToClose } from './swipe';
 export { statChevron } from './stat';
+export { timelineHeadingLevel, timelineKind, timelineKinds, type TimelineKind } from './timeline';
 export { tones, type Tone } from './tones';
 export { toolbarKeys, useToolbarKeys } from './toolbar';
 
@@ -209,6 +216,9 @@ export const Plinth: Plugin = {
     app.component('PlinthStat', PlinthStat);
     app.component('PlinthTextarea', PlinthTextarea);
     app.component('PlinthTextField', PlinthTextField);
+    app.component('PlinthTimeline', PlinthTimeline);
+    app.component('PlinthTimelineEvent', PlinthTimelineEvent);
+    app.component('PlinthTimelinePost', PlinthTimelinePost);
     app.component('PlinthToolbar', PlinthToolbar);
     app.component('PlinthToolbarAction', PlinthToolbarAction);
     app.component('PlinthToolbarGroup', PlinthToolbarGroup);
