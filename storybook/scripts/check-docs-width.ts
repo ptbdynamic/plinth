@@ -5,6 +5,10 @@
  *
  * The three widths load side by side, each in its own page. With a shard (`{ index: 2, total: 4 }`),
  * it checks every fourth docs page, starting with the second, so CI's shards share the pages.
+ *
+ * A page is measured once Storybook says the docs have rendered (its `docsRendered` event) and
+ * the fonts have loaded. Waiting for the network to go quiet instead timed out on a busy machine
+ * (#163), though the pages render in under a second.
  */
 import { chromium } from 'playwright';
 
@@ -27,10 +31,11 @@ export async function checkDocsWidth(
     await Promise.all(
       widths.map(async (width) => {
         const page = await browser.newPage({ viewport: { width, height: 900 } });
+        await page.addInitScript(markDocsRendered);
         for (const { id } of docs) {
-          await page.goto(`${url}/iframe.html?viewMode=docs&id=${id}`, {
-            waitUntil: 'networkidle',
-          });
+          await page.goto(`${url}/iframe.html?viewMode=docs&id=${id}`, { waitUntil: 'load' });
+          await page.waitForFunction(() => 'plinthDocsRendered' in window);
+          await page.evaluate(() => document.fonts.ready);
           await page.locator('.sbdocs-content').waitFor();
           const extra = await page.evaluate(
             () => document.documentElement.scrollWidth - document.documentElement.clientWidth,
@@ -43,4 +48,21 @@ export async function checkDocsWidth(
     await browser.close();
   }
   return failures;
+}
+
+/**
+ * Runs in the page before Storybook: when the preview sets up its channel, listens on it for
+ * `docsRendered` and marks the window.
+ */
+function markDocsRendered() {
+  type Channel = { on: (event: string, listener: () => void) => void };
+  let channel: Channel | undefined;
+  Object.defineProperty(window, '__STORYBOOK_ADDONS_CHANNEL__', {
+    configurable: true,
+    get: () => channel,
+    set(value: Channel) {
+      channel = value;
+      value.on('docsRendered', () => Object.assign(window, { plinthDocsRendered: true }));
+    },
+  });
 }
