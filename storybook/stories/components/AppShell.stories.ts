@@ -18,6 +18,7 @@ import '@ptbdynamic/plinth-css/src/components/button.css';
 import '@ptbdynamic/plinth-css/src/components/avatar.css';
 import '@ptbdynamic/plinth-css/src/components/list-row.css';
 import '@ptbdynamic/plinth-css/src/components/list-card.css';
+import '@ptbdynamic/plinth-css/src/components/list-header.css';
 import '@ptbdynamic/plinth-css/src/components/text-field.css';
 import '@ptbdynamic/plinth-css/src/components/textarea.css';
 import '@ptbdynamic/plinth-css/src/components/modal.css';

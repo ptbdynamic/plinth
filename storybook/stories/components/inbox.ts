@@ -11,6 +11,7 @@ import { icon } from './icon.ts';
 import { iconButton, type IconButtonArgs } from './icon-button.ts';
 import { sampleIcons } from './icons.ts';
 import { listCard } from './list-card.ts';
+import { listHeader } from './list-header.ts';
 import type { ListRowArgs } from './list-row.ts';
 import { menuSheet } from './menu-sheet.ts';
 import { navList, type NavListGroupArgs, type NavListItemArgs } from './nav-list.ts';
@@ -167,11 +168,18 @@ const subjects = [
   ['Search misses older tickets', 'Ola Berg · 5 days'],
 ] as const;
 
-/** The tickets, in the list; the first one is open with `current`. */
+/** The list header's actions: select (a toggle, off), filter and sort. */
+const ticketActions = [
+  action('Select', { svg: sampleIcons.select, pressed: false }),
+  action('Filter', { svg: sampleIcons.filter }),
+  action('Sort', { svg: sampleIcons.sort }),
+].join('');
+
+/** The tickets, in the list under its header; the first one is open with `current`. */
 export function sampleTickets(current = true, count: number = subjects.length): string {
-  return pane(
+  const header = listHeader({ heading: 'Open', count: 12, actions: ticketActions });
+  return `${header}${pane(
     listCard({
-      heading: 'Open tickets',
       headingLevel: 'h2',
       rows: subjects
         .slice(0, count)
@@ -179,7 +187,7 @@ export function sampleTickets(current = true, count: number = subjects.length): 
           row(title, { description, current: current && index === 0 }),
         ),
     }),
-  );
+  )}`;
 }
 
 const paragraphs = [

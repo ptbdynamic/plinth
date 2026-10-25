@@ -53,6 +53,15 @@
         @case('inbox')
             <path d="M4 13l2.5-8h11L20 13v6H4z"></path><path d="M4 13h4.5a3.5 3.5 0 0 0 7 0H20"></path>
             @break
+        @case('select')
+            <rect x="4" y="4" width="16" height="16" rx="3"></rect><path d="M8 12l3 3 5-6"></path>
+            @break
+        @case('filter')
+            <path d="M4 6h16M7 12h10M10 18h4"></path>
+            @break
+        @case('sort')
+            <path d="M7 4v16M3 16l4 4 4-4M17 20V4M13 8l4-4 4 4"></path>
+            @break
         @case('archive')
             <rect x="3" y="4" width="18" height="4" rx="1"></rect><path d="M5 8v11h14V8M10 12h4"></path>
             @break
