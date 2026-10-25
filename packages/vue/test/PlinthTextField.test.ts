@@ -5,12 +5,15 @@ import { PlinthTextField, fieldDescribedBy, textFieldSize } from '../src/index.t
 
 const fieldWith = (
   props: Record<string, unknown> = {},
-  options: { attrs?: Record<string, unknown>; slots?: Record<string, unknown> } = {},
+  options: {
+    attrs?: Record<string, unknown>;
+    slots?: Record<string, string | (() => unknown)>;
+  } = {},
 ) =>
   mount(PlinthTextField, {
     props: { id: 'email', label: 'Email', ...props },
     attrs: options.attrs,
-    slots: options.slots,
+    slots: options.slots as Record<string, string>,
   });
 
 const html = (wrapper: ReturnType<typeof fieldWith>) =>
