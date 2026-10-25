@@ -42,5 +42,5 @@ execFileSync(
 );
 execFileSync('npx', ['prettier', '--write', 'CHANGELOG.md'], { stdio: 'inherit' });
 
-console.log(`\n${readPackage(root).name} and bdynamicpt/plinth are now ${version}.`);
+console.log(`\n${readPackage(root).name} and ptbdynamic/plinth are now ${version}.`);
 console.log('Commit this in a pull request; once it is merged, run `npm run release` on main.');

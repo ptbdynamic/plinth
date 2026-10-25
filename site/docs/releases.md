@@ -7,7 +7,7 @@ components ([ADR 4](../../docs/adr/0004-one-version-released-with-changesets.md)
 ## Versions
 
 Plinth follows [semantic versioning](https://semver.org). The npm package `@bdynamic/plinth` and
-the Composer package `bdynamicpt/plinth` always carry the same version, and the git tag
+the Composer package `ptbdynamic/plinth` always carry the same version, and the git tag
 `v<version>` marks it. A fix in one layer still moves both packages; the changelog says what
 moved.
 
@@ -45,3 +45,10 @@ npm run release                  # on main, after the version pull request merge
 
 The version goes to `main` in a pull request titled `chore: release <version>`, like any other
 change. CI runs the dry run on every pull request, so the versions can't drift apart unnoticed.
+
+Packagist reads the Composer package from the `composer.json` at the root of the repository, at
+each tag, and takes the version from the tag. That file points the autoload and the Laravel
+provider at `packages/blade/`, and `.gitattributes` keeps everything else out of the download, so
+a `composer require` gets only the Blade package and its built CSS and fonts. The dry run checks
+both: `composer validate` passes, and `git archive` of the tag holds what the package needs and
+nothing else.

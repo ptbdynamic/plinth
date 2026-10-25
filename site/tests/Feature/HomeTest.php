@@ -8,7 +8,7 @@ it('shows the home page with every section', function () {
         ->assertHeaderMissing('Set-Cookie')
         ->assertSeeInOrder([
             'One markup contract. Every framework.',
-            'composer require bdynamicpt/plinth',
+            'composer require ptbdynamic/plinth',
             'npm install @bdynamic/plinth',
             'Recent invoices',
             'Works with',

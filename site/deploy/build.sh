@@ -19,7 +19,7 @@ npm ci --no-audit --no-fund
 # The Blade package comes from ../packages/blade as a copy (symlink: false), and `composer install`
 # keeps the old copy while the lock file is unchanged. Refresh it before the build: the site's
 # views use its components and the site's CSS bundles its plinth.css.
-(cd "$site" && composer reinstall bdynamicpt/plinth --no-interaction --no-progress)
+(cd "$site" && composer reinstall ptbdynamic/plinth --no-interaction --no-progress)
 
 npx turbo run build build-storybook \
     --filter=@bdynamic/plinth-site... \

@@ -1,5 +1,5 @@
 {
-  "name": "bdynamicpt/plinth",
+  "name": "ptbdynamic/plinth",
   "description": "Plinth, the design system of BDynamic's projects: Blade components, a Filament plugin and the built CSS.",
   "type": "library",
   "license": "MIT",

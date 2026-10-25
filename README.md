@@ -32,10 +32,17 @@ site/         Plinth's website, a Laravel app built with Plinth's components, an
 The npm workspaces are private. They are published together as one npm package and one Composer
 package (nothing is published yet):
 
-| Package             | Registry  | Holds                                                                                      |
-| ------------------- | --------- | ------------------------------------------------------------------------------------------ |
-| `@bdynamic/plinth`  | npm       | `./tokens`, `./tokens.css`, `./css`, `./vue`, `./react` and `./tailwind.css`               |
-| `bdynamicpt/plinth` | Packagist | `<x-plinth::…>` Blade components, `PlinthPlugin` for Filament, `resources/dist/plinth.css` |
+| Package             | Registry  | Holds                                                                                                      |
+| ------------------- | --------- | ---------------------------------------------------------------------------------------------------------- |
+| `@bdynamic/plinth`  | npm       | `./tokens`, `./tokens.css`, `./css`, `./vue`, `./react` and `./tailwind.css`                               |
+| `ptbdynamic/plinth` | Packagist | `<x-plinth::…>` Blade components, `PlinthPlugin` for Filament, the built CSS and fonts in `resources/dist` |
+
+Packagist reads the Composer package from the `composer.json` at the root of the repository, which
+points its autoload and Laravel provider at `packages/blade/`. `.gitattributes` marks everything
+else `export-ignore`, so a `composer require` downloads only `packages/blade/src`,
+`packages/blade/resources`, `composer.json`, `README.md` and `LICENSE` (and `CHANGELOG.md` once
+there is one). `packages/blade/composer.json` names the same package for the tests, the dev tools
+and the site's path repository.
 
 ## Working on Plinth
 
@@ -91,6 +98,31 @@ radii and elevation, layers and breakpoints, motion, the focus ring and componen
 showing the semantic tokens and the primitives they are built from. Its Markdown is in
 [`site/docs`](site/docs).
 
+## Installing Plinth in a Laravel project
+
+Once a version is on Packagist:
+
+```bash
+composer require ptbdynamic/plinth
+```
+
+Laravel discovers the service provider, and the components are available as `<x-plinth::badge>`.
+In a Filament panel, add the plugin and publish its CSS and fonts:
+
+```php
+use BDynamic\Plinth\Filament\PlinthPlugin;
+
+$panel->plugin(PlinthPlugin::make());
+```
+
+```bash
+php artisan filament:assets
+```
+
+Outside Filament, publish them with `php artisan vendor:publish --tag=plinth-assets` and link
+`vendor/plinth/fonts/index.css` and `vendor/plinth/plinth.css`, or import them in the app's Vite
+CSS from `vendor/ptbdynamic/plinth/packages/blade/resources/dist/`.
+
 ## Using Plinth from a project while you work on it
 
 Link your local checkout instead of a published version. Build Plinth first
@@ -104,12 +136,12 @@ Link your local checkout instead of a published version. Build Plinth first
     { "type": "path", "url": "../plinth/packages/blade", "options": { "symlink": true } }
   ],
   "require": {
-    "bdynamicpt/plinth": "@dev"
+    "ptbdynamic/plinth": "@dev"
   }
 }
 ```
 
-Then `composer update bdynamicpt/plinth`. In a Filament panel, add the plugin and publish its
+Then `composer update ptbdynamic/plinth`. In a Filament panel, add the plugin and publish its
 CSS:
 
 ```php
@@ -204,6 +236,24 @@ npm run release:version          # on a branch: the next version, in every packa
 npm run release -- --dry-run     # what npm and Packagist would get, without tagging or publishing
 npm run release                  # on main, after the version pull request merges: tag and publish
 ```
+
+The dry run (CI runs it on every pull request) also checks the Composer side: the root
+`composer.json` and `packages/blade/composer.json` name the same package with the same runtime
+requirements and provider and have no `version` (Packagist takes it from the tag),
+`composer validate --strict` passes on the root one, and `git archive` of the tag (or of `HEAD`
+before tagging) holds what the package needs and nothing else.
+
+### One-time steps for the owner
+
+Only the owner of the GitHub organisation and the registries can do these:
+
+1. **Packagist**: sign in to [packagist.org](https://packagist.org) and submit
+   `https://github.com/ptbdynamic/plinth`. Then turn on its GitHub hook (Packagist's GitHub
+   integration, or a webhook to `https://packagist.org/api/github` with the Packagist API token),
+   so each tag `npm run release` pushes becomes a version without a manual update.
+2. **npm**: reserve the `@bdynamic` scope (an npm organisation named `bdynamic`), then remove
+   `"private": true` from the root `package.json` so `npm run release` publishes
+   `@bdynamic/plinth`.
 
 ## Contributing
 

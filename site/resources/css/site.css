@@ -6,8 +6,8 @@
 
 @layer site-base, plinth, site;
 
-@import url('../../vendor/bdynamicpt/plinth/resources/dist/fonts/index.css');
-@import url('../../vendor/bdynamicpt/plinth/resources/dist/plinth.css');
+@import url('../../vendor/ptbdynamic/plinth/resources/dist/fonts/index.css');
+@import url('../../vendor/ptbdynamic/plinth/resources/dist/plinth.css');
 @import url('./site/base.css');
 @import url('./site/type.css');
 @import url('./site/header.css');

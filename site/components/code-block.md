@@ -13,7 +13,7 @@ keeps its lines and scrolls sideways inside its own box on a phone, never the pa
   Phiki), and the block styles what it is given.
 
 ```blade example layout="stack"
-<x-plinth::code-block label="Terminal">composer require bdynamicpt/plinth</x-plinth::code-block>
+<x-plinth::code-block label="Terminal">composer require ptbdynamic/plinth</x-plinth::code-block>
 ```
 
 ## Language tabs
@@ -144,7 +144,7 @@ and React show it once mounted. Vue emits **`copied`** with the text, and React 
 import { PlinthCodeBlock } from '@bdynamic/plinth/react';
 
 <PlinthCodeBlock label="Terminal" onCopied={track}>
-    composer require bdynamicpt/plinth
+    composer require ptbdynamic/plinth
 </PlinthCodeBlock>;
 ```
 

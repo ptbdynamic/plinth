@@ -4,7 +4,7 @@ The Composer package holds the Blade components, a Filament plugin, and the buil
 so a Laravel app uses Plinth with no Node build.
 
 ```bash
-composer require bdynamicpt/plinth
+composer require ptbdynamic/plinth
 ```
 
 ## In a Filament panel
@@ -43,12 +43,16 @@ and link them in your layout, before your own CSS:
 <link rel="stylesheet" href="{{ asset('vendor/plinth/plinth.css') }}">
 ```
 
-With Vite, import the files from `vendor/` in your stylesheet instead, as this site does:
+With Vite, import the files from `vendor/` in your stylesheet instead. The package is the whole
+repository's root, so the built files are under `packages/blade/resources/dist`:
 
 ```css label="resources/css/app.css"
-@import url('../../vendor/bdynamicpt/plinth/resources/dist/fonts/index.css');
-@import url('../../vendor/bdynamicpt/plinth/resources/dist/plinth.css');
+@import url('../../vendor/ptbdynamic/plinth/packages/blade/resources/dist/fonts/index.css');
+@import url('../../vendor/ptbdynamic/plinth/packages/blade/resources/dist/plinth.css');
 ```
+
+In PHP, `BDynamic\Plinth\Plinth::cssPath()` and `Plinth::fontsPath()` give the same files,
+wherever Composer put the package.
 
 ## The components
 

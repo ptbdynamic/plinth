@@ -7,7 +7,7 @@
 ## Context
 
 Plinth is published twice: the npm package `@bdynamic/plinth` (tokens, CSS, the Tailwind theme
-and the Vue components) and the Composer package `bdynamicpt/plinth` (the Blade components, the
+and the Vue components) and the Composer package `ptbdynamic/plinth` (the Blade components, the
 Filament plugin and the built CSS). Both print the same markup contract and ship the same CSS,
 so a project that uses Vue in one place and Blade in another must be able to ask for the same
 version of each and get the same components.
@@ -69,10 +69,19 @@ token's pull requests don't start other workflows).
   one version, and a cheap one: the changelog says what moved.
 - Contributors add a changeset to each pull request that changes the packages; reviewers check
   it is there and that its bump is right.
-- Packagist reads `composer.json` at the repository root, and Plinth's is in `packages/blade/`.
-  Until that is settled ([#56](https://github.com/ptbdynamic/plinth/issues/56)), the tags carry
-  the version Packagist will use, but Packagist can't read the package.
+- Packagist reads `composer.json` at the repository root, and Plinth's was in `packages/blade/`
+  (see the amendment below).
 - npm publishing waits for the `@bdynamic` scope; removing `"private": true` from the root
   `package.json` turns it on.
+- Amended 2026-10-25 ([#56](https://github.com/ptbdynamic/plinth/issues/56)): the Composer
+  package is `ptbdynamic/plinth`, after the GitHub organisation (nothing was published under the
+  old `bdynamicpt/plinth`). Packagist reads a `composer.json` at the repository root that points
+  its autoload and Laravel provider at `packages/blade/` and holds only the runtime requirements;
+  `.gitattributes` marks everything else `export-ignore`, so a `composer require` downloads only
+  the Blade package and its built CSS and fonts. One repository and one tag, rather than a
+  read-only split repository, which would need a second repository and a token to push to it.
+  `packages/blade/composer.json` keeps the dev tools. The release dry run checks that the two
+  files agree and have no version, that `composer validate --strict` passes on the root one, and
+  that `git archive` of the tag holds what the package needs and nothing else.
 
 [semver]: https://semver.org

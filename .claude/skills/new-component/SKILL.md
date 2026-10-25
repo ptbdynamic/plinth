@@ -111,7 +111,7 @@ Change all five together so they keep printing the same markup:
   an example in each in fenced blocks with `tab="Blade"`, `tab="Vue"` and `tab="React"`), and **Accessibility**. Storybook writes the component's own docs page from the
   stories (`storybook/blocks/DocsPage.tsx`, with the "at every width" block), so there is no MDX
   page. Make the preview in `catalogue/previews/` a small, neutral example; after changing
-  `packages/blade`, run `composer reinstall bdynamicpt/plinth` in `site/` and look at the page.
+  `packages/blade`, run `composer reinstall ptbdynamic/plinth` in `site/` and look at the page.
 - **Tests:** Blade, Vue and React each cover the full markup, defaults, every variant, the
   fallback, escaping and extra attributes (React: the `ref` too), at 100% coverage.
 

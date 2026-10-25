@@ -3,8 +3,10 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import {
+  archiveProblems,
   bumpOf,
   changelogSection,
+  composerProblems,
   prependSection,
   readPackage,
   sharedVersion,
@@ -115,5 +117,74 @@ describe('sharedVersion', () => {
     expect(() => sharedVersion(workspace(['0.2.0', '0.2.0', '0.1.0', '0.2.0', '0.2.0']))).toThrow(
       'The packages should share one version, but they have packages/tokens 0.2.0, packages/css 0.2.0, packages/vue 0.1.0, packages/react 0.2.0, packages/blade 0.2.0.',
     );
+  });
+});
+
+describe('composerProblems', () => {
+  const blade = {
+    name: 'ptbdynamic/plinth',
+    require: { php: '^8.3' },
+    autoload: { 'psr-4': { 'BDynamic\\Plinth\\': 'src/' } },
+    extra: { laravel: { providers: ['BDynamic\\Plinth\\PlinthServiceProvider'] } },
+  };
+  const root = {
+    ...blade,
+    autoload: { 'psr-4': { 'BDynamic\\Plinth\\': 'packages/blade/src/' } },
+  };
+
+  it('accepts a root composer.json that points at packages/blade', () => {
+    expect(composerProblems(root, blade)).toEqual([]);
+  });
+
+  it('lists what has drifted apart', () => {
+    expect(
+      composerProblems(
+        { version: '1.0.0', name: 'ptbdynamic/other', require: {} },
+        { ...blade, version: '1.0.0' },
+      ),
+    ).toEqual([
+      'composer.json must not have a version: Packagist takes it from the tag.',
+      'packages/blade/composer.json must not have a version: Packagist takes it from the tag.',
+      'composer.json names ptbdynamic/other, packages/blade/composer.json ptbdynamic/plinth.',
+      'composer.json and packages/blade/composer.json require different packages.',
+      'composer.json and packages/blade/composer.json register different providers.',
+      "composer.json's autoload must point at packages/blade's.",
+    ]);
+  });
+
+  it('reads composer.json files without autoload or providers', () => {
+    expect(composerProblems({ name: 'a' }, { name: 'a' })).toEqual([]);
+  });
+});
+
+describe('archiveProblems', () => {
+  const needed = [
+    'composer.json',
+    'packages/blade/src/PlinthServiceProvider.php',
+    'packages/blade/resources/dist/plinth.css',
+    'packages/blade/resources/dist/fonts/index.css',
+  ];
+
+  it('accepts the Blade package and its built CSS', () => {
+    expect(
+      archiveProblems([
+        ...needed,
+        'LICENSE',
+        'README.md',
+        'packages/',
+        'packages/blade/',
+        'packages/blade/resources/views/components/badge.blade.php',
+      ]),
+    ).toEqual([]);
+  });
+
+  it('lists what should not ship and what is missing', () => {
+    expect(
+      archiveProblems([...needed.slice(1), 'package.json', 'packages/blade/tests/Pest.php']),
+    ).toEqual([
+      'The archive should not ship package.json.',
+      'The archive should not ship packages/blade/tests/Pest.php.',
+      'The archive is missing composer.json.',
+    ]);
   });
 });

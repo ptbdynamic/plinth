@@ -1,12 +1,12 @@
 {
     "$schema": "https://getcomposer.org/schema.json",
-    "name": "bdynamicpt/plinth-site",
+    "name": "ptbdynamic/plinth-site",
     "type": "project",
     "description": "Plinth's website, built with Plinth.",
     "license": "MIT",
     "require": {
         "php": "^8.4",
-        "bdynamicpt/plinth": "*@dev",
+        "ptbdynamic/plinth": "*@dev",
         "laravel/framework": "^13.17",
         "league/commonmark": "^2.10",
         "phiki/phiki": "^2.2"
@@ -25,7 +25,7 @@
             "options": {
                 "symlink": false,
                 "versions": {
-                    "bdynamicpt/plinth": "dev-main"
+                    "ptbdynamic/plinth": "dev-main"
                 }
             }
         }

@@ -2,7 +2,7 @@
     @php
         $nav = config('site.nav');
         $latest = $decisions->first();
-        $installs = ['composer require bdynamicpt/plinth', 'npm install @bdynamic/plinth'];
+        $installs = ['composer require ptbdynamic/plinth', 'npm install @bdynamic/plinth'];
     @endphp
 
     <section class="site-hero" aria-labelledby="hero-title">

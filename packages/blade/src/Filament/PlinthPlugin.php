@@ -17,7 +17,7 @@ use Filament\Support\Assets\Font;
  */
 final class PlinthPlugin implements Plugin
 {
-    public const PACKAGE = 'bdynamicpt/plinth';
+    public const PACKAGE = 'ptbdynamic/plinth';
 
     public static function make(): static
     {
