@@ -104,7 +104,7 @@ it('goes back to the list from the first decision, and has no next after the las
     $this->get('/docs/decisions/0001-design-tokens-in-dtcg-built-with-style-dictionary')
         ->assertSeeInOrder(['Previous', 'Decisions', 'Next', 'ADR 2']);
 
-    $this->get('/docs/decisions/0007-the-plinth-website')
+    $this->get('/docs/decisions/0008-the-app-shell')
         ->assertSee('Previous')
         ->assertDontSee('rel="next"', false);
 });

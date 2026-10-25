@@ -68,9 +68,9 @@ it('shows the header and footer links', function () {
 
 it('shows the latest four decisions, newest first, with the newest announced in the hero', function () {
     $this->get('/')
-        ->assertSee('New · ADR 7, the Plinth website')
-        ->assertSeeInOrder(['ADR 7', 'The Plinth website', 'ADR 6', 'A React layer', 'ADR 5', 'Dialogs, sheets and drawers', 'ADR 4'])
-        ->assertDontSee('ADR 3</span>', false);
+        ->assertSee('New · ADR 8, the app shell')
+        ->assertSeeInOrder(['ADR 8', 'The app shell', 'ADR 7', 'The Plinth website', 'ADR 6', 'A React layer', 'ADR 5'])
+        ->assertDontSee('ADR 4</span>', false);
 });
 
 it('leaves the decisions out when the ADRs are not there', function () {
