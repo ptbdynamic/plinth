@@ -59,10 +59,12 @@ Safari. Native `<dialog>`, `popover`, `<details>`, `:has()` and invoker commands
 Projects that need older browsers bring their own polyfills
 ([ADR 2](../../docs/adr/0002-behaviour-state-and-forwarding.md#2-browser-support)).
 
-Set your bundler's CSS target to the same browsers. Vite's default (Baseline "widely
-available") predates `:dir()`, so its minifier rewrites `:dir(rtl)` into a list of
-right-to-left `:lang()` selectors, and under `dir="rtl"` without a right-to-left `lang`, mirrored
-icons, sheets and drawers keep their left-to-right direction:
+If you bundle the CSS, keep your bundler from rewriting `:dir()`. Vite's default CSS target
+(Baseline "widely available") predates it, so its minifier turns `:dir(rtl)` into a list of
+right-to-left `:lang()` selectors. Under `dir="rtl"` without a right-to-left `lang`, every
+component's right-to-left rules are then lost: mirrored icons don't flip, sheets and drawers slide
+from the wrong side, and the app bar, page header and section menu keep their left-to-right
+safe-area padding. Set the CSS target to at least the first releases with `:dir()`:
 
 ```js label="vite.config.js"
 export default defineConfig({
