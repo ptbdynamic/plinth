@@ -131,6 +131,11 @@
       "$type": "dimension",
       "$value": "{size.search}",
       "$description": "The most width of the toolbar's search field with its scope (320px); it narrows with the toolbar."
+    },
+    "search-min-width": {
+      "$type": "dimension",
+      "$value": "{size.search-min}",
+      "$description": "The least width of the toolbar's search field with its scope (160px); past it, the target is cut short."
     }
   },
   "text-field": {

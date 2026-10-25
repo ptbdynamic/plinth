@@ -2,13 +2,13 @@ import { icon, iconInside, type IconName } from './icon.ts';
 import { escape, rootAttributes, type Attributes } from './markup.ts';
 
 export interface ToolbarActionArgs {
-  /** The action's name, shown beside its icon in a toolbar 1024px wide or more. */
+  /** The action's name, shown beside its icon with 1024px of room in the toolbar. */
   label: string;
   /** A built-in glyph by name; without one (or with an unknown one) the action shows `svg`. */
   icon?: IconName;
   /** The project's own SVG (trusted, not escaped). */
   svg?: string;
-  /** Hidden in a toolbar narrower than 1024px, where the app shows it in the ⋯ menu instead. */
+  /** Hidden below 1024px of room in the toolbar, where the app shows it in the ⋯ menu instead. */
   overflow: boolean;
   disabled: boolean;
 }

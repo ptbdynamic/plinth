@@ -208,6 +208,7 @@
     --plinth-size-rail: var(--plinth-ref-size-56);
     --plinth-size-list: var(--plinth-ref-size-320);
     --plinth-size-search: var(--plinth-ref-size-320);
+    --plinth-size-search-min: var(--plinth-ref-size-160);
     --plinth-layer-base: 0;
     --plinth-layer-sticky: 100;
     --plinth-layer-overlay: 200;
@@ -236,6 +237,7 @@
     --plinth-menu-max-width: var(--plinth-size-menu-max);
     --plinth-toolbar-height: var(--plinth-size-row);
     --plinth-toolbar-search-width: var(--plinth-size-search);
+    --plinth-toolbar-search-min-width: var(--plinth-size-search-min);
     --plinth-text-field-trailing-size: var(--plinth-control-md);
   }
 
@@ -6191,22 +6193,24 @@
  *   label when the group has a name of its own. A hairline divider (color.divider) sits between
  *   two groups.
  * - an action (<x-plinth::toolbar-action>, PlinthToolbarAction): a ghost button, md, with its icon
- *   (the project's SVG or a built-in glyph) and its label. In a toolbar 1024px wide or more it
- *   shows both; in a narrower one, the icon alone, square, and the label is hidden from sight but
- *   stays its name.
+ *   (the project's SVG or a built-in glyph) and its label. With 1024px of room inside the
+ *   toolbar's padding it shows both; with less, the icon alone, square, and the label is hidden
+ *   from sight but stays its name.
  *
  * Width: the toolbar is a size container (plinth-toolbar), and what it shows follows its own
  * width (inside its padding), not the screen's, so a toolbar over one pane of a wide screen gives
  * way as a narrow screen's does. The parts give way in this order: the search narrows first;
  * below 1024px the actions drop their labels and what overflows moves into the ⋯ menu; the target
- * is cut short (with an ellipsis) only when the search has no width left to give. As a container
- * its width never comes from its content: it fills the width its parent gives it, so don't put
- * it in a row that sizes it to fit.
+ * is cut short (with an ellipsis) only when the search is at its least. 1024px is the toolbar's
+ * own value, not a breakpoint token: a container query can't read a custom property. As a
+ * container its width never comes from its content: it fills the width its parent gives it, so
+ * don't put it in a row that sizes it to fit. It is also the containing block of anything fixed
+ * inside it (popovers aren't: they are in the top layer).
  *
- * Overflow: data-overflow on an action hides it in a toolbar narrower than 1024px, where the room
- * runs out; the app puts the same action in the ⋯ menu with data-overflow on that item too (and
- * on a separator next to them), and inside a toolbar the menu shows those only below 1024px. A
- * group whose actions all overflow is hidden with them, and so is its divider. From 1024px the ⋯
+ * Overflow: data-overflow on an action hides it below 1024px of room, where the room runs out;
+ * the app puts the same action in the ⋯ menu with data-overflow on that item too (and on a
+ * separator next to them), and inside a toolbar the menu shows those only below 1024px. A group
+ * whose actions all overflow is hidden with them, and so is its divider. From 1024px the ⋯
  * button is hidden when every entry of the menu right after it overflows, so it never opens an
  * empty menu. Plinth doesn't measure the actions: the app picks what overflows.
  *
@@ -6215,14 +6219,15 @@
  * ends. That is script, the only script the toolbar has (ADR 2 records why a component adds it):
  * Alpine in Blade (an x-init on the actions), an effect in Vue and React. It keeps one control at
  * tabindex 0 (the last one focused) and the rest at -1, and skips disabled controls, controls the
- * CSS hides at this width, and the items of a menu inside. Without it, as in the stories, Tab goes
+ * CSS hides at the toolbar's width (it watches the root's size), and the items of a menu inside. Without it, as in the stories, Tab goes
  * through every control. The search sits outside the toolbar, so its field keeps its arrow keys.
  *
  * States: an action takes `disabled`; the rest are the button's and the menu's. Every control
  * shows the focus ring on :focus-visible, and keeps a 40px touch target on a touch screen.
  *
  * Its height is --plinth-toolbar-height (44px, a list header's), with a hairline divider under
- * it; the search is --plinth-toolbar-search-width (320px) at most and narrows with the toolbar.
+ * it; the search is --plinth-toolbar-search-width (320px) at most and narrows with the toolbar
+ * to --plinth-toolbar-search-min-width (160px).
  * It needs button.css, icon.css and menu.css for its parts.
  */
 
@@ -6247,14 +6252,15 @@
   /*
    * The field with its scope joined to its end; the icon sits over the field's start. It narrows
    * before the target does: its shrink factor is so large against the target's that the target
-   * gives nothing (less than a hundredth of a pixel) until the search is at its least.
+   * gives nothing (less than a hundredth of a pixel) until the search is at its least
+   * (--plinth-toolbar-search-min-width).
    */
   .plinth-toolbar-search {
     position: relative;
     display: flex;
     flex: 0 100000 var(--plinth-toolbar-search-width);
     align-items: stretch;
-    min-inline-size: 0;
+    min-inline-size: var(--plinth-toolbar-search-min-width);
   }
 
   .plinth-toolbar-search > .plinth-icon {
@@ -6345,7 +6351,7 @@
     border-end-end-radius: 0;
   }
 
-  /* Cut short only when the search has no width left to give. */
+  /* Cut short only when the search is at its least. */
   .plinth-toolbar-target {
     flex: 0 1 auto;
     min-inline-size: 0;

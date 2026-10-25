@@ -5,11 +5,11 @@ import { iconGlyphs, iconName, mirroredIconNames, type IconName } from './icon';
 import { classNames } from './markup';
 
 interface ToolbarActionOptions {
-  /** The action's name, shown beside its icon in a toolbar 1024px wide or more. */
+  /** The action's name, shown beside its icon with 1024px of room in the toolbar. */
   label: string;
   /** A built-in glyph; `children` (the project's SVG) show when it is missing or not one. */
   icon?: IconName;
-  /** Hidden in a toolbar narrower than 1024px, where the app shows it in the ⋯ menu instead. */
+  /** Hidden below 1024px of room in the toolbar, where the app shows it in the ⋯ menu instead. */
   overflow?: boolean;
   disabled?: boolean;
 }

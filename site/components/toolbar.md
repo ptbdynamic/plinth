@@ -25,11 +25,13 @@ divider sits between two groups.
 In a toolbar with 1024px of room or more, each action shows its icon and its label; in a
 narrower one, its icon alone, and the label stays its name for a screen reader. The toolbar
 follows its own width, not the screen's, so over one pane of a wide screen it gives way as on a
-narrow one. It fills the width its parent gives it.
+narrow one. Its width never comes from its content: it fills the width its parent gives it, so
+don't put it in a row that sizes it to fit, and it is the containing block of anything fixed
+inside it.
 
 The target stays readable: the search narrows first, then the actions drop their labels and what
-overflows moves into the ⋯ menu, and the target is cut short only when the search has nothing
-left to give.
+overflows moves into the ⋯ menu, and the target is cut short only when the search is at its
+least (`--plinth-toolbar-search-min-width`, 160px).
 
 ```blade example layout="stack"
 <x-plinth::toolbar label="Ticket actions" target="2 selected">
@@ -140,7 +142,8 @@ Blade, Vue and React print exactly this markup, and the parity tests hold them t
 | `tabindex`         | the toolbar's controls | set by the layer's script: 0 on one, -1 on the rest | none      |
 
 Its height is `--plinth-toolbar-height` (44px, a list header's), with a hairline divider under
-it; the search is `--plinth-toolbar-search-width` (320px) at most and narrows with the toolbar.
+it; the search is `--plinth-toolbar-search-width` (320px) at most and narrows with the toolbar
+to `--plinth-toolbar-search-min-width` (160px).
 It needs `button.css`, `icon.css` and `menu.css` for its parts.
 
 ## Props

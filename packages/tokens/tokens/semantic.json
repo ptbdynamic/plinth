@@ -298,6 +298,10 @@
     "search": {
       "$value": "{ref.size.320}",
       "$description": "The most width of an app bar's search button (320 px)."
+    },
+    "search-min": {
+      "$value": "{ref.size.160}",
+      "$description": "The least width of a search field that narrows with its row (160 px)."
     }
   },
   "layer": {
