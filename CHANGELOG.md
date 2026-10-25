@@ -1,5 +1,22 @@
 # Changelog
 
+## 0.2.0 (2026-10-25)
+
+### New
+
+- Add the menu: a short list of actions in a popover anchored to the button that opens it, with
+  items (buttons or links, an icon, a shortcut hint, a danger tone), separators and groups under a
+  heading. It is `<x-plinth::menu>`, `<x-plinth::menu-item>`, `<x-plinth::menu-group>` and
+  `<x-plinth::menu-separator>` in Blade, and `PlinthMenu`, `PlinthMenuItem`, `PlinthMenuGroup` and
+  `PlinthMenuSeparator` in Vue and React. New tokens: `--plinth-menu-min-width` and
+  `--plinth-menu-max-width`.
+- Breaking: `header` is now `page-header` (`plinth-page-header`, `<x-plinth::page-header>`, `PlinthPageHeader`), and its `title` prop is `heading`, so the `title` attribute reaches the root. It takes a `level` (`h1` by default, `h2` to `h6`), sticks at the new `--plinth-page-header-offset` token (0, or an app bar's height), and adds the top safe-area inset only with `top` (`data-top`), when it is the screen's top bar. The `--plinth-header-height` token is now `--plinth-page-header-height`.
+- Adds the text field (`plinth-text-field`, `<x-plinth::text-field>`, `PlinthTextField`) and the textarea (`plinth-textarea`, `<x-plinth::textarea>`, `PlinthTextarea`): a label (visible or visually hidden), an optional description and error (`aria-describedby`, `aria-invalid`), disabled and read-only. The text field takes a leading icon, a trailing slot (a clear button or a keyboard hint) and the sm and md sizes; `grow` makes the textarea grow with its content from `rows` to `max-rows`. A project's class goes on the root and every other attribute (`wire:model`, `name`, `value`) on the input. Vue binds the value with `v-model`. New component token `--plinth-text-field-trailing-size`.
+
+### Fixes
+
+- Tailwind breakpoints are literal values, so `md:` and `lg:` utilities compile.
+
 ## 0.1.1 (2026-10-25)
 
 ### Fixes
