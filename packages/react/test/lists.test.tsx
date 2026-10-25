@@ -14,6 +14,7 @@ import * as vueButton from '../../vue/src/button.ts';
 import * as vueIcon from '../../vue/src/icon.ts';
 import * as vueSize from '../../vue/src/size.ts';
 import * as vueTones from '../../vue/src/tones.ts';
+import * as vueTextField from '../../vue/src/text-field.ts';
 import { buttonVariant } from '../src/button.ts';
 import { swipeToClose } from '../src/swipe.ts';
 import { classNames, hasContent } from '../src/markup.ts';
@@ -60,6 +61,8 @@ import {
   sheetSidePhone,
   sheetSides,
   sizes,
+  textFieldSize,
+  textFieldSizes,
   tones,
 } from '../src/index.ts';
 
@@ -69,6 +72,7 @@ describe('the shared lists', () => {
     expect(buttonVariants).toEqual(vueButton.buttonVariants);
     expect(sizes).toEqual(vueSize.sizes);
     expect(controlSizes).toEqual(vueSize.controlSizes);
+    expect(textFieldSizes).toEqual(vueTextField.textFieldSizes);
     expect(iconSizes).toEqual(vueIcon.iconSizes);
     expect(calloutTones).toEqual(vueCallout.calloutTones);
     expect(calloutRoles).toEqual(vueCallout.calloutRoles);
@@ -101,6 +105,8 @@ describe('the shared lists', () => {
     expect(buttonVariant('loud')).toBe('primary');
     expect(buttonVariant('danger-ghost')).toBe('danger-ghost');
     expect(resolveSize('xl', controlSizes, 'md')).toBe('md');
+    expect(textFieldSize('lg')).toBe('md');
+    expect(textFieldSize('sm')).toBe('sm');
     expect(calloutTone('loud')).toBe('neutral');
     expect(calloutTone('info')).toBe('info');
     expect(calloutRole('log')).toBe('note');

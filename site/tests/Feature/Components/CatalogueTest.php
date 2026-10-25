@@ -7,9 +7,9 @@ use App\Components\Playground;
 it('lists the components by group, in the groups\' order', function () {
     $catalogue = app(Catalogue::class);
 
-    expect($catalogue->groups()->keys()->all())->toBe(['Actions', 'Content', 'Navigation', 'Overlays'])
+    expect($catalogue->groups()->keys()->all())->toBe(['Actions', 'Forms', 'Content', 'Navigation', 'Overlays'])
         ->and($catalogue->all()->first()?->slug)->toBe('button')
-        ->and($catalogue->all())->toHaveCount(18);
+        ->and($catalogue->all())->toHaveCount(20);
 });
 
 it('finds a component, and the one before and after it', function () {

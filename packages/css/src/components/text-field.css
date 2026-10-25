@@ -1,0 +1,230 @@
+/*
+ * Text field: one line of text, with its label, an optional description and an error.
+ *
+ * <div class="plinth-text-field" data-size="md">
+ *   <label class="plinth-text-field-label" for="email">Email</label>
+ *   <div class="plinth-text-field-control">
+ *     <span class="plinth-icon" data-size="sm" aria-hidden="true"><svg>…</svg></span>
+ *     <input type="email" class="plinth-text-field-input" id="email"
+ *       aria-describedby="email-description email-error" aria-invalid="true">
+ *     <span class="plinth-text-field-trailing">…</span>
+ *   </div>
+ *   <p class="plinth-text-field-description" id="email-description">For receipts only.</p>
+ *   <p class="plinth-text-field-error" id="email-error">Enter an email address.</p>
+ * </div>
+ *
+ * The input needs an id: the label points at it with for, and the description's and error's ids
+ * are the input's id with -description and -error. The icon, the trailing slot, the description
+ * and the error are optional; aria-describedby lists the description, then the error, and is left
+ * out when there is neither.
+ *
+ * Attributes go to the input, not the root (name, value, placeholder, autocomplete, required,
+ * wire:model, x-model, data-*, aria-*), so the app talks to the input; only a project's class is
+ * added to the root's.
+ *
+ * - type (on the input): text by default; email, url, tel, password, number or search. A search
+ *   field takes a search icon and, in the trailing slot, a clear button (a small ghost icon
+ *   button) that the app shows when there is text and wires up. With a trailing slot, the
+ *   browser's own clear button is hidden, so there is only one.
+ * - the leading icon is 16px and decorative (aria-hidden); the label names the field.
+ * - the trailing slot holds one small control or hint, in the room the field keeps at its end
+ *   (--plinth-text-field-trailing-size, 32px): a small icon button, or a keyboard hint as <kbd>.
+ * - data-label="hidden" on the root hides the label visually; screen readers still read it. Use it
+ *   only where the field's purpose is plain without it, such as a search box with its icon.
+ *
+ * Sizes (data-size): md 32px (default, also when missing) and sm 28px. On a touch screen both are
+ * 40px tall. The text is 16px on a phone, so iOS doesn't zoom into the field, and from 768px
+ * up it is 14px (md) or 13px (sm).
+ *
+ * States:
+ * - error: aria-invalid="true" on the input and the error message under it; the edge turns
+ *   danger and thick, so it isn't only a colour, and the message says what to fix.
+ * - disabled: `disabled` on the input; the field is faded and can't be focused.
+ * - read-only: `readonly` on the input; it keeps its text and focus, without the field's fill
+ *   and with a dashed edge.
+ * - the focus ring on the input's :focus-visible.
+ */
+
+@layer plinth {
+  .plinth-text-field {
+    --plinth-text-field-height: var(--plinth-control-md);
+    --plinth-text-field-text: var(--plinth-font-size-md);
+
+    display: grid;
+    gap: var(--plinth-space-2);
+    min-inline-size: 0;
+    font-family: var(--plinth-font-family-body);
+  }
+
+  .plinth-text-field[data-size='sm'] {
+    --plinth-text-field-height: var(--plinth-control-sm);
+    --plinth-text-field-text: var(--plinth-font-size-sm);
+  }
+
+  .plinth-text-field-label {
+    font-size: var(--plinth-font-size-sm);
+    font-weight: var(--plinth-font-weight-medium);
+    line-height: var(--plinth-font-leading-normal);
+    color: var(--plinth-color-text-muted);
+    overflow-wrap: anywhere;
+  }
+
+  /* Hidden from sight, still read by screen readers. */
+  .plinth-text-field[data-label='hidden'] .plinth-text-field-label {
+    position: absolute;
+    inline-size: 1px;
+    block-size: 1px;
+    overflow: hidden;
+    white-space: nowrap;
+    clip-path: inset(50%);
+  }
+
+  .plinth-text-field-control {
+    position: relative;
+    display: flex;
+    align-items: center;
+    min-inline-size: 0;
+  }
+
+  .plinth-text-field-input {
+    box-sizing: border-box;
+    flex: 1;
+    min-inline-size: 0;
+    min-block-size: var(--plinth-text-field-height);
+    padding-block: 0;
+    padding-inline: var(--plinth-space-3);
+    margin: 0;
+    font-family: inherit;
+    font-size: var(--plinth-font-size-field);
+    line-height: var(--plinth-font-leading-tight);
+    color: var(--plinth-color-text);
+    appearance: none;
+    background-color: var(--plinth-color-surface-sunken);
+    border: var(--plinth-border-width-thin) solid var(--plinth-color-border-strong);
+    border-radius: var(--plinth-radius-control);
+    transition: border-color var(--plinth-duration-fast) var(--plinth-easing-standard);
+  }
+
+  .plinth-text-field-input::placeholder {
+    color: var(--plinth-color-text-subtle);
+    opacity: 1;
+  }
+
+  @media (hover: hover) {
+    .plinth-text-field-input:hover:not(:disabled, :read-only, [aria-invalid='true']) {
+      border-color: var(--plinth-color-text-subtle);
+    }
+  }
+
+  .plinth-text-field-input:focus-visible {
+    outline: var(--plinth-focus-ring-width) solid var(--plinth-color-focus-ring);
+    outline-offset: var(--plinth-focus-ring-offset);
+  }
+
+  .plinth-text-field-input[aria-invalid='true'] {
+    border-color: var(--plinth-color-danger);
+    border-width: var(--plinth-border-width-thick);
+  }
+
+  .plinth-text-field-input:disabled {
+    cursor: not-allowed;
+  }
+
+  /* Without the fill, and with a dashed edge, so it doesn't read as a field to type in. */
+  .plinth-text-field-input:read-only:not(:disabled) {
+    background-color: transparent;
+    border-style: dashed;
+  }
+
+  .plinth-text-field-control:has(.plinth-text-field-input:disabled) {
+    opacity: var(--plinth-opacity-disabled);
+  }
+
+  /* The leading icon sits over the input's start, which keeps room for it. */
+  .plinth-text-field-control > .plinth-icon {
+    position: absolute;
+    inset-inline-start: var(--plinth-space-3);
+    color: var(--plinth-color-text-subtle);
+    pointer-events: none;
+  }
+
+  .plinth-text-field-control:has(> .plinth-icon) > .plinth-text-field-input {
+    padding-inline-start: calc(
+      var(--plinth-space-3) + var(--plinth-size-icon-sm) + var(--plinth-space-2)
+    );
+  }
+
+  .plinth-text-field-trailing {
+    position: absolute;
+    inset-inline-end: var(--plinth-space-1);
+    display: flex;
+    gap: var(--plinth-space-1);
+    align-items: center;
+    justify-content: center;
+    min-inline-size: var(--plinth-text-field-trailing-size);
+    color: var(--plinth-color-text-subtle);
+  }
+
+  .plinth-text-field-control:has(> .plinth-text-field-trailing) > .plinth-text-field-input {
+    padding-inline-end: calc(var(--plinth-space-1) + var(--plinth-text-field-trailing-size));
+  }
+
+  /* With its own clear button in the trailing slot, the browser's is one too many. */
+  .plinth-text-field-control:has(> .plinth-text-field-trailing)
+    > .plinth-text-field-input::-webkit-search-cancel-button {
+    display: none;
+  }
+
+  .plinth-text-field-trailing kbd {
+    box-sizing: border-box;
+    min-inline-size: var(--plinth-size-icon-md);
+    padding-block: 0;
+    padding-inline: var(--plinth-space-1);
+    font-family: var(--plinth-font-family-mono);
+    font-size: var(--plinth-font-size-xs);
+    line-height: var(--plinth-font-leading-normal);
+    color: var(--plinth-color-text-muted);
+    text-align: center;
+    border: var(--plinth-border-width-thin) solid var(--plinth-color-border-strong);
+    border-radius: var(--plinth-radius-control);
+  }
+
+  .plinth-text-field-description,
+  .plinth-text-field-error {
+    margin: 0;
+    font-size: var(--plinth-font-size-sm);
+    line-height: var(--plinth-font-leading-normal);
+    overflow-wrap: anywhere;
+  }
+
+  .plinth-text-field-description {
+    color: var(--plinth-color-text-muted);
+  }
+
+  .plinth-text-field-error {
+    color: var(--plinth-color-danger-text);
+  }
+
+  @media (pointer: coarse) {
+    .plinth-text-field-input {
+      min-block-size: var(--plinth-touch-target);
+    }
+  }
+
+  @media (min-width: 768px) {
+    .plinth-text-field-input {
+      font-size: var(--plinth-text-field-text);
+    }
+  }
+
+  @media (forced-colors: active) {
+    .plinth-text-field-control:has(.plinth-text-field-input:disabled) {
+      color: GrayText;
+    }
+
+    .plinth-text-field-input:disabled {
+      color: GrayText;
+      border-color: GrayText;
+    }
+  }
+}
