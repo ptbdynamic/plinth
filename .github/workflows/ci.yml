@@ -102,7 +102,7 @@ jobs:
         if: steps.affected.outputs.run == 'true'
         run: npx turbo run build-storybook --filter=@ptbdynamic/plinth-storybook
 
-      # The rest of the workspace's `test` and its `lint`, in one shard only.
+      # The rest of the workspace's `test`, and its `lint`, in one shard only.
       - name: Lint Storybook and run its Vitest tests
         if: steps.affected.outputs.run == 'true' && matrix.shard == 1
         run: |
