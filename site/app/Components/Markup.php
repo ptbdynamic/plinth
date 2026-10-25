@@ -22,7 +22,7 @@ final class Markup
     private const array BOOLEANS = ['disabled', 'hidden', 'open', 'inert', 'checked', 'required', 'readonly', 'multiple', 'selected', 'autofocus', 'popover'];
 
     /** HTML attributes React spells its own way. */
-    private const array REACT_NAMES = ['class' => 'className', 'for' => 'htmlFor', 'tabindex' => 'tabIndex', 'readonly' => 'readOnly'];
+    private const array REACT_NAMES = ['class' => 'className', 'for' => 'htmlFor', 'tabindex' => 'tabIndex', 'readonly' => 'readOnly', 'popovertarget' => 'popoverTarget'];
 
     public function blade(string $source): string
     {

@@ -55,6 +55,7 @@ it('writes bound props as expressions and keeps HTML elements\' own names', func
 
     expect($markup->react($source))->toBe("<PlinthPillRow count={24} data-filter=\"status\">\n  <label htmlFor=\"a\" className=\"x\" tabIndex=\"0\">A</label>\n</PlinthPillRow>")
         ->and($markup->vue($source))->toBe("<PlinthPillRow :count=\"24\" data-filter=\"status\">\n  <label for=\"a\" class=\"x\" tabindex=\"0\">A</label>\n</PlinthPillRow>")
+        ->and($markup->react('<x-plinth::button popovertarget="m">A</x-plinth::button>'))->toBe('<PlinthButton popoverTarget="m">A</PlinthButton>')
         ->and($markup->blade('<x-plinth::avatar name="Northwind &amp; Co." />'))->toBe('<x-plinth::avatar name="Northwind & Co." />')
         ->and($markup->html('<span title="A &amp; B">x</span>'))->toBe('<span title="A &amp; B">x</span>');
 });

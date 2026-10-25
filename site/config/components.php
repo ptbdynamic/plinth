@@ -270,6 +270,19 @@ return [
             ],
         ],
 
+        'menu' => [
+            'name' => 'Menu',
+            'group' => 'Overlays',
+            'description' => 'A short list of actions in a popover, anchored to the button that opens it.',
+            'playground' => [
+                'template' => "<x-plinth::icon-button label=\"More actions\" variant=\"ghost\" popovertarget=\"playground-menu\"><x-site.glyph name=\"more\" /></x-plinth::icon-button>\n<x-plinth::menu id=\"playground-menu\">\n    <x-plinth::menu-item shortcut=\"⌘D\">Duplicate</x-plinth::menu-item>\n    <x-plinth::menu-separator />\n    <x-plinth::menu-item{attributes}>Delete</x-plinth::menu-item>\n</x-plinth::menu>",
+                'options' => [
+                    'tone' => ['values' => ['neutral', 'danger'], 'default' => 'danger'],
+                ],
+                'states' => ['disabled'],
+            ],
+        ],
+
         'menu-sheet' => [
             'name' => 'Menu sheet',
             'group' => 'Overlays',

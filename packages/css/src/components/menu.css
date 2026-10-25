@@ -57,14 +57,15 @@
  * - open is the native one (:popover-open), never a class.
  *
  * Placement: below the button, starting at its start edge, through CSS anchor positioning (the
- * popover's button is its implicit anchor). When that would leave the screen it flips above, or
- * to the button's end edge, or both. It is the same at every width; a phone gets no bottom sheet,
+ * popover's button is its implicit anchor). It takes the side of the button with more room, above
+ * or below, and is never taller than that room: a long menu scrolls. When it would leave the
+ * screen sideways it flips to the button's end edge. It is the same at every width; a phone gets no bottom sheet,
  * since a menu is a few actions next to the button that opened them (a long list belongs in a
  * sheet). A browser without anchor positioning shows the menu in the middle of the screen, where
  * it still works; so does a menu opened by showPopover() without a source.
  *
  * Size: --plinth-menu-min-width (192px) to --plinth-menu-max-width (320px), never wider than the
- * screen less a margin, and never taller: a long menu scrolls. Items are --plinth-touch-target
+ * screen less a margin, and never taller than the room it has. Items are --plinth-touch-target
  * (40px) tall; with a mouse from 768px up, --plinth-control-md (32px). A long label wraps.
  * It fades in and out on the motion tokens, which drop to 0ms under prefers-reduced-motion.
  */
@@ -108,9 +109,11 @@
   @supports (position-area: block-end) {
     .plinth-menu {
       inset: auto;
+      max-block-size: calc(100% - 2 * var(--plinth-space-1));
       margin-block: var(--plinth-space-1);
       margin-inline: 0;
       position-area: block-end span-inline-end;
+      position-try-order: most-block-size;
       position-try-fallbacks:
         flip-block,
         flip-inline,

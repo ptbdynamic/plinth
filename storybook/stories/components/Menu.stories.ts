@@ -49,7 +49,7 @@ const openMenu = (canvas: HTMLElement) => {
 
 /** Room for the open menu under its button, so the story's frame shows all of it. */
 const stage = (content: string, align: 'start' | 'end' = 'start') =>
-  `<div style="display: flex; justify-content: ${align === 'end' ? 'flex-end' : 'flex-start'}; min-block-size: 22rem; padding: var(--plinth-space-4);">${content}</div>`;
+  `<div style="display: flex; align-items: flex-start; justify-content: ${align === 'end' ? 'flex-end' : 'flex-start'}; min-block-size: 22rem; padding: var(--plinth-space-4);">${content}</div>`;
 
 const meta = {
   title: 'Components/Menu',
