@@ -65,5 +65,12 @@
       "$value": "{control.lg}",
       "$description": "An item's height (40px), its touch target too."
     }
+  },
+  "text-field": {
+    "trailing-size": {
+      "$type": "dimension",
+      "$value": "{control.md}",
+      "$description": "The room a text field keeps at its end for its trailing slot (32px): a small icon button or a short keyboard hint. A project with a wider hint raises it."
+    }
   }
 }

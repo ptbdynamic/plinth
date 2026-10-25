@@ -24,6 +24,8 @@ import {
   PlinthSectionMenu,
   PlinthSectionMenuItem,
   PlinthSheet,
+  PlinthTextarea,
+  PlinthTextField,
 } from '@ptbdynamic/plinth-vue';
 import {
   PlinthAvatar as ReactAvatar,
@@ -51,6 +53,8 @@ import {
   PlinthSectionMenu as ReactSectionMenu,
   PlinthSectionMenuItem as ReactSectionMenuItem,
   PlinthSheet as ReactSheet,
+  PlinthTextarea as ReactTextarea,
+  PlinthTextField as ReactTextField,
 } from '@ptbdynamic/plinth-react';
 import { createElement, type ComponentType } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
@@ -121,8 +125,19 @@ import * as drawerStories from '../stories/components/Drawer.stories.ts';
 import { drawer, type DrawerArgs } from '../stories/components/drawer.ts';
 import * as sheetStories from '../stories/components/Sheet.stories.ts';
 import { sheet, type SheetArgs } from '../stories/components/sheet.ts';
+import * as textareaStories from '../stories/components/Textarea.stories.ts';
+import { textarea, type TextareaArgs } from '../stories/components/textarea.ts';
+import * as textFieldStories from '../stories/components/TextField.stories.ts';
+import { textField, type TextFieldArgs } from '../stories/components/text-field.ts';
 import { sampleIcons } from '../stories/components/icons.ts';
-import { htmlToReact, normalize, reactProps, renderBlade, withoutAlpine } from './markup.ts';
+import {
+  htmlToReact,
+  normalize,
+  reactProps,
+  reactStyle,
+  renderBlade,
+  withoutAlpine,
+} from './markup.ts';
 
 /**
  * Parity: for every story of a component, the Blade, Vue and React output must match the story's
@@ -186,6 +201,8 @@ const reactComponents = new Map<Component, unknown>([
   [PlinthSectionMenu, ReactSectionMenu],
   [PlinthSectionMenuItem, ReactSectionMenuItem],
   [PlinthSheet, ReactSheet],
+  [PlinthTextarea, ReactTextarea],
+  [PlinthTextField, ReactTextField],
 ]);
 
 /**
@@ -195,7 +212,15 @@ const reactComponents = new Map<Component, unknown>([
 function renderReact(component: unknown, vue: ParityCase['vue']): string {
   const slot = vue.html ? htmlToReact(vue.slot) : vue.slot;
   const named = Object.entries(vue.named ?? {}).map(([name, html]) => [name, htmlToReact(html)]);
-  const props = { ...reactProps(vue.props), ...Object.fromEntries(named), children: slot };
+  // An empty default slot is no children: a field's <input> can't have any.
+  const attributes = reactProps(vue.props);
+  // React takes a style as an object.
+  if (typeof attributes.style === 'string') attributes.style = reactStyle(attributes.style);
+  const props = {
+    ...attributes,
+    ...Object.fromEntries(named),
+    ...(slot === '' ? {} : { children: slot }),
+  };
   return renderToStaticMarkup(
     createElement(component as ComponentType<Record<string, unknown>>, props),
   );
@@ -313,6 +338,27 @@ const calloutDefaults: CalloutArgs = {
   role: 'note',
   title: 'Invoices are sent at 9:00',
   text: 'Invoices you approve after that go out the next morning.',
+};
+
+const textFieldDefaults: TextFieldArgs = {
+  id: 'email',
+  label: 'Email',
+  hideLabel: false,
+  type: 'email',
+  size: 'md',
+  disabled: false,
+  readonly: false,
+};
+
+const textareaDefaults: TextareaArgs = {
+  id: 'reply',
+  label: 'Reply',
+  hideLabel: false,
+  rows: 3,
+  grow: false,
+  maxRows: 8,
+  disabled: false,
+  readonly: false,
 };
 
 const cases: ParityCase[] = [
@@ -961,6 +1007,59 @@ const cases: ParityCase[] = [
     title: 'Fish & <chips>',
     text: '"Quotes" & <tags>',
   }),
+  ...storyArgs<TextFieldArgs>(textFieldStories).map(([story, args]) =>
+    textFieldCase(`Text field/${story}`, args),
+  ),
+  textFieldCase('Text field/with extra attributes', textFieldDefaults, {
+    class: 'mb-4',
+    name: 'email',
+    autocomplete: 'email',
+    'data-testid': 'email',
+    'aria-describedby': 'email-help',
+  }),
+  textFieldCase(
+    'Text field/with a clashing attribute',
+    { ...textFieldDefaults, description: 'Receipts go to this address.' },
+    { 'aria-describedby': 'my-help' },
+  ),
+  textFieldCase('Text field/unknown size and blank messages', {
+    ...textFieldDefaults,
+    size: 'lg' as TextFieldArgs['size'],
+    description: ' ',
+    error: '',
+  }),
+  textFieldCase('Text field/escaped text', {
+    ...textFieldDefaults,
+    label: 'Name <b>',
+    value: '"quoted" & <tag>',
+    description: 'A & B',
+    error: 'Not <this>',
+  }),
+  ...storyArgs<TextareaArgs>(textareaStories).map(([story, args]) =>
+    textareaCase(`Textarea/${story}`, args),
+  ),
+  textareaCase('Textarea/with extra attributes', textareaDefaults, {
+    class: 'mb-4',
+    name: 'reply',
+    maxlength: '2000',
+    'data-testid': 'reply',
+  }),
+  textareaCase(
+    'Textarea/with a clashing attribute',
+    { ...textareaDefaults, error: 'Write a reply first.' },
+    { 'aria-invalid': 'false' },
+  ),
+  textareaCase(
+    'Textarea/growing with its own style',
+    { ...textareaDefaults, grow: true, rows: 4, maxRows: 2 },
+    { style: 'color: red;' },
+  ),
+  textareaCase('Textarea/escaped text', {
+    ...textareaDefaults,
+    label: 'Note <b>',
+    value: 'A & B <i>',
+    description: '"quoted"',
+  }),
 ];
 
 function buttonCase(story: string, args: ButtonArgs, attributes: Attributes = {}): ParityCase {
@@ -1484,6 +1583,69 @@ function codeBlockCase(
   };
 }
 
+function textFieldCase(
+  story: string,
+  args: TextFieldArgs,
+  attributes: Attributes = {},
+): ParityCase {
+  // The story prints an unknown size as it is; the layers print the default.
+  const markup = textField({ ...args, size: args.size === 'sm' ? 'sm' : 'md' }, attributes);
+  const props = {
+    id: args.id,
+    label: args.label,
+    hideLabel: args.hideLabel,
+    type: args.type,
+    size: args.size,
+    disabled: args.disabled,
+    readonly: args.readonly,
+    ...(args.description !== undefined ? { description: args.description } : {}),
+    ...(args.error !== undefined ? { error: args.error } : {}),
+  };
+  const input = {
+    ...(args.placeholder ? { placeholder: args.placeholder } : {}),
+    ...(args.value !== undefined ? { value: args.value } : {}),
+    ...attributes,
+  };
+  const named = {
+    ...(args.icon ? { icon: args.icon } : {}),
+    ...(args.trailing ? { trailing: args.trailing } : {}),
+  };
+  return {
+    story,
+    markup,
+    vue: { component: PlinthTextField, props: { ...props, ...input }, slot: '', named },
+    blade: { component: 'text-field', props, attributes: input, slot: '', named },
+  };
+}
+
+function textareaCase(story: string, args: TextareaArgs, attributes: Attributes = {}): ParityCase {
+  const props = {
+    id: args.id,
+    label: args.label,
+    hideLabel: args.hideLabel,
+    rows: args.rows,
+    grow: args.grow,
+    maxRows: args.maxRows,
+    disabled: args.disabled,
+    readonly: args.readonly,
+    ...(args.description !== undefined ? { description: args.description } : {}),
+    ...(args.error !== undefined ? { error: args.error } : {}),
+  };
+  const input = { ...(args.placeholder ? { placeholder: args.placeholder } : {}), ...attributes };
+  const value = args.value ?? '';
+  return {
+    story,
+    markup: textarea(args, attributes),
+    // The value is Vue's and React's value, and Blade's slot, as a textarea's content.
+    vue: {
+      component: PlinthTextarea,
+      props: { ...props, ...input, ...(value ? { value } : {}) },
+      slot: '',
+    },
+    blade: { component: 'textarea', props, attributes: input, slot: escape(value) },
+  };
+}
+
 function calloutCase(story: string, args: CalloutArgs, attributes: Attributes = {}): ParityCase {
   // The story prints unknown values as they are; the layers print the defaults.
   const markup = callout(
@@ -1840,6 +2002,30 @@ describe('parity with the stories', () => {
       'Callout/blank title and text',
       'Callout/title only',
       'Callout/escaped text',
+      'Text field/Default',
+      'Text field/WithDescription',
+      'Text field/WithError',
+      'Text field/Small',
+      'Text field/Search',
+      'Text field/WithKeyboardHint',
+      'Text field/Disabled',
+      'Text field/ReadOnly',
+      'Text field/with extra attributes',
+      'Text field/with a clashing attribute',
+      'Text field/unknown size and blank messages',
+      'Text field/escaped text',
+      'Textarea/Default',
+      'Textarea/WithDescription',
+      'Textarea/WithError',
+      'Textarea/Grow',
+      'Textarea/GrowToMaximum',
+      'Textarea/HiddenLabel',
+      'Textarea/Disabled',
+      'Textarea/ReadOnly',
+      'Textarea/with extra attributes',
+      'Textarea/with a clashing attribute',
+      'Textarea/growing with its own style',
+      'Textarea/escaped text',
     ]);
   });
 

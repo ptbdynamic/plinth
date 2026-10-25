@@ -1,0 +1,157 @@
+/*
+ * Textarea: several lines of text, with its label, an optional description and an error. With
+ * grow, it grows with its content.
+ *
+ * <div class="plinth-textarea">
+ *   <label class="plinth-textarea-label" for="reply">Reply</label>
+ *   <textarea class="plinth-textarea-input" id="reply" rows="3"
+ *     aria-describedby="reply-description reply-error" aria-invalid="true"></textarea>
+ *   <p class="plinth-textarea-description" id="reply-description">The customer sees it.</p>
+ *   <p class="plinth-textarea-error" id="reply-error">Write a reply first.</p>
+ * </div>
+ *
+ * The textarea needs an id: the label points at it with for, and the description's and error's
+ * ids are the textarea's id with -description and -error. The description and the error are
+ * optional; aria-describedby lists the description, then the error, and is left out when there is
+ * neither. rows is 3 by default.
+ *
+ * Attributes go to the textarea, not the root (name, placeholder, maxlength, required,
+ * wire:model, x-model, data-*, aria-*), so the app talks to the textarea; only a project's class
+ * is added to the root's.
+ *
+ * - grow: data-grow on the textarea, with its rows and maximum as custom properties:
+ *   <textarea class="plinth-textarea-input" id="reply" rows="3" data-grow
+ *     style="--plinth-textarea-rows: 3; --plinth-textarea-max-rows: 8"></textarea>
+ *   It starts at rows lines and grows with its content (field-sizing: content) up to max-rows
+ *   (8 by default), then scrolls. Where the browser has no field-sizing it keeps rows lines and
+ *   the person can resize it, as without grow.
+ * - data-label="hidden" on the root hides the label visually; screen readers still read it. Use it
+ *   only where the field's purpose is plain without it, such as a reply box under a thread.
+ *
+ * The text is 16px on a phone, so iOS doesn't zoom into the field, and 14px from 768px up.
+ *
+ * States:
+ * - error: aria-invalid="true" on the textarea and the error message under it; the edge turns
+ *   danger and thick, so it isn't only a colour, and the message says what to fix.
+ * - disabled: `disabled` on the textarea; the field is faded and can't be focused.
+ * - read-only: `readonly` on the textarea; it keeps its text and focus, without the field's fill.
+ * - the focus ring on the textarea's :focus-visible.
+ */
+
+@layer plinth {
+  .plinth-textarea {
+    display: grid;
+    gap: var(--plinth-space-2);
+    min-inline-size: 0;
+    font-family: var(--plinth-font-family-body);
+  }
+
+  .plinth-textarea-label {
+    font-size: var(--plinth-font-size-sm);
+    font-weight: var(--plinth-font-weight-medium);
+    line-height: var(--plinth-font-leading-normal);
+    color: var(--plinth-color-text-muted);
+    overflow-wrap: anywhere;
+  }
+
+  /* Hidden from sight, still read by screen readers. */
+  .plinth-textarea[data-label='hidden'] .plinth-textarea-label {
+    position: absolute;
+    inline-size: 1px;
+    block-size: 1px;
+    overflow: hidden;
+    white-space: nowrap;
+    clip-path: inset(50%);
+  }
+
+  .plinth-textarea-input {
+    box-sizing: border-box;
+    inline-size: 100%;
+    min-block-size: var(--plinth-touch-target);
+    padding-block: var(--plinth-space-2);
+    padding-inline: var(--plinth-space-3);
+    margin: 0;
+    font-family: inherit;
+    font-size: var(--plinth-font-size-field);
+    line-height: var(--plinth-font-leading-normal);
+    color: var(--plinth-color-text);
+    resize: vertical;
+    background-color: var(--plinth-color-surface-sunken);
+    border: var(--plinth-border-width-thin) solid var(--plinth-color-border-strong);
+    border-radius: var(--plinth-radius-control);
+    transition: border-color var(--plinth-duration-fast) var(--plinth-easing-standard);
+  }
+
+  .plinth-textarea-input::placeholder {
+    color: var(--plinth-color-text-subtle);
+    opacity: 1;
+  }
+
+  .plinth-textarea-input:focus-visible {
+    outline: var(--plinth-focus-ring-width) solid var(--plinth-color-focus-ring);
+    outline-offset: var(--plinth-focus-ring-offset);
+  }
+
+  .plinth-textarea-input[aria-invalid='true'] {
+    border-color: var(--plinth-color-danger);
+    border-width: var(--plinth-border-width-thick);
+  }
+
+  .plinth-textarea-input:disabled {
+    cursor: not-allowed;
+    resize: none;
+    opacity: var(--plinth-opacity-disabled);
+  }
+
+  .plinth-textarea-input:read-only:not(:disabled) {
+    background-color: transparent;
+  }
+
+  /*
+   * Grow: from rows lines to max-rows lines (in the textarea's own line height, with its padding
+   * and edge), then it scrolls.
+   */
+  @supports (field-sizing: content) {
+    .plinth-textarea-input[data-grow] {
+      field-sizing: content;
+      min-block-size: calc(
+        var(--plinth-textarea-rows, 3) * 1lh + 2 * var(--plinth-space-2) + 2 *
+          var(--plinth-border-width-thin)
+      );
+      max-block-size: calc(
+        var(--plinth-textarea-max-rows, 8) * 1lh + 2 * var(--plinth-space-2) + 2 *
+          var(--plinth-border-width-thin)
+      );
+      resize: none;
+    }
+  }
+
+  .plinth-textarea-description,
+  .plinth-textarea-error {
+    margin: 0;
+    font-size: var(--plinth-font-size-sm);
+    line-height: var(--plinth-font-leading-normal);
+    overflow-wrap: anywhere;
+  }
+
+  .plinth-textarea-description {
+    color: var(--plinth-color-text-muted);
+  }
+
+  .plinth-textarea-error {
+    color: var(--plinth-color-danger-text);
+  }
+
+  @media (min-width: 768px) {
+    .plinth-textarea-input {
+      font-size: var(--plinth-font-size-md);
+    }
+  }
+
+  @media (forced-colors: active) {
+    .plinth-textarea-input:disabled {
+      color: GrayText;
+      border-color: GrayText;
+    }
+  }
+}

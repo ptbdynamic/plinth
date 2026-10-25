@@ -27,6 +27,8 @@ import {
   PlinthSectionMenu,
   PlinthSectionMenuItem,
   PlinthSheet,
+  PlinthTextarea,
+  PlinthTextField,
 } from '../src/index.ts';
 
 describe('the Plinth plugin', () => {
@@ -59,5 +61,7 @@ describe('the Plinth plugin', () => {
     expect(app.component('PlinthSectionMenu')).toBe(PlinthSectionMenu);
     expect(app.component('PlinthSectionMenuItem')).toBe(PlinthSectionMenuItem);
     expect(app.component('PlinthSheet')).toBe(PlinthSheet);
+    expect(app.component('PlinthTextarea')).toBe(PlinthTextarea);
+    expect(app.component('PlinthTextField')).toBe(PlinthTextField);
   });
 });
