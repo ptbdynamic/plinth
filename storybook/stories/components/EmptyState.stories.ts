@@ -45,7 +45,7 @@ const meta = {
           'A calm, centred message for a screen or a section with nothing to show yet, such as "No runs yet", often with one action. ' +
           'It has a heading (what is empty, in plain words), and optionally a decorative icon, a description (why it is empty, or what fills it) and the actions, usually one button or link. ' +
           'Plain by default, for inside a card or a panel that has its own surface; `framed` gives it a raised surface of its own, for a page section with nothing around it. ' +
-          'The app decides when to show it. When it replaces results as the user types, such as a search with no match, add `role="status"` so screen readers announce it. ' +
+          'The app decides when to show it. When it replaces results as the user types, such as a search with no match, put it in a container with `role="status"` that stays on the page, so screen readers announce it. ' +
           'Use it for nothing to show, not for an error or a warning: those are a callout.',
       },
     },
