@@ -15,7 +15,7 @@ return [
 
     'path' => base_path('components'),
 
-    'groups' => ['Actions', 'Content', 'Navigation', 'Overlays'],
+    'groups' => ['Actions', 'Forms', 'Content', 'Navigation', 'Overlays'],
 
     'components' => [
 
@@ -56,6 +56,41 @@ return [
                     'size' => $controls,
                 ],
                 'states' => ['pressed', 'busy', 'disabled'],
+            ],
+        ],
+
+        'text-field' => [
+            'name' => 'Text field',
+            'group' => 'Forms',
+            'description' => 'One line of text with its label, a description and an error; search with a clear button.',
+            'playground' => [
+                'template' => '<x-plinth::text-field label="Email" type="email" placeholder="name@example.com" description="Receipts go to this address."{attributes} />',
+                'options' => [
+                    'size' => ['values' => ['sm', 'md'], 'default' => 'md'],
+                    'error' => [
+                        'values' => ['none', 'shown'],
+                        'default' => 'none',
+                        'print' => ['shown' => 'error="Enter an email address, such as name@example.com."'],
+                    ],
+                ],
+                'states' => ['hide-label', 'disabled', 'readonly'],
+            ],
+        ],
+
+        'textarea' => [
+            'name' => 'Textarea',
+            'group' => 'Forms',
+            'description' => 'Several lines of text, with the same label, description and error; it can grow with its content.',
+            'playground' => [
+                'template' => '<x-plinth::textarea label="Reply" placeholder="Write a reply" description="The customer sees this reply."{attributes} />',
+                'options' => [
+                    'error' => [
+                        'values' => ['none', 'shown'],
+                        'default' => 'none',
+                        'print' => ['shown' => 'error="Write a reply before you send it."'],
+                    ],
+                ],
+                'states' => ['grow', 'hide-label', 'disabled', 'readonly'],
             ],
         ],
 
