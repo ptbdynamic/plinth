@@ -1,4 +1,4 @@
-import { iconSizes, type IconSize } from '@bdynamic/plinth-vue';
+import { iconSizes, type IconSize } from '@ptbdynamic/plinth-vue';
 
 export { iconSizes, type IconSize };
 

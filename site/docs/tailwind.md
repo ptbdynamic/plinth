@@ -11,9 +11,9 @@ utilities, so a utility class can adjust a component without `!important`:
 ```css label="resources/css/app.css"
 @layer theme, base, plinth, components, utilities;
 @import 'tailwindcss';
-@import '@bdynamic/plinth/fonts.css';
-@import '@bdynamic/plinth/css';
-@import '@bdynamic/plinth/tailwind.css';
+@import '@ptbdynamic/plinth/fonts.css';
+@import '@ptbdynamic/plinth/css';
+@import '@ptbdynamic/plinth/tailwind.css';
 ```
 
 The last import is a Tailwind v4 theme, written by the tokens build (v4 has no JS presets). It

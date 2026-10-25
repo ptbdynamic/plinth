@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/html-vite';
 import { avatar, avatarSizes, samplePhoto, tones, type AvatarArgs } from './avatar.ts';
-import '@bdynamic/plinth-css/src/components/avatar.css';
+import '@ptbdynamic/plinth-css/src/components/avatar.css';
 
 const meta = {
   title: 'Components/Avatar',

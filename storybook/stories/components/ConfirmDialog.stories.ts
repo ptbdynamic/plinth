@@ -1,12 +1,12 @@
 import type { Meta, StoryObj } from '@storybook/html-vite';
-import { confirmDialogKinds, confirmDialogTones, dialogSidePhones } from '@bdynamic/plinth-vue';
+import { confirmDialogKinds, confirmDialogTones, dialogSidePhones } from '@ptbdynamic/plinth-vue';
 import { button } from './button.ts';
 import { confirmDialog, type ConfirmDialogArgs } from './confirm-dialog.ts';
-import '@bdynamic/plinth-css/src/components/icon.css';
-import '@bdynamic/plinth-css/src/components/button.css';
-import '@bdynamic/plinth-css/src/components/modal.css';
-import '@bdynamic/plinth-css/src/components/dialog.css';
-import '@bdynamic/plinth-css/src/components/confirm-dialog.css';
+import '@ptbdynamic/plinth-css/src/components/icon.css';
+import '@ptbdynamic/plinth-css/src/components/button.css';
+import '@ptbdynamic/plinth-css/src/components/modal.css';
+import '@ptbdynamic/plinth-css/src/components/dialog.css';
+import '@ptbdynamic/plinth-css/src/components/confirm-dialog.css';
 
 /** A button that opens the dialog with no script: commandfor and command="show-modal". */
 const opener = (args: ConfirmDialogArgs) =>

@@ -4,7 +4,7 @@ import {
   buttonVariants,
   type ControlSize,
   type ButtonVariant,
-} from '@bdynamic/plinth-vue';
+} from '@ptbdynamic/plinth-vue';
 import { escape, rootAttributes, type Attributes } from './markup.ts';
 
 export { controlSizes, buttonVariants, type ControlSize, type ButtonVariant };

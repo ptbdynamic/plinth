@@ -67,7 +67,7 @@ Without a label, the header holds only the copy button. With `copy` off, the but
 status are left out, and with neither the header hides.
 
 ```blade example layout="stack"
-<x-plinth::code-block>npm install @bdynamic/plinth</x-plinth::code-block>
+<x-plinth::code-block>npm install @ptbdynamic/plinth</x-plinth::code-block>
 <x-plinth::code-block :copy="false">npm run build</x-plinth::code-block>
 ```
 
@@ -141,7 +141,7 @@ and React show it once mounted. Vue emits **`copied`** with the text, and React 
 ```
 
 ```tsx tab="React"
-import { PlinthCodeBlock } from '@bdynamic/plinth/react';
+import { PlinthCodeBlock } from '@ptbdynamic/plinth/react';
 
 <PlinthCodeBlock label="Terminal" onCopied={track}>
     composer require ptbdynamic/plinth

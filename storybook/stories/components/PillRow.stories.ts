@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/html-vite';
 import { pillRow, type PillArgs, type PillRowArgs } from './pill-row.ts';
-import '@bdynamic/plinth-css/src/components/pill-row.css';
+import '@ptbdynamic/plinth-css/src/components/pill-row.css';
 
 const filter = (label: string, extra: Partial<PillArgs> = {}): PillArgs => ({
   label,

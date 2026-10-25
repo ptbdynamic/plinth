@@ -112,7 +112,7 @@ types don't list them yet.
 ```
 
 ```tsx tab="React"
-import { PlinthIconButton } from '@bdynamic/plinth/react';
+import { PlinthIconButton } from '@ptbdynamic/plinth/react';
 
 <PlinthIconButton label="Favourite" pressed={favourite} onClick={toggle}>
     <StarIcon />

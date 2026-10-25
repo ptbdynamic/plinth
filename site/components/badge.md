@@ -87,7 +87,7 @@ In Blade the tone is a value or a case of `\BDynamic\Plinth\Enums\Tone`; in Vue 
 ```
 
 ```tsx tab="React"
-import { PlinthBadge } from '@bdynamic/plinth/react';
+import { PlinthBadge } from '@ptbdynamic/plinth/react';
 
 <PlinthBadge tone={invoice.paid ? 'success' : 'warning'} dot className="ms-2">
     {invoice.statusLabel}

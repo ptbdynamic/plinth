@@ -1,4 +1,4 @@
-import { tokens } from '@bdynamic/plinth-tokens';
+import { tokens } from '@ptbdynamic/plinth-tokens';
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 

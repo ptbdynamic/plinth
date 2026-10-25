@@ -1,9 +1,9 @@
 import type { Decorator, Meta, StoryObj } from '@storybook/html-vite';
 import { badge } from './badge.ts';
 import { codeBlock, type CodeBlockArgs, type CodeBlockTab } from './code-block.ts';
-import '@bdynamic/plinth-css/src/components/badge.css';
-import '@bdynamic/plinth-css/src/components/button.css';
-import '@bdynamic/plinth-css/src/components/code-block.css';
+import '@ptbdynamic/plinth-css/src/components/badge.css';
+import '@ptbdynamic/plinth-css/src/components/button.css';
+import '@ptbdynamic/plinth-css/src/components/code-block.css';
 
 /**
  * What the Blade (Alpine), Vue and React layers add: the copy button shows, and copies the code
@@ -170,7 +170,7 @@ export const WithoutCopy: Story = {
 
 /** Neither a label nor a copy button: no header at all. */
 export const CodeOnly: Story = {
-  args: { label: undefined, copy: false, code: 'npm install @bdynamic/plinth' },
+  args: { label: undefined, copy: false, code: 'npm install @ptbdynamic/plinth' },
 };
 
 /** A label with a little markup, here a badge (label slot in Blade and Vue, a node in React). */

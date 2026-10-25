@@ -87,7 +87,7 @@ Check what Stylelint cannot:
 If the tests are cheap to run, run them: `npx vitest run test/parity.test.ts` in `storybook/`,
 `npx vitest run` in `packages/vue` and in `packages/react`, and `composer test` in
 `packages/blade`. The parity suite reads the built Vue and React packages: run
-`npx turbo run build --filter=@bdynamic/plinth-storybook^...` first.
+`npx turbo run build --filter=@ptbdynamic/plinth-storybook^...` first.
 
 ## How to report
 

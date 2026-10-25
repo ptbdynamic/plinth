@@ -1,7 +1,7 @@
 import { useOf, type Of } from '@storybook/addon-docs/blocks';
 import { useEffect, useRef, useState } from 'react';
 import { fitScale, frameUrl, themes, toTheme, widths, type Theme } from './every-width.ts';
-import '@bdynamic/plinth-css/src/components/button.css';
+import '@ptbdynamic/plinth-css/src/components/button.css';
 import './every-width.css';
 
 /** The toolbar's globals as the docs page's decorators set them on <html>. */

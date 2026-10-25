@@ -149,7 +149,7 @@ types don't list them yet.
 ```
 
 ```tsx tab="React"
-import { PlinthButton } from '@bdynamic/plinth/react';
+import { PlinthButton } from '@ptbdynamic/plinth/react';
 
 <PlinthButton type="submit" busy={saving} icon={<SaveIcon />}>
     Save changes

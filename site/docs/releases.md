@@ -6,7 +6,7 @@ components ([ADR 4](../../docs/adr/0004-one-version-released-with-changesets.md)
 
 ## Versions
 
-Plinth follows [semantic versioning](https://semver.org). The npm package `@bdynamic/plinth` and
+Plinth follows [semantic versioning](https://semver.org). The npm package `@ptbdynamic/plinth` and
 the Composer package `ptbdynamic/plinth` always carry the same version, and the git tag
 `v<version>` marks it. A fix in one layer still moves both packages; the changelog says what
 moved.

@@ -5,11 +5,11 @@ import { icon } from './icon.ts';
 import { sampleIcons } from './icons.ts';
 import { listCard, type ListCardArgs } from './list-card.ts';
 import type { ListRowArgs } from './list-row.ts';
-import '@bdynamic/plinth-css/src/components/icon.css';
-import '@bdynamic/plinth-css/src/components/avatar.css';
-import '@bdynamic/plinth-css/src/components/badge.css';
-import '@bdynamic/plinth-css/src/components/list-row.css';
-import '@bdynamic/plinth-css/src/components/list-card.css';
+import '@ptbdynamic/plinth-css/src/components/icon.css';
+import '@ptbdynamic/plinth-css/src/components/avatar.css';
+import '@ptbdynamic/plinth-css/src/components/badge.css';
+import '@ptbdynamic/plinth-css/src/components/list-row.css';
+import '@ptbdynamic/plinth-css/src/components/list-card.css';
 
 const leadingIcon = (svg: string) => icon({ size: 'md', mirror: false, svg });
 

@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/html-vite';
-import { swipeToClose } from '@bdynamic/plinth-vue';
+import { swipeToClose } from '@ptbdynamic/plinth-vue';
 import { samplePhoto } from './avatar.ts';
 import { header } from './header.ts';
 import { iconButton } from './icon-button.ts';
@@ -7,15 +7,15 @@ import { sampleIcons } from './icons.ts';
 import { listCard } from './list-card.ts';
 import type { ListRowArgs } from './list-row.ts';
 import { menuSheet, type MenuSheetArgs } from './menu-sheet.ts';
-import '@bdynamic/plinth-css/src/components/icon.css';
-import '@bdynamic/plinth-css/src/components/button.css';
-import '@bdynamic/plinth-css/src/components/avatar.css';
-import '@bdynamic/plinth-css/src/components/list-row.css';
-import '@bdynamic/plinth-css/src/components/list-card.css';
-import '@bdynamic/plinth-css/src/components/modal.css';
-import '@bdynamic/plinth-css/src/components/sheet.css';
-import '@bdynamic/plinth-css/src/components/header.css';
-import '@bdynamic/plinth-css/src/components/menu-sheet.css';
+import '@ptbdynamic/plinth-css/src/components/icon.css';
+import '@ptbdynamic/plinth-css/src/components/button.css';
+import '@ptbdynamic/plinth-css/src/components/avatar.css';
+import '@ptbdynamic/plinth-css/src/components/list-row.css';
+import '@ptbdynamic/plinth-css/src/components/list-card.css';
+import '@ptbdynamic/plinth-css/src/components/modal.css';
+import '@ptbdynamic/plinth-css/src/components/sheet.css';
+import '@ptbdynamic/plinth-css/src/components/header.css';
+import '@ptbdynamic/plinth-css/src/components/menu-sheet.css';
 
 const row = (title: string, extra: Partial<ListRowArgs> = {}): ListRowArgs => ({
   title,

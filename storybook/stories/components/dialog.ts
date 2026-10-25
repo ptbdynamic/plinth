@@ -1,4 +1,4 @@
-import { dialogCloseIcon, dialogSidePhone, type DialogSidePhone } from '@bdynamic/plinth-vue';
+import { dialogCloseIcon, dialogSidePhone, type DialogSidePhone } from '@ptbdynamic/plinth-vue';
 import { iconButton } from './icon-button.ts';
 import { escape, rootAttributes, type Attributes } from './markup.ts';
 

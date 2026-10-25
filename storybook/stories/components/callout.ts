@@ -4,7 +4,7 @@ import {
   calloutTones,
   type CalloutRole,
   type CalloutTone,
-} from '@bdynamic/plinth-vue';
+} from '@ptbdynamic/plinth-vue';
 import { escape, rootAttributes, type Attributes } from './markup.ts';
 
 export { calloutRoles, calloutTones, type CalloutRole, type CalloutTone };

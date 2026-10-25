@@ -1,17 +1,17 @@
 import type { Meta, StoryObj } from '@storybook/html-vite';
-import { dialogSidePhones, swipeToClose } from '@bdynamic/plinth-vue';
+import { dialogSidePhones, swipeToClose } from '@ptbdynamic/plinth-vue';
 import { button } from './button.ts';
 import { dialog, type DialogArgs } from './dialog.ts';
 import { listCard } from './list-card.ts';
 import type { ListRowArgs } from './list-row.ts';
 import { pillRow } from './pill-row.ts';
-import '@bdynamic/plinth-css/src/components/icon.css';
-import '@bdynamic/plinth-css/src/components/button.css';
-import '@bdynamic/plinth-css/src/components/list-row.css';
-import '@bdynamic/plinth-css/src/components/list-card.css';
-import '@bdynamic/plinth-css/src/components/pill-row.css';
-import '@bdynamic/plinth-css/src/components/modal.css';
-import '@bdynamic/plinth-css/src/components/dialog.css';
+import '@ptbdynamic/plinth-css/src/components/icon.css';
+import '@ptbdynamic/plinth-css/src/components/button.css';
+import '@ptbdynamic/plinth-css/src/components/list-row.css';
+import '@ptbdynamic/plinth-css/src/components/list-card.css';
+import '@ptbdynamic/plinth-css/src/components/pill-row.css';
+import '@ptbdynamic/plinth-css/src/components/modal.css';
+import '@ptbdynamic/plinth-css/src/components/dialog.css';
 
 const action = (label: string, variant: 'primary' | 'secondary' | 'danger', extra = {}) =>
   button({ label, variant, size: 'md', disabled: false, busy: false }, extra);

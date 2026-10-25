@@ -37,7 +37,7 @@ packages/
   tokens/   DTCG token source; builds CSS custom properties, JS/TS export, Tailwind `@theme` CSS
   css/      one stylesheet per component, tokens only, mobile first
   vue/      Vue 3 components
-  react/    React 19 components (`@bdynamic/plinth-react`)
+  react/    React 19 components (`@ptbdynamic/plinth-react`)
   blade/    Composer package: Blade components (<x-plinth::name>) + Filament plugin;
             has a package.json whose scripts run Composer and copy the built CSS in
 storybook/  never published
@@ -64,7 +64,7 @@ site/       Plinth's website, a Laravel app built with Plinth (docs/adr/0007); n
   (such as the tests' `TestCase`) are the only exception.
 - CI: `npm ci`, then `turbo run lint test build build-storybook`, `.turbo` kept by the Actions
   cache; pull requests use `--filter=...[origin/main]`.
-- Published as npm `@bdynamic/plinth` (subpaths `tokens`, `tokens.css`, `css`, `vue`, `react`,
+- Published as npm `@ptbdynamic/plinth` (subpaths `tokens`, `tokens.css`, `css`, `vue`, `react`,
   `tailwind.css`) and Packagist `ptbdynamic/plinth` (Blade, Filament plugin, built CSS so Laravel
   needs no Node build). One version, one tag. Storybook, tests, token sources and tooling are not published.
   Packagist reads the root `composer.json`, which points at `packages/blade/` (#56); `.gitattributes`

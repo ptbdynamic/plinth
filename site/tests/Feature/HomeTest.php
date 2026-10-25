@@ -9,7 +9,7 @@ it('shows the home page with every section', function () {
         ->assertSeeInOrder([
             'One markup contract. Every framework.',
             'composer require ptbdynamic/plinth',
-            'npm install @bdynamic/plinth',
+            'npm install @ptbdynamic/plinth',
             'Recent invoices',
             'Works with',
             'Write it in Blade, Vue or React. Ship the same HTML.',

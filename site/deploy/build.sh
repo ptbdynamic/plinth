@@ -22,8 +22,8 @@ npm ci --no-audit --no-fund
 (cd "$site" && composer reinstall ptbdynamic/plinth --no-interaction --no-progress)
 
 npx turbo run build build-storybook \
-    --filter=@bdynamic/plinth-site... \
-    --filter=@bdynamic/plinth-storybook
+    --filter=@ptbdynamic/plinth-site... \
+    --filter=@ptbdynamic/plinth-storybook
 
 cd "$site"
 

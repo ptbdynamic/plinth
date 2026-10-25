@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/html-vite';
 import { button } from '../components/button.ts';
-import '@bdynamic/plinth-css/src/components/button.css';
+import '@ptbdynamic/plinth-css/src/components/button.css';
 import './foundations.css';
 
 /**

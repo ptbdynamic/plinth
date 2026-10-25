@@ -8,10 +8,10 @@ import {
   type DataTableColumnArgs,
   type DataTableRowArgs,
 } from './data-table.ts';
-import '@bdynamic/plinth-css/src/components/icon.css';
-import '@bdynamic/plinth-css/src/components/badge.css';
-import '@bdynamic/plinth-css/src/components/button.css';
-import '@bdynamic/plinth-css/src/components/data-table.css';
+import '@ptbdynamic/plinth-css/src/components/icon.css';
+import '@ptbdynamic/plinth-css/src/components/badge.css';
+import '@ptbdynamic/plinth-css/src/components/button.css';
+import '@ptbdynamic/plinth-css/src/components/data-table.css';
 
 const column = (label: string, extra: Partial<DataTableColumnArgs> = {}): DataTableColumnArgs => ({
   label,

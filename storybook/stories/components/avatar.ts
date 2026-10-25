@@ -5,7 +5,7 @@ import {
   tones,
   type AvatarSize,
   type Tone,
-} from '@bdynamic/plinth-vue';
+} from '@ptbdynamic/plinth-vue';
 import { escape, rootAttributes, type Attributes } from './markup.ts';
 
 export { avatarSizes, tones, type AvatarSize };

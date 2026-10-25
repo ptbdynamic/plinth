@@ -32,10 +32,10 @@ site/         Plinth's website, a Laravel app built with Plinth's components, an
 The npm workspaces are private. They are published together as one npm package and one Composer
 package (nothing is published yet):
 
-| Package             | Registry  | Holds                                                                                                      |
-| ------------------- | --------- | ---------------------------------------------------------------------------------------------------------- |
-| `@bdynamic/plinth`  | npm       | `./tokens`, `./tokens.css`, `./css`, `./vue`, `./react` and `./tailwind.css`                               |
-| `ptbdynamic/plinth` | Packagist | `<x-plinth::…>` Blade components, `PlinthPlugin` for Filament, the built CSS and fonts in `resources/dist` |
+| Package              | Registry  | Holds                                                                                                      |
+| -------------------- | --------- | ---------------------------------------------------------------------------------------------------------- |
+| `@ptbdynamic/plinth` | npm       | `./tokens`, `./tokens.css`, `./css`, `./vue`, `./react` and `./tailwind.css`                               |
+| `ptbdynamic/plinth`  | Packagist | `<x-plinth::…>` Blade components, `PlinthPlugin` for Filament, the built CSS and fonts in `resources/dist` |
 
 Packagist reads the Composer package from the `composer.json` at the root of the repository, which
 points its autoload and Laravel provider at `packages/blade/`. `.gitattributes` marks everything
@@ -163,23 +163,23 @@ registers both itself. Components are then available as `<x-plinth::badge>`.
 ```json
 {
   "dependencies": {
-    "@bdynamic/plinth": "file:../plinth"
+    "@ptbdynamic/plinth": "file:../plinth"
   }
 }
 ```
 
 ```ts
-import '@bdynamic/plinth/fonts.css'; // Geist and Geist Mono, the default typefaces
-import '@bdynamic/plinth/css';
-import { PlinthBadge } from '@bdynamic/plinth/vue';
+import '@ptbdynamic/plinth/fonts.css'; // Geist and Geist Mono, the default typefaces
+import '@ptbdynamic/plinth/css';
+import { PlinthBadge } from '@ptbdynamic/plinth/vue';
 ```
 
 **React** (an Inertia React app, or any React 19 app): the same `file:` link, then
 
 ```tsx
-import '@bdynamic/plinth/fonts.css';
-import '@bdynamic/plinth/css';
-import { PlinthButton } from '@bdynamic/plinth/react';
+import '@ptbdynamic/plinth/fonts.css';
+import '@ptbdynamic/plinth/css';
+import { PlinthButton } from '@ptbdynamic/plinth/react';
 
 <PlinthButton variant="secondary" onClick={save}>
   Save
@@ -199,8 +199,8 @@ the theme file, so page code gets the tokens as utilities (`bg-surface`, `text-t
 ```css
 @layer theme, base, plinth, components, utilities;
 @import 'tailwindcss';
-@import '@bdynamic/plinth/css';
-@import '@bdynamic/plinth/tailwind.css';
+@import '@ptbdynamic/plinth/css';
+@import '@ptbdynamic/plinth/tailwind.css';
 ```
 
 **Your brand**: override the **semantic** tokens after Plinth's CSS, outside any layer (Plinth's
@@ -245,15 +245,10 @@ before tagging) holds what the package needs and nothing else.
 
 ### One-time steps for the owner
 
-Only the owner of the GitHub organisation and the registries can do these:
-
-1. **Packagist**: sign in to [packagist.org](https://packagist.org) and submit
-   `https://github.com/ptbdynamic/plinth`. Then turn on its GitHub hook (Packagist's GitHub
-   integration, or a webhook to `https://packagist.org/api/github` with the Packagist API token),
-   so each tag `npm run release` pushes becomes a version without a manual update.
-2. **npm**: reserve the `@bdynamic` scope (an npm organisation named `bdynamic`), then remove
-   `"private": true` from the root `package.json` so `npm run release` publishes
-   `@bdynamic/plinth`.
+Both registries are set up: Packagist publishes each tag through its GitHub hook, and
+`npm run release` publishes `@ptbdynamic/plinth` to npm under the `ptbdynamic` organisation
+(the person releasing runs `npm login` first, with a one-time code if their account uses
+two-factor authentication).
 
 ## Contributing
 

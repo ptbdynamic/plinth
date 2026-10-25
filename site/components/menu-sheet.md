@@ -107,7 +107,7 @@ the account as a prop that takes a node.
 ```
 
 ```tsx tab="React"
-import { PlinthListCard, PlinthListRow, PlinthMenuSheet } from '@bdynamic/plinth/react';
+import { PlinthListCard, PlinthListRow, PlinthMenuSheet } from '@ptbdynamic/plinth/react';
 
 <PlinthMenuSheet
     id="menu"

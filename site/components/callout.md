@@ -116,7 +116,7 @@ through, and in React as props (`className`, added to Plinth's class, `id`, `dat
 ```
 
 ```tsx tab="React"
-import { PlinthButton, PlinthCallout } from '@bdynamic/plinth/react';
+import { PlinthButton, PlinthCallout } from '@ptbdynamic/plinth/react';
 
 <PlinthCallout
     tone="danger"

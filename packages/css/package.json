@@ -1,5 +1,5 @@
 {
-  "name": "@bdynamic/plinth-css",
+  "name": "@ptbdynamic/plinth-css",
   "version": "0.1.0",
   "private": true,
   "license": "MIT",
@@ -15,7 +15,7 @@
     "lint": "stylelint --cache --cache-location node_modules/.cache/stylelint \"src/**/*.css\""
   },
   "dependencies": {
-    "@bdynamic/plinth-tokens": "*"
+    "@ptbdynamic/plinth-tokens": "*"
   },
   "devDependencies": {
     "@fontsource-variable/geist": "^5.3.0",

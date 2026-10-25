@@ -141,7 +141,7 @@ itself, with its own `showModal()` and `close()`, and **`onClose`** is the dialo
 
 ```tsx tab="React"
 import { useRef } from 'react';
-import { PlinthButton, PlinthDialog } from '@bdynamic/plinth/react';
+import { PlinthButton, PlinthDialog } from '@ptbdynamic/plinth/react';
 
 const project = useRef<HTMLDialogElement>(null);
 

@@ -119,7 +119,7 @@ Every layer needs a `title` and throws without one. Extra attributes reach the `
 ```
 
 ```tsx tab="React"
-import { PlinthHeader, PlinthIconButton } from '@bdynamic/plinth/react';
+import { PlinthHeader, PlinthIconButton } from '@ptbdynamic/plinth/react';
 
 <PlinthHeader
     title="Message"

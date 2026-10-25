@@ -1,4 +1,4 @@
-import { listRowChevron } from '@bdynamic/plinth-vue';
+import { listRowChevron } from '@ptbdynamic/plinth-vue';
 import { escape, rootAttributes, type Attributes } from './markup.ts';
 
 export interface ListRowArgs {

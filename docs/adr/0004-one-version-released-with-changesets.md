@@ -6,7 +6,7 @@
 
 ## Context
 
-Plinth is published twice: the npm package `@bdynamic/plinth` (tokens, CSS, the Tailwind theme
+Plinth is published twice: the npm package `@ptbdynamic/plinth` (tokens, CSS, the Tailwind theme
 and the Vue components) and the Composer package `ptbdynamic/plinth` (the Blade components, the
 Filament plugin and the built CSS). Both print the same markup contract and ship the same CSS,
 so a project that uses Vue in one place and Blade in another must be able to ask for the same
@@ -71,8 +71,8 @@ token's pull requests don't start other workflows).
   it is there and that its bump is right.
 - Packagist reads `composer.json` at the repository root, and Plinth's was in `packages/blade/`
   (see the amendment below).
-- npm publishing waits for the `@bdynamic` scope; removing `"private": true` from the root
-  `package.json` turns it on.
+- npm publishing waited for an npm scope; removing `"private": true` from the root
+  `package.json` turned it on (see the second amendment below).
 - Amended 2026-10-25 ([#56](https://github.com/ptbdynamic/plinth/issues/56)): the Composer
   package is `ptbdynamic/plinth`, after the GitHub organisation (nothing was published under the
   old `bdynamicpt/plinth`). Packagist reads a `composer.json` at the repository root that points
@@ -85,3 +85,7 @@ token's pull requests don't start other workflows).
   that `git archive` of the tag holds what the package needs and nothing else.
 
 [semver]: https://semver.org
+
+- Amended 2026-10-25: the npm package is `@ptbdynamic/plinth`, under the `ptbdynamic` npm
+  organisation, to match the GitHub organisation and the Composer package (nothing was published
+  under `@bdynamic`). The root `package.json` is public, so `npm run release` publishes it.

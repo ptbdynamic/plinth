@@ -150,7 +150,7 @@ Extra attributes and listeners (`wire:click`, `@click`, `onClick`) reach the roo
 ```
 
 ```tsx tab="React"
-import { PlinthListRow } from '@bdynamic/plinth/react';
+import { PlinthListRow } from '@ptbdynamic/plinth/react';
 
 <PlinthListRow href="/settings/language" chevron trailing="English">
     Language

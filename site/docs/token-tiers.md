@@ -33,10 +33,10 @@ The tokens are DTCG JSON in `packages/tokens/tokens/`
 ([ADR 1](../../docs/adr/0001-design-tokens-in-dtcg-built-with-style-dictionary.md)), built with
 Style Dictionary to:
 
-- CSS custom properties (`@bdynamic/plinth/tokens.css`, also inside the full stylesheet);
-- a JS and TypeScript export (`@bdynamic/plinth/tokens`), with each token's tier, value and dark
+- CSS custom properties (`@ptbdynamic/plinth/tokens.css`, also inside the full stylesheet);
+- a JS and TypeScript export (`@ptbdynamic/plinth/tokens`), with each token's tier, value and dark
   value;
-- a Tailwind v4 theme (`@bdynamic/plinth/tailwind.css`).
+- a Tailwind v4 theme (`@ptbdynamic/plinth/tailwind.css`).
 
 The CSS build rejects any `var(--plinth-*)` in a component that isn't a token, and the token
 tests check that text colours meet WCAG AA on the surfaces in both themes.

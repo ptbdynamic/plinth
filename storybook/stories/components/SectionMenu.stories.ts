@@ -3,10 +3,10 @@ import { header } from './header.ts';
 import { iconButton } from './icon-button.ts';
 import { sampleIcons } from './icons.ts';
 import { sectionMenu, type SectionMenuArgs, type SectionMenuItemArgs } from './section-menu.ts';
-import '@bdynamic/plinth-css/src/components/icon.css';
-import '@bdynamic/plinth-css/src/components/button.css';
-import '@bdynamic/plinth-css/src/components/header.css';
-import '@bdynamic/plinth-css/src/components/section-menu.css';
+import '@ptbdynamic/plinth-css/src/components/icon.css';
+import '@ptbdynamic/plinth-css/src/components/button.css';
+import '@ptbdynamic/plinth-css/src/components/header.css';
+import '@ptbdynamic/plinth-css/src/components/section-menu.css';
 
 const item = (label: string, extra: Partial<SectionMenuItemArgs> = {}): SectionMenuItemArgs => ({
   label,

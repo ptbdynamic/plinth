@@ -7,7 +7,7 @@ import {
   type ConfirmDialogKind,
   type ConfirmDialogTone,
   type DialogSidePhone,
-} from '@bdynamic/plinth-vue';
+} from '@ptbdynamic/plinth-vue';
 import { button } from './button.ts';
 import { escape, rootAttributes, type Attributes } from './markup.ts';
 

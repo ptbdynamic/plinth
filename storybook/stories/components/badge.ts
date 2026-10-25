@@ -1,4 +1,4 @@
-import { tones, type Tone } from '@bdynamic/plinth-vue';
+import { tones, type Tone } from '@ptbdynamic/plinth-vue';
 
 export { tones, type Tone };
 

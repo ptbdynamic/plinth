@@ -34,7 +34,7 @@ const config: StorybookConfig = {
         ? existing
         : Object.entries(existing).map(([find, replacement]) => ({ find, replacement }))),
       {
-        find: /^@bdynamic\/plinth-vue$/,
+        find: /^@ptbdynamic\/plinth-vue$/,
         replacement: fileURLToPath(new URL('../../packages/vue/src/index.ts', import.meta.url)),
       },
     ];

@@ -1,4 +1,4 @@
-import { headingLevel, type HeadingLevel } from '@bdynamic/plinth-vue';
+import { headingLevel, type HeadingLevel } from '@ptbdynamic/plinth-vue';
 import { listRow, type ListRowArgs } from './list-row.ts';
 import { escape, rootAttributes, type Attributes } from './markup.ts';
 
