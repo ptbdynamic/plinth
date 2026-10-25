@@ -38,7 +38,7 @@ const meta = {
     docs: {
       description: {
         component:
-          "The bar on top of a list: the list's heading and count, then its actions (select, filter, sort). While the app is selecting rows, set `selection` to the app's own words for how many are selected (_2 selected_): it shows in the heading's place, is announced as a status, and the app swaps the actions for the selection's own. The rows under it become selectable list rows. Every icon button needs its own label.",
+          "The bar on top of a list: the list's heading and count, then its actions (select, filter, sort). While the app is selecting rows, set `selection` to the app's own words for how many are selected (_2 selected_): it shows in the heading's place, is announced as a status, and the app swaps the actions for the selection's own, moving focus to the new control (Done on the way in, Select on the way out). The rows under it become selectable list rows. Every icon button needs its own label.",
       },
     },
   },

@@ -28,7 +28,9 @@
  * (2 selected); it shows in the heading's place, and the heading stays in the page's outline,
  * hidden from sight. plinth-list-header-selection is a polite live region (role="status"),
  * printed empty when not selecting, so a screen reader hears the count change. The app swaps
- * the actions for the selection's own (Archive, Done) while selecting.
+ * the actions for the selection's own (Archive, Done) while selecting, and moves focus to the
+ * new control as it does (Done on the way in, Select on the way out), since the focused button
+ * leaves the page; or it keeps Select in place as a toggle (aria-pressed).
  *
  * The height is --plinth-list-header-height (44px), a list row's, and a hairline divider
  * (color.divider) sits under it. A long title is cut with an ellipsis; the count and the
@@ -89,7 +91,7 @@
   .plinth-list-header-actions {
     display: flex;
     flex: none;
-    gap: var(--plinth-space-1);
+    gap: var(--plinth-space-2);
     align-items: center;
     margin-inline-start: auto;
   }

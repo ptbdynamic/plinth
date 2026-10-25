@@ -11,6 +11,7 @@ then its actions (select, filter, sort). While the app is selecting rows, `selec
 words, such as _2 selected_) takes the heading's place in a status region. It is
 `<x-plinth::list-header>` in Blade and `PlinthListHeader` in Vue and React. List rows gain a
 selectable form: `selectable` makes the row a `<label>` with a checkbox in the leading slot,
-named by the row's text, that never navigates; `selected`, `name` and `value` set the checkbox,
+named by the row's text, that never navigates; `selected`, `name` and `value` set the checkbox
+(on a row that is not selectable, `name` and `value` stay on the root),
 Vue emits `update:selected` and React calls `onSelectedChange`. New token:
 `--plinth-list-header-height`.

@@ -192,9 +192,23 @@ describe('PlinthListRow', () => {
     expect(disabled.container.querySelector('input')!.disabled).toBe(true);
   });
 
-  it('ignores a change without a callback', () => {
+  it('toggles natively without a callback, as Blade and Vue do', () => {
     const { container } = render(<PlinthListRow selectable>Ticket</PlinthListRow>);
+    const checkbox = container.querySelector('input')!;
 
-    expect(() => fireEvent.click(container.querySelector('input')!)).not.toThrow();
+    fireEvent.click(checkbox);
+    expect(checkbox.checked).toBe(true);
+  });
+
+  it('keeps name and value on the root of a row that is not selectable', () => {
+    const button = root(
+      <PlinthListRow button type="submit" name="action" value="archive">
+        Archive
+      </PlinthListRow>,
+    );
+
+    expect(button.getAttribute('type')).toBe('submit');
+    expect(button.getAttribute('name')).toBe('action');
+    expect(button.getAttribute('value')).toBe('archive');
   });
 });

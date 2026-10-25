@@ -746,6 +746,17 @@ const cases: ParityCase[] = [
     selectable: true,
     selected: true,
   }),
+  listRowCase(
+    'List row/submit button with name and value',
+    { ...listRowDefaults, button: true, name: 'action', value: 'archive' },
+    { type: 'submit' },
+  ),
+  listRowCase('List row/selectable with a blank name and value', {
+    ...listRowDefaults,
+    selectable: true,
+    name: '  ',
+    value: ' ',
+  }),
   ...storyArgs<ListHeaderArgs>(listHeaderStories).map(([story, args]) =>
     listHeaderCase(`List header/${story}`, args),
   ),
@@ -2637,6 +2648,8 @@ describe('parity with the stories', () => {
       'List row/selectable with extra attributes',
       'List row/selectable with a clashing attribute',
       'List row/selectable button',
+      'List row/submit button with name and value',
+      'List row/selectable with a blank name and value',
       'List header/Default',
       'List header/WithoutCount',
       'List header/ZeroCount',

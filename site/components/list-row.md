@@ -105,7 +105,11 @@ it. Selecting never navigates: the row drops its `href` and its chevron until th
 the checkbox's `change`, which bubbles to the row (`wire:change`, `x-on:change`). Give the
 checkbox a **`name`** and a **`value`** and a form around the list sends the selection. A selected
 row takes the selection tint, and the check mark says it beyond colour; a disabled row disables
-its checkbox.
+its checkbox. The label's whole text names the checkbox, description and trailing text included,
+so keep the trailing slot to short text or a badge, and never a control: the label would click
+it too. The open ticket can stay `current`, but a screen reader folds the label into its
+checkbox, so while selecting the current row is a visual cue only. On a row that isn't
+selectable, `name` and `value` are the root's own, as on a submit button row.
 
 ```blade example layout="stack"
 <x-plinth::list-card>
@@ -118,7 +122,8 @@ its checkbox.
 In Livewire, keep the selection in the component and listen on the row:
 `wire:change="toggle({{ $ticket->id }})"` (not `wire:click`: a click on a label clicks its checkbox
 too, so it would fire twice). Vue emits `update:selected`, so `v-model:selected` works; React calls
-`onSelectedChange` with the new value.
+`onSelectedChange` with the new value; without it, React's checkbox starts at `selected` and
+toggles natively, as Blade's and Vue's do.
 
 ## In a list
 
@@ -214,7 +219,8 @@ import { PlinthListRow } from '@ptbdynamic/plinth/react';
   text names and the keyboard reaches with Tab and toggles with Space.
 - The current row prints `aria-current="page"`; a disabled link row has no `href`, `role="link"`
   and `aria-disabled="true"`.
-- The focus ring is drawn inside the row, so a scrolling sheet or a card doesn't cut it off.
+- The focus ring is drawn inside the row, so a scrolling sheet or a card doesn't cut it off; while
+  selecting it is on the checkbox, which takes the focus.
 - The minimum height is `--plinth-list-row-height` (44px), above the 40px touch target.
 - A decorative avatar is hidden from screen readers, so a person's name isn't read twice.
 - Checked with axe in light and dark at 390, 768 and 1440px on every pull request.

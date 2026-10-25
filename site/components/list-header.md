@@ -54,9 +54,11 @@ heading stays in the page's outline, hidden from sight, and the text is a polite
 </form>
 ```
 
-Keep the select button a toggle (`pressed`) so its state is announced, or replace it with _Done_
-while selecting, as here. When selecting ends, leave `selection` out: the header shows the heading
-again and the status empties.
+Swapping the actions removes the button that has focus, so move focus to the new control as you
+swap them: to _Done_ (or the first of the selection's actions) on the way in, back to _Select_ on
+the way out. Or keep _Select_ in place as a toggle (`pressed`), so its state is announced and focus
+stays put. When selecting ends, leave `selection` out: the header shows the heading again and the
+status empties.
 
 ## Markup contract
 
@@ -143,6 +145,8 @@ import { PlinthButton, PlinthListHeader } from '@ptbdynamic/plinth/react';
 - While selecting, the selection text is a polite live region (`role="status"`), printed empty
   otherwise so the change is heard; the heading stays in the outline, hidden from sight.
 - Every icon button needs its own `label`; a select button that toggles takes `pressed`.
+- When the app swaps the actions, it moves focus to the new control, since the focused one
+  leaves the page.
 - The actions keep the 40px touch target and show the focus ring on `:focus-visible`; nothing
   depends on hover, and nothing moves, so reduced motion has nothing to stop.
 - Checked with axe in light and dark at 390, 768 and 1440px on every pull request.

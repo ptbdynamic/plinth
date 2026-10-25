@@ -129,4 +129,18 @@ describe('PlinthListRow', () => {
     await enabled.get('input').setValue(false);
     expect(enabled.emitted('update:selected')).toEqual([[false]]);
   });
+
+  it('keeps name and value on the root of a row that is not selectable', () => {
+    const wrapper = mount(PlinthListRow, {
+      props: { button: true, name: 'action', value: 'archive' },
+      attrs: { type: 'submit' },
+      slots: { default: 'Archive' },
+    });
+
+    expect(wrapper.attributes()).toMatchObject({
+      type: 'submit',
+      name: 'action',
+      value: 'archive',
+    });
+  });
 });

@@ -20,9 +20,9 @@ const props = withDefaults(
     selectable?: boolean;
     /** A selectable row that is selected: its checkbox is checked. */
     selected?: boolean;
-    /** The checkbox's name, for a form. */
+    /** The checkbox's name, for a form; on another row, the root's (a submit button's). */
     name?: string;
-    /** The checkbox's value, for a form. */
+    /** The checkbox's value, for a form; on another row, the root's. */
     value?: string;
   }>(),
   {
@@ -65,13 +65,15 @@ function change(event: Event) {
     :disabled="tag === 'button' && disabled ? true : undefined"
     :role="tag === 'a' && disabled ? 'link' : undefined"
     :aria-disabled="tag === 'a' && disabled ? 'true' : undefined"
+    :name="!selectable && name?.trim() ? name : undefined"
+    :value="!selectable && value?.trim() ? value : undefined"
   >
     <span v-if="selectable" class="plinth-list-row-leading"
       ><input
         type="checkbox"
         class="plinth-list-row-checkbox"
-        :name="name || undefined"
-        :value="value || undefined"
+        :name="name?.trim() ? name : undefined"
+        :value="value?.trim() ? value : undefined"
         :checked="selected"
         :disabled="disabled"
         @change="change"

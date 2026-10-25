@@ -1,5 +1,5 @@
 // Markup contract: packages/css/src/components/list-row.css
-import type { ComponentProps, ElementType, ReactNode, Ref } from 'react';
+import type { ChangeEvent, ComponentProps, ElementType, ReactNode, Ref } from 'react';
 import { classNames, hasContent } from './markup';
 
 interface ListRowOptions {
@@ -17,9 +17,9 @@ interface ListRowOptions {
   selectable?: boolean;
   /** A selectable row that is selected: its checkbox is checked. */
   selected?: boolean;
-  /** The checkbox's name, for a form. */
+  /** The checkbox's name, for a form; on another row, the root's (a submit button's). */
   name?: string;
-  /** The checkbox's value, for a form. */
+  /** The checkbox's value, for a form; on another row, the root's. */
   value?: string;
   /** A selectable row's checkbox changed: whether it is now checked (Vue's `update:selected`). */
   onSelectedChange?: (selected: boolean) => void;
@@ -76,20 +76,29 @@ export function PlinthListRow({
       disabled={tag === 'button' && disabled ? true : undefined}
       role={tag === 'a' && disabled ? 'link' : undefined}
       aria-disabled={tag === 'a' && disabled ? 'true' : undefined}
+      name={!selectable && name?.trim() ? name : undefined}
+      value={!selectable && value?.trim() ? value : undefined}
       {...rest}
       className={classNames('plinth-list-row', className)}
     >
       {selectable ? (
         <span className="plinth-list-row-leading">
-          {/* The app owns the selection: the checkbox shows `selected` and reports changes. */}
+          {/* The app owns the selection: with onSelectedChange the checkbox shows `selected` and
+              reports changes; without it, it starts at `selected` and toggles natively, as in
+              Blade and Vue, so a form can still send it. */}
           <input
             type="checkbox"
             className="plinth-list-row-checkbox"
-            name={name || undefined}
-            value={value || undefined}
-            checked={selected}
+            name={name?.trim() ? name : undefined}
+            value={value?.trim() ? value : undefined}
+            {...(onSelectedChange
+              ? {
+                  checked: selected,
+                  onChange: (event: ChangeEvent<HTMLInputElement>) =>
+                    onSelectedChange(event.currentTarget.checked),
+                }
+              : { defaultChecked: selected })}
             disabled={disabled}
-            onChange={(event) => onSelectedChange?.(event.currentTarget.checked)}
           />
         </span>
       ) : hasContent(leading) ? (

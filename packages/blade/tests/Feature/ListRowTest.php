@@ -109,3 +109,8 @@ it('escapes the checkbox name and value', function () {
     expect(Blade::render('<x-plinth::list-row selectable :value="$value">Ticket</x-plinth::list-row>', ['value' => '"><b>x</b>']))
         ->toContain('value="&quot;&gt;&lt;b&gt;x&lt;/b&gt;"');
 });
+
+it('keeps name and value on the root of a row that is not selectable', function () {
+    expect(Blade::render('<x-plinth::list-row button type="submit" name="action" value="archive">Archive</x-plinth::list-row>'))
+        ->toStartWith('<button class="plinth-list-row" type="submit" name="action" value="archive">');
+});

@@ -119,7 +119,7 @@ export const Selectable: Story = {
     title: 'Cannot export the March report',
     description: 'Alex Kim · 10 min',
     leading: person,
-    trailing: '10 min',
+    trailing: badge({ label: 'Urgent', tone: 'danger', dot: false }),
     href: '#ticket-1',
     chevron: true,
     selectable: true,

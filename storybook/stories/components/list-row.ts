@@ -23,9 +23,9 @@ export interface ListRowArgs {
   selectable?: boolean;
   /** A selectable row that is selected: its checkbox is checked. */
   selected?: boolean;
-  /** The checkbox's name, for a form. */
+  /** The checkbox's name, for a form; on another row, the root's (a submit button's). */
   name?: string;
-  /** The checkbox's value, for a form. */
+  /** The checkbox's value, for a form; on another row, the root's. */
   value?: string;
 }
 
@@ -61,6 +61,9 @@ export function listRow(
     extra,
     tag === 'a' && !disabled ? ` href="${escape(href!)}"` : '',
     current && tag !== 'button' ? ' aria-current="page"' : '',
+    // Not selecting, name and value are the root's own, as they were before they were props.
+    !selectable && name?.trim() ? ` name="${escape(name)}"` : '',
+    !selectable && value?.trim() ? ` value="${escape(value)}"` : '',
     disabled && tag === 'button' ? ' disabled' : '',
     disabled && tag === 'a' ? ' role="link" aria-disabled="true"' : '',
     '>',
@@ -68,8 +71,8 @@ export function listRow(
   // A selectable row shows its checkbox in the leading slot, and opens nothing: no chevron.
   const checkbox = [
     '<input type="checkbox" class="plinth-list-row-checkbox"',
-    name ? ` name="${escape(name)}"` : '',
-    value ? ` value="${escape(value)}"` : '',
+    name?.trim() ? ` name="${escape(name)}"` : '',
+    value?.trim() ? ` value="${escape(value)}"` : '',
     selected ? ' checked' : '',
     disabled ? ' disabled' : '',
     '>',

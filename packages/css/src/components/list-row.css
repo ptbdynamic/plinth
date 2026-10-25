@@ -39,7 +39,12 @@
  * it. Selecting never navigates: the row drops its href (and its chevron) while selecting. The
  * app owns which rows are selected: it prints `checked` and listens to the checkbox's change,
  * which bubbles to the row. A selected row takes the selection tint (accent-subtle); the check
- * mark is its cue beyond colour. name and value let a form send the selection.
+ * mark is its cue beyond colour. name and value let a form send the selection (on a row that
+ * isn't selectable they are the root's own, a submit button's). A selectable row holds no other
+ * control: the label would name and click it too, so a trailing slot holds text or a badge. The
+ * focus ring is on the checkbox (focus-ring.offset), since the label can't take focus. A current
+ * row keeps aria-current and its tint, but a screen reader folds a label into its checkbox, so
+ * while selecting the current row is a visual cue only.
  *
  * States:
  * - current: aria-current="page" on a link row (or a static row) for the page being shown, set

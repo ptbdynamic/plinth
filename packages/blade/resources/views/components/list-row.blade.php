@@ -21,6 +21,9 @@
         'disabled' => $tag === 'button' && $disabled ? '' : null,
         'role' => $tag === 'a' && $disabled ? 'link' : null,
         'aria-disabled' => $tag === 'a' && $disabled ? 'true' : null,
+        // Not selecting, name and value are the root's own, as they were before they were props.
+        'name' => ! $selectable && filled($name) ? $name : null,
+        'value' => ! $selectable && filled($value) ? $value : null,
     ], fn ($value) => $value !== null);
     // A selectable row opens nothing, so it has no chevron.
     $chevron = $chevron && ! $selectable;

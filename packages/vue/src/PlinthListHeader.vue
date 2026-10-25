@@ -1,7 +1,7 @@
 <script setup lang="ts">
 // Markup contract: packages/css/src/components/list-header.css
 import { computed, useSlots } from 'vue';
-import { headingLevel, type HeadingLevel } from './heading';
+import { headingLevel as resolveLevel, type HeadingLevel } from './heading';
 import { hasContent } from './slots';
 
 const props = withDefaults(
@@ -27,7 +27,7 @@ if (!props.heading?.trim()) {
   throw new Error('<PlinthListHeader> needs a heading: it names the list.');
 }
 
-const element = computed(() => headingLevel(props.headingLevel));
+const element = computed(() => resolveLevel(props.headingLevel));
 const selecting = computed(() => Boolean(props.selection?.trim()));
 const hasCount = computed(
   () => props.count !== null && props.count !== undefined && String(props.count).trim() !== '',

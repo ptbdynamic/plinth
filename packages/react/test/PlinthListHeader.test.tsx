@@ -37,9 +37,9 @@ describe('PlinthListHeader', () => {
   });
 
   it('says how many are selected while selecting', () => {
-    expect(renderToStaticMarkup(<PlinthListHeader heading="Open" selection="2 selected" />))
-      .toContain('<div class="plinth-list-header is-selecting">')
-      .toContain('role="status">2 selected</p>');
+    const html = renderToStaticMarkup(<PlinthListHeader heading="Open" selection="2 selected" />);
+    expect(html).toContain('<div class="plinth-list-header is-selecting">');
+    expect(html).toContain('role="status">2 selected</p>');
     expect(renderToStaticMarkup(<PlinthListHeader heading="Open" selection=" " />)).toContain(
       '<div class="plinth-list-header">',
     );
