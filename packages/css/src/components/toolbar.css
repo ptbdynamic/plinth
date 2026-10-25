@@ -53,15 +53,24 @@
  *   label when the group has a name of its own. A hairline divider (color.divider) sits between
  *   two groups.
  * - an action (<x-plinth::toolbar-action>, PlinthToolbarAction): a ghost button, md, with its icon
- *   (the project's SVG or a built-in glyph) and its label. From 1280px it shows both; below, the
- *   icon alone, square, and the label is hidden from sight but stays its name.
+ *   (the project's SVG or a built-in glyph) and its label. In a toolbar 1024px wide or more it
+ *   shows both; in a narrower one, the icon alone, square, and the label is hidden from sight but
+ *   stays its name.
  *
- * Overflow: data-overflow on an action hides it below 1280px, where the room runs out; the app
- * puts the same action in the ⋯ menu with data-overflow on that item too (and on a separator
- * next to them), and inside a toolbar the menu shows those only below 1280px. A group whose
- * actions all overflow is hidden with them, and so is its divider. From 1280px the ⋯ button is
- * hidden when every entry of the menu right after it overflows, so it never opens an empty menu.
- * Plinth doesn't measure: the app picks what overflows.
+ * Width: the toolbar is a size container (plinth-toolbar), and what it shows follows its own
+ * width (inside its padding), not the screen's, so a toolbar over one pane of a wide screen gives
+ * way as a narrow screen's does. The parts give way in this order: the search narrows first;
+ * below 1024px the actions drop their labels and what overflows moves into the ⋯ menu; the target
+ * is cut short (with an ellipsis) only when the search has no width left to give. As a container
+ * its width never comes from its content: it fills the width its parent gives it, so don't put
+ * it in a row that sizes it to fit.
+ *
+ * Overflow: data-overflow on an action hides it in a toolbar narrower than 1024px, where the room
+ * runs out; the app puts the same action in the ⋯ menu with data-overflow on that item too (and
+ * on a separator next to them), and inside a toolbar the menu shows those only below 1024px. A
+ * group whose actions all overflow is hidden with them, and so is its divider. From 1024px the ⋯
+ * button is hidden when every entry of the menu right after it overflows, so it never opens an
+ * empty menu. Plinth doesn't measure the actions: the app picks what overflows.
  *
  * Keyboard: the actions are one tab stop, and the arrow keys move between their buttons and links
  * (Left and Right, the other way round in right-to-left text, Home and End), wrapping at the
@@ -88,6 +97,7 @@
     min-block-size: var(--plinth-toolbar-height);
     padding-block: var(--plinth-space-1);
     padding-inline: var(--plinth-space-4) var(--plinth-space-2);
+    container: plinth-toolbar / inline-size;
     font-family: var(--plinth-font-family-body);
     font-size: var(--plinth-font-size-md);
     line-height: var(--plinth-font-leading-tight);
@@ -96,11 +106,15 @@
     border-block-end: var(--plinth-border-width-thin) solid var(--plinth-color-divider);
   }
 
-  /* The field with its scope joined to its end; the icon sits over the field's start. */
+  /*
+   * The field with its scope joined to its end; the icon sits over the field's start. It narrows
+   * before the target does: its shrink factor is so large against the target's that the target
+   * gives nothing (less than a hundredth of a pixel) until the search is at its least.
+   */
   .plinth-toolbar-search {
     position: relative;
     display: flex;
-    flex: 0 1 var(--plinth-toolbar-search-width);
+    flex: 0 100000 var(--plinth-toolbar-search-width);
     align-items: stretch;
     min-inline-size: 0;
   }
@@ -193,6 +207,7 @@
     border-end-end-radius: 0;
   }
 
+  /* Cut short only when the search has no width left to give. */
   .plinth-toolbar-target {
     flex: 0 1 auto;
     min-inline-size: 0;
@@ -219,19 +234,19 @@
     align-items: center;
   }
 
-  /* What overflows is in the ⋯ menu below 1280px, and in the toolbar from there. */
+  /* What overflows is in the ⋯ menu below 1024px, and in the toolbar from there. */
   .plinth-toolbar-action[data-overflow],
   .plinth-toolbar-group:not(:has(> :not([data-overflow]))) {
     display: none;
   }
 
-  /* A divider after a group that shows; from 1280px every group shows. */
+  /* A divider after a group that shows; from 1024px every group shows. */
   .plinth-toolbar-group:has(> :not([data-overflow])) + .plinth-toolbar-group {
     padding-inline-start: var(--plinth-space-2);
     border-inline-start: var(--plinth-border-width-thin) solid var(--plinth-color-divider);
   }
 
-  /* Below 1280px an action is its icon alone, square, and its label stays its name. */
+  /* Below 1024px an action is its icon alone, square, and its label stays its name. */
   .plinth-toolbar-action {
     flex: none;
     inline-size: var(--plinth-control-md);
@@ -274,7 +289,8 @@
     }
   }
 
-  @media (min-width: 1280px) {
+  /* The toolbar's own width, not the screen's: a toolbar over one pane gives way too. */
+  @container plinth-toolbar (min-width: 1024px) {
     .plinth-toolbar-action {
       inline-size: auto;
       padding-inline: var(--plinth-space-3);
