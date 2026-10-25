@@ -95,22 +95,14 @@ export const sampleMenuSheet = menuSheet({
 });
 
 /**
- * The Inbox's page header: the menu button (or, with a ticket open, a back link to the list),
- * the panel button for the folders (when there are folders) and New ticket.
+ * The Inbox's page header: the menu button (or, with a ticket open, a back link to the list) and
+ * New ticket. The folders' panel button is left out: below 1280px it would control a column that
+ * isn't shown, and Plinth gives a page header action no width of its own.
  */
-export function inboxHeader({
-  back = false,
-  secondaryOpen = true,
-  secondary = true,
-}: { back?: boolean; secondaryOpen?: boolean; secondary?: boolean } = {}): string {
+export function inboxHeader({ back = false }: { back?: boolean } = {}): string {
   const leading = back
     ? action('Back to the tickets', { icon: 'back', href: '#inbox' })
     : action('Menu', { icon: 'menu' }, { commandfor: 'app-menu', command: 'show-modal' });
-  const panel = action(
-    'Folders',
-    { svg: sampleIcons.panel },
-    { 'aria-expanded': secondaryOpen ? 'true' : 'false', 'aria-controls': 'folders' },
-  );
   const newTicket = button({
     label: 'New ticket',
     variant: 'primary',
@@ -118,13 +110,7 @@ export function inboxHeader({
     disabled: false,
     busy: false,
   });
-  return pageHeader({
-    heading: 'Inbox',
-    level: 'h1',
-    top: true,
-    leading,
-    actions: (secondary ? panel : '') + newTicket,
-  });
+  return pageHeader({ heading: 'Inbox', level: 'h1', top: true, leading, actions: newTicket });
 }
 
 const row = (title: string, extra: Partial<ListRowArgs> = {}): ListRowArgs => ({

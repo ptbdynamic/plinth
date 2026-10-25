@@ -16,21 +16,21 @@ bar step aside, the page's [page header](page-header.md) is the top bar, and the
 
 The **`nav`** slot takes the app nav, the **`bar`** slot the app bar, and the default slot the page:
 its page header, then its content. From 768px the shell is as tall as the screen; the nav fills its
-start column, the bar sits above the main, and only the main scrolls. Here it is framed at 32rem
-with an inline style; in an app, leave the height to the shell. Below 768px the example shows the
-page alone, as a phone does.
+start column, the bar sits above the main, and only the main scrolls. The shell holds the page's
+`<main>`, so it can't be shown live inside this one: its stories in Storybook show it at every
+width, with a support inbox in it.
 
-```blade example layout="stack"
-<x-plinth::app-shell style="block-size: 32rem; min-block-size: 0">
+```blade
+<x-plinth::app-shell>
     <x-slot:nav>
         <x-plinth::app-nav label="Main" brand-name="Harbour" brand-href="#">
-            <x-slot:mark><x-site.glyph name="harbour" /></x-slot:mark>
+            <x-slot:mark><img src="/logo.svg" alt=""></x-slot:mark>
             <x-plinth::app-nav-item href="#">
-                <x-slot:icon><x-plinth::icon><x-site.glyph name="lines" /></x-plinth::icon></x-slot:icon>
+                <x-slot:icon><x-plinth::icon><x-app.icon name="file" /></x-plinth::icon></x-slot:icon>
                 Content
             </x-plinth::app-nav-item>
             <x-plinth::app-nav-item href="#" count="12" current>
-                <x-slot:icon><x-plinth::icon><x-site.glyph name="support" /></x-plinth::icon></x-slot:icon>
+                <x-slot:icon><x-plinth::icon><x-app.icon name="support" /></x-plinth::icon></x-slot:icon>
                 Support
             </x-plinth::app-nav-item>
         </x-plinth::app-nav>
@@ -39,17 +39,14 @@ page alone, as a phone does.
         <x-plinth::app-bar>
             <x-plinth::app-bar-search shortcut="⌘K" />
             <x-slot:actions>
-                <x-plinth::icon-button label="Notifications"><x-site.glyph name="bell" /></x-plinth::icon-button>
+                <x-plinth::icon-button label="Notifications"><x-app.icon name="bell" /></x-plinth::icon-button>
             </x-slot:actions>
         </x-plinth::app-bar>
     </x-slot:bar>
-    <x-plinth::page-header heading="Support" level="h2" top />
-    <p style="padding: var(--plinth-space-4)">The page goes here, and scrolls on its own.</p>
+    <x-plinth::page-header heading="Support" top />
+    <p>The page goes here, and scrolls on its own.</p>
 </x-plinth::app-shell>
 ```
-
-(The example's heading is an `<h2>`, since this page has its own `<h1>`. In an app the page
-header's heading is the page's `<h1>`.)
 
 ## On a phone
 
@@ -70,9 +67,10 @@ sticks to the main's top: leave `--plinth-page-header-offset` at 0. The main is 
 [split view](split-view.md) after the page header fills the height left, and its panes scroll on
 their own instead.
 
-The page header's contract asks the app to set `scroll-padding-block-start` on its scrolling
-element, so a focused element doesn't land under it: from 768px that is the shell's main, below it
-the document.
+The page header's contract asks for `scroll-padding-block-start` on its scrolling element, so a
+focused element doesn't land under it. From 768px the shell sets it on its main when the main
+holds a page header; below 768px the document scrolls, so the app sets it on `html`. On a phone a
+split view's footer covers the bottom of the screen too: add `scroll-padding-block-end` there.
 
 ## Markup contract
 

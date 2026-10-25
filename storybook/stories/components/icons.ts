@@ -6,7 +6,6 @@ const outline = (paths: string) =>
   `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${paths}</svg>`;
 
 export const sampleIcons = {
-  panel: outline('<rect x="3" y="4" width="18" height="16" rx="2"/><path d="M9 4v16"/>'),
   check: outline('<path d="M5 12l5 5L19 7"/>'),
   alert: outline('<circle cx="12" cy="12" r="9"/><path d="M12 7v6M12 16.5v.01"/>'),
   arrow: outline('<path d="M5 12h14M13 6l6 6-6 6"/>'),

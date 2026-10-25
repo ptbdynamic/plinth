@@ -528,21 +528,26 @@
     border-radius: var(--plinth-radius-control);
   }
 
-  @media (hover: hover) {
-    .plinth-app-bar-search:hover {
-      color: var(--plinth-color-text);
-      border-color: var(--plinth-color-text-subtle);
-    }
-  }
-
-  .plinth-app-bar-search:active {
-    color: var(--plinth-color-text);
-    border-color: var(--plinth-color-text-subtle);
+  .plinth-app-bar-search:disabled {
+    cursor: not-allowed;
+    opacity: var(--plinth-opacity-disabled);
   }
 
   .plinth-app-bar-search:focus-visible {
     outline: var(--plinth-focus-ring-width) solid var(--plinth-color-focus-ring);
     outline-offset: var(--plinth-focus-ring-offset);
+  }
+
+  @media (hover: hover) {
+    .plinth-app-bar-search:hover:not(:disabled) {
+      color: var(--plinth-color-text);
+      border-color: var(--plinth-color-text-subtle);
+    }
+  }
+
+  .plinth-app-bar-search:active:not(:disabled) {
+    color: var(--plinth-color-text);
+    border-color: var(--plinth-color-text-subtle);
   }
 
   @media (min-width: 768px) {
@@ -956,7 +961,8 @@
  *   bottom; the bar sits at the top of the other column and the main below it. The main scrolls
  *   on its own (the screen doesn't), and it is a flex column, so a split view in it fills the
  *   height left under the page header. A page header in it sticks to the main's top: leave
- *   --plinth-page-header-offset at 0. Give it data-top for the phone; under the bar the shell
+ *   --plinth-page-header-offset at 0; the main keeps a focused element clear of it
+ *   (scroll-padding). Give it data-top for the phone; under the bar the shell
  *   drops the safe area it adds, since the bar is then the top of the screen.
  *
  * Sides are logical: in right-to-left text the nav is on the right. The shell has no states; the
@@ -1013,6 +1019,11 @@
       min-block-size: 0;
       overflow-y: auto;
       overscroll-behavior-block: contain;
+    }
+
+    /* A focused element or an anchor's target stops below a page header, not under it. */
+    .plinth-app-shell-main:has(> .plinth-page-header) {
+      scroll-padding-block-start: var(--plinth-page-header-height);
     }
 
     /* Under the app bar the page header isn't the screen's top bar, so it adds no safe area. */
@@ -4031,15 +4042,17 @@
  * Variant (the app sets it, the page header doesn't guess):
  * - data-top: the page header is the screen's top bar, at the very top of a phone's screen. It
  *   adds env(safe-area-inset-top) above its height, which pads it below the status bar and the
- *   notch on a phone that draws under them (viewport-fit=cover). Leave it off under an app bar.
+ *   notch on a phone that draws under them (viewport-fit=cover). Leave it off under an app bar in the document's flow; in the app
+ *   shell, set it for the phone, and the shell drops the safe area under its app bar.
  *
  * Its height is the page-header.height component token (56px). The inline padding clears the
  * notch on a phone held sideways. It is sticky on the layer.sticky z-index, so it sits above the
  * page and below sheets and menus (the top layer), and it sticks --plinth-page-header-offset from
- * the top: 0 by default, or the app bar's height in a shell that has one. Content scrolls under
- * it, so the app sets scroll-padding-block-start on its scrolling element (the offset plus the
- * height, plus env(safe-area-inset-top) with data-top) to keep a focused element or an anchor's
- * target from landing under the page header.
+ * the top: 0 by default (and in the app shell, whose main scrolls under its app bar), or the app
+ * bar's height when the bar sits in the document's flow above it. Content scrolls under it, so
+ * the app sets scroll-padding-block-start on its scrolling element (the offset plus the height,
+ * plus env(safe-area-inset-top) with data-top) to keep a focused element or an anchor's target
+ * from landing under the page header; the app shell sets it on its main from 768px.
  *
  * The actions sit var(--plinth-space-2) apart, so on a touch screen the 40px hit areas of 32px
  * icon buttons don't overlap.
@@ -4823,7 +4836,8 @@
  *
  * By width:
  * - phone (below 768px): one pane, the list or the detail, in the page's flow; the document
- *   scrolls, and the footer sticks to the bottom of the screen. The secondary isn't shown: offer
+ *   scrolls, and the footer sticks to the bottom of the screen. At every width the footer clears the home
+ *   indicator (safe area), which a tablet or a phone held sideways has too. The secondary isn't shown: offer
  *   its content another way (a sheet, a pill row).
  * - from 768px: the list (--plinth-split-view-list-width, 320px) and the detail beside it, which
  *   takes the rest.
@@ -4902,10 +4916,6 @@
     .plinth-split-view-detail {
       display: flex;
       flex: 1 1 0;
-    }
-
-    .plinth-split-view-footer {
-      padding-block-end: var(--plinth-space-3);
     }
   }
 

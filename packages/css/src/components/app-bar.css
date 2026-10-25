@@ -102,21 +102,26 @@
     border-radius: var(--plinth-radius-control);
   }
 
-  @media (hover: hover) {
-    .plinth-app-bar-search:hover {
-      color: var(--plinth-color-text);
-      border-color: var(--plinth-color-text-subtle);
-    }
-  }
-
-  .plinth-app-bar-search:active {
-    color: var(--plinth-color-text);
-    border-color: var(--plinth-color-text-subtle);
+  .plinth-app-bar-search:disabled {
+    cursor: not-allowed;
+    opacity: var(--plinth-opacity-disabled);
   }
 
   .plinth-app-bar-search:focus-visible {
     outline: var(--plinth-focus-ring-width) solid var(--plinth-color-focus-ring);
     outline-offset: var(--plinth-focus-ring-offset);
+  }
+
+  @media (hover: hover) {
+    .plinth-app-bar-search:hover:not(:disabled) {
+      color: var(--plinth-color-text);
+      border-color: var(--plinth-color-text-subtle);
+    }
+  }
+
+  .plinth-app-bar-search:active:not(:disabled) {
+    color: var(--plinth-color-text);
+    border-color: var(--plinth-color-text-subtle);
   }
 
   @media (min-width: 768px) {

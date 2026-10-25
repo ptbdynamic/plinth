@@ -26,12 +26,7 @@ import '@ptbdynamic/plinth-css/src/components/app-shell.css';
 /** The page around it, in the app shell's main: the page header, whose buttons follow the state. */
 const page = (args: SplitViewArgs) =>
   appShell({
-    main:
-      inboxHeader({
-        back: args.pane === 'detail',
-        secondaryOpen: !args.secondaryClosed,
-        secondary: Boolean(args.secondary?.trim()),
-      }) + splitView(args),
+    main: inboxHeader({ back: args.pane === 'detail' }) + splitView(args),
   }) + sampleMenuSheet;
 
 const meta = {
@@ -66,7 +61,7 @@ export const List: Story = {};
 /** The detail on a phone, with a back link in the page header; the same panes on a wide screen. */
 export const Detail: Story = { args: { pane: 'detail' } };
 
-/** The secondary column collapsed with the panel button: `data-secondary="closed"`. */
+/** The secondary column collapsed, as the app's panel button does: `data-secondary="closed"`. */
 export const SecondaryClosed: Story = { args: { secondaryClosed: true } };
 
 /** Two panes: the list and the detail. */

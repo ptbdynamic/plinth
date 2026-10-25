@@ -73,7 +73,8 @@ The secondary column shows from 1280px. **`secondary-closed`** collapses it
 (`data-secondary="closed"`): the page header's panel button sets it, with `aria-expanded` on the
 button and `aria-controls` naming the column's content (give that content an `id`). Below 1280px
 the column isn't shown, so offer its content another way (a [sheet](sheet.md), a
-[pill row](pill-row.md)); the panel button is the app's to show only from 1280px.
+[pill row](pill-row.md)); the panel button is the app's to show only from 1280px, with its own
+CSS (a `min-width: 1280px` media query, or a utility such as Tailwind's `hidden xl:inline-flex`).
 
 ```blade tab="Blade"
 <x-plinth::icon-button label="Folders" :aria-expanded="$foldersOpen ? 'true' : 'false'"
