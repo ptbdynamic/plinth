@@ -129,7 +129,7 @@ export const Default: Story = {};
 
 /** No label: the header holds only the copy button. */
 export const WithoutLabel: Story = {
-  args: { label: undefined, code: 'composer require bdynamicpt/plinth' },
+  args: { label: undefined, code: 'composer require ptbdynamic/plinth' },
 };
 
 /** Language tabs: the radio buttons pick the code that shows, with no script. */

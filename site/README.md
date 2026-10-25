@@ -3,9 +3,9 @@
 The Laravel app that is Plinth's public site, built only from Plinth's own components and tokens
 ([ADR 7](../docs/adr/0007-the-plinth-website.md)). It is not published to npm or Packagist.
 
-It requires `bdynamicpt/plinth` from `../packages/blade` through a Composer path repository,
+It requires `ptbdynamic/plinth` from `../packages/blade` through a Composer path repository,
 copied rather than symlinked, so it always shows the components as they are in this repository.
-After changing a component, refresh the copy with `composer reinstall bdynamicpt/plinth`.
+After changing a component, refresh the copy with `composer reinstall ptbdynamic/plinth`.
 
 ```bash
 npm ci                    # at the repository root; also runs composer install here

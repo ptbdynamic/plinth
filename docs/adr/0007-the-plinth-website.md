@@ -22,7 +22,7 @@ projects are Laravel apps, so the site should be one too.
 The website is a Laravel app (the current release, PHP 8.4) in `site/`. It is Plinth's own site,
 not a consumer project, so it lives next to the packages:
 
-- It requires `bdynamicpt/plinth` through a Composer path repository (`../packages/blade`, copied
+- It requires `ptbdynamic/plinth` through a Composer path repository (`../packages/blade`, copied
   rather than symlinked so the deployed directory stands alone) and so always shows the components
   as they are on `main`, not as they were at the last release.
 - A pull request that changes a component changes its docs page in the same pull request, and CI
@@ -79,3 +79,8 @@ needs no database at first. Forge remains the fallback: the same layout deploys 
 - Every component's definition of done gains a site page.
 - Deploying needs a Laravel Cloud application connected to this repository, set up by the
   repository's owner.
+- Amended 2026-10-25 ([#56](https://github.com/ptbdynamic/plinth/issues/56)): the package is
+  `ptbdynamic/plinth`. The site keeps its path repository on `../packages/blade`, not the
+  repository root that Packagist reads, so its copy holds only the Blade package and its CSS is
+  under `vendor/ptbdynamic/plinth/resources/dist`; a project installed from Packagist finds the
+  same files under `vendor/ptbdynamic/plinth/packages/blade/resources/dist`.

@@ -60,7 +60,7 @@ final readonly class Guides
             ...glob(resource_path('views/components/site/*.blade.php')) ?: [],
             ...glob(resource_path('views/docs/*/*.blade.php')) ?: [],
             ...glob(resource_path('highlight/*.json')) ?: [],
-            ...glob(base_path('vendor/bdynamicpt/plinth/resources/views/components/*.blade.php')) ?: [],
+            ...glob(base_path('vendor/ptbdynamic/plinth/resources/views/components/*.blade.php')) ?: [],
         ];
 
         return implode(',', array_map(fn (string $file): int => (int) filemtime($file), $files));

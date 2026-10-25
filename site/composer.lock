@@ -4,79 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "958371c3bfa478b21bc7c32feffd5301",
+    "content-hash": "3f6f372f7f2652acfc5f7985a91ea2e9",
     "packages": [
-        {
-            "name": "bdynamicpt/plinth",
-            "version": "dev-main",
-            "dist": {
-                "type": "path",
-                "url": "../packages/blade",
-                "reference": "5fbdaf53403beda3f7e19157999930f2b4b80f06"
-            },
-            "require": {
-                "illuminate/support": "^12.0|^13.0",
-                "illuminate/view": "^12.0|^13.0",
-                "php": "^8.3"
-            },
-            "require-dev": {
-                "filament/filament": "^4.0|^5.0",
-                "larastan/larastan": "^3.13",
-                "laravel/pint": "^1.24",
-                "orchestra/testbench": "^10.0|^11.0",
-                "pestphp/pest": "^4.0|^5.0"
-            },
-            "suggest": {
-                "filament/filament": "To register Plinth's CSS in a Filament panel with PlinthPlugin."
-            },
-            "type": "library",
-            "extra": {
-                "laravel": {
-                    "providers": [
-                        "BDynamic\\Plinth\\PlinthServiceProvider"
-                    ]
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "BDynamic\\Plinth\\": "src/"
-                }
-            },
-            "autoload-dev": {
-                "psr-4": {
-                    "BDynamic\\Plinth\\Tests\\": "tests/"
-                }
-            },
-            "scripts": {
-                "lint": [
-                    "pint --test",
-                    "phpstan analyse --no-progress --memory-limit=1G"
-                ],
-                "format": [
-                    "pint"
-                ],
-                "analyse": [
-                    "phpstan analyse --memory-limit=1G"
-                ],
-                "test": [
-                    "pest --coverage --min=100"
-                ]
-            },
-            "license": [
-                "MIT"
-            ],
-            "description": "Plinth, the design system of BDynamic's projects: Blade components, a Filament plugin and the built CSS.",
-            "keywords": [
-                "blade",
-                "design-system",
-                "filament",
-                "laravel"
-            ],
-            "transport-options": {
-                "symlink": false,
-                "relative": true
-            }
-        },
         {
             "name": "brick/math",
             "version": "1.0.0",
@@ -3056,6 +2985,77 @@
                 "source": "https://github.com/php-fig/simple-cache/tree/3.0.0"
             },
             "time": "2021-10-29T13:26:27+00:00"
+        },
+        {
+            "name": "ptbdynamic/plinth",
+            "version": "dev-main",
+            "dist": {
+                "type": "path",
+                "url": "../packages/blade",
+                "reference": "08fd2e6547c8a7e30d72e5a95845926aa01b86c6"
+            },
+            "require": {
+                "illuminate/support": "^12.0|^13.0",
+                "illuminate/view": "^12.0|^13.0",
+                "php": "^8.3"
+            },
+            "require-dev": {
+                "filament/filament": "^4.0|^5.0",
+                "larastan/larastan": "^3.13",
+                "laravel/pint": "^1.24",
+                "orchestra/testbench": "^10.0|^11.0",
+                "pestphp/pest": "^4.0|^5.0"
+            },
+            "suggest": {
+                "filament/filament": "To register Plinth's CSS in a Filament panel with PlinthPlugin."
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "BDynamic\\Plinth\\PlinthServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "BDynamic\\Plinth\\": "src/"
+                }
+            },
+            "autoload-dev": {
+                "psr-4": {
+                    "BDynamic\\Plinth\\Tests\\": "tests/"
+                }
+            },
+            "scripts": {
+                "lint": [
+                    "pint --test",
+                    "phpstan analyse --no-progress --memory-limit=1G"
+                ],
+                "format": [
+                    "pint"
+                ],
+                "analyse": [
+                    "phpstan analyse --memory-limit=1G"
+                ],
+                "test": [
+                    "pest --coverage --min=100"
+                ]
+            },
+            "license": [
+                "MIT"
+            ],
+            "description": "Plinth, the design system of BDynamic's projects: Blade components, a Filament plugin and the built CSS.",
+            "keywords": [
+                "blade",
+                "design-system",
+                "filament",
+                "laravel"
+            ],
+            "transport-options": {
+                "symlink": false,
+                "relative": true
+            }
         },
         {
             "name": "ramsey/collection",
@@ -9443,7 +9443,7 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "bdynamicpt/plinth": 20
+        "ptbdynamic/plinth": 20
     },
     "prefer-stable": true,
     "prefer-lowest": false,

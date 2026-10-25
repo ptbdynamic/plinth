@@ -65,8 +65,11 @@ site/       Plinth's website, a Laravel app built with Plinth (docs/adr/0007); n
 - CI: `npm ci`, then `turbo run lint test build build-storybook`, `.turbo` kept by the Actions
   cache; pull requests use `--filter=...[origin/main]`.
 - Published as npm `@bdynamic/plinth` (subpaths `tokens`, `tokens.css`, `css`, `vue`, `react`,
-  `tailwind.css`) and Packagist `bdynamicpt/plinth` (Blade, Filament plugin, built CSS so Laravel
+  `tailwind.css`) and Packagist `ptbdynamic/plinth` (Blade, Filament plugin, built CSS so Laravel
   needs no Node build). One version, one tag. Storybook, tests, token sources and tooling are not published.
+  Packagist reads the root `composer.json`, which points at `packages/blade/` (#56); `.gitattributes`
+  `export-ignore` keeps the rest out of its download. Keep its `require` and provider the same as
+  `packages/blade/composer.json` (the release dry run checks it), and dev tools in the latter.
 - Versions come from Changesets (docs/adr/0004): the five workspaces are one `fixed` group, and
   `npm run release:version` copies the version to the root `package.json` and `CHANGELOG.md`. A
   pull request that changes a package adds a changeset (`npx changeset`); docs, tests, Storybook

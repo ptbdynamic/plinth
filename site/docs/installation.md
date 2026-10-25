@@ -4,21 +4,21 @@ Plinth is published as one npm package and one Composer package, with one versio
 Install the one your stack needs, or both.
 
 > [!NOTE]
-> Plinth is in pre-release: nothing is on npm or Packagist yet. Until it is, link a local checkout
-> of the repository, as the [README](../../README.md#using-plinth-from-a-project-while-you-work-on-it)
-> shows.
+> Plinth is in pre-release: nothing is on npm or Packagist until its first release is tagged.
+> Until then, link a local checkout of the repository, as the
+> [README](../../README.md#using-plinth-from-a-project-while-you-work-on-it) shows.
 
 ## The packages
 
 | Package             | Registry  | Holds                                                                           |
 | ------------------- | --------- | ------------------------------------------------------------------------------- |
 | `@bdynamic/plinth`  | npm       | the tokens, the CSS and fonts, the Tailwind theme, and the Vue and React layers |
-| `bdynamicpt/plinth` | Packagist | the Blade components, the Filament plugin, and the built CSS and fonts          |
+| `ptbdynamic/plinth` | Packagist | the Blade components, the Filament plugin, and the built CSS and fonts          |
 
 The Composer package carries the built CSS, so a Laravel app needs no Node build to use Plinth.
 
 ```bash tab="Laravel"
-composer require bdynamicpt/plinth
+composer require ptbdynamic/plinth
 ```
 
 ```bash tab="Vue or React"
