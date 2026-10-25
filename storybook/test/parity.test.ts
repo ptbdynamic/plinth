@@ -42,6 +42,9 @@ import {
   PlinthStat,
   PlinthTextarea,
   PlinthTextField,
+  PlinthTimeline,
+  PlinthTimelineEvent,
+  PlinthTimelinePost,
   PlinthToolbar,
   PlinthToolbarAction,
   PlinthToolbarGroup,
@@ -92,6 +95,9 @@ import {
   PlinthStat as ReactStat,
   PlinthTextarea as ReactTextarea,
   PlinthTextField as ReactTextField,
+  PlinthTimeline as ReactTimeline,
+  PlinthTimelineEvent as ReactTimelineEvent,
+  PlinthTimelinePost as ReactTimelinePost,
   PlinthToolbar as ReactToolbar,
   PlinthToolbarAction as ReactToolbarAction,
   PlinthToolbarGroup as ReactToolbarGroup,
@@ -131,7 +137,7 @@ import {
   type NavListItemArgs,
 } from '../stories/components/nav-list.ts';
 import * as avatarStories from '../stories/components/Avatar.stories.ts';
-import { avatar, type AvatarArgs } from '../stories/components/avatar.ts';
+import { avatar, samplePhoto, type AvatarArgs } from '../stories/components/avatar.ts';
 import * as badgeStories from '../stories/components/Badge.stories.ts';
 import { badge, type Attributes, type BadgeArgs } from '../stories/components/badge.ts';
 import * as buttonStories from '../stories/components/Button.stories.ts';
@@ -214,6 +220,16 @@ import * as textareaStories from '../stories/components/Textarea.stories.ts';
 import { textarea, type TextareaArgs } from '../stories/components/textarea.ts';
 import * as textFieldStories from '../stories/components/TextField.stories.ts';
 import { textField, type TextFieldArgs } from '../stories/components/text-field.ts';
+import * as timelineStories from '../stories/components/Timeline.stories.ts';
+import {
+  timeline,
+  timelineEntries,
+  timelineEvent,
+  timelinePost,
+  type TimelineArgs,
+  type TimelineEventArgs,
+  type TimelinePostArgs,
+} from '../stories/components/timeline.ts';
 import * as toolbarStories from '../stories/components/Toolbar.stories.ts';
 import {
   toolbar,
@@ -315,6 +331,9 @@ const reactComponents = new Map<Component, unknown>([
   [PlinthSheet, ReactSheet],
   [PlinthTextarea, ReactTextarea],
   [PlinthTextField, ReactTextField],
+  [PlinthTimeline, ReactTimeline],
+  [PlinthTimelineEvent, ReactTimelineEvent],
+  [PlinthTimelinePost, ReactTimelinePost],
   [PlinthToolbar, ReactToolbar],
   [PlinthToolbarAction, ReactToolbarAction],
   [PlinthToolbarGroup, ReactToolbarGroup],
@@ -449,6 +468,23 @@ const navListItemDefaults: NavListItemArgs = { label: 'Open', href: '#open', cur
 const navListGroupDefaults: NavListGroupArgs = {
   heading: 'Views',
   items: [navListItemDefaults],
+};
+
+const timelinePostDefaults: TimelinePostArgs = {
+  author: 'Alex Morgan',
+  kind: 'customer',
+  detail: 'alex@example.com',
+  time: '09:14',
+  datetime: '2026-10-25T09:14',
+  reference: '#4821',
+  body: '<p>Hello</p>',
+  actions: '<button type="button">Reply</button>',
+};
+
+const timelineEventDefaults: TimelineEventArgs = {
+  text: 'Alex Morgan assigned it to <b>themselves</b>',
+  time: '09:14',
+  datetime: '2026-10-25T09:14',
 };
 
 const sectionMenuItemDefaults: SectionMenuItemArgs = {
@@ -1700,7 +1736,183 @@ const cases: ParityCase[] = [
       'aria-label': 'Find tickets',
     },
   ),
+  ...storyArgs<TimelineArgs>(timelineStories).map(([story, args]) =>
+    timelineCase(`Timeline/${story}`, args),
+  ),
+  timelineCase(
+    'Timeline/with extra attributes',
+    { label: 'Conversation', entries: [] },
+    { class: 'is-wide', id: 'thread', 'data-testid': 'thread', 'aria-busy': 'true' },
+  ),
+  timelineCase(
+    'Timeline/with a clashing attribute',
+    { label: 'Conversation', entries: [] },
+    { role: 'feed', 'aria-label': 'Thread' },
+  ),
+  timelineCase('Timeline/blank label', { label: ' ', entries: [] }),
+  timelineCase('Timeline/escaped label', { label: '"><b>x</b>', entries: [] }),
+  timelinePostCase('Timeline post/Default', timelinePostDefaults),
+  timelinePostCase('Timeline post/Minimal', {
+    author: 'Sam Lee',
+    kind: 'team',
+    body: 'Hi',
+  }),
+  timelinePostCase('Timeline post/Note', { ...timelinePostDefaults, kind: 'note' }),
+  timelinePostCase('Timeline post/NoteLabel', {
+    ...timelinePostDefaults,
+    kind: 'note',
+    noteLabel: 'Nota interna',
+  }),
+  timelinePostCase('Timeline post/WithPicture', { ...timelinePostDefaults, avatar: samplePhoto }),
+  timelinePostCase('Timeline post/HeadingLevel', { ...timelinePostDefaults, headingLevel: 'h4' }),
+  timelinePostCase('Timeline post/detail alone', {
+    author: 'Sam Lee',
+    kind: 'team',
+    detail: 'Support team',
+    body: 'Hi',
+  }),
+  timelinePostCase('Timeline post/time alone, blank datetime', {
+    author: 'Sam Lee',
+    kind: 'team',
+    time: '09:14',
+    datetime: ' ',
+    body: 'Hi',
+  }),
+  timelinePostCase('Timeline post/blank parts', {
+    author: 'Sam Lee',
+    kind: 'team',
+    avatar: ' ',
+    detail: ' ',
+    time: ' ',
+    reference: ' ',
+    body: 'Hi',
+    actions: ' ',
+  }),
+  timelinePostCase('Timeline post/unknown kind and level', {
+    ...timelinePostDefaults,
+    kind: 'admin' as TimelinePostArgs['kind'],
+    headingLevel: 'h1' as TimelinePostArgs['headingLevel'],
+  }),
+  timelinePostCase('Timeline post/escaped text', {
+    author: '"><b>x</b>',
+    kind: 'note',
+    detail: '<b>x</b>',
+    time: '<b>x</b>',
+    datetime: '"x"',
+    reference: '<b>x</b>',
+    noteLabel: '<b>x</b>',
+    body: 'Hi',
+  }),
+  timelinePostCase('Timeline post/with extra attributes', timelinePostDefaults, {
+    class: 'is-new',
+    id: 'post-1',
+    'data-testid': 'post',
+    'aria-current': 'true',
+    'wire:key': 'post-1',
+  }),
+  timelinePostCase('Timeline post/with a clashing attribute', timelinePostDefaults, {
+    'data-kind': 'team',
+  }),
+  timelineEventCase('Timeline event/Default', timelineEventDefaults),
+  timelineEventCase('Timeline event/without a time', { text: 'Closed' }),
+  timelineEventCase('Timeline event/blank time and datetime', {
+    text: 'Closed',
+    time: ' ',
+    datetime: ' ',
+  }),
+  timelineEventCase('Timeline event/blank datetime', {
+    text: 'Closed',
+    time: '09:14',
+    datetime: ' ',
+  }),
+  timelineEventCase('Timeline event/escaped time', {
+    text: 'Closed',
+    time: '<b>x</b>',
+    datetime: '"x"',
+  }),
+  timelineEventCase('Timeline event/with extra attributes', timelineEventDefaults, {
+    class: 'is-new',
+    id: 'event-1',
+    'data-testid': 'event',
+    'wire:key': 'event-1',
+  }),
+  timelineEventCase('Timeline event/with a clashing attribute', timelineEventDefaults, {
+    class: 'is-quiet',
+    'aria-hidden': 'true',
+  }),
 ];
+
+/** A post's parity; the body is the default slot and the actions a named one. */
+function timelinePostCase(
+  story: string,
+  args: TimelinePostArgs,
+  attributes: Attributes = {},
+): ParityCase {
+  const optional = [
+    'avatar',
+    'detail',
+    'time',
+    'datetime',
+    'reference',
+    'noteLabel',
+    'headingLevel',
+  ] as const;
+  const props = {
+    author: args.author,
+    kind: args.kind,
+    ...Object.fromEntries(
+      optional.filter((name) => args[name] !== undefined).map((name) => [name, args[name]]),
+    ),
+  };
+  const named = args.actions !== undefined ? { actions: args.actions } : {};
+  return {
+    story,
+    markup: timelinePost(args, attributes),
+    vue: {
+      component: PlinthTimelinePost,
+      props: { ...props, ...attributes },
+      slot: args.body,
+      html: true,
+      named,
+    },
+    blade: { component: 'timeline-post', props, attributes, slot: args.body, named },
+  };
+}
+
+/** An event's parity; the sentence is the slot. */
+function timelineEventCase(
+  story: string,
+  args: TimelineEventArgs,
+  attributes: Attributes = {},
+): ParityCase {
+  const props = {
+    ...(args.time !== undefined ? { time: args.time } : {}),
+    ...(args.datetime !== undefined ? { datetime: args.datetime } : {}),
+  };
+  return {
+    story,
+    markup: timelineEvent(args, attributes),
+    vue: {
+      component: PlinthTimelineEvent,
+      props: { ...props, ...attributes },
+      slot: args.text,
+      html: true,
+    },
+    blade: { component: 'timeline-event', props, attributes, slot: args.text },
+  };
+}
+
+/** The timeline's own parity; its entries are each a post or event case's markup, as the slot. */
+function timelineCase(story: string, args: TimelineArgs, attributes: Attributes = {}): ParityCase {
+  const props = args.label !== undefined ? { label: args.label } : {};
+  const slot = timelineEntries(args.entries);
+  return {
+    story,
+    markup: timeline(args, attributes),
+    vue: { component: PlinthTimeline, props: { ...props, ...attributes }, slot, html: true },
+    blade: { component: 'timeline', props, attributes, slot },
+  };
+}
 
 /** The toolbar's parity; the search and the actions are markup, passed in as slots. */
 function toolbarCase(story: string, args: ToolbarArgs, attributes: Attributes = {}): ParityCase {
@@ -3272,6 +3484,37 @@ describe('parity with the stories', () => {
       'Toolbar search/escaped label',
       'Toolbar search/with extra attributes',
       'Toolbar search/with a clashing attribute',
+      'Timeline/Default',
+      'Timeline/Kinds',
+      'Timeline/Note',
+      'Timeline/Events',
+      'Timeline/Minimal',
+      'Timeline/WithPicture',
+      'Timeline/LongText',
+      'Timeline/with extra attributes',
+      'Timeline/with a clashing attribute',
+      'Timeline/blank label',
+      'Timeline/escaped label',
+      'Timeline post/Default',
+      'Timeline post/Minimal',
+      'Timeline post/Note',
+      'Timeline post/NoteLabel',
+      'Timeline post/WithPicture',
+      'Timeline post/HeadingLevel',
+      'Timeline post/detail alone',
+      'Timeline post/time alone, blank datetime',
+      'Timeline post/blank parts',
+      'Timeline post/unknown kind and level',
+      'Timeline post/escaped text',
+      'Timeline post/with extra attributes',
+      'Timeline post/with a clashing attribute',
+      'Timeline event/Default',
+      'Timeline event/without a time',
+      'Timeline event/blank time and datetime',
+      'Timeline event/blank datetime',
+      'Timeline event/escaped time',
+      'Timeline event/with extra attributes',
+      'Timeline event/with a clashing attribute',
     ]);
   });
 
