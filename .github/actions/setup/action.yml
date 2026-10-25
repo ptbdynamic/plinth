@@ -1,0 +1,39 @@
+name: Setup
+description: PHP, Node, the Composer, npm and Turborepo caches, then npm ci.
+
+inputs:
+  cache:
+    description: The Turborepo cache's name, one per job.
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - uses: shivammathur/setup-php@v2
+      with:
+        php-version: '8.4'
+        tools: composer
+        coverage: pcov
+
+    - uses: actions/setup-node@v5
+      with:
+        node-version-file: .nvmrc
+        cache: npm
+
+    - name: Restore the Composer cache
+      uses: actions/cache@v4
+      with:
+        path: ~/.cache/composer/files
+        key: composer-${{ runner.os }}-${{ hashFiles('packages/blade/composer.lock', 'site/composer.lock') }}
+        restore-keys: composer-${{ runner.os }}-
+
+    - name: Restore the Turborepo cache
+      uses: actions/cache@v4
+      with:
+        path: .turbo
+        key: turbo-${{ runner.os }}-${{ inputs.cache }}-${{ github.sha }}
+        restore-keys: turbo-${{ runner.os }}-${{ inputs.cache }}-
+
+    # Also runs `composer install` in packages/blade and site (their postinstall).
+    - shell: bash
+      run: npm ci

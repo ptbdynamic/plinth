@@ -1,0 +1,35 @@
+name: Affected
+description: >
+  Says whether a workspace needs checking: on a pull request, when Turborepo counts it affected
+  (changed, or depending on what changed) or the pull request changes .github; otherwise always.
+  Needs the checkout with its history, and nothing installed.
+
+inputs:
+  package:
+    description: The workspace's package name.
+    required: true
+
+outputs:
+  run:
+    description: '"true" when the workspace needs checking.'
+    value: ${{ steps.affected.outputs.run }}
+
+runs:
+  using: composite
+  steps:
+    - id: affected
+      shell: bash
+      env:
+        EVENT: ${{ github.event_name }}
+        BASE: origin/${{ github.base_ref }}
+        PACKAGE: ${{ inputs.package }}
+      run: |
+        if [ "$EVENT" = pull_request ] && git diff --quiet "$BASE...HEAD" -- .github; then
+          turbo=$(jq -r '.packages["node_modules/turbo"].version' package-lock.json)
+          run=$(TURBO_SCM_BASE="$BASE" npx --yes "turbo@$turbo" ls --affected --output=json \
+            | jq --arg name "$PACKAGE" 'any(.packages.items[]; .name == $name)')
+        else
+          run=true
+        fi
+        echo "$PACKAGE: $run"
+        echo "run=$run" >> "$GITHUB_OUTPUT"

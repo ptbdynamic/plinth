@@ -48,7 +48,7 @@
     ],
     "format": "pint",
     "analyse": "phpstan analyse --memory-limit=1G",
-    "test": "pest --coverage --min=100"
+    "test": "pest --parallel --coverage --min=100"
   },
   "config": {
     "sort-packages": true,
