@@ -46,7 +46,8 @@ export function toolbarKeys(toolbar: HTMLElement): () => void {
     next.focus();
   };
   // The app adds and removes actions, enables, disables, hides and shows them; the CSS hides some
-  // at a width.
+  // at the toolbar's width (a container query on the root), which changes with the screen's and
+  // with the panes', so the root's size is watched, not the window's.
   const observer = new MutationObserver(update);
   observer.observe(toolbar, {
     subtree: true,
@@ -54,14 +55,14 @@ export function toolbarKeys(toolbar: HTMLElement): () => void {
     attributes: true,
     attributeFilter: ['disabled', 'hidden', 'data-overflow', 'class', 'style'],
   });
-  const view = toolbar.ownerDocument.defaultView!;
-  view.addEventListener('resize', update);
+  const resize = new ResizeObserver(update);
+  resize.observe(toolbar.parentElement ?? toolbar);
   toolbar.addEventListener('focusin', focus);
   toolbar.addEventListener('keydown', keydown);
   update();
   return () => {
     observer.disconnect();
-    view.removeEventListener('resize', update);
+    resize.disconnect();
     toolbar.removeEventListener('focusin', focus);
     toolbar.removeEventListener('keydown', keydown);
   };

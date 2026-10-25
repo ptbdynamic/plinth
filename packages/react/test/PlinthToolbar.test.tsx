@@ -2,6 +2,7 @@ import { render } from '@testing-library/react';
 import { createRef } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { afterEach, describe, expect, it, vi } from 'vitest';
+import { resize } from './setup';
 import {
   PlinthToolbar,
   PlinthToolbarAction,
@@ -301,6 +302,17 @@ describe('toolbarKeys', () => {
     expect(document.activeElement).toBe(d);
   });
 
+  it('watches its own size when it has no root', () => {
+    const toolbar = document.createElement('div');
+    toolbar.innerHTML = '<button>A</button><button>B</button>';
+    toolbarKeys(toolbar);
+    const [a, b] = [...toolbar.children] as HTMLElement[];
+
+    a!.setAttribute('disabled', '');
+    resize(toolbar);
+    expect(b!.tabIndex).toBe(0);
+  });
+
   it('counts a toolbar inside a popover', () => {
     const popover = document.createElement('div');
     popover.setAttribute('popover', '');
@@ -328,14 +340,15 @@ describe('toolbarKeys', () => {
     await new Promise((resolve) => setTimeout(resolve));
     expect([a!.tabIndex, c.tabIndex]).toEqual([0, -1]);
 
-    // A width change re-checks which controls show.
+    // A change of the root's size (the toolbar's width, with the screen's or a pane's) re-checks
+    // which controls show; a window resize alone doesn't.
     a!.setAttribute('disabled', '');
-    window.dispatchEvent(new Event('resize'));
+    resize(toolbar.parentElement!);
     expect(c.tabIndex).toBe(0);
 
     stop();
     a!.removeAttribute('disabled');
-    window.dispatchEvent(new Event('resize'));
+    resize(toolbar.parentElement!);
     expect(a!.tabIndex).toBe(0);
     c.focus();
     expect(c.tabIndex).toBe(0);
