@@ -113,6 +113,8 @@ describe('tiers', () => {
         `callout.${tone}-surface`,
         `callout.${tone}-border`,
       ]),
+      'timeline.note-surface',
+      'timeline.note-border',
     ]);
   });
 

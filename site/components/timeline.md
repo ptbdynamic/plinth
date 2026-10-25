@@ -50,8 +50,11 @@ default fits.
 | **customer** | blue  | the person the conversation is with                         |
 | **note**     | amber | an internal note: only the team sees it                     |
 
-The ring is not the only cue: say who wrote each post in its `detail` (the customer's email, the
-team member's role), so the kinds read apart without colour.
+The ring is not the only cue, so give every post a `detail` that says who wrote it (the customer's
+email, the team member's role): without one, a team post and a customer's differ only by colour,
+and not at all in forced colours. Set the kind with `kind`, never with a `data-kind` attribute:
+the note's badge follows `kind`, and a `data-kind` of its own would win on the root and leave a
+note without it.
 
 ## Notes
 
@@ -84,29 +87,37 @@ The avatars and the dots sit in a small gap of the page's colour, so the line st
 them. On a card or another raised surface, set `--plinth-timeline-surface` on the timeline to that
 surface (`--plinth-color-surface-raised`).
 
+| Custom property                  | What it sets                                     | Default                             |
+| -------------------------------- | ------------------------------------------------ | ----------------------------------- |
+| `--plinth-timeline-surface`      | the gap around the avatars and the dots          | `--plinth-color-surface`            |
+| `--plinth-timeline-line`         | the line's colour                                | `--plinth-color-border`             |
+| `--plinth-timeline-gutter`       | the column the line runs down, the avatar's size | `--plinth-size-avatar-md`           |
+| `--plinth-timeline-note-surface` | a note's faint warning tint (a token)            | the warning colour at 8% (dark), 6% |
+| `--plinth-timeline-note-border`  | a note's hairline (a token)                      | the warning colour at 24%           |
+
 ## Markup contract
 
 Blade, Vue and React print exactly this markup, and the parity tests hold them to it.
 
-| Part                        | Element          | Holds                                               |
-| --------------------------- | ---------------- | --------------------------------------------------- |
-| `plinth-timeline`           | `<ol>`           | the root, `role="list"`, named by `aria-label`      |
-| `plinth-timeline-post`      | `<li>`           | a post, its own component                           |
-| `plinth-timeline-article`   | `<article>`      | the post's content                                  |
-| `plinth-avatar`             | `<span>`         | the author's [avatar](avatar.md), decorative        |
-| `plinth-timeline-header`    | `<header>`       | the heading and the meta line                       |
-| `plinth-timeline-heading`   | `<h2>` to `<h6>` | the author, the note's badge and the reference      |
-| `plinth-timeline-author`    | `<span>`         | the author's name, ending in an ellipsis            |
-| `plinth-badge`              | `<span>`         | a note's [badge](badge.md), in the warning tone     |
-| `plinth-timeline-reference` | `<span>`         | the optional reference, on the end side from 1280px |
-| `plinth-timeline-meta`      | `<p>`            | the meta line, when there is a detail or a time     |
-| `plinth-timeline-detail`    | `<span>`         | the optional email or role                          |
-| `plinth-timeline-time`      | `<time>`         | the optional time, with its `datetime`              |
-| `plinth-timeline-body`      | `<div>`          | the body                                            |
-| `plinth-timeline-actions`   | `<div>`          | the optional actions                                |
-| `plinth-timeline-event`     | `<li>`           | an event, its own component                         |
-| `plinth-timeline-dot`       | `<span>`         | the dot on the line, hidden from screen readers     |
-| `plinth-timeline-text`      | `<p>`            | the event's sentence and its time                   |
+| Part                        | Element          | Holds                                                    |
+| --------------------------- | ---------------- | -------------------------------------------------------- |
+| `plinth-timeline`           | `<ol>`           | the root, `role="list"`, named by `aria-label`           |
+| `plinth-timeline-post`      | `<li>`           | a post, its own component                                |
+| `plinth-timeline-article`   | `<article>`      | the post's content                                       |
+| `plinth-avatar`             | `<span>`         | the author's [avatar](avatar.md), decorative             |
+| `plinth-timeline-header`    | `<header>`       | the heading and the meta line                            |
+| `plinth-timeline-heading`   | `<h2>` to `<h6>` | the author, the note's badge and the reference           |
+| `plinth-timeline-author`    | `<span>`         | the author's name, ending in an ellipsis                 |
+| `plinth-badge`              | `<span>`         | a note's [badge](badge.md), in the warning tone          |
+| `plinth-timeline-meta`      | `<p>`            | the meta line, when there is a detail or a time          |
+| `plinth-timeline-detail`    | `<span>`         | the optional email or role                               |
+| `plinth-timeline-time`      | `<time>`         | the optional time, with its `datetime`                   |
+| `plinth-timeline-reference` | `<span>`         | the optional reference, on the heading's row from 1280px |
+| `plinth-timeline-body`      | `<div>`          | the body                                                 |
+| `plinth-timeline-actions`   | `<div>`          | the optional actions                                     |
+| `plinth-timeline-event`     | `<li>`           | an event, its own component                              |
+| `plinth-timeline-dot`       | `<span>`         | the dot on the line, hidden from screen readers          |
+| `plinth-timeline-text`      | `<p>`            | the event's sentence and its time                        |
 
 | Attribute or state | On       | Values                                            | Default |
 | ------------------ | -------- | ------------------------------------------------- | ------- |
@@ -217,15 +228,17 @@ import {
 - The timeline is an ordered list, named by `label`, with `role="list"` so Safari keeps announcing
   it as a list without its bullets; a screen reader says how many entries it holds.
 - Each post is an `<article>` with its author as a heading, so a screen reader can jump from post
-  to post. The avatar is decorative, since the name is next to it, and the event's dot is hidden.
+  to post. The reference sits beside the heading, not in it, so the heading reads as the name
+  (and the note's badge). The avatar is decorative, since the name is next to it, and the event's
+  dot is hidden.
 - The separator before a time is drawn by the CSS with an empty alternative, so it isn't read.
   Give each time a `datetime`.
 - The kind's ring is not the only cue: a note has its badge, and the `detail` says who wrote the
-  rest. In forced colours the ring goes, the badge and the note's box border stay, and the dot
-  takes the text colour.
+  rest, so give every post one. In forced colours the ring goes, the badge and the note's box
+  border stay, and the dot takes the text colour.
 - The actions are the app's own [buttons](button.md): always shown, never only on hover, each
-  with its focus ring, and a 40px hit area on a touch screen. Give an icon button its label
-  (_Copy link_).
+  with its focus ring, and a 40px hit area on a touch screen; the row spaces them so those areas
+  don't overlap. Give an icon button its label (_Copy link_).
 - Nothing moves, so reduced motion needs nothing.
 
 The markup contract is at the top of

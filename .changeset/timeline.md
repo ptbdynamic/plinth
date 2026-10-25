@@ -1,4 +1,5 @@
 ---
+'@ptbdynamic/plinth-tokens': minor
 '@ptbdynamic/plinth-css': minor
 '@ptbdynamic/plinth-vue': minor
 '@ptbdynamic/plinth-react': minor
@@ -12,4 +13,5 @@ thread. Posts have the author's avatar on the line, ringed by `kind` (`team`, `c
 _Internal note_ badge (`noteLabel`). Events are a dot and one sentence with its time. It is
 `<x-plinth::timeline>`, `timeline-post` and `timeline-event` in Blade (with the `TimelineKind`
 enum), and `PlinthTimeline`, `PlinthTimelinePost` and `PlinthTimelineEvent` in Vue and React
-(`timelineKinds`).
+(`timelineKinds`). New tokens:
+`--plinth-timeline-note-surface` and `--plinth-timeline-note-border`.

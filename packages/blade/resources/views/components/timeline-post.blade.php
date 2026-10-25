@@ -26,9 +26,6 @@
                 @if ($kind === \BDynamic\Plinth\Enums\TimelineKind::Note)
                     <x-plinth::badge tone="warning">{{ $noteLabel }}</x-plinth::badge>
                 @endif
-                @if (filled($reference))
-                    <span class="plinth-timeline-reference">{{ $reference }}</span>
-                @endif
             </{{ $level }}>
             @if (filled($detail) || filled($time))
                 <p class="plinth-timeline-meta">
@@ -39,6 +36,9 @@
                         <time @if (filled($datetime)) datetime="{{ $datetime }}" @endif class="plinth-timeline-time">{{ $time }}</time>
                     @endif
                 </p>
+            @endif
+            @if (filled($reference))
+                <span class="plinth-timeline-reference">{{ $reference }}</span>
             @endif
         </header>
         <div class="plinth-timeline-body">{{ $slot }}</div>

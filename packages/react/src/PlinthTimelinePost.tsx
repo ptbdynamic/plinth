@@ -69,9 +69,6 @@ export function PlinthTimelinePost({
           <Heading className="plinth-timeline-heading">
             <span className="plinth-timeline-author">{author}</span>
             {dataKind === 'note' ? <PlinthBadge tone="warning">{noteLabel}</PlinthBadge> : null}
-            {filled(reference) ? (
-              <span className="plinth-timeline-reference">{reference}</span>
-            ) : null}
           </Heading>
           {filled(detail) || filled(time) ? (
             <p className="plinth-timeline-meta">
@@ -85,6 +82,9 @@ export function PlinthTimelinePost({
                 </time>
               ) : null}
             </p>
+          ) : null}
+          {filled(reference) ? (
+            <span className="plinth-timeline-reference">{reference}</span>
           ) : null}
         </header>
         <div className="plinth-timeline-body">{children}</div>

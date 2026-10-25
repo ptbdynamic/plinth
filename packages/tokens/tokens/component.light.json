@@ -51,5 +51,17 @@
       "$value": "color-mix(in srgb, {color.danger} 24%, transparent)",
       "$description": "A translucent danger hairline around the callout."
     }
+  },
+  "timeline": {
+    "note-surface": {
+      "$type": "color",
+      "$value": "color-mix(in srgb, {color.warning} 6%, transparent)",
+      "$description": "A faint, translucent warning tint behind an internal note's body."
+    },
+    "note-border": {
+      "$type": "color",
+      "$value": "color-mix(in srgb, {color.warning} 24%, transparent)",
+      "$description": "A translucent warning hairline around an internal note's body."
+    }
   }
 }

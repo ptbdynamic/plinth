@@ -36,8 +36,8 @@ it('prints a post with its avatar, heading, meta line, body and actions', functi
     expect(squish($html))->toBe(squish(<<<'HTML'
         <li class="plinth-timeline-post" data-kind="customer"><article class="plinth-timeline-article">
         <span class="plinth-avatar" data-size="md" aria-hidden="true"><span class="plinth-avatar-initials" aria-hidden="true">AM</span></span>
-        <header class="plinth-timeline-header"><h3 class="plinth-timeline-heading"><span class="plinth-timeline-author">Alex Morgan</span><span class="plinth-timeline-reference">#4821</span></h3>
-        <p class="plinth-timeline-meta"><span class="plinth-timeline-detail">alex@example.com</span><time datetime="2026-10-25T09:14" class="plinth-timeline-time">09:14</time></p></header>
+        <header class="plinth-timeline-header"><h3 class="plinth-timeline-heading"><span class="plinth-timeline-author">Alex Morgan</span></h3>
+        <p class="plinth-timeline-meta"><span class="plinth-timeline-detail">alex@example.com</span><time datetime="2026-10-25T09:14" class="plinth-timeline-time">09:14</time></p><span class="plinth-timeline-reference">#4821</span></header>
         <div class="plinth-timeline-body"><p>Hello</p></div>
         <div class="plinth-timeline-actions"><button type="button">Reply</button></div>
         </article></li>
@@ -138,12 +138,12 @@ it('escapes the event\'s text', function () {
         ->not->toContain('<b>');
 });
 
-it('passes extra attributes to the event, and the project wins a clash', function () {
-    $html = Blade::render('<x-plinth::timeline-event class="is-new" id="event-1" aria-hidden="true" wire:key="event-1">x</x-plinth::timeline-event>');
+it('passes extra attributes to the event', function () {
+    $html = Blade::render('<x-plinth::timeline-event class="is-new" id="event-1" data-testid="event" wire:key="event-1">x</x-plinth::timeline-event>');
 
     expect($html)
         ->toContain('class="plinth-timeline-event is-new"')
         ->toContain('id="event-1"')
-        ->toContain('aria-hidden="true"')
+        ->toContain('data-testid="event"')
         ->toContain('wire:key="event-1"');
 });

@@ -56,8 +56,8 @@ describe('PlinthTimelinePost', () => {
         '<span class="plinth-avatar" data-size="md" aria-hidden="true"><span class="plinth-avatar-initials" aria-hidden="true">AM</span>',
         '<!--v-if--></span>',
         '<header class="plinth-timeline-header"><h3 class="plinth-timeline-heading"><span class="plinth-timeline-author">Alex Morgan</span>',
-        '<!--v-if--><span class="plinth-timeline-reference">#4821</span></h3>',
-        '<p class="plinth-timeline-meta"><span class="plinth-timeline-detail">alex@example.com</span><time class="plinth-timeline-time" datetime="2026-10-25T09:14">09:14</time></p></header>',
+        '<!--v-if--></h3>',
+        '<p class="plinth-timeline-meta"><span class="plinth-timeline-detail">alex@example.com</span><time class="plinth-timeline-time" datetime="2026-10-25T09:14">09:14</time></p><span class="plinth-timeline-reference">#4821</span></header>',
         '<div class="plinth-timeline-body"><p>Hello</p></div>',
         '<div class="plinth-timeline-actions"><button type="button">Reply</button></div>',
         '</article></li>',
@@ -202,11 +202,11 @@ describe('PlinthTimelineEvent', () => {
 
   it('passes extra attributes to its root, and the project wins a clash', () => {
     const wrapper = mount(PlinthTimelineEvent, {
-      attrs: { class: 'is-new', id: 'event-1', 'aria-hidden': 'true' },
+      attrs: { class: 'is-new', id: 'event-1', 'data-testid': 'event' },
     });
 
     expect(wrapper.classes()).toEqual(['plinth-timeline-event', 'is-new']);
     expect(wrapper.attributes('id')).toBe('event-1');
-    expect(wrapper.attributes('aria-hidden')).toBe('true');
+    expect(wrapper.attributes('data-testid')).toBe('event');
   });
 });

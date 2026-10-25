@@ -58,8 +58,8 @@ describe('PlinthTimelinePost', () => {
       [
         '<li data-kind="customer" class="plinth-timeline-post"><article class="plinth-timeline-article">',
         '<span data-size="md" aria-hidden="true" class="plinth-avatar"><span class="plinth-avatar-initials" aria-hidden="true">AM</span></span>',
-        '<header class="plinth-timeline-header"><h3 class="plinth-timeline-heading"><span class="plinth-timeline-author">Alex Morgan</span><span class="plinth-timeline-reference">#4821</span></h3>',
-        '<p class="plinth-timeline-meta"><span class="plinth-timeline-detail">alex@example.com</span><time class="plinth-timeline-time" dateTime="2026-10-25T09:14">09:14</time></p></header>',
+        '<header class="plinth-timeline-header"><h3 class="plinth-timeline-heading"><span class="plinth-timeline-author">Alex Morgan</span></h3>',
+        '<p class="plinth-timeline-meta"><span class="plinth-timeline-detail">alex@example.com</span><time class="plinth-timeline-time" dateTime="2026-10-25T09:14">09:14</time></p><span class="plinth-timeline-reference">#4821</span></header>',
         '<div class="plinth-timeline-body"><p>Hello</p></div>',
         '<div class="plinth-timeline-actions"><button type="button">Reply</button></div>',
         '</article></li>',
@@ -202,13 +202,13 @@ describe('PlinthTimelineEvent', () => {
   it('keeps extra classes, attributes and the ref on its root; the project wins a clash', () => {
     const ref = createRef<HTMLLIElement>();
     const { container } = render(
-      <PlinthTimelineEvent ref={ref} className="is-new" id="event-1" aria-hidden="true" />,
+      <PlinthTimelineEvent ref={ref} className="is-new" id="event-1" data-testid="event" />,
     );
     const root = container.firstElementChild;
 
     expect(root?.getAttribute('class')).toBe('plinth-timeline-event is-new');
     expect(root?.getAttribute('id')).toBe('event-1');
-    expect(root?.getAttribute('aria-hidden')).toBe('true');
+    expect(root?.getAttribute('data-testid')).toBe('event');
     expect(ref.current).toBe(root);
   });
 });

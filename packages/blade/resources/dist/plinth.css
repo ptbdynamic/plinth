@@ -296,6 +296,8 @@
     --plinth-callout-warning-border: color-mix(in srgb, var(--plinth-color-warning) 24%, transparent);
     --plinth-callout-danger-surface: color-mix(in srgb, var(--plinth-color-danger) 6%, transparent);
     --plinth-callout-danger-border: color-mix(in srgb, var(--plinth-color-danger) 24%, transparent);
+    --plinth-timeline-note-surface: color-mix(in srgb, var(--plinth-color-warning) 6%, transparent);
+    --plinth-timeline-note-border: color-mix(in srgb, var(--plinth-color-warning) 24%, transparent);
   }
 
   [data-theme="dark"],
@@ -355,6 +357,8 @@
     --plinth-callout-warning-border: color-mix(in srgb, var(--plinth-color-warning) 24%, transparent);
     --plinth-callout-danger-surface: color-mix(in srgb, var(--plinth-color-danger) 8%, transparent);
     --plinth-callout-danger-border: color-mix(in srgb, var(--plinth-color-danger) 24%, transparent);
+    --plinth-timeline-note-surface: color-mix(in srgb, var(--plinth-color-warning) 8%, transparent);
+    --plinth-timeline-note-border: color-mix(in srgb, var(--plinth-color-warning) 24%, transparent);
   }
 
   @media (prefers-color-scheme: dark) {
@@ -414,6 +418,8 @@
       --plinth-callout-warning-border: color-mix(in srgb, var(--plinth-color-warning) 24%, transparent);
       --plinth-callout-danger-surface: color-mix(in srgb, var(--plinth-color-danger) 8%, transparent);
       --plinth-callout-danger-border: color-mix(in srgb, var(--plinth-color-danger) 24%, transparent);
+      --plinth-timeline-note-surface: color-mix(in srgb, var(--plinth-color-warning) 8%, transparent);
+      --plinth-timeline-note-border: color-mix(in srgb, var(--plinth-color-warning) 24%, transparent);
     }
   }
 
@@ -5859,12 +5865,12 @@
  *         <h3 class="plinth-timeline-heading">
  *           <span class="plinth-timeline-author">Alex Morgan</span>
  *           <span class="plinth-badge" data-tone="warning">…Internal note…</span>   (data-kind="note")
- *           <span class="plinth-timeline-reference">#4821</span>
  *         </h3>
  *         <p class="plinth-timeline-meta">
  *           <span class="plinth-timeline-detail">alex@example.com</span>
  *           <time class="plinth-timeline-time" datetime="2026-10-25T09:14">09:14</time>
  *         </p>
+ *         <span class="plinth-timeline-reference">#4821</span>
  *       </header>
  *       <div class="plinth-timeline-body">…</div>
  *       <div class="plinth-timeline-actions">…</div>
@@ -5878,18 +5884,20 @@
  *
  * The list resets its bullets and prints role="list", so Safari keeps announcing it. A post is an
  * <article> in its <li>: a decorative avatar (the name is next to it) on the line, the heading (an
- * <h3> unless the app picks another level) with the author, the note's badge and a short reference
- * on the end side, shown from 1280px; the meta line in mono (the detail, an email or a role, and
- * the time); the body; and an optional row of quiet actions (Reply, Quote, Copy link). The
- * heading stays on one line, the author's name ending in an ellipsis, and so does the meta line,
- * the detail ending in one.
+ * <h3> unless the app picks another level) with the author and the note's badge; the meta line in
+ * mono (the detail, an email or a role, and the time); a short reference on the end side of the
+ * heading's row, shown from 1280px and kept out of the heading's name; the body; and an optional
+ * row of quiet actions (Reply, Quote, Copy link). The heading stays on one line, the author's name
+ * ending in an ellipsis, and so does the meta line, the detail ending in one.
  *
  * Kinds (data-kind on the post): team (default), customer, note. Each rings the avatar in its own
- * colour; a note also sets its body in a faint warning-tinted box and shows the badge. The ring is
- * not the only cue: a note has its badge, and the detail says who wrote the rest (an email or a
- * role). An event is a dot on the line and one sentence with its time.
+ * colour; a note also sets its body in a faint warning-tinted box (--plinth-timeline-note-surface
+ * and -note-border) and shows the badge. The ring is not the only cue: a note has its badge, and
+ * the app gives each post a detail that says who wrote it (an email or a role). Set kind, not
+ * data-kind: the badge follows kind. An event is a dot on the line and one sentence with its time.
  *
- * The line runs through the avatars and the dots, from the first entry's to the last's. On
+ * The line (--plinth-timeline-line) runs through the avatars and the dots, from the first entry's
+ * to the last's, at the middle of a gutter as wide as the avatar (--plinth-timeline-gutter). On
  * another surface, set --plinth-timeline-surface on the timeline (a card:
  * --plinth-color-surface-raised), so the gaps around the avatars and the dots match it.
  */
@@ -5968,17 +5976,21 @@
         var(--plinth-timeline-kind);
   }
 
+  /* The heading's row, with the reference on its end side, then the meta line. */
   .plinth-timeline-header {
-    display: flex;
-    flex-direction: column;
+    display: grid;
     grid-area: header;
-    gap: var(--plinth-space-0-5);
-    justify-content: center;
+    grid-template-columns: minmax(0, 1fr) auto;
+    row-gap: var(--plinth-space-0-5);
+    align-content: center;
+    align-items: center;
     min-block-size: var(--plinth-timeline-gutter);
   }
 
   .plinth-timeline-heading {
     display: flex;
+    grid-row: 1;
+    grid-column: 1;
     gap: var(--plinth-space-2);
     align-items: center;
     min-inline-size: 0;
@@ -6002,8 +6014,9 @@
 
   .plinth-timeline-reference {
     display: none;
-    flex: none;
-    margin-inline-start: auto;
+    grid-row: 1;
+    grid-column: 2;
+    margin-inline-start: var(--plinth-space-3);
     font-family: var(--plinth-font-family-mono);
     font-size: var(--plinth-font-size-xs);
     font-weight: var(--plinth-font-weight-regular);
@@ -6012,6 +6025,7 @@
 
   .plinth-timeline-meta {
     display: flex;
+    grid-column: 1 / -1;
     min-inline-size: 0;
     margin: 0;
     font-family: var(--plinth-font-family-mono);
@@ -6060,8 +6074,8 @@
 
   .plinth-timeline-post[data-kind='note'] .plinth-timeline-body {
     padding: var(--plinth-space-3);
-    background-color: var(--plinth-color-warning-surface);
-    border: var(--plinth-border-width-thin) solid var(--plinth-color-border);
+    background-color: var(--plinth-timeline-note-surface);
+    border: var(--plinth-border-width-thin) solid var(--plinth-timeline-note-border);
     border-radius: var(--plinth-radius-container);
   }
 
@@ -6070,7 +6084,9 @@
     display: flex;
     flex-wrap: wrap;
     grid-area: actions;
-    gap: var(--plinth-space-1);
+
+    /* Apart enough that the small buttons' 40px hit areas don't overlap on a touch screen. */
+    gap: var(--plinth-space-3) var(--plinth-space-2);
     align-items: center;
     margin-inline-start: calc(var(--plinth-space-2) * -1);
     color: var(--plinth-color-text-muted);

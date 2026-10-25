@@ -63,7 +63,6 @@ const hasMeta = computed(() => filled(props.detail) || filled(props.time));
         <component :is="level" class="plinth-timeline-heading">
           <span class="plinth-timeline-author">{{ author }}</span>
           <PlinthBadge v-if="dataKind === 'note'" tone="warning">{{ noteLabel }}</PlinthBadge>
-          <span v-if="filled(reference)" class="plinth-timeline-reference">{{ reference }}</span>
         </component>
         <p v-if="hasMeta" class="plinth-timeline-meta">
           <span v-if="filled(detail)" class="plinth-timeline-detail">{{ detail }}</span>
@@ -74,6 +73,7 @@ const hasMeta = computed(() => filled(props.detail) || filled(props.time));
             >{{ time }}</time
           >
         </p>
+        <span v-if="filled(reference)" class="plinth-timeline-reference">{{ reference }}</span>
       </header>
       <div class="plinth-timeline-body"><slot /></div>
       <div v-if="hasContent(slots.actions?.())" class="plinth-timeline-actions">

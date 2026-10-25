@@ -259,8 +259,9 @@ import {
  * Each component also has a case with extra attributes, as a project adds them (a class, an id,
  * data-* and aria-*), so attribute forwarding cannot drift between the layers either, and a case
  * with an attribute that clashes with one the component sets on its root, where the project's
- * value wins (docs/adr/0002). The list card, code block, app shell and toolbar set no attribute on
- * their root but the class (the code block's id is a prop), so they have no clashing case.
+ * value wins (docs/adr/0002). The list card, code block, app shell, toolbar and timeline event set
+ * no attribute on their root but the class (the code block's id is a prop), so they have no
+ * clashing case.
  *
  * React takes the same props as Vue (docs/adr/0006), so a case's React side is its Vue side
  * with slots as `children` and node props.
@@ -1835,10 +1836,6 @@ const cases: ParityCase[] = [
     id: 'event-1',
     'data-testid': 'event',
     'wire:key': 'event-1',
-  }),
-  timelineEventCase('Timeline event/with a clashing attribute', timelineEventDefaults, {
-    class: 'is-quiet',
-    'aria-hidden': 'true',
   }),
 ];
 
@@ -3514,7 +3511,6 @@ describe('parity with the stories', () => {
       'Timeline event/blank datetime',
       'Timeline event/escaped time',
       'Timeline event/with extra attributes',
-      'Timeline event/with a clashing attribute',
     ]);
   });
 
