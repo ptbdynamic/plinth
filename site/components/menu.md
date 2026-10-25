@@ -122,8 +122,8 @@ The menu is a list of buttons and links that a person reaches with Tab, not `rol
 `menuitem`s. The ARIA menu pattern promises arrow keys, a roving focus and type-ahead, which would
 be script in every layer; a `role="menu"` without them is worse than none. So the button has no
 `aria-haspopup`, the items read as the buttons and links they are, and the browser gives the rest
-(docs/adr/0002). The button reports whether the menu is open through `aria-expanded`, which the
-browser sets on a `popovertarget` button.
+(docs/adr/0002). The browser tells assistive technology whether the button's menu is expanded,
+as it does for any `popovertarget` button.
 
 ## Markup contract
 
@@ -219,7 +219,7 @@ import {
 ## Accessibility
 
 - The browser opens and closes the menu: Escape and a click outside close it, focus returns to the
-  button, and the button reports `aria-expanded`.
+  button, and the browser says whether the button's menu is expanded.
 - Items are buttons and links, reached with Tab, each named by its label; an icon-only button that
   opens the menu needs its own name.
 - The shortcut hint is hidden from assistive technology; `aria-keyshortcuts` on the item says it.
