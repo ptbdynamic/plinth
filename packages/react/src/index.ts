@@ -117,10 +117,5 @@ export { fieldDescribedBy, textFieldSize, textFieldSizes, type TextFieldSize } f
 export { splitViewPane, splitViewPanes, type SplitViewPane } from './split-view';
 export { sheetCloseIcon, sheetSide, sheetSidePhone, sheetSides, type SheetSide } from './sheet';
 export { statChevron } from './stat';
-export {
-  timelineHeadingLevel,
-  timelineKind,
-  timelineKinds,
-  type TimelineKind,
-} from './timeline';
+export { timelineHeadingLevel, timelineKind, timelineKinds, type TimelineKind } from './timeline';
 export { tones, type Tone } from './tones';

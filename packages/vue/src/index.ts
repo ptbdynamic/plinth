@@ -166,12 +166,7 @@ export { sheetCloseIcon, sheetSide, sheetSidePhone, sheetSides, type SheetSide }
 export { fieldDescribedBy, textFieldSize, textFieldSizes, type TextFieldSize } from './text-field';
 export { swipeToClose, useSwipeToClose } from './swipe';
 export { statChevron } from './stat';
-export {
-  timelineHeadingLevel,
-  timelineKind,
-  timelineKinds,
-  type TimelineKind,
-} from './timeline';
+export { timelineHeadingLevel, timelineKind, timelineKinds, type TimelineKind } from './timeline';
 export { tones, type Tone } from './tones';
 export { toolbarKeys, useToolbarKeys } from './toolbar';
 
