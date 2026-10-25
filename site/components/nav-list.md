@@ -23,7 +23,7 @@ is current on a page outside every view. Give every item its `href`: without one
 plain `<a>`, which is no link and can't be reached with Tab.
 
 ```blade example
-<x-plinth::nav-list label="Folders" style="max-inline-size: 15rem">
+<x-plinth::nav-list label="Folders" style="inline-size: 15rem">
     <x-plinth::nav-list-group>
         <x-plinth::nav-list-item href="#" count="12" current>Open</x-plinth::nav-list-item>
         <x-plinth::nav-list-item href="#" count="3">Pending</x-plinth::nav-list-item>
