@@ -613,8 +613,8 @@
     /* A count sits on the icon's top end corner, a small inverted pill. */
     .plinth-app-nav-count {
       position: absolute;
-      inset-block-start: var(--plinth-space-0-5);
-      inset-inline-end: var(--plinth-space-0-5);
+      inset-block-start: 0;
+      inset-inline-end: 0;
       box-sizing: border-box;
       min-inline-size: var(--plinth-size-icon-sm);
       padding-inline: var(--plinth-space-1);

@@ -1558,7 +1558,7 @@ function appNavItemCase(
     ...(args.count !== undefined ? { count: args.count } : {}),
     current: args.current,
   };
-  const named = args.icon ? { icon: args.icon } : {};
+  const named: Record<string, string> = args.icon ? { icon: args.icon } : {};
   return {
     story,
     markup: appNavItem(args, attributes),
