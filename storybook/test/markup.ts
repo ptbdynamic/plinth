@@ -3,6 +3,12 @@ import { fileURLToPath } from 'node:url';
 import { JSDOM } from 'jsdom';
 import { createElement, type ReactNode } from 'react';
 
+/**
+ * One window for every parse: a window per call holds on to its memory, and the parity test makes
+ * thousands of them.
+ */
+const { document, Node } = new JSDOM('').window;
+
 const collapse = (value: string): string => value.replace(/\s+/g, ' ').trim();
 
 /** A style attribute's declarations as `property: value; …`, however they were spaced. */
@@ -19,7 +25,6 @@ const style = (value: string): string =>
  * semicolons), and comments are removed.
  */
 export function normalize(html: string): string {
-  const { document, Node } = new JSDOM('').window;
   const template = document.createElement('template');
   template.innerHTML = html;
 
@@ -48,7 +53,6 @@ export function normalize(html: string): string {
  * part of the contract; Pest checks them.
  */
 export function withoutAlpine(html: string): string {
-  const { document } = new JSDOM('').window;
   const template = document.createElement('template');
   template.innerHTML = html;
   for (const element of template.content.querySelectorAll('*')) {
@@ -128,7 +132,6 @@ export function reactStyle(style: string): Record<string, string> {
  * or as a node prop, the way a project passes its own icon component.
  */
 export function htmlToReact(html: string): ReactNode {
-  const { document, Node } = new JSDOM('').window;
   const template = document.createElement('template');
   template.innerHTML = html;
 

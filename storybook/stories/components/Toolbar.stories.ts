@@ -33,7 +33,7 @@ const item = (label: string, extra: Partial<MenuItemArgs> = {}): MenuItemArgs =>
 });
 
 /** Assign, Solve, Snooze and Priority; then Spam and Delete, which overflow below 1280px. */
-export const sampleGroups = (extra: Partial<ToolbarActionArgs> = {}): ToolbarGroupArgs[] => [
+const sampleGroups = (extra: Partial<ToolbarActionArgs> = {}): ToolbarGroupArgs[] => [
   {
     actions: [
       action('Assign', sampleIcons.user, extra),
@@ -51,7 +51,7 @@ export const sampleGroups = (extra: Partial<ToolbarActionArgs> = {}): ToolbarGro
 ];
 
 /** The ⋯ button and its menu: Spam and Delete below 1280px, then Merge and Print. */
-export const sampleMore = (id = 'ticket-more') =>
+const sampleMore = (id = 'ticket-more') =>
   [
     iconButton(
       {
@@ -74,7 +74,7 @@ export const sampleMore = (id = 'ticket-more') =>
   ].join('');
 
 /** The search with its scope button and the menu of scopes. */
-export const sampleSearch = (scope = 'In: Open', id = 'search-scope') =>
+const sampleSearch = (scope = 'In: Open', id = 'search-scope') =>
   toolbarSearch(
     {
       label: 'Search tickets',

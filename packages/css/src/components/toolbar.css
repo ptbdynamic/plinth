@@ -224,7 +224,7 @@
   /* Below 1280px an action is its icon alone, square, and its label stays its name. */
   .plinth-toolbar-action {
     flex: none;
-    inline-size: var(--plinth-button-height);
+    inline-size: var(--plinth-control-md);
     padding-inline: 0;
   }
 

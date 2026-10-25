@@ -234,6 +234,8 @@
     --plinth-split-view-list-width: var(--plinth-size-list);
     --plinth-menu-min-width: var(--plinth-size-menu-min);
     --plinth-menu-max-width: var(--plinth-size-menu-max);
+    --plinth-toolbar-height: var(--plinth-size-row);
+    --plinth-toolbar-search-width: var(--plinth-size-search);
     --plinth-text-field-trailing-size: var(--plinth-control-md);
   }
 
@@ -5841,6 +5843,312 @@
     .plinth-textarea-input:disabled {
       color: GrayText;
       border-color: GrayText;
+    }
+  }
+}
+
+/* toolbar.css */
+/*
+ * Toolbar: the row of actions under a page header, as in a mail app: a search field with its
+ * scope, what the actions act on, then the actions in groups, and a menu (⋯) for the rest. From
+ * 768px; on a phone it is not shown, and the actions live in the page header.
+ *
+ * <div class="plinth-toolbar">
+ *   <div class="plinth-toolbar-search" role="search">
+ *     <span class="plinth-icon" data-size="sm" data-icon="search" aria-hidden="true"><svg>…</svg></span>
+ *     <input type="search" class="plinth-toolbar-search-input" aria-label="Search tickets">
+ *     <button type="button" class="plinth-toolbar-scope" popovertarget="search-scope">
+ *       <span class="plinth-toolbar-scope-label">In: Open</span>
+ *       <span class="plinth-icon" data-size="sm" data-icon="chevron-down" aria-hidden="true">…</span>
+ *     </button>
+ *     <div class="plinth-menu" id="search-scope" popover="auto">…</div>
+ *   </div>
+ *   <p class="plinth-toolbar-target">2 selected</p>
+ *   <div class="plinth-toolbar-actions" role="toolbar" aria-label="Ticket actions">
+ *     <div class="plinth-toolbar-group" role="group">
+ *       <button type="button" class="plinth-button plinth-toolbar-action" data-variant="ghost"
+ *         data-size="md">
+ *         <span class="plinth-icon" data-size="md" aria-hidden="true"><svg>…</svg></span>
+ *         <span class="plinth-button-label">Assign</span>
+ *       </button>
+ *     </div>
+ *     <div class="plinth-toolbar-group" role="group">
+ *       <button type="button" class="plinth-button plinth-toolbar-action" data-variant="ghost"
+ *         data-size="md" data-overflow>…<span class="plinth-button-label">Delete</span></button>
+ *     </div>
+ *     <button type="button" class="plinth-button plinth-icon-button" data-variant="ghost"
+ *       data-size="md" aria-label="More actions" popovertarget="ticket-more">…</button>
+ *     <div class="plinth-menu" id="ticket-more" popover="auto">
+ *       <button type="button" class="plinth-menu-item" … data-overflow>…Delete…</button>
+ *       <hr class="plinth-menu-separator" data-overflow>
+ *       <button type="button" class="plinth-menu-item" …>Merge</button>
+ *     </div>
+ *   </div>
+ * </div>
+ *
+ * The root is a <div>, and each part is printed only when it has content:
+ * - the search (<x-plinth::toolbar-search>, PlinthToolbarSearch): a <div role="search"> around a
+ *   search icon, an <input type="search"> and the scope. The label is the input's name
+ *   (aria-label), required, since the field shows no label of its own. The app's attributes
+ *   (name, value, placeholder, wire:model, …) go to the input, and only a class to the root.
+ * - the scope (<x-plinth::toolbar-scope>, PlinthToolbarScope): a <button> joined to the field's
+ *   end, whose text says where the search looks (In: Open, All folders) and is its name. The app
+ *   opens its own menu of scopes with it (popovertarget), and changes the text when one is picked.
+ * - the target: a <p>, what the actions act on (2 selected, #1042), in the app's words. It is not
+ *   a live region: the list that changes the selection announces it (list-header.css).
+ * - the actions: a <div role="toolbar"> named by the label (required, Actions by default), with
+ *   groups of actions, then the app's ⋯ icon button and its menu (menu.css).
+ * - a group (<x-plinth::toolbar-group>, PlinthToolbarGroup): a <div role="group">, named with a
+ *   label when the group has a name of its own. A hairline divider (color.divider) sits between
+ *   two groups.
+ * - an action (<x-plinth::toolbar-action>, PlinthToolbarAction): a ghost button, md, with its icon
+ *   (the project's SVG or a built-in glyph) and its label. From 1280px it shows both; below, the
+ *   icon alone, square, and the label is hidden from sight but stays its name.
+ *
+ * Overflow: data-overflow on an action hides it below 1280px, where the room runs out; the app
+ * puts the same action in the ⋯ menu with data-overflow on that item too (and on a separator
+ * next to them), and inside a toolbar the menu shows those only below 1280px. A group whose
+ * actions all overflow is hidden with them. Plinth doesn't measure: the app picks what overflows.
+ *
+ * Keyboard: the actions are one tab stop, and the arrow keys move between their buttons and links
+ * (Left and Right, the other way round in right-to-left text, Home and End), wrapping at the
+ * ends. That is script, the only script the toolbar has (ADR 2 records why a component adds it):
+ * Alpine in Blade (an x-init on the actions), an effect in Vue and React. It keeps one control at
+ * tabindex 0 (the last one focused) and the rest at -1, and skips disabled controls, controls the
+ * CSS hides at this width, and the items of a menu inside. Without it, as in the stories, Tab goes
+ * through every control. The search sits outside the toolbar, so its field keeps its arrow keys.
+ *
+ * States: an action takes `disabled`; the rest are the button's and the menu's. Every control
+ * shows the focus ring on :focus-visible, and keeps a 40px touch target on a touch screen.
+ *
+ * Its height is --plinth-toolbar-height (44px, a list header's), with a hairline divider under
+ * it; the search is --plinth-toolbar-search-width (320px) at most and narrows with the toolbar.
+ * It needs button.css, icon.css and menu.css for its parts.
+ */
+
+@layer plinth {
+  .plinth-toolbar {
+    box-sizing: border-box;
+    display: none;
+    gap: var(--plinth-space-3);
+    align-items: center;
+    min-block-size: var(--plinth-toolbar-height);
+    padding-block: var(--plinth-space-1);
+    padding-inline: var(--plinth-space-4) var(--plinth-space-2);
+    font-family: var(--plinth-font-family-body);
+    font-size: var(--plinth-font-size-md);
+    line-height: var(--plinth-font-leading-tight);
+    color: var(--plinth-color-text);
+    background-color: var(--plinth-color-surface);
+    border-block-end: var(--plinth-border-width-thin) solid var(--plinth-color-divider);
+  }
+
+  /* The field with its scope joined to its end; the icon sits over the field's start. */
+  .plinth-toolbar-search {
+    position: relative;
+    display: flex;
+    flex: 0 1 var(--plinth-toolbar-search-width);
+    align-items: stretch;
+    min-inline-size: 0;
+  }
+
+  .plinth-toolbar-search > .plinth-icon {
+    position: absolute;
+    inset-block-start: 50%;
+    inset-inline-start: var(--plinth-space-3);
+    color: var(--plinth-color-text-subtle);
+    pointer-events: none;
+    translate: 0 -50%;
+  }
+
+  .plinth-toolbar-search-input {
+    box-sizing: border-box;
+    flex: 1;
+    min-inline-size: 0;
+    min-block-size: var(--plinth-control-md);
+    padding-block: 0;
+    padding-inline: calc(var(--plinth-space-3) + var(--plinth-size-icon-sm) + var(--plinth-space-2))
+      var(--plinth-space-3);
+    margin: 0;
+    font-family: inherit;
+    font-size: var(--plinth-font-size-md);
+    line-height: var(--plinth-font-leading-tight);
+    color: var(--plinth-color-text);
+    appearance: none;
+    background-color: var(--plinth-color-surface-sunken);
+    border: var(--plinth-border-width-thin) solid var(--plinth-color-border-strong);
+    border-radius: var(--plinth-radius-control);
+    transition: border-color var(--plinth-duration-fast) var(--plinth-easing-standard);
+  }
+
+  .plinth-toolbar-search-input::placeholder {
+    color: var(--plinth-color-text-subtle);
+    opacity: 1;
+  }
+
+  .plinth-toolbar-scope {
+    box-sizing: border-box;
+    display: inline-flex;
+    flex: none;
+    gap: var(--plinth-space-1);
+    align-items: center;
+    max-inline-size: 50%;
+    padding-block: 0;
+    padding-inline: var(--plinth-space-3) var(--plinth-space-2);
+    margin: 0;
+    font-family: inherit;
+    font-size: var(--plinth-font-size-sm);
+    font-weight: var(--plinth-font-weight-medium);
+    line-height: var(--plinth-font-leading-tight);
+    color: var(--plinth-color-text-muted);
+    white-space: nowrap;
+    cursor: pointer;
+    background-color: var(--plinth-color-surface-sunken);
+    border: var(--plinth-border-width-thin) solid var(--plinth-color-border-strong);
+    border-inline-start-color: var(--plinth-color-divider);
+    border-start-start-radius: 0;
+    border-start-end-radius: var(--plinth-radius-control);
+    border-end-start-radius: 0;
+    border-end-end-radius: var(--plinth-radius-control);
+    transition: background-color var(--plinth-duration-fast) var(--plinth-easing-standard);
+  }
+
+  /* The scope's border meets the field's, so the two read as one control. */
+  .plinth-toolbar-search-input + .plinth-toolbar-scope {
+    margin-inline-start: calc(var(--plinth-border-width-thin) * -1);
+  }
+
+  .plinth-toolbar-scope-label {
+    min-inline-size: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .plinth-toolbar-scope:active {
+    background-color: var(--plinth-color-surface-hover);
+  }
+
+  /* Drawn inside, so the field's ring and the scope's don't cross where the two meet. */
+  .plinth-toolbar-search-input:focus-visible,
+  .plinth-toolbar-scope:focus-visible {
+    outline: var(--plinth-focus-ring-width) solid var(--plinth-color-focus-ring);
+    outline-offset: var(--plinth-focus-ring-offset-inset);
+  }
+
+  .plinth-toolbar-search:has(> .plinth-toolbar-scope) > .plinth-toolbar-search-input {
+    border-start-end-radius: 0;
+    border-end-end-radius: 0;
+  }
+
+  .plinth-toolbar-target {
+    flex: 0 1 auto;
+    min-inline-size: 0;
+    margin: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-weight: var(--plinth-font-weight-medium);
+    font-variant-numeric: tabular-nums;
+    color: var(--plinth-color-text-muted);
+    white-space: nowrap;
+  }
+
+  .plinth-toolbar-actions {
+    display: flex;
+    flex: none;
+    gap: var(--plinth-space-2);
+    align-items: center;
+    margin-inline-start: auto;
+  }
+
+  .plinth-toolbar-group {
+    display: flex;
+    gap: var(--plinth-space-2);
+    align-items: center;
+  }
+
+  .plinth-toolbar-group + .plinth-toolbar-group {
+    padding-inline-start: var(--plinth-space-2);
+    border-inline-start: var(--plinth-border-width-thin) solid var(--plinth-color-divider);
+  }
+
+  /* Below 1280px an action is its icon alone, square, and its label stays its name. */
+  .plinth-toolbar-action {
+    flex: none;
+    inline-size: var(--plinth-control-md);
+    padding-inline: 0;
+  }
+
+  .plinth-toolbar-action .plinth-button-label {
+    position: absolute;
+    inline-size: 1px;
+    block-size: 1px;
+    overflow: hidden;
+    white-space: nowrap;
+    clip-path: inset(50%);
+  }
+
+  /* What overflows is in the ⋯ menu below 1280px, and in the toolbar from there. */
+  .plinth-toolbar-action[data-overflow],
+  .plinth-toolbar-group:not(:has(> :not([data-overflow]))) {
+    display: none;
+  }
+
+  @media (pointer: coarse) {
+    .plinth-toolbar-search-input {
+      min-block-size: var(--plinth-touch-target);
+    }
+
+    /* The icon alone is narrower than 40px, so its hit area grows sideways too. */
+    .plinth-toolbar-action::before {
+      inset-inline: min(0%, 50% - var(--plinth-touch-target) / 2);
+    }
+  }
+
+  @media (hover: hover) {
+    .plinth-toolbar-scope:hover {
+      background-color: var(--plinth-color-surface-hover);
+    }
+
+    .plinth-toolbar-search-input:hover {
+      border-color: var(--plinth-color-text-subtle);
+    }
+  }
+
+  @media (min-width: 768px) {
+    .plinth-toolbar {
+      display: flex;
+    }
+  }
+
+  @media (min-width: 1280px) {
+    .plinth-toolbar-action {
+      inline-size: auto;
+      padding-inline: var(--plinth-space-3);
+    }
+
+    .plinth-toolbar-action .plinth-button-label {
+      position: static;
+      inline-size: auto;
+      block-size: auto;
+      clip-path: none;
+    }
+
+    .plinth-toolbar-action[data-overflow] {
+      display: inline-flex;
+    }
+
+    .plinth-toolbar-group:not(:has(> :not([data-overflow]))) {
+      display: flex;
+    }
+
+    .plinth-toolbar .plinth-menu [data-overflow] {
+      display: none;
+    }
+  }
+
+  @media (forced-colors: active) {
+    .plinth-toolbar-scope {
+      border-color: ButtonText;
     }
   }
 }

@@ -42,6 +42,11 @@ import {
   PlinthStat,
   PlinthTextarea,
   PlinthTextField,
+  PlinthToolbar,
+  PlinthToolbarAction,
+  PlinthToolbarGroup,
+  PlinthToolbarScope,
+  PlinthToolbarSearch,
 } from '@ptbdynamic/plinth-vue';
 import {
   PlinthAppBar as ReactAppBar,
@@ -87,6 +92,11 @@ import {
   PlinthStat as ReactStat,
   PlinthTextarea as ReactTextarea,
   PlinthTextField as ReactTextField,
+  PlinthToolbar as ReactToolbar,
+  PlinthToolbarAction as ReactToolbarAction,
+  PlinthToolbarGroup as ReactToolbarGroup,
+  PlinthToolbarScope as ReactToolbarScope,
+  PlinthToolbarSearch as ReactToolbarSearch,
 } from '@ptbdynamic/plinth-react';
 import { createElement, type ComponentType } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
@@ -204,6 +214,17 @@ import * as textareaStories from '../stories/components/Textarea.stories.ts';
 import { textarea, type TextareaArgs } from '../stories/components/textarea.ts';
 import * as textFieldStories from '../stories/components/TextField.stories.ts';
 import { textField, type TextFieldArgs } from '../stories/components/text-field.ts';
+import * as toolbarStories from '../stories/components/Toolbar.stories.ts';
+import {
+  toolbar,
+  toolbarAction,
+  toolbarGroup,
+  toolbarScope,
+  toolbarSearch,
+  type ToolbarActionArgs,
+  type ToolbarArgs,
+  type ToolbarSearchArgs,
+} from '../stories/components/toolbar.ts';
 import { sampleIcons } from '../stories/components/icons.ts';
 import {
   htmlToReact,
@@ -222,8 +243,8 @@ import {
  * Each component also has a case with extra attributes, as a project adds them (a class, an id,
  * data-* and aria-*), so attribute forwarding cannot drift between the layers either, and a case
  * with an attribute that clashes with one the component sets on its root, where the project's
- * value wins (docs/adr/0002). The list card, code block and app shell set no attribute on their
- * root but the class (the code block's id is a prop), so they have no clashing case.
+ * value wins (docs/adr/0002). The list card, code block, app shell and toolbar set no attribute on
+ * their root but the class (the code block's id is a prop), so they have no clashing case.
  *
  * React takes the same props as Vue (docs/adr/0006), so a case's React side is its Vue side
  * with slots as `children` and node props.
@@ -294,6 +315,11 @@ const reactComponents = new Map<Component, unknown>([
   [PlinthSheet, ReactSheet],
   [PlinthTextarea, ReactTextarea],
   [PlinthTextField, ReactTextField],
+  [PlinthToolbar, ReactToolbar],
+  [PlinthToolbarAction, ReactToolbarAction],
+  [PlinthToolbarGroup, ReactToolbarGroup],
+  [PlinthToolbarScope, ReactToolbarScope],
+  [PlinthToolbarSearch, ReactToolbarSearch],
 ]);
 
 /**
@@ -479,6 +505,13 @@ const textareaDefaults: TextareaArgs = {
   maxRows: 8,
   disabled: false,
   readonly: false,
+};
+
+const toolbarActionDefaults: ToolbarActionArgs = {
+  label: 'Assign',
+  svg: sampleIcons.user,
+  overflow: false,
+  disabled: false,
 };
 
 const cases: ParityCase[] = [
@@ -1581,7 +1614,189 @@ const cases: ParityCase[] = [
     value: 'A & B <i>',
     description: '"quoted"',
   }),
+  ...storyArgs<ToolbarArgs>(toolbarStories).map(([story, args]) =>
+    toolbarCase(`Toolbar/${story}`, args),
+  ),
+  toolbarCase(
+    'Toolbar/with extra attributes',
+    { label: 'Actions', actions: '<button type="button">Assign</button>' },
+    { class: 'is-sticky', id: 'bar', 'data-testid': 'bar', 'aria-describedby': 'bar-help' },
+  ),
+  toolbarCase('Toolbar/blank target and search', {
+    label: 'Actions',
+    target: ' ',
+    search: ' ',
+    actions: '',
+  }),
+  toolbarCase('Toolbar/escaped label and target', {
+    label: '"><b>x</b>',
+    target: '<b>2</b> selected',
+    actions: '',
+  }),
+  toolbarActionCase('Toolbar action/Default', toolbarActionDefaults),
+  toolbarActionCase('Toolbar action/Glyph', { ...toolbarActionDefaults, icon: 'back' }),
+  toolbarActionCase('Toolbar action/unknown glyph', {
+    ...toolbarActionDefaults,
+    icon: 'nope' as ToolbarActionArgs['icon'],
+  }),
+  toolbarActionCase('Toolbar action/Overflow', { ...toolbarActionDefaults, overflow: true }),
+  toolbarActionCase('Toolbar action/Disabled', { ...toolbarActionDefaults, disabled: true }),
+  toolbarActionCase('Toolbar action/escaped label', {
+    ...toolbarActionDefaults,
+    label: '<b>Assign</b>',
+  }),
+  toolbarActionCase('Toolbar action/with extra attributes', toolbarActionDefaults, {
+    class: 'is-new',
+    id: 'assign',
+    'data-testid': 'assign',
+    'aria-keyshortcuts': 'A',
+  }),
+  toolbarActionCase('Toolbar action/with a clashing attribute', toolbarActionDefaults, {
+    type: 'submit',
+    'data-variant': 'secondary',
+  }),
+  toolbarGroupCase('Toolbar group/Default', undefined),
+  toolbarGroupCase('Toolbar group/Named', 'Remove'),
+  toolbarGroupCase('Toolbar group/blank label', ' '),
+  toolbarGroupCase('Toolbar group/escaped label', '"><b>x</b>'),
+  toolbarGroupCase('Toolbar group/with extra attributes', 'Remove', {
+    class: 'is-wide',
+    id: 'remove',
+    'data-testid': 'remove',
+    'aria-describedby': 'remove-help',
+  }),
+  toolbarGroupCase('Toolbar group/with a clashing attribute', 'Remove', { role: 'none' }),
+  toolbarScopeCase('Toolbar scope/Default', 'In: Open'),
+  toolbarScopeCase('Toolbar scope/escaped label', 'In: <b>Open</b>'),
+  toolbarScopeCase('Toolbar scope/with extra attributes', 'All folders', {
+    class: 'is-wide',
+    id: 'scope',
+    popovertarget: 'search-scope',
+    'data-testid': 'scope',
+  }),
+  toolbarScopeCase('Toolbar scope/with a clashing attribute', 'In: Open', { type: 'submit' }),
+  toolbarSearchCase('Toolbar search/Default', { label: 'Search' }),
+  toolbarSearchCase('Toolbar search/WithScope', {
+    label: 'Search tickets',
+    scope: '<button type="button" class="plinth-toolbar-scope">In: Open</button>',
+  }),
+  toolbarSearchCase('Toolbar search/blank scope', { label: 'Search', scope: ' ' }),
+  toolbarSearchCase('Toolbar search/escaped label', { label: '"><b>x</b>' }),
+  toolbarSearchCase(
+    'Toolbar search/with extra attributes',
+    { label: 'Search' },
+    {
+      class: 'is-wide',
+      name: 'q',
+      placeholder: 'Search',
+      'data-testid': 'search',
+    },
+  ),
+  toolbarSearchCase(
+    'Toolbar search/with a clashing attribute',
+    { label: 'Search' },
+    {
+      type: 'text',
+      'aria-label': 'Find tickets',
+    },
+  ),
 ];
+
+/** The toolbar's parity; the search and the actions are markup, passed in as slots. */
+function toolbarCase(story: string, args: ToolbarArgs, attributes: Attributes = {}): ParityCase {
+  const props = {
+    label: args.label,
+    ...(args.target !== undefined ? { target: args.target } : {}),
+  };
+  const named = args.search !== undefined ? { search: args.search } : undefined;
+  return {
+    story,
+    markup: toolbar(args, attributes),
+    vue: {
+      component: PlinthToolbar,
+      props: { ...props, ...attributes },
+      slot: args.actions,
+      html: true,
+      named,
+    },
+    blade: { component: 'toolbar', props, attributes, slot: args.actions, named },
+  };
+}
+
+function toolbarActionCase(
+  story: string,
+  args: ToolbarActionArgs,
+  attributes: Attributes = {},
+): ParityCase {
+  const props = {
+    label: args.label,
+    ...(args.icon ? { icon: args.icon } : {}),
+    overflow: args.overflow,
+    disabled: args.disabled,
+  };
+  return {
+    story,
+    markup: toolbarAction(args, attributes),
+    vue: {
+      component: PlinthToolbarAction,
+      props: { ...props, ...attributes },
+      slot: args.svg ?? '',
+      html: true,
+    },
+    blade: { component: 'toolbar-action', props, attributes, slot: args.svg ?? '' },
+  };
+}
+
+/** A group, with one action's markup as its slot. */
+function toolbarGroupCase(
+  story: string,
+  label: string | undefined,
+  attributes: Attributes = {},
+): ParityCase {
+  const slot = toolbarAction(toolbarActionDefaults);
+  const props = label !== undefined ? { label } : {};
+  return {
+    story,
+    markup: toolbarGroup({ label }, slot, attributes),
+    vue: { component: PlinthToolbarGroup, props: { ...props, ...attributes }, slot, html: true },
+    blade: { component: 'toolbar-group', props, attributes, slot },
+  };
+}
+
+function toolbarScopeCase(story: string, label: string, attributes: Attributes = {}): ParityCase {
+  return {
+    story,
+    markup: toolbarScope({ label }, attributes),
+    vue: { component: PlinthToolbarScope, props: { label, ...attributes }, slot: '' },
+    blade: { component: 'toolbar-scope', props: { label }, attributes, slot: '' },
+  };
+}
+
+/** The search's parity; its attributes go to the input, the scope is a named slot. */
+function toolbarSearchCase(
+  story: string,
+  args: ToolbarSearchArgs,
+  attributes: Attributes = {},
+): ParityCase {
+  const named = args.scope !== undefined ? { scope: args.scope } : undefined;
+  return {
+    story,
+    markup: toolbarSearch(args, attributes),
+    vue: {
+      component: PlinthToolbarSearch,
+      props: { label: args.label, ...attributes },
+      slot: '',
+      named,
+    },
+    blade: {
+      component: 'toolbar-search',
+      props: { label: args.label },
+      attributes,
+      slot: '',
+      named,
+    },
+  };
+}
 
 function buttonCase(story: string, args: ButtonArgs, attributes: Attributes = {}): ParityCase {
   const props = {
@@ -3022,6 +3237,41 @@ describe('parity with the stories', () => {
       'Textarea/growing with its own style',
       'Textarea/with a description and an error',
       'Textarea/escaped text',
+      'Toolbar/Default',
+      'Toolbar/OneTicket',
+      'Toolbar/AllFolders',
+      'Toolbar/WithoutTarget',
+      'Toolbar/WithoutSearch',
+      'Toolbar/NothingSelected',
+      'Toolbar/NamedGroups',
+      'Toolbar/NoOverflow',
+      'Toolbar/with extra attributes',
+      'Toolbar/blank target and search',
+      'Toolbar/escaped label and target',
+      'Toolbar action/Default',
+      'Toolbar action/Glyph',
+      'Toolbar action/unknown glyph',
+      'Toolbar action/Overflow',
+      'Toolbar action/Disabled',
+      'Toolbar action/escaped label',
+      'Toolbar action/with extra attributes',
+      'Toolbar action/with a clashing attribute',
+      'Toolbar group/Default',
+      'Toolbar group/Named',
+      'Toolbar group/blank label',
+      'Toolbar group/escaped label',
+      'Toolbar group/with extra attributes',
+      'Toolbar group/with a clashing attribute',
+      'Toolbar scope/Default',
+      'Toolbar scope/escaped label',
+      'Toolbar scope/with extra attributes',
+      'Toolbar scope/with a clashing attribute',
+      'Toolbar search/Default',
+      'Toolbar search/WithScope',
+      'Toolbar search/blank scope',
+      'Toolbar search/escaped label',
+      'Toolbar search/with extra attributes',
+      'Toolbar search/with a clashing attribute',
     ]);
   });
 
