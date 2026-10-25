@@ -1,3 +1,5 @@
+export { PlinthAppNav, type PlinthAppNavProps } from './PlinthAppNav';
+export { PlinthAppNavItem, type PlinthAppNavItemProps } from './PlinthAppNavItem';
 export { PlinthAvatar, type PlinthAvatarProps } from './PlinthAvatar';
 export { PlinthBadge, type PlinthBadgeProps } from './PlinthBadge';
 export { PlinthButton, type PlinthButtonProps } from './PlinthButton';

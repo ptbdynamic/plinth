@@ -122,6 +122,45 @@
         isolation: isolate;
     }
 
+    /* The app nav's sidebar, drawn small on the start side of an app's frame. */
+    .site-catalogue-app {
+        display: flex;
+        min-block-size: calc(var(--plinth-space-16) * 2);
+    }
+
+    .site-catalogue-sidebar {
+        display: flex;
+        flex-direction: column;
+        gap: var(--plinth-space-0-5);
+        inline-size: 55%;
+        padding: var(--plinth-space-2);
+        font-size: var(--plinth-font-size-xs);
+        color: var(--plinth-color-text-muted);
+        border-inline-end: var(--plinth-border-width-thin) solid var(--plinth-color-divider);
+    }
+
+    .site-catalogue-sidebar-brand,
+    .site-catalogue-sidebar-item {
+        display: flex;
+        gap: var(--plinth-space-2);
+        align-items: center;
+        padding: var(--plinth-space-1) var(--plinth-space-2);
+        border-radius: var(--plinth-radius-control);
+    }
+
+    .site-catalogue-sidebar-brand {
+        margin-block-end: var(--plinth-space-1);
+        font-weight: var(--plinth-font-weight-semibold);
+        color: var(--plinth-color-text);
+    }
+
+    .site-catalogue-sidebar-item.is-current {
+        font-weight: var(--plinth-font-weight-semibold);
+        color: var(--plinth-color-accent-text);
+        background-color: var(--plinth-color-accent-subtle);
+        box-shadow: inset var(--plinth-border-width-thick) 0 0 var(--plinth-color-accent);
+    }
+
     .site-catalogue-header-preview {
         position: static;
     }

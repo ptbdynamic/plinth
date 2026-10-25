@@ -17,6 +17,8 @@ tokens, so a brand's overrides still reach them.
 
 <!-- tokens: component section-menu -->
 
+<!-- tokens: component app-nav -->
+
 ## Callout
 
 Each tone's background and hairline border: a faint, translucent tint of the tone's colour, so a

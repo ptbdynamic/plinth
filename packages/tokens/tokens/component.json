@@ -66,6 +66,18 @@
       "$description": "An item's height (40px), its touch target too."
     }
   },
+  "app-nav": {
+    "width": {
+      "$type": "dimension",
+      "$value": "{size.sidebar}",
+      "$description": "The app nav's width as a sidebar, from 1280px (240px)."
+    },
+    "rail-width": {
+      "$type": "dimension",
+      "$value": "{size.rail}",
+      "$description": "The app nav's width as a rail, from 768px to 1279px (56px): a 40px item, the room around it and the divider."
+    }
+  },
   "menu": {
     "min-width": {
       "$type": "dimension",

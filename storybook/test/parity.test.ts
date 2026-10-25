@@ -1,4 +1,6 @@
 import {
+  PlinthAppNav,
+  PlinthAppNavItem,
   PlinthAvatar,
   PlinthBadge,
   PlinthButton,
@@ -34,6 +36,8 @@ import {
   PlinthTextField,
 } from '@ptbdynamic/plinth-vue';
 import {
+  PlinthAppNav as ReactAppNav,
+  PlinthAppNavItem as ReactAppNavItem,
   PlinthAvatar as ReactAvatar,
   PlinthBadge as ReactBadge,
   PlinthButton as ReactButton,
@@ -73,6 +77,13 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import { createStaticVNode, h, type Component } from 'vue';
 import { renderToString } from 'vue/server-renderer';
 import { describe, expect, it } from 'vitest';
+import * as appNavStories from '../stories/components/AppNav.stories.ts';
+import {
+  appNav,
+  appNavItem,
+  type AppNavArgs,
+  type AppNavItemArgs,
+} from '../stories/components/app-nav.ts';
 import * as avatarStories from '../stories/components/Avatar.stories.ts';
 import { avatar, type AvatarArgs } from '../stories/components/avatar.ts';
 import * as badgeStories from '../stories/components/Badge.stories.ts';
@@ -202,6 +213,8 @@ interface ParityCase {
 
 /** Each Vue component and its React one. */
 const reactComponents = new Map<Component, unknown>([
+  [PlinthAppNav, ReactAppNav],
+  [PlinthAppNavItem, ReactAppNavItem],
   [PlinthAvatar, ReactAvatar],
   [PlinthBadge, ReactBadge],
   [PlinthStat, ReactStat],
@@ -351,6 +364,13 @@ const menuSheetDefaults: MenuSheetArgs = {
 
 const pillDefaults: PillArgs = { label: 'Open', selected: false, disabled: false };
 const menuItemDefaults: MenuItemArgs = { label: 'Archive', tone: 'neutral', disabled: false };
+
+const appNavItemDefaults: AppNavItemArgs = {
+  label: 'Support',
+  href: '#support',
+  icon: '<span class="plinth-icon" data-size="md" aria-hidden="true"><svg viewBox="0 0 24 24"></svg></span>',
+  current: false,
+};
 
 const sectionMenuItemDefaults: SectionMenuItemArgs = {
   label: 'Tasks',
@@ -718,6 +738,58 @@ const cases: ParityCase[] = [
     { class: 'ms-2', 'data-testid': 'open', type: 'text/html' },
   ),
   pillCase('Pill/with a clashing attribute', pillDefaults, { 'aria-pressed': 'mixed' }),
+  ...storyArgs<AppNavArgs>(appNavStories).map(([story, args]) =>
+    appNavCase(`App nav/${story}`, args),
+  ),
+  appNavCase(
+    'App nav/with extra attributes',
+    { label: 'Main', brandName: 'Harbour', items: [appNavItemDefaults] },
+    { class: 'is-pinned', id: 'app-nav', 'data-testid': 'app-nav', 'aria-describedby': 'nav-help' },
+  ),
+  appNavCase(
+    'App nav/with a clashing attribute',
+    { label: 'Main', items: [appNavItemDefaults] },
+    { 'aria-label': 'Primary' },
+  ),
+  appNavCase('App nav/blank text', {
+    label: ' ',
+    brandName: ' ',
+    brandHref: ' ',
+    mark: sampleIcons.mark,
+    items: [],
+  }),
+  appNavCase('App nav/escaped text', {
+    label: '"><b>x</b>',
+    brandName: '<b>Harbour</b>',
+    brandHref: '/?a=1&b="2"',
+    items: [],
+  }),
+  appNavItemCase('App nav item/Default', appNavItemDefaults),
+  appNavItemCase('App nav item/Current', { ...appNavItemDefaults, current: true }),
+  appNavItemCase('App nav item/WithCount', { ...appNavItemDefaults, count: 12 }),
+  appNavItemCase('App nav item/ZeroCount', { ...appNavItemDefaults, count: 0 }),
+  appNavItemCase('App nav item/WithoutIcon', { ...appNavItemDefaults, icon: undefined }),
+  appNavItemCase('App nav item/blank href and count', {
+    ...appNavItemDefaults,
+    href: ' ',
+    count: ' ',
+  }),
+  appNavItemCase('App nav item/escaped text', {
+    ...appNavItemDefaults,
+    label: '<b>Support</b>',
+    href: '/?a=1&b="2"',
+    count: '<b>1</b>',
+  }),
+  appNavItemCase(
+    'App nav item/with extra attributes',
+    { ...appNavItemDefaults, count: 3 },
+    { class: 'is-new', id: 'support', 'data-testid': 'support', 'wire:navigate': '' },
+  ),
+  appNavItemCase(
+    'App nav item/with a clashing attribute',
+    { ...appNavItemDefaults, current: true },
+    { 'aria-current': 'location' },
+  ),
   ...storyArgs<SectionMenuArgs>(sectionMenuStories).map(([story, args]) =>
     sectionMenuCase(`Section menu/${story}`, args),
   ),
@@ -1476,6 +1548,57 @@ function sectionMenuItemProps(args: SectionMenuItemArgs) {
   };
 }
 
+function appNavItemCase(
+  story: string,
+  args: AppNavItemArgs,
+  attributes: Attributes = {},
+): ParityCase {
+  const props = {
+    href: args.href,
+    ...(args.count !== undefined ? { count: args.count } : {}),
+    current: args.current,
+  };
+  const named: Record<string, string> = args.icon ? { icon: args.icon } : {};
+  return {
+    story,
+    markup: appNavItem(args, attributes),
+    vue: {
+      component: PlinthAppNavItem,
+      props: { ...props, ...attributes },
+      slot: escape(args.label),
+      html: true,
+      named,
+    },
+    blade: { component: 'app-nav-item', props, attributes, slot: escape(args.label), named },
+  };
+}
+
+/** The nav's own parity; its items are each an item case's markup, passed in as the slot. */
+function appNavCase(story: string, args: AppNavArgs, attributes: Attributes = {}): ParityCase {
+  const props = {
+    ...(args.label !== undefined ? { label: args.label } : {}),
+    ...(args.brandName !== undefined ? { brandName: args.brandName } : {}),
+    ...(args.brandHref !== undefined ? { brandHref: args.brandHref } : {}),
+  };
+  const named = {
+    ...(args.mark ? { mark: args.mark } : {}),
+    ...(args.footer ? { footer: args.footer } : {}),
+  };
+  const slot = args.items.map((item) => appNavItem(item)).join('');
+  return {
+    story,
+    markup: appNav(args, attributes),
+    vue: {
+      component: PlinthAppNav,
+      props: { ...props, ...attributes },
+      slot,
+      html: true,
+      named,
+    },
+    blade: { component: 'app-nav', props, attributes, slot, named },
+  };
+}
+
 function sectionMenuItemCase(
   story: string,
   args: SectionMenuItemArgs,
@@ -2162,6 +2285,27 @@ describe('parity with the stories', () => {
       'Pill/with extra attributes',
       'Pill/link with extra attributes',
       'Pill/with a clashing attribute',
+      'App nav/Default',
+      'App nav/WithFooter',
+      'App nav/NoneCurrent',
+      'App nav/WithCounts',
+      'App nav/BrandWithoutLink',
+      'App nav/MarkOnly',
+      'App nav/WithoutBrand',
+      'App nav/ManyItems',
+      'App nav/with extra attributes',
+      'App nav/with a clashing attribute',
+      'App nav/blank text',
+      'App nav/escaped text',
+      'App nav item/Default',
+      'App nav item/Current',
+      'App nav item/WithCount',
+      'App nav item/ZeroCount',
+      'App nav item/WithoutIcon',
+      'App nav item/blank href and count',
+      'App nav item/escaped text',
+      'App nav item/with extra attributes',
+      'App nav item/with a clashing attribute',
       'Section menu/Default',
       'Section menu/WithCounts',
       'Section menu/Buttons',

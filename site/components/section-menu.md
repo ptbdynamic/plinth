@@ -8,7 +8,8 @@ scrolls sideways.
 ## When not to use it
 
 - For filters on a list: use a [pill row](pill-row.md).
-- For the app's main navigation: that belongs in the [menu sheet](menu-sheet.md).
+- For the app's main navigation: use the [app nav](app-nav.md), and the [menu sheet](menu-sheet.md)
+  on a phone.
 - For one or two sections: show them on one page instead.
 
 ## Links

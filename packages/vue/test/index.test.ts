@@ -2,6 +2,8 @@ import { createApp } from 'vue';
 import { describe, expect, it } from 'vitest';
 import {
   Plinth,
+  PlinthAppNav,
+  PlinthAppNavItem,
   PlinthAvatar,
   PlinthBadge,
   PlinthButton,
@@ -42,6 +44,8 @@ describe('the Plinth plugin', () => {
     const app = createApp({});
     app.use(Plinth);
 
+    expect(app.component('PlinthAppNav')).toBe(PlinthAppNav);
+    expect(app.component('PlinthAppNavItem')).toBe(PlinthAppNavItem);
     expect(app.component('PlinthAvatar')).toBe(PlinthAvatar);
     expect(app.component('PlinthBadge')).toBe(PlinthBadge);
     expect(app.component('PlinthButton')).toBe(PlinthButton);
