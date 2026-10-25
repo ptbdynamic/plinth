@@ -219,6 +219,12 @@ return [
             'description' => 'The bar on top of a list: its heading and count, its actions, and how many are selected.',
         ],
 
+        'toolbar' => [
+            'name' => 'Toolbar',
+            'group' => 'Navigation',
+            'description' => 'The row of actions under a page header: a search with its scope, the target, grouped actions and a menu.',
+        ],
+
         'app-nav' => [
             'name' => 'App nav',
             'group' => 'Navigation',

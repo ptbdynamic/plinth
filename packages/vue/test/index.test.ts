@@ -45,6 +45,11 @@ import {
   PlinthStat,
   PlinthTextarea,
   PlinthTextField,
+  PlinthToolbar,
+  PlinthToolbarAction,
+  PlinthToolbarGroup,
+  PlinthToolbarScope,
+  PlinthToolbarSearch,
 } from '../src/index.ts';
 
 describe('the Plinth plugin', () => {
@@ -95,5 +100,10 @@ describe('the Plinth plugin', () => {
     expect(app.component('PlinthStat')).toBe(PlinthStat);
     expect(app.component('PlinthTextarea')).toBe(PlinthTextarea);
     expect(app.component('PlinthTextField')).toBe(PlinthTextField);
+    expect(app.component('PlinthToolbar')).toBe(PlinthToolbar);
+    expect(app.component('PlinthToolbarAction')).toBe(PlinthToolbarAction);
+    expect(app.component('PlinthToolbarGroup')).toBe(PlinthToolbarGroup);
+    expect(app.component('PlinthToolbarScope')).toBe(PlinthToolbarScope);
+    expect(app.component('PlinthToolbarSearch')).toBe(PlinthToolbarSearch);
   });
 });

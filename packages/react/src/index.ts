@@ -41,6 +41,11 @@ export { PlinthSplitView, type PlinthSplitViewProps } from './PlinthSplitView';
 export { PlinthStat, type PlinthStatProps } from './PlinthStat';
 export { PlinthTextarea, type PlinthTextareaProps } from './PlinthTextarea';
 export { PlinthTextField, type PlinthTextFieldProps } from './PlinthTextField';
+export { PlinthToolbar, type PlinthToolbarProps } from './PlinthToolbar';
+export { PlinthToolbarAction, type PlinthToolbarActionProps } from './PlinthToolbarAction';
+export { PlinthToolbarGroup, type PlinthToolbarGroupProps } from './PlinthToolbarGroup';
+export { PlinthToolbarScope, type PlinthToolbarScopeProps } from './PlinthToolbarScope';
+export { PlinthToolbarSearch, type PlinthToolbarSearchProps } from './PlinthToolbarSearch';
 export { avatarGlyph, avatarSizes, initialsFrom, type AvatarSize } from './avatar';
 export {
   buttonVariants,
@@ -104,6 +109,7 @@ export {
   type DrawerSnap,
 } from './drawer';
 export { swipeToClose, useSwipeToClose } from './swipe';
+export { toolbarKeys } from './toolbar';
 export { fieldDescribedBy, textFieldSize, textFieldSizes, type TextFieldSize } from './text-field';
 export { splitViewPane, splitViewPanes, type SplitViewPane } from './split-view';
 export { sheetCloseIcon, sheetSide, sheetSidePhone, sheetSides, type SheetSide } from './sheet';

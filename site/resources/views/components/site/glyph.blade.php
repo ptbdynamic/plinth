@@ -65,6 +65,15 @@
         @case('archive')
             <rect x="3" y="4" width="18" height="4" rx="1"></rect><path d="M5 8v11h14V8M10 12h4"></path>
             @break
+        @case('clock')
+            <circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path>
+            @break
+        @case('flag')
+            <path d="M5 21V4M5 4h11l-2 4 2 4H5"></path>
+            @break
+        @case('spam')
+            <circle cx="12" cy="12" r="9"></circle><path d="M5.6 5.6l12.8 12.8"></path>
+            @break
         @case('trash')
             <path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"></path>
             @break
