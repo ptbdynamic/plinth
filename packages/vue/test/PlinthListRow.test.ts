@@ -94,4 +94,53 @@ describe('PlinthListRow', () => {
     await wrapper.trigger('click');
     expect(clicks).toBe(1);
   });
+
+  it('is a label with a checkbox while selecting, and never navigates', () => {
+    const wrapper = mount(PlinthListRow, {
+      props: { href: '/tickets/1', chevron: true, selectable: true, name: 'tickets[]', value: '1' },
+      slots: { default: 'Cannot export', leading: '<i>avatar</i>' },
+    });
+
+    expect(squish(wrapper.html())).toBe(
+      '<label class="plinth-list-row"><span class="plinth-list-row-leading"><input type="checkbox" class="plinth-list-row-checkbox" name="tickets[]" value="1"></span><span class="plinth-list-row-content"><span class="plinth-list-row-title">Cannot export</span></span></label>',
+    );
+    const checkbox = wrapper.get('input').element as HTMLInputElement;
+    expect(checkbox.checked).toBe(false);
+    expect(checkbox.disabled).toBe(false);
+  });
+
+  it('checks a selected row, disables it, and emits the change', async () => {
+    const wrapper = mount(PlinthListRow, {
+      props: { selectable: true, selected: true, disabled: true, current: true },
+      slots: { default: 'Ticket' },
+    });
+    const checkbox = wrapper.get('input');
+
+    expect(wrapper.attributes('aria-current')).toBe('page');
+    expect((checkbox.element as HTMLInputElement).checked).toBe(true);
+    expect((checkbox.element as HTMLInputElement).disabled).toBe(true);
+    expect(checkbox.attributes('name')).toBeUndefined();
+    expect(checkbox.attributes('value')).toBeUndefined();
+
+    const enabled = mount(PlinthListRow, {
+      props: { selectable: true, selected: true },
+      slots: { default: 'Ticket' },
+    });
+    await enabled.get('input').setValue(false);
+    expect(enabled.emitted('update:selected')).toEqual([[false]]);
+  });
+
+  it('keeps name and value on the root of a row that is not selectable', () => {
+    const wrapper = mount(PlinthListRow, {
+      props: { button: true, name: 'action', value: 'archive' },
+      attrs: { type: 'submit' },
+      slots: { default: 'Archive' },
+    });
+
+    expect(wrapper.attributes()).toMatchObject({
+      type: 'submit',
+      name: 'action',
+      value: 'archive',
+    });
+  });
 });

@@ -91,6 +91,7 @@ describe('tiers', () => {
       'page-header.offset',
       'data-table.row-height',
       'list-row.height',
+      'list-header.height',
       'pill.height',
       'dialog.width',
       'sheet.side-width',

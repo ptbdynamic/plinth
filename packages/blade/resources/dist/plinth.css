@@ -219,6 +219,7 @@
     --plinth-page-header-offset: var(--plinth-space-0);
     --plinth-data-table-row-height: var(--plinth-size-row);
     --plinth-list-row-height: var(--plinth-size-row);
+    --plinth-list-header-height: var(--plinth-size-row);
     --plinth-pill-height: var(--plinth-control-md);
     --plinth-dialog-width: var(--plinth-size-dialog);
     --plinth-sheet-side-width: var(--plinth-size-panel);
@@ -3137,6 +3138,120 @@
   }
 }
 
+/* list-header.css */
+/*
+ * List header: the bar on top of a list, with the list's heading and count, then its actions
+ * (select, filter, sort). While the app is selecting rows it says how many are selected.
+ *
+ * <div class="plinth-list-header">
+ *   <h2 class="plinth-list-header-heading">
+ *     <span class="plinth-list-header-title">Open</span>
+ *     <span class="plinth-list-header-count">12</span>
+ *   </h2>
+ *   <p class="plinth-list-header-selection" role="status"></p>
+ *   <div class="plinth-list-header-actions">icon buttons</div>
+ * </div>
+ *
+ * While selecting:
+ *
+ * <div class="plinth-list-header is-selecting">
+ *   <h2 class="plinth-list-header-heading">…</h2>
+ *   <p class="plinth-list-header-selection" role="status">2 selected</p>
+ *   <div class="plinth-list-header-actions">the selection's actions</div>
+ * </div>
+ *
+ * The heading names the list, an <h2> unless the heading level says otherwise (h2 to h6). The
+ * count is optional: how many items the list holds, in the mono face, read after the title
+ * (Open 12). The actions are optional: icon buttons, each with its own label, or a button.
+ *
+ * State, set by the app: is-selecting on the root while it is selecting rows (selectable list
+ * rows, list-row.css). The selection text is the app's, so it can count and translate it
+ * (2 selected); it shows in the heading's place, and the heading stays in the page's outline,
+ * hidden from sight. plinth-list-header-selection is a polite live region (role="status"),
+ * printed empty when not selecting, so a screen reader hears the count change. The app swaps
+ * the actions for the selection's own (Archive, Done) while selecting, and moves focus to the
+ * new control as it does (Done on the way in, Select on the way out), since the focused button
+ * leaves the page; or it keeps Select in place as a toggle (aria-pressed).
+ *
+ * The height is --plinth-list-header-height (44px), a list row's, and a hairline divider
+ * (color.divider) sits under it. A long title is cut with an ellipsis; the count and the
+ * actions keep their width.
+ */
+
+@layer plinth {
+  .plinth-list-header {
+    position: relative;
+    box-sizing: border-box;
+    display: flex;
+    gap: var(--plinth-space-2);
+    align-items: center;
+    min-block-size: var(--plinth-list-header-height);
+    padding-block: var(--plinth-space-1);
+    padding-inline: var(--plinth-space-4) var(--plinth-space-2);
+    font-family: var(--plinth-font-family-body);
+    font-size: var(--plinth-font-size-md);
+    line-height: var(--plinth-font-leading-tight);
+    color: var(--plinth-color-text);
+    border-block-end: var(--plinth-border-width-thin) solid var(--plinth-color-divider);
+  }
+
+  .plinth-list-header-heading {
+    display: flex;
+    flex: 1 1 auto;
+    gap: var(--plinth-space-2);
+    align-items: baseline;
+    min-inline-size: 0;
+    margin: 0;
+    font-size: var(--plinth-font-size-md);
+    font-weight: var(--plinth-font-weight-semibold);
+    line-height: var(--plinth-font-leading-tight);
+  }
+
+  .plinth-list-header-title {
+    min-inline-size: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .plinth-list-header-count {
+    flex: none;
+    font-family: var(--plinth-font-family-mono);
+    font-size: var(--plinth-font-size-sm);
+    font-weight: var(--plinth-font-weight-regular);
+    font-variant-numeric: tabular-nums;
+    color: var(--plinth-color-text-muted);
+  }
+
+  .plinth-list-header-selection {
+    min-inline-size: 0;
+    margin: 0;
+    font-weight: var(--plinth-font-weight-medium);
+  }
+
+  .plinth-list-header-actions {
+    display: flex;
+    flex: none;
+    gap: var(--plinth-space-2);
+    align-items: center;
+    margin-inline-start: auto;
+  }
+
+  /* While selecting, the count of selected rows takes the heading's place. */
+  .plinth-list-header.is-selecting .plinth-list-header-heading {
+    position: absolute;
+    inline-size: 1px;
+    block-size: 1px;
+    overflow: hidden;
+    white-space: nowrap;
+    clip-path: inset(50%);
+  }
+
+  .plinth-list-header.is-selecting .plinth-list-header-selection {
+    flex: 1 1 auto;
+  }
+}
+
 /* list-row.css */
 /*
  * List row: one row of a list or a sheet, 44px tall at least.
@@ -3161,14 +3276,37 @@
  * - a static row is a <div>;
  * - a row that navigates is <a class="plinth-list-row" href="…">;
  * - a row that acts is <button type="button" class="plinth-list-row">.
+ * - a row the app is selecting is <label class="plinth-list-row"> (selectable below).
  * A link or button row holds no other control: a switch or an icon button in the trailing slot
  * needs a static row, and its own accessible name.
+ *
+ * Selectable: while the app is selecting rows (a list header with is-selecting, list-header.css),
+ * each row becomes a <label> with a checkbox in the leading slot, in place of its icon or avatar:
+ *
+ * <label class="plinth-list-row">
+ *   <span class="plinth-list-row-leading">
+ *     <input type="checkbox" class="plinth-list-row-checkbox" name="tickets[]" value="12" checked>
+ *   </span>
+ *   <span class="plinth-list-row-content">…</span>
+ * </label>
+ *
+ * The label gives the checkbox the row's text as its accessible name, and the whole row toggles
+ * it. Selecting never navigates: the row drops its href (and its chevron) while selecting. The
+ * app owns which rows are selected: it prints `checked` and listens to the checkbox's change,
+ * which bubbles to the row. A selected row takes the selection tint (accent-subtle); the check
+ * mark is its cue beyond colour. name and value let a form send the selection (on a row that
+ * isn't selectable they are the root's own, a submit button's). A selectable row holds no other
+ * control: the label would name and click it too, so a trailing slot holds text or a badge. The
+ * focus ring is on the checkbox (focus-ring.offset), since the label can't take focus. A current
+ * row keeps aria-current and its tint, but a screen reader folds a label into its checkbox, so
+ * while selecting the current row is a visual cue only.
  *
  * States:
  * - current: aria-current="page" on a link row (or a static row) for the page being shown, set
  *   by the app; the selection tint (accent-subtle, accent-text) and a heavier title. A button
  *   row never prints it: a button is not a page.
- * - disabled: `disabled` on a <button>; on a link, no href, role="link" and aria-disabled="true".
+ * - disabled: `disabled` on a <button>; on a link, no href, role="link" and aria-disabled="true";
+ *   on a selectable row, `disabled` on its checkbox.
  * - hover only where the device can hover; the focus ring on :focus-visible, drawn inside the
  *   row (focus-ring.offset-inset).
  *
@@ -3203,7 +3341,7 @@
     transition: background-color var(--plinth-duration-fast) var(--plinth-easing-standard);
   }
 
-  :is(a, button).plinth-list-row {
+  :is(a, button, label).plinth-list-row {
     cursor: pointer;
   }
 
@@ -3217,13 +3355,19 @@
 
   @media (hover: hover) {
     a.plinth-list-row[href]:not([aria-current='page']):hover,
-    button.plinth-list-row:enabled:not([aria-current='page']):hover {
+    button.plinth-list-row:enabled:not([aria-current='page']):hover,
+    label.plinth-list-row:has(.plinth-list-row-checkbox:enabled:not(:checked)):not(
+        [aria-current='page']
+      ):hover {
       background-color: var(--plinth-color-surface-hover);
     }
   }
 
   a.plinth-list-row[href]:not([aria-current='page']):active,
-  button.plinth-list-row:enabled:not([aria-current='page']):active {
+  button.plinth-list-row:enabled:not([aria-current='page']):active,
+  label.plinth-list-row:has(.plinth-list-row-checkbox:enabled:not(:checked)):not(
+      [aria-current='page']
+    ):active {
     background-color: var(--plinth-color-surface-sunken);
   }
 
@@ -3232,16 +3376,21 @@
     background-color: var(--plinth-color-accent-subtle);
   }
 
-  .plinth-list-row:disabled,
-  .plinth-list-row[aria-disabled='true'] {
-    cursor: not-allowed;
-    opacity: var(--plinth-opacity-disabled);
-  }
-
   /* Inside the row, so a scrolling sheet or a card doesn't cut the ring off at the sides. */
   .plinth-list-row:focus-visible {
     outline: var(--plinth-focus-ring-width) solid var(--plinth-color-focus-ring);
     outline-offset: var(--plinth-focus-ring-offset-inset);
+  }
+
+  .plinth-list-row:disabled,
+  .plinth-list-row[aria-disabled='true'],
+  .plinth-list-row:has(.plinth-list-row-checkbox:disabled) {
+    cursor: not-allowed;
+    opacity: var(--plinth-opacity-disabled);
+  }
+
+  .plinth-list-row:has(.plinth-list-row-checkbox:checked) {
+    background-color: var(--plinth-color-accent-subtle);
   }
 
   .plinth-list-row-leading {
@@ -3249,6 +3398,21 @@
     flex: none;
     align-items: center;
     color: var(--plinth-color-text-muted);
+  }
+
+  /* The native checkbox, in the accent, the size of a small icon. */
+  .plinth-list-row-checkbox {
+    flex: none;
+    inline-size: var(--plinth-size-icon-sm);
+    block-size: var(--plinth-size-icon-sm);
+    margin: 0;
+    accent-color: var(--plinth-color-accent);
+    cursor: inherit;
+  }
+
+  .plinth-list-row-checkbox:focus-visible {
+    outline: var(--plinth-focus-ring-width) solid var(--plinth-color-focus-ring);
+    outline-offset: var(--plinth-focus-ring-offset);
   }
 
   .plinth-list-row-content {
@@ -3297,8 +3461,14 @@
     }
 
     .plinth-list-row:disabled,
-    .plinth-list-row[aria-disabled='true'] {
+    .plinth-list-row[aria-disabled='true'],
+    .plinth-list-row:has(.plinth-list-row-checkbox:disabled) {
       color: GrayText;
+    }
+
+    .plinth-list-row:has(.plinth-list-row-checkbox:checked) {
+      outline: var(--plinth-border-width-thin) solid CanvasText;
+      outline-offset: calc(-1 * var(--plinth-border-width-thin));
     }
   }
 }

@@ -209,8 +209,14 @@ return [
             'description' => 'One row of a list: title, description, a leading and a trailing slot.',
             'playground' => [
                 'template' => "<x-plinth::list-card>\n    <li><x-plinth::list-row href=\"#\" description=\"Monthly, by email\"{attributes}>Invoices</x-plinth::list-row></li>\n</x-plinth::list-card>",
-                'states' => ['chevron', 'current', 'disabled'],
+                'states' => ['chevron', 'current', 'disabled', 'selectable', 'selected'],
             ],
+        ],
+
+        'list-header' => [
+            'name' => 'List header',
+            'group' => 'Content',
+            'description' => 'The bar on top of a list: its heading and count, its actions, and how many are selected.',
         ],
 
         'app-nav' => [

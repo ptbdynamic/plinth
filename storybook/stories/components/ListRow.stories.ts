@@ -25,18 +25,28 @@ const moreActions = iconButton({
 const meta = {
   title: 'Components/List Row',
   render: (args) => listRow(args),
-  args: { title: 'Notifications', chevron: false, button: false, current: false, disabled: false },
+  args: {
+    title: 'Notifications',
+    chevron: false,
+    button: false,
+    current: false,
+    disabled: false,
+    selectable: false,
+    selected: false,
+  },
   argTypes: {
     description: { control: 'text' },
     href: { control: 'text' },
     leading: { control: 'text' },
     trailing: { control: 'text' },
+    name: { control: 'text' },
+    value: { control: 'text' },
   },
   parameters: {
     docs: {
       description: {
         component:
-          'One row of a list: a title, a description, and a leading and a trailing slot. A link, a button or plain.',
+          "One row of a list: a title, a description, and a leading and a trailing slot. A link, a button or plain. While the app is selecting rows, `selectable` makes it a `<label>` with a checkbox in the leading slot, named by the row's text; selecting never navigates, and the app owns which rows are `selected` (it listens to the checkbox's `change`).",
       },
     },
   },
@@ -101,6 +111,46 @@ export const LongValue: Story = {
     chevron: true,
     href: '#billing',
   },
+};
+
+/** While the app is selecting: a checkbox in place of the avatar, and the row opens nothing. */
+export const Selectable: Story = {
+  args: {
+    title: 'Cannot export the March report',
+    description: 'Alex Kim · 10 min',
+    leading: person,
+    trailing: badge({ label: 'Urgent', tone: 'danger', dot: false }),
+    href: '#ticket-1',
+    chevron: true,
+    selectable: true,
+    name: 'tickets[]',
+    value: '1',
+  },
+};
+export const Selected: Story = { args: { ...Selectable.args, selected: true } };
+export const SelectableDisabled: Story = {
+  args: { ...Selectable.args, title: 'Ticket locked by Jo Park', disabled: true },
+};
+/** The open ticket stays current while the app is selecting. */
+export const SelectableCurrent: Story = {
+  args: { ...Selectable.args, current: true, selected: true },
+};
+
+const tickets = [
+  ['Cannot export the March report', 'Alex Kim · 10 min', true],
+  ['Invoice shows the wrong address', 'Jo Park · 1 h', true],
+  ['Two-factor code never arrives', 'Rui Silva · 3 h', false],
+] as const;
+
+/** Rows while selecting, in a list: two selected, one not. */
+export const SelectableList: Story = {
+  render: () =>
+    `<ul role="list" style="margin: 0; padding: 0; list-style: none;">${tickets
+      .map(
+        ([title, description, selected], index) =>
+          `<li>${listRow({ ...meta.args, title, description, selectable: true, selected, name: 'tickets[]', value: String(index + 1) })}</li>`,
+      )
+      .join('')}</ul>`,
 };
 
 const settings = [

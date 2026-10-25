@@ -1,0 +1,112 @@
+/*
+ * List header: the bar on top of a list, with the list's heading and count, then its actions
+ * (select, filter, sort). While the app is selecting rows it says how many are selected.
+ *
+ * <div class="plinth-list-header">
+ *   <h2 class="plinth-list-header-heading">
+ *     <span class="plinth-list-header-title">Open</span>
+ *     <span class="plinth-list-header-count">12</span>
+ *   </h2>
+ *   <p class="plinth-list-header-selection" role="status"></p>
+ *   <div class="plinth-list-header-actions">icon buttons</div>
+ * </div>
+ *
+ * While selecting:
+ *
+ * <div class="plinth-list-header is-selecting">
+ *   <h2 class="plinth-list-header-heading">…</h2>
+ *   <p class="plinth-list-header-selection" role="status">2 selected</p>
+ *   <div class="plinth-list-header-actions">the selection's actions</div>
+ * </div>
+ *
+ * The heading names the list, an <h2> unless the heading level says otherwise (h2 to h6). The
+ * count is optional: how many items the list holds, in the mono face, read after the title
+ * (Open 12). The actions are optional: icon buttons, each with its own label, or a button.
+ *
+ * State, set by the app: is-selecting on the root while it is selecting rows (selectable list
+ * rows, list-row.css). The selection text is the app's, so it can count and translate it
+ * (2 selected); it shows in the heading's place, and the heading stays in the page's outline,
+ * hidden from sight. plinth-list-header-selection is a polite live region (role="status"),
+ * printed empty when not selecting, so a screen reader hears the count change. The app swaps
+ * the actions for the selection's own (Archive, Done) while selecting, and moves focus to the
+ * new control as it does (Done on the way in, Select on the way out), since the focused button
+ * leaves the page; or it keeps Select in place as a toggle (aria-pressed).
+ *
+ * The height is --plinth-list-header-height (44px), a list row's, and a hairline divider
+ * (color.divider) sits under it. A long title is cut with an ellipsis; the count and the
+ * actions keep their width.
+ */
+
+@layer plinth {
+  .plinth-list-header {
+    position: relative;
+    box-sizing: border-box;
+    display: flex;
+    gap: var(--plinth-space-2);
+    align-items: center;
+    min-block-size: var(--plinth-list-header-height);
+    padding-block: var(--plinth-space-1);
+    padding-inline: var(--plinth-space-4) var(--plinth-space-2);
+    font-family: var(--plinth-font-family-body);
+    font-size: var(--plinth-font-size-md);
+    line-height: var(--plinth-font-leading-tight);
+    color: var(--plinth-color-text);
+    border-block-end: var(--plinth-border-width-thin) solid var(--plinth-color-divider);
+  }
+
+  .plinth-list-header-heading {
+    display: flex;
+    flex: 1 1 auto;
+    gap: var(--plinth-space-2);
+    align-items: baseline;
+    min-inline-size: 0;
+    margin: 0;
+    font-size: var(--plinth-font-size-md);
+    font-weight: var(--plinth-font-weight-semibold);
+    line-height: var(--plinth-font-leading-tight);
+  }
+
+  .plinth-list-header-title {
+    min-inline-size: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .plinth-list-header-count {
+    flex: none;
+    font-family: var(--plinth-font-family-mono);
+    font-size: var(--plinth-font-size-sm);
+    font-weight: var(--plinth-font-weight-regular);
+    font-variant-numeric: tabular-nums;
+    color: var(--plinth-color-text-muted);
+  }
+
+  .plinth-list-header-selection {
+    min-inline-size: 0;
+    margin: 0;
+    font-weight: var(--plinth-font-weight-medium);
+  }
+
+  .plinth-list-header-actions {
+    display: flex;
+    flex: none;
+    gap: var(--plinth-space-2);
+    align-items: center;
+    margin-inline-start: auto;
+  }
+
+  /* While selecting, the count of selected rows takes the heading's place. */
+  .plinth-list-header.is-selecting .plinth-list-header-heading {
+    position: absolute;
+    inline-size: 1px;
+    block-size: 1px;
+    overflow: hidden;
+    white-space: nowrap;
+    clip-path: inset(50%);
+  }
+
+  .plinth-list-header.is-selecting .plinth-list-header-selection {
+    flex: 1 1 auto;
+  }
+}

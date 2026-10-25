@@ -95,6 +95,36 @@ it belongs to (_More actions for Rui Costa_).
 </x-plinth::list-card>
 ```
 
+## Selectable
+
+While the app is selecting rows (after the [list header](list-header.md)'s Select, say), set
+**`selectable`** on each row. The row becomes a `<label>` with a checkbox in its leading slot, in
+place of the icon or the avatar, and the row's text names the checkbox, so the whole row toggles
+it. Selecting never navigates: the row drops its `href` and its chevron until the app turns
+`selectable` off. The app owns which rows are selected: set **`selected`** on those, and listen to
+the checkbox's `change`, which bubbles to the row (`wire:change`, `x-on:change`). Give the
+checkbox a **`name`** and a **`value`** and a form around the list sends the selection. A selected
+row takes the selection tint, and the check mark says it beyond colour; a disabled row disables
+its checkbox. The label's whole text names the checkbox, description and trailing text included,
+so keep the trailing slot to short text or a badge, and never a control: the label would click
+it too. The open ticket can stay `current`, but a screen reader folds the label into its
+checkbox, so while selecting the current row is a visual cue only. On a row that isn't
+selectable, `name` and `value` are the root's own, as on a submit button row.
+
+```blade example layout="stack"
+<x-plinth::list-card>
+    <li><x-plinth::list-row selectable selected name="tickets[]" value="1" description="Alex Kim · 10 min">Cannot export the March report</x-plinth::list-row></li>
+    <li><x-plinth::list-row selectable name="tickets[]" value="2" description="Jo Park · 1 h">Invoice shows the wrong address</x-plinth::list-row></li>
+    <li><x-plinth::list-row selectable disabled name="tickets[]" value="3" description="Locked by Rui Silva">Two-factor code never arrives</x-plinth::list-row></li>
+</x-plinth::list-card>
+```
+
+In Livewire, keep the selection in the component and listen on the row:
+`wire:change="toggle({{ $ticket->id }})"` (not `wire:click`: a click on a label clicks its checkbox
+too, so it would fire twice). Vue emits `update:selected`, so `v-model:selected` works; React calls
+`onSelectedChange` with the new value; without it, React's checkbox starts at `selected` and
+toggles natively, as Blade's and Vue's do.
+
 ## In a list
 
 Put rows next to each other, or each as the direct child of its own `<li>` in a `<ul>`, and a
@@ -125,12 +155,17 @@ slots as props that take a node.
 | chevron     | `chevron`                           | `chevron`                         | `chevron`                         | off     |
 | current     | `current` or `:current="$active"`   | `current` or `:current="active"`  | `current={active}`                | off     |
 | disabled    | `disabled`                          | `disabled`                        | `disabled`                        | off     |
+| selectable  | `selectable`, makes it a label      | `selectable`                      | `selectable`                      | off     |
+| selected    | `selected` or `:selected="$on"`     | `v-model:selected="on"`           | `selected={on}`                   | off     |
+| name        | `name="tickets[]"`, the checkbox's  | `name="tickets[]"`                | `name="tickets[]"`                | none    |
+| value       | `value="12"`, the checkbox's        | `value="12"`                      | `value="12"`                      | none    |
 | leading     | `<x-slot:leading>`                  | `#leading` slot                   | `leading` (a node)                | none    |
 | trailing    | `<x-slot:trailing>`                 | `#trailing` slot                  | `trailing` (a node)               | none    |
 | title       | the slot                            | the default slot                  | `children`                        | none    |
 
 Extra attributes and listeners (`wire:click`, `@click`, `onClick`) reach the root: the `<a>`, the
-`<button>` or the `<div>`.
+`<button>`, the `<div>` or, while selecting, the `<label>`. Vue emits `update:selected` with the
+checkbox's new value; React calls `onSelectedChange(selected)`.
 
 ```blade tab="Blade"
 <x-plinth::list-row :href="route('settings.language')" chevron wire:navigate>
@@ -139,6 +174,10 @@ Extra attributes and listeners (`wire:click`, `@click`, `onClick`) reach the roo
 </x-plinth::list-row>
 
 <x-plinth::list-row button wire:click="signOut">Sign out</x-plinth::list-row>
+
+<x-plinth::list-row :selectable="$selecting" :selected="in_array($ticket->id, $selected)" wire:change="toggle({{ $ticket->id }})">
+    {{ $ticket->subject }}
+</x-plinth::list-row>
 ```
 
 ```vue tab="Vue"
@@ -146,6 +185,10 @@ Extra attributes and listeners (`wire:click`, `@click`, `onClick`) reach the roo
 
 <PlinthListRow button description="Email and push" @click="openNotifications">
   Notifications
+</PlinthListRow>
+
+<PlinthListRow :selectable="selecting" v-model:selected="selected[ticket.id]">
+  {{ ticket.subject }}
 </PlinthListRow>
 ```
 
@@ -159,15 +202,25 @@ import { PlinthListRow } from '@ptbdynamic/plinth/react';
 <PlinthListRow button description="Email and push" onClick={openNotifications}>
     Notifications
 </PlinthListRow>;
+
+<PlinthListRow
+    selectable={selecting}
+    selected={selected.has(ticket.id)}
+    onSelectedChange={(on) => select(ticket.id, on)}
+>
+    {ticket.subject}
+</PlinthListRow>;
 ```
 
 ## Accessibility
 
 - The root is the native element for what the row does: a `<div>`, an `<a>` or a
-  `<button type="button">`.
+  `<button type="button">`; while selecting, a `<label>` around a native checkbox, which the row's
+  text names and the keyboard reaches with Tab and toggles with Space.
 - The current row prints `aria-current="page"`; a disabled link row has no `href`, `role="link"`
   and `aria-disabled="true"`.
-- The focus ring is drawn inside the row, so a scrolling sheet or a card doesn't cut it off.
+- The focus ring is drawn inside the row, so a scrolling sheet or a card doesn't cut it off; while
+  selecting it is on the checkbox, which takes the focus.
 - The minimum height is `--plinth-list-row-height` (44px), above the 40px touch target.
 - A decorative avatar is hidden from screen readers, so a person's name isn't read twice.
 - Checked with axe in light and dark at 390, 768 and 1440px on every pull request.
