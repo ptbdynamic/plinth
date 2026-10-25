@@ -24,18 +24,18 @@ jobs:
         with:
           cache: packages
 
-      - name: Lint, test and build the packages the pull request touches, and what depends on them
-        if: github.event_name == 'pull_request'
-        run: >-
-          npx turbo run lint test build
-          --filter="...[origin/${{ github.base_ref }}]"
-          --filter="!@ptbdynamic/plinth-site" --filter="!@ptbdynamic/plinth-storybook"
-
-      - name: Lint, test and build every package
-        if: github.event_name != 'pull_request'
-        run: >-
-          npx turbo run lint test build
-          --filter="!@ptbdynamic/plinth-site" --filter="!@ptbdynamic/plinth-storybook"
+      # On a pull request that leaves .github alone: what it touches, and what depends on that.
+      - name: Lint, test and build the packages
+        env:
+          EVENT: ${{ github.event_name }}
+          BASE: origin/${{ github.base_ref }}
+        run: |
+          filter=()
+          if [ "$EVENT" = pull_request ] && git diff --quiet "$BASE...HEAD" -- .github; then
+            filter=(--filter="...[$BASE]")
+          fi
+          npx turbo run lint test build "${filter[@]}" \
+            --filter='!@ptbdynamic/plinth-site' --filter='!@ptbdynamic/plinth-storybook'
 
       - name: A release dry run gives npm and Packagist one version
         run: npm run release -- --dry-run

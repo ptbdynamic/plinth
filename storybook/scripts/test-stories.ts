@@ -30,14 +30,7 @@ const { port } = server.address() as AddressInfo;
 
 const runner = spawn(
   'npx',
-  [
-    'test-storybook',
-    '--url',
-    `http://127.0.0.1:${port}`,
-    '--testTimeout',
-    '60000',
-    ...args,
-  ],
+  ['test-storybook', '--url', `http://127.0.0.1:${port}`, '--testTimeout', '60000', ...args],
   { stdio: 'inherit' },
 );
 const stop = () => runner.kill('SIGTERM');
