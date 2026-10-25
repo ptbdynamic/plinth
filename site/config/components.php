@@ -171,6 +171,16 @@ return [
             'description' => 'Records as cards on a phone and a table from 768px, from one markup, with no script.',
         ],
 
+        'empty-state' => [
+            'name' => 'Empty state',
+            'group' => 'Content',
+            'description' => 'A calm, centred message for nothing to show yet, often with one action.',
+            'playground' => [
+                'template' => "<x-plinth::empty-state heading=\"No runs yet\" heading-level=\"h3\" description=\"Runs show here once a workflow starts.\"{attributes}>\n    <x-slot:icon>\n        <x-plinth::icon><x-site.glyph name=\"inbox\" /></x-plinth::icon>\n    </x-slot:icon>\n    <x-slot:actions>\n        <x-plinth::button href=\"#\">Start a run</x-plinth::button>\n    </x-slot:actions>\n</x-plinth::empty-state>",
+                'states' => ['framed'],
+            ],
+        ],
+
         'icon' => [
             'name' => 'Icon',
             'group' => 'Content',
