@@ -29,7 +29,7 @@ it('leaves out an empty description', function () {
 
 it('prints the chevron in the trailing slot', function () {
     expect(squish(Blade::render('<x-plinth::list-row chevron>Language</x-plinth::list-row>')))
-        ->toContain('<span class="plinth-list-row-trailing"><span class="plinth-icon plinth-list-row-chevron" data-size="sm" data-mirror aria-hidden="true"><svg');
+        ->toContain('<span class="plinth-list-row-trailing"><span class="plinth-icon plinth-list-row-chevron" data-size="sm" data-icon="chevron-right" data-mirror="" aria-hidden="true"><svg');
 });
 
 it('is a link with an href, and a button with button', function () {

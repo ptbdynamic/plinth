@@ -85,19 +85,8 @@ export function PlinthSheet({
             variant="ghost"
             commandfor={sheetId}
             command="close"
-          >
-            {/* The cross is sheetCloseIcon (sheet.ts), written out; parity keeps the copies equal. */}
-            <svg
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <path d="M6 6l12 12M18 6L6 18"></path>
-            </svg>
-          </PlinthIconButton>
+            icon="close"
+          />
         </div>
         <div className="plinth-sheet-body">{children}</div>
         {hasContent(footer) ? <div className="plinth-sheet-footer">{footer}</div> : null}

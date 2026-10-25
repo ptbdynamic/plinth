@@ -1,3 +1,5 @@
+import { iconGlyph } from './icon';
+
 /**
  * The edge a sheet comes from. `end` is the default; `start` and `end` are logical, so they swap
  * in right-to-left text. The same list is the side on a phone (`sidePhone`), which has no default.
@@ -15,6 +17,5 @@ export function sheetSidePhone(value: string | undefined): SheetSide | undefined
   return sheetSides.includes(value as SheetSide) ? (value as SheetSide) : undefined;
 }
 
-/** The close button's icon, a cross. Blade's sheet prints the same markup. */
-export const sheetCloseIcon =
-  '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6L6 18"></path></svg>';
+/** The close button's icon, the built-in close glyph. Blade's sheet prints the same markup. */
+export const sheetCloseIcon = iconGlyph('close');

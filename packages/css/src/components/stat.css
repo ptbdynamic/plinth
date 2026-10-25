@@ -15,8 +15,8 @@
  * - a static tile is a <div>;
  * - a tile that leads to the detail behind the number is <a class="plinth-stat" href="…">, with
  *   the tile's own chevron as its last child, so the link shows without hover:
- *   <span class="plinth-icon plinth-stat-chevron" data-size="sm" data-mirror
- *     aria-hidden="true"><svg>…</svg></span>
+ *   <span class="plinth-icon plinth-stat-chevron" data-size="sm" data-icon="chevron-right"
+ *     data-mirror aria-hidden="true"><svg>…</svg></span>
  *   Its accessible name is its text: "Success rate 94% Up 2 points this week". It holds no other
  *   control.
  *

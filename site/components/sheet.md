@@ -31,16 +31,16 @@ The sheets on this page stay closed until you press their button.
 </x-plinth::sheet>
 ```
 
-| Part                        | Element    | Required | What it is                                                             |
-| --------------------------- | ---------- | -------- | ---------------------------------------------------------------------- |
-| `.plinth-sheet`             | `<dialog>` | yes      | The root. Needs an `id`; a project's classes and attributes land on it |
-| `.plinth-sheet-panel`       | `<div>`    | yes      | The root's only child, holding the parts                               |
-| `.plinth-sheet-handle`      | `<div>`    | no       | Where the side on a phone is the bottom: the grab handle, decorative   |
-| `.plinth-sheet-title`       | `<h2>`     | yes      | The sheet's accessible name                                            |
-| `.plinth-sheet-description` | `<p>`      | no       | Its accessible description (`aria-describedby`)                        |
-| `.plinth-sheet-close`       | `<button>` | yes      | An icon button, always there, named "Close" by default                 |
-| `.plinth-sheet-body`        | `<div>`    | yes      | The content; scrolls when it is taller than the screen                 |
-| `.plinth-sheet-footer`      | `<div>`    | no       | Usually the actions: full width on a phone, at the end from 768px      |
+| Part                        | Element    | Required | What it is                                                                  |
+| --------------------------- | ---------- | -------- | --------------------------------------------------------------------------- |
+| `.plinth-sheet`             | `<dialog>` | yes      | The root. Needs an `id`; a project's classes and attributes land on it      |
+| `.plinth-sheet-panel`       | `<div>`    | yes      | The root's only child, holding the parts                                    |
+| `.plinth-sheet-handle`      | `<div>`    | no       | Where the side on a phone is the bottom: the grab handle, decorative        |
+| `.plinth-sheet-title`       | `<h2>`     | yes      | The sheet's accessible name                                                 |
+| `.plinth-sheet-description` | `<p>`      | no       | Its accessible description (`aria-describedby`)                             |
+| `.plinth-sheet-close`       | `<button>` | yes      | An icon button with the close glyph, always there, named "Close" by default |
+| `.plinth-sheet-body`        | `<div>`    | yes      | The content; scrolls when it is taller than the screen                      |
+| `.plinth-sheet-footer`      | `<div>`    | no       | Usually the actions: full width on a phone, at the end from 768px           |
 
 Every layer generates an `id` when you leave it out, but pass your own when a button elsewhere
 opens the sheet. Set the close button's name with **`close-label`** in the page's language.

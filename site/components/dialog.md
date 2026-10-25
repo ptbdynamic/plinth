@@ -25,16 +25,16 @@ The dialogs on this page stay closed until you press their button.
 </x-plinth::dialog>
 ```
 
-| Part                         | Element    | Required | What it is                                                             |
-| ---------------------------- | ---------- | -------- | ---------------------------------------------------------------------- |
-| `.plinth-dialog`             | `<dialog>` | yes      | The root. Needs an `id`; a project's classes and attributes land on it |
-| `.plinth-dialog-panel`       | `<div>`    | yes      | The root's only child, holding the parts                               |
-| `.plinth-dialog-handle`      | `<div>`    | no       | On a dismissible bottom sheet on a phone: the grab handle, decorative  |
-| `.plinth-dialog-title`       | `<h2>`     | yes      | The dialog's accessible name                                           |
-| `.plinth-dialog-description` | `<p>`      | no       | Its accessible description (`aria-describedby`)                        |
-| `.plinth-dialog-close`       | `<button>` | no       | An icon button, named "Close" by default; only on a dismissible dialog |
-| `.plinth-dialog-body`        | `<div>`    | yes      | The content; scrolls when it is taller than the screen                 |
-| `.plinth-dialog-footer`      | `<div>`    | no       | Usually the actions: full width on a phone, at the end from 768px      |
+| Part                         | Element    | Required | What it is                                                                                  |
+| ---------------------------- | ---------- | -------- | ------------------------------------------------------------------------------------------- |
+| `.plinth-dialog`             | `<dialog>` | yes      | The root. Needs an `id`; a project's classes and attributes land on it                      |
+| `.plinth-dialog-panel`       | `<div>`    | yes      | The root's only child, holding the parts                                                    |
+| `.plinth-dialog-handle`      | `<div>`    | no       | On a dismissible bottom sheet on a phone: the grab handle, decorative                       |
+| `.plinth-dialog-title`       | `<h2>`     | yes      | The dialog's accessible name                                                                |
+| `.plinth-dialog-description` | `<p>`      | no       | Its accessible description (`aria-describedby`)                                             |
+| `.plinth-dialog-close`       | `<button>` | no       | An icon button with the close glyph, named "Close" by default; only on a dismissible dialog |
+| `.plinth-dialog-body`        | `<div>`    | yes      | The content; scrolls when it is taller than the screen                                      |
+| `.plinth-dialog-footer`      | `<div>`    | no       | Usually the actions: full width on a phone, at the end from 768px                           |
 
 Every layer generates an `id` when you leave it out, but pass your own when a button elsewhere
 opens the dialog. Set the close button's name with **`close-label`** in the page's language.

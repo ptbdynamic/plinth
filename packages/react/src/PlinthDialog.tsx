@@ -86,19 +86,8 @@ export function PlinthDialog({
               variant="ghost"
               commandfor={dialogId}
               command="close"
-            >
-              {/* The cross is dialogCloseIcon (dialog.ts), written out; parity keeps the copies equal. */}
-              <svg
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <path d="M6 6l12 12M18 6L6 18"></path>
-              </svg>
-            </PlinthIconButton>
+              icon="close"
+            />
           ) : null}
         </div>
         <div className="plinth-dialog-body">{children}</div>

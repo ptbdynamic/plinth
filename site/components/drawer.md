@@ -33,16 +33,16 @@ handle or its header.
 </x-plinth::drawer>
 ```
 
-| Part                         | Element    | Required | What it is                                                             |
-| ---------------------------- | ---------- | -------- | ---------------------------------------------------------------------- |
-| `.plinth-drawer`             | `<dialog>` | yes      | The root. Needs an `id`; a project's classes and attributes land on it |
-| `.plinth-drawer-panel`       | `<div>`    | yes      | The root's only child, holding the parts; the surface on a phone       |
-| `.plinth-drawer-handle`      | `<div>`    | yes      | The grab handle, decorative (`aria-hidden`); shown below 768px         |
-| `.plinth-drawer-title`       | `<h2>`     | yes      | The drawer's accessible name                                           |
-| `.plinth-drawer-description` | `<p>`      | no       | Its accessible description (`aria-describedby`)                        |
-| `.plinth-drawer-close`       | `<button>` | yes      | An icon button, always there, named "Close" by default                 |
-| `.plinth-drawer-body`        | `<div>`    | yes      | The content; scrolls inside the panel                                  |
-| `.plinth-drawer-footer`      | `<div>`    | no       | Usually the actions: full width on a phone, at the end from 768px      |
+| Part                         | Element    | Required | What it is                                                                  |
+| ---------------------------- | ---------- | -------- | --------------------------------------------------------------------------- |
+| `.plinth-drawer`             | `<dialog>` | yes      | The root. Needs an `id`; a project's classes and attributes land on it      |
+| `.plinth-drawer-panel`       | `<div>`    | yes      | The root's only child, holding the parts; the surface on a phone            |
+| `.plinth-drawer-handle`      | `<div>`    | yes      | The grab handle, decorative (`aria-hidden`); shown below 768px              |
+| `.plinth-drawer-title`       | `<h2>`     | yes      | The drawer's accessible name                                                |
+| `.plinth-drawer-description` | `<p>`      | no       | Its accessible description (`aria-describedby`)                             |
+| `.plinth-drawer-close`       | `<button>` | yes      | An icon button with the close glyph, always there, named "Close" by default |
+| `.plinth-drawer-body`        | `<div>`    | yes      | The content; scrolls inside the panel                                       |
+| `.plinth-drawer-footer`      | `<div>`    | no       | Usually the actions: full width on a phone, at the end from 768px           |
 
 Every layer generates an `id` when you leave it out, but pass your own when a button elsewhere
 opens the drawer. Set the close button's name with **`close-label`** in the page's language.

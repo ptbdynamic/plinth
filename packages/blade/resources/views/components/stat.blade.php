@@ -27,6 +27,6 @@
         <span class="plinth-stat-description">@if ($tone !== \BDynamic\Plinth\Enums\Tone::Neutral)<span class="plinth-icon plinth-stat-tone" data-size="sm" aria-hidden="true">{!! \BDynamic\Plinth\Enums\CalloutTone::from($tone->value)->icon() !!}</span>@endif{{ $description }}</span>
     @endif
     @if ($tag === 'a')
-        <span class="plinth-icon plinth-stat-chevron" data-size="sm" data-mirror aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"></path></svg></span>
+        <x-plinth::icon class="plinth-stat-chevron" name="chevron-right" size="sm" />
     @endif
 </{{ $tag }}>

@@ -53,7 +53,7 @@ it('prints the empty state for a missing value', function () {
 it('is a link with an href, with its chevron', function () {
     expect(squish(Blade::render('<x-plinth::stat label="Runs today" value="12" href="/runs" />')))
         ->toStartWith('<a class="plinth-stat" href="/runs" data-tone="neutral">')
-        ->toEndWith('<span class="plinth-icon plinth-stat-chevron" data-size="sm" data-mirror aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"></path></svg></span></a>');
+        ->toEndWith('<span class="plinth-icon plinth-stat-chevron" data-size="sm" data-icon="chevron-right" data-mirror="" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"></path></svg></span></a>');
     expect(Blade::render('<x-plinth::stat label="Runs today" value="12" />'))
         ->not->toContain('plinth-stat-chevron');
 });

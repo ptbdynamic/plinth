@@ -5,7 +5,7 @@ use Illuminate\Support\Facades\Blade;
 
 $close = '<button class="plinth-button plinth-icon-button plinth-sheet-close" type="button"'
     .' data-variant="ghost" data-size="md" aria-label="Close" commandfor="filters" command="close">'
-    .'<span class="plinth-icon" data-size="md" aria-hidden="true">'
+    .'<span class="plinth-icon" data-size="md" data-icon="close" aria-hidden="true">'
     .'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6L6 18"></path></svg>'
     .'</span></button>';
 

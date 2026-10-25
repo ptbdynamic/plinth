@@ -9,13 +9,14 @@
  *   </span>
  *   <span class="plinth-list-row-trailing">
  *     a value, a badge or a control
- *     <span class="plinth-icon plinth-list-row-chevron" data-size="sm" data-mirror
- *       aria-hidden="true"><svg>…</svg></span>
+ *     <span class="plinth-icon plinth-list-row-chevron" data-size="sm" data-icon="chevron-right"
+ *       data-mirror aria-hidden="true"><svg>…</svg></span>
  *   </span>
  * </div>
  *
  * The leading slot, the description and the trailing slot are optional; the chevron is the
- * row's own (chevron in Blade and Vue), and points the other way in right-to-left text.
+ * row's own (chevron in Blade and Vue), the built-in chevron-right glyph, which points the other
+ * way in right-to-left text.
  *
  * The root is the element the app talks to (ADR 2):
  * - a static row is a <div>;

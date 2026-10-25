@@ -6,7 +6,7 @@ import { PlinthDrawer, drawerCloseIcon, type DrawerDesktop } from '../src/index.
 
 const close =
   '<button type="button" class="plinth-button plinth-icon-button plinth-drawer-close" data-variant="ghost" data-size="md" aria-label="Close" commandfor="route" command="close">' +
-  `<span class="plinth-icon" data-size="md" aria-hidden="true">${drawerCloseIcon}</span></button>`;
+  `<span class="plinth-icon" data-size="md" data-icon="close" aria-hidden="true">${drawerCloseIcon}</span></button>`;
 
 const root = (element: ReactElement) =>
   render(element).container.firstElementChild! as HTMLDialogElement;

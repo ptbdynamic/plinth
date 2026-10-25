@@ -1,6 +1,7 @@
 // Markup contract: packages/css/src/components/list-row.css
 import type { ChangeEvent, ComponentProps, ElementType, ReactNode, Ref } from 'react';
 import { classNames, hasContent } from './markup';
+import { PlinthIcon } from './PlinthIcon';
 
 interface ListRowOptions {
   /** A second line under the title. */
@@ -108,28 +109,11 @@ export function PlinthListRow({
         <span className="plinth-list-row-title">{children}</span>
         {description ? <span className="plinth-list-row-description">{description}</span> : null}
       </span>
-      {/* The chevron is listRowChevron (list-row.ts), written out; parity keeps the copies equal. */}
       {hasTrailing || mark ? (
         <span className="plinth-list-row-trailing">
           {hasTrailing ? trailing : null}
           {mark ? (
-            <span
-              className="plinth-icon plinth-list-row-chevron"
-              data-size="sm"
-              data-mirror=""
-              aria-hidden="true"
-            >
-              <svg
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <path d="M9 6l6 6-6 6"></path>
-              </svg>
-            </span>
+            <PlinthIcon className="plinth-list-row-chevron" name="chevron-right" size="sm" />
           ) : null}
         </span>
       ) : null}

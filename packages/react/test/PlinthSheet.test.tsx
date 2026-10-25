@@ -6,7 +6,7 @@ import { PlinthSheet, sheetCloseIcon, type SheetSide } from '../src/index.ts';
 
 const close =
   '<button type="button" class="plinth-button plinth-icon-button plinth-sheet-close" data-variant="ghost" data-size="md" aria-label="Close" commandfor="filters" command="close">' +
-  `<span class="plinth-icon" data-size="md" aria-hidden="true">${sheetCloseIcon}</span></button>`;
+  `<span class="plinth-icon" data-size="md" data-icon="close" aria-hidden="true">${sheetCloseIcon}</span></button>`;
 
 const root = (element: ReactElement) =>
   render(element).container.firstElementChild! as HTMLDialogElement;
