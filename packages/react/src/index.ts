@@ -12,12 +12,12 @@ export { PlinthDataTableRow, type PlinthDataTableRowProps } from './PlinthDataTa
 export { PlinthDataTableSort, type PlinthDataTableSortProps } from './PlinthDataTableSort';
 export { PlinthDialog, type PlinthDialogProps } from './PlinthDialog';
 export { PlinthDrawer, type PlinthDrawerProps } from './PlinthDrawer';
-export { PlinthHeader, type PlinthHeaderProps } from './PlinthHeader';
 export { PlinthIcon, type PlinthIconProps } from './PlinthIcon';
 export { PlinthIconButton, type PlinthIconButtonProps } from './PlinthIconButton';
 export { PlinthListCard, type PlinthListCardProps } from './PlinthListCard';
 export { PlinthListRow, type PlinthListRowProps } from './PlinthListRow';
 export { PlinthMenuSheet, type PlinthMenuSheetProps } from './PlinthMenuSheet';
+export { PlinthPageHeader, type PlinthPageHeaderProps } from './PlinthPageHeader';
 export { PlinthPill, type PlinthPillProps } from './PlinthPill';
 export { PlinthPillRow, type PlinthPillRowProps } from './PlinthPillRow';
 export { PlinthSectionMenu, type PlinthSectionMenuProps } from './PlinthSectionMenu';
@@ -64,6 +64,7 @@ export { headingLevel, headingLevels, type HeadingLevel } from './heading';
 export { controlSizes, iconSizeFor, resolveSize, sizes, type ControlSize, type Size } from './size';
 export { iconSizes, type IconSize } from './icon';
 export { listRowChevron } from './list-row';
+export { pageHeaderLevel, pageHeaderLevels, type PageHeaderLevel } from './page-header';
 export {
   drawerCloseIcon,
   drawerDesktop,

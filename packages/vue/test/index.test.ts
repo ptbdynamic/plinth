@@ -16,12 +16,12 @@ import {
   PlinthDataTableSort,
   PlinthDialog,
   PlinthDrawer,
-  PlinthHeader,
   PlinthIcon,
   PlinthIconButton,
   PlinthListCard,
   PlinthListRow,
   PlinthMenuSheet,
+  PlinthPageHeader,
   PlinthPill,
   PlinthPillRow,
   PlinthSectionMenu,
@@ -48,12 +48,12 @@ describe('the Plinth plugin', () => {
     expect(app.component('PlinthDataTableSort')).toBe(PlinthDataTableSort);
     expect(app.component('PlinthDialog')).toBe(PlinthDialog);
     expect(app.component('PlinthDrawer')).toBe(PlinthDrawer);
-    expect(app.component('PlinthHeader')).toBe(PlinthHeader);
     expect(app.component('PlinthIcon')).toBe(PlinthIcon);
     expect(app.component('PlinthIconButton')).toBe(PlinthIconButton);
     expect(app.component('PlinthListCard')).toBe(PlinthListCard);
     expect(app.component('PlinthListRow')).toBe(PlinthListRow);
     expect(app.component('PlinthMenuSheet')).toBe(PlinthMenuSheet);
+    expect(app.component('PlinthPageHeader')).toBe(PlinthPageHeader);
     expect(app.component('PlinthPill')).toBe(PlinthPill);
     expect(app.component('PlinthPillRow')).toBe(PlinthPillRow);
     expect(app.component('PlinthSectionMenu')).toBe(PlinthSectionMenu);

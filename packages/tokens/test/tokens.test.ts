@@ -87,7 +87,8 @@ describe('tiers', () => {
     expect(tier('primitive').length).toBeGreaterThan(50);
     expect(tier('semantic').length).toBeGreaterThan(30);
     expect(tier('component').map((t) => t.path.join('.'))).toEqual([
-      'header.height',
+      'page-header.height',
+      'page-header.offset',
       'data-table.row-height',
       'list-row.height',
       'pill.height',
@@ -343,7 +344,7 @@ describe('CSS custom properties', () => {
       expect(css).toContain(`${t.name}: ${t.css};`);
     }
     expect(css).toContain('--plinth-color-text: var(--plinth-ref-color-neutral-950);');
-    expect(css).toContain('--plinth-header-height: var(--plinth-space-14);');
+    expect(css).toContain('--plinth-page-header-height: var(--plinth-space-14);');
   });
 
   it('switches to dark with data-theme, the .dark class or the system preference', () => {
@@ -364,7 +365,7 @@ describe('JS export', () => {
   it('exposes the semantic and component tokens as var()s', () => {
     expect(vars.color.surface).toBe('var(--plinth-color-surface)');
     expect(vars.space['4']).toBe('var(--plinth-space-4)');
-    expect(vars.header.height).toBe('var(--plinth-header-height)');
+    expect(vars['page-header'].height).toBe('var(--plinth-page-header-height)');
     expect(vars).not.toHaveProperty('ref');
   });
 });

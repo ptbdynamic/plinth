@@ -13,12 +13,12 @@ import {
   PlinthDataTableSort,
   PlinthDialog,
   PlinthDrawer,
-  PlinthHeader,
   PlinthIcon,
   PlinthIconButton,
   PlinthListCard,
   PlinthListRow,
   PlinthMenuSheet,
+  PlinthPageHeader,
   PlinthPill,
   PlinthPillRow,
   PlinthSectionMenu,
@@ -40,12 +40,12 @@ import {
   PlinthDataTableSort as ReactDataTableSort,
   PlinthDialog as ReactDialog,
   PlinthDrawer as ReactDrawer,
-  PlinthHeader as ReactHeader,
   PlinthIcon as ReactIcon,
   PlinthIconButton as ReactIconButton,
   PlinthListCard as ReactListCard,
   PlinthListRow as ReactListRow,
   PlinthMenuSheet as ReactMenuSheet,
+  PlinthPageHeader as ReactPageHeader,
   PlinthPill as ReactPill,
   PlinthPillRow as ReactPillRow,
   PlinthSectionMenu as ReactSectionMenu,
@@ -92,8 +92,6 @@ import * as confirmDialogStories from '../stories/components/ConfirmDialog.stori
 import { confirmDialog, type ConfirmDialogArgs } from '../stories/components/confirm-dialog.ts';
 import * as dialogStories from '../stories/components/Dialog.stories.ts';
 import { dialog, type DialogArgs } from '../stories/components/dialog.ts';
-import * as headerStories from '../stories/components/Header.stories.ts';
-import { header, type HeaderArgs } from '../stories/components/header.ts';
 import * as iconButtonStories from '../stories/components/IconButton.stories.ts';
 import { iconButton, type IconButtonArgs } from '../stories/components/icon-button.ts';
 import * as iconStories from '../stories/components/Icon.stories.ts';
@@ -104,6 +102,12 @@ import * as listRowStories from '../stories/components/ListRow.stories.ts';
 import { listRow, type ListRowArgs } from '../stories/components/list-row.ts';
 import * as menuSheetStories from '../stories/components/MenuSheet.stories.ts';
 import { menuSheet, type MenuSheetArgs } from '../stories/components/menu-sheet.ts';
+import * as pageHeaderStories from '../stories/components/PageHeader.stories.ts';
+import {
+  pageHeader,
+  type PageHeaderArgs,
+  type PageHeaderLevel,
+} from '../stories/components/page-header.ts';
 import * as pillRowStories from '../stories/components/PillRow.stories.ts';
 import { pill, pillRow, type PillArgs, type PillRowArgs } from '../stories/components/pill-row.ts';
 import * as sectionMenuStories from '../stories/components/SectionMenu.stories.ts';
@@ -128,7 +132,7 @@ import { htmlToReact, normalize, reactProps, renderBlade, withoutAlpine } from '
  * Each component also has a case with extra attributes, as a project adds them (a class, an id,
  * data-* and aria-*), so attribute forwarding cannot drift between the layers either, and a case
  * with an attribute that clashes with one the component sets on its root, where the project's
- * value wins (docs/adr/0002). The header, list card and code block set no attribute on their root
+ * value wins (docs/adr/0002). The list card and code block set no attribute on their root
  * but the class (the code block's id is a prop), so they have no clashing case.
  *
  * React takes the same props as Vue (docs/adr/0006), so a case's React side is its Vue side
@@ -171,12 +175,12 @@ const reactComponents = new Map<Component, unknown>([
   [PlinthDataTableSort, ReactDataTableSort],
   [PlinthDialog, ReactDialog],
   [PlinthDrawer, ReactDrawer],
-  [PlinthHeader, ReactHeader],
   [PlinthIcon, ReactIcon],
   [PlinthIconButton, ReactIconButton],
   [PlinthListCard, ReactListCard],
   [PlinthListRow, ReactListRow],
   [PlinthMenuSheet, ReactMenuSheet],
+  [PlinthPageHeader, ReactPageHeader],
   [PlinthPill, ReactPill],
   [PlinthPillRow, ReactPillRow],
   [PlinthSectionMenu, ReactSectionMenu],
@@ -213,6 +217,8 @@ const buttonDefaults: ButtonArgs = {
   disabled: false,
   busy: false,
 };
+
+const pageHeaderDefaults: PageHeaderArgs = { heading: 'Inbox', level: 'h1', top: false };
 
 const listRowDefaults: ListRowArgs = {
   title: 'Notifications',
@@ -759,15 +765,35 @@ const cases: ParityCase[] = [
   }),
   menuSheetCase('Menu sheet/blank user name', { ...menuSheetDefaults, userName: '  ' }),
   menuSheetCase('Menu sheet/id with spaces', menuSheetDefaults, {}, ' menu '),
-  ...storyArgs<HeaderArgs>(headerStories).map(([story, args]) =>
-    headerCase(`Header/${story}`, args),
+  ...storyArgs<PageHeaderArgs>(pageHeaderStories).map(([story, args]) =>
+    pageHeaderCase(`Page header/${story}`, args),
   ),
-  headerCase(
-    'Header/with extra attributes',
-    { title: 'Inbox', actions: '<button type="button">Search</button>' },
-    { class: 'app-header', id: 'top', 'data-testid': 'header', 'aria-label': 'Inbox' },
+  pageHeaderCase(
+    'Page header/with extra attributes',
+    { ...pageHeaderDefaults, actions: '<button type="button">Search</button>' },
+    {
+      class: 'app-header',
+      id: 'top',
+      title: 'Your inbox',
+      'data-testid': 'header',
+      'aria-label': 'Inbox',
+    },
   ),
-  headerCase('Header/blank slots', { title: 'Settings', leading: '  ', actions: ' ' }),
+  pageHeaderCase(
+    'Page header/with a clashing attribute',
+    { ...pageHeaderDefaults, top: true },
+    { 'data-top': 'notch' },
+  ),
+  pageHeaderCase('Page header/blank slots', {
+    ...pageHeaderDefaults,
+    heading: 'Settings',
+    leading: '  ',
+    actions: ' ',
+  }),
+  pageHeaderCase('Page header/unknown level', {
+    ...pageHeaderDefaults,
+    level: 'h7' as PageHeaderLevel,
+  }),
   ...storyArgs<DataTableArgs>(dataTableStories).map(([story, args]) =>
     dataTableCase(`Data table/${story}`, args),
   ),
@@ -1051,17 +1077,21 @@ function listCardCase(story: string, args: ListCardArgs, attributes: Attributes 
   };
 }
 
-function headerCase(story: string, args: HeaderArgs, attributes: Attributes = {}): ParityCase {
-  const props = { title: args.title };
+function pageHeaderCase(
+  story: string,
+  args: PageHeaderArgs,
+  attributes: Attributes = {},
+): ParityCase {
+  const props = { heading: args.heading, level: args.level, top: args.top };
   const named = {
     ...(args.leading ? { leading: args.leading } : {}),
     ...(args.actions ? { actions: args.actions } : {}),
   };
   return {
     story,
-    markup: header(args, attributes),
-    vue: { component: PlinthHeader, props: { ...props, ...attributes }, slot: '', named },
-    blade: { component: 'header', props, attributes, slot: '', named },
+    markup: pageHeader(args, attributes),
+    vue: { component: PlinthPageHeader, props: { ...props, ...attributes }, slot: '', named },
+    blade: { component: 'page-header', props, attributes, slot: '', named },
   };
 }
 
@@ -1726,13 +1756,19 @@ describe('parity with the stories', () => {
       'Menu sheet/blank user parts and account',
       'Menu sheet/blank user name',
       'Menu sheet/id with spaces',
-      'Header/Default',
-      'Header/WithBack',
-      'Header/WithoutLeading',
-      'Header/TitleOnly',
-      'Header/LongTitle',
-      'Header/with extra attributes',
-      'Header/blank slots',
+      'Page header/Default',
+      'Page header/WithBack',
+      'Page header/WithPrimaryAction',
+      'Page header/ThreeActions',
+      'Page header/WithoutLeading',
+      'Page header/HeadingOnly',
+      'Page header/LongHeading',
+      'Page header/LevelTwo',
+      'Page header/TopBar',
+      'Page header/with extra attributes',
+      'Page header/with a clashing attribute',
+      'Page header/blank slots',
+      'Page header/unknown level',
       'Data table/Default',
       'Data table/Sorted',
       'Data table/SortedAscending',

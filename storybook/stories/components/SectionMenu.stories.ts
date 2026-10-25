@@ -1,11 +1,11 @@
 import type { Meta, StoryObj } from '@storybook/html-vite';
-import { header } from './header.ts';
+import { pageHeader } from './page-header.ts';
 import { iconButton } from './icon-button.ts';
 import { sampleIcons } from './icons.ts';
 import { sectionMenu, type SectionMenuArgs, type SectionMenuItemArgs } from './section-menu.ts';
 import '@ptbdynamic/plinth-css/src/components/icon.css';
 import '@ptbdynamic/plinth-css/src/components/button.css';
-import '@ptbdynamic/plinth-css/src/components/header.css';
+import '@ptbdynamic/plinth-css/src/components/page-header.css';
 import '@ptbdynamic/plinth-css/src/components/section-menu.css';
 
 const item = (label: string, extra: Partial<SectionMenuItemArgs> = {}): SectionMenuItemArgs => ({
@@ -26,12 +26,12 @@ const meta = {
   title: 'Components/Section Menu',
   render: (args) => sectionMenu(args),
   args: { label: 'Project', nav: true, items: sections },
-  // The menu spans the page, as it does under the header.
+  // The menu spans the page, as it does under the page header.
   parameters: {
     layout: 'fullscreen',
     docs: {
       description: {
-        component: "The row under the header that switches between a page's sections.",
+        component: "The row under the page header that switches between a page's sections.",
       },
     },
   },
@@ -111,11 +111,13 @@ export const RightToLeft: Story = {
   render: () => `<div dir="rtl">${sectionMenu({ ...meta.args, ...Overflowing.args })}</div>`,
 };
 
-/** Under the header, as in a phone app. */
-export const UnderHeader: Story = {
+/** Under the page header, as in a phone app. */
+export const UnderPageHeader: Story = {
   render: (args) =>
-    header({
-      title: 'Project',
+    pageHeader({
+      heading: 'Project',
+      level: 'h1',
+      top: true,
       leading: iconButton({
         label: 'Back',
         variant: 'ghost',

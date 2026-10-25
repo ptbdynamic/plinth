@@ -13,12 +13,12 @@ import PlinthDataTableRow from './PlinthDataTableRow.vue';
 import PlinthDataTableSort from './PlinthDataTableSort.vue';
 import PlinthDialog from './PlinthDialog.vue';
 import PlinthDrawer from './PlinthDrawer.vue';
-import PlinthHeader from './PlinthHeader.vue';
 import PlinthIcon from './PlinthIcon.vue';
 import PlinthIconButton from './PlinthIconButton.vue';
 import PlinthListCard from './PlinthListCard.vue';
 import PlinthListRow from './PlinthListRow.vue';
 import PlinthMenuSheet from './PlinthMenuSheet.vue';
+import PlinthPageHeader from './PlinthPageHeader.vue';
 import PlinthPill from './PlinthPill.vue';
 import PlinthPillRow from './PlinthPillRow.vue';
 import PlinthSectionMenu from './PlinthSectionMenu.vue';
@@ -40,12 +40,12 @@ export {
   PlinthDataTableSort,
   PlinthDialog,
   PlinthDrawer,
-  PlinthHeader,
   PlinthIcon,
   PlinthIconButton,
   PlinthListCard,
   PlinthListRow,
   PlinthMenuSheet,
+  PlinthPageHeader,
   PlinthPill,
   PlinthPillRow,
   PlinthSectionMenu,
@@ -98,6 +98,7 @@ export { headingLevel, headingLevels, type HeadingLevel } from './heading';
 export { controlSizes, iconSizeFor, resolveSize, sizes, type ControlSize, type Size } from './size';
 export { iconSizes, type IconSize } from './icon';
 export { listRowChevron } from './list-row';
+export { pageHeaderLevel, pageHeaderLevels, type PageHeaderLevel } from './page-header';
 export { sheetCloseIcon, sheetSide, sheetSidePhone, sheetSides, type SheetSide } from './sheet';
 export { swipeToClose, useSwipeToClose } from './swipe';
 export { tones, type Tone } from './tones';
@@ -119,12 +120,12 @@ export const Plinth: Plugin = {
     app.component('PlinthDataTableSort', PlinthDataTableSort);
     app.component('PlinthDialog', PlinthDialog);
     app.component('PlinthDrawer', PlinthDrawer);
-    app.component('PlinthHeader', PlinthHeader);
     app.component('PlinthIcon', PlinthIcon);
     app.component('PlinthIconButton', PlinthIconButton);
     app.component('PlinthListCard', PlinthListCard);
     app.component('PlinthListRow', PlinthListRow);
     app.component('PlinthMenuSheet', PlinthMenuSheet);
+    app.component('PlinthPageHeader', PlinthPageHeader);
     app.component('PlinthPill', PlinthPill);
     app.component('PlinthPillRow', PlinthPillRow);
     app.component('PlinthSectionMenu', PlinthSectionMenu);
