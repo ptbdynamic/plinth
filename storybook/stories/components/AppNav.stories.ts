@@ -59,7 +59,7 @@ const meta = {
     docs: {
       description: {
         component:
-          "The app's main navigation: a rail of icons from 768px and a sidebar from 1280px, with the app's logo at its top. On a phone it is hidden, and the menu sheet holds the same items, rendered from the same list. Name it with `label`; the app sets `current` on the item of the page being shown.",
+          "The app's main navigation: a rail of icons from 768px and a sidebar from 1280px, with the app's logo at its top. On a phone it is hidden, and the menu sheet holds the same items, rendered from the same list. Name it with `label`, give every item an icon (all the rail shows), and set `current` on the item of the page being shown. In the rail the footer holds items, or content no wider than 40px.",
       },
     },
   },
@@ -74,6 +74,7 @@ export const Default: Story = {};
 /** A footer on the bottom edge, for items such as Help, or the account. */
 export const WithFooter: Story = { args: { footer } };
 
+/** No item is current, as on a page outside every part of the app. */
 export const NoneCurrent: Story = {
   args: { items: items.map((entry) => ({ ...entry, current: false })) },
 };
@@ -83,7 +84,7 @@ export const WithCounts: Story = {
   args: {
     items: [
       item('Inbox', 'inbox', { count: 8, current: true }),
-      item('Content', 'file', { count: 128 }),
+      item('Content', 'file', { count: '99+' }),
       item('Media', 'image', { count: 0 }),
       item('Support', 'support', { count: 3 }),
     ],

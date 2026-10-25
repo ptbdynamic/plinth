@@ -75,7 +75,7 @@
     "rail-width": {
       "$type": "dimension",
       "$value": "{size.rail}",
-      "$description": "The app nav's width as a rail, from 768px to 1279px (56px): a 40px item and its padding."
+      "$description": "The app nav's width as a rail, from 768px to 1279px (56px): a 40px item, the room around it and the divider."
     }
   },
   "menu": {

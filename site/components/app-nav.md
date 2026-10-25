@@ -69,7 +69,9 @@ corner. Keep it short (_99+_ rather than _1,204_): the rail's pill has 40px to f
 ## The footer
 
 The **`footer`** slot sits on the bottom edge, with a divider above: items such as _Help_, or the
-account. The items scroll on their own when they don't fit, and the footer stays put.
+account. The items scroll on their own when they don't fit, and the footer stays put. In the rail the footer is as
+narrow as the items: put items in it, or something no wider than 40px such as an avatar button,
+not a name or a text button.
 
 ```blade example
 <x-plinth::app-nav label="Main">

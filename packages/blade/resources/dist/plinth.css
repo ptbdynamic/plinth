@@ -453,9 +453,11 @@
  * - the items (always there): links, each its own component (<x-plinth::app-nav-item>,
  *   PlinthAppNavItem) so the app's attributes and listeners land on the link (ADR 2). An item
  *   has an icon (decorative: the label names the link), a label and an optional count, in the
- *   mono face. They scroll on their own when they don't fit.
+ *   mono face. The icon is required in practice: it is all the rail shows. They scroll on their
+ *   own when they don't fit.
  * - the footer (optional): on the bottom edge, with a divider above: more items (Settings, Help)
- *   or the account.
+ *   or the account. In the rail it is as narrow as the items, so it holds items, or
+ *   content no wider than 40px (an avatar button), never a name or a text button.
  *
  * State, set by the app: aria-current="page" on the item of the page being shown, or of the
  * section it belongs to. The current item takes the selection tint (accent-subtle, accent-text),
@@ -510,6 +512,7 @@
     }
 
     .plinth-app-nav-brand {
+      position: relative;
       box-sizing: border-box;
       display: flex;
       flex: none;
@@ -551,7 +554,10 @@
       gap: var(--plinth-space-0-5);
       align-items: center;
       min-block-size: 0;
-      padding: var(--plinth-space-2);
+
+      /* The rail centres its 40px items; the sidebar adds the inline padding back. */
+      padding-block: var(--plinth-space-2);
+      padding-inline: 0;
       overflow-y: auto;
       overscroll-behavior-block: contain;
     }
@@ -562,7 +568,8 @@
       flex-direction: column;
       gap: var(--plinth-space-0-5);
       align-items: center;
-      padding: var(--plinth-space-2);
+      padding-block: var(--plinth-space-2);
+      padding-inline: 0;
       border-block-start: var(--plinth-border-width-thin) solid var(--plinth-color-divider);
     }
 
@@ -677,6 +684,7 @@
     .plinth-app-nav-items,
     .plinth-app-nav-footer {
       align-items: stretch;
+      padding-inline: var(--plinth-space-2);
     }
 
     .plinth-app-nav-item {
