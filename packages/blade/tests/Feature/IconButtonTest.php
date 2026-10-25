@@ -1,6 +1,7 @@
 <?php
 
 use BDynamic\Plinth\Enums\ButtonVariant;
+use BDynamic\Plinth\Enums\Glyph;
 use BDynamic\Plinth\Enums\Size;
 use Illuminate\Support\Facades\Blade;
 
@@ -75,4 +76,20 @@ it("lets the project's attribute win over its own, on a button and a link", func
     expect(Blade::render("<x-plinth::icon-button label=\"Next\" href=\"/next\" disabled role=\"button\">{$svg}</x-plinth::icon-button>"))
         ->toContain('role="button"')
         ->not->toContain('role="link"');
+});
+
+it('prints a built-in glyph by name instead of the slot', function () use ($svg) {
+    expect(squish(Blade::render("<x-plinth::icon-button label=\"Close\" icon=\"close\">{$svg}</x-plinth::icon-button>")))
+        ->toContain('<span class="plinth-icon" data-size="md" data-icon="close" aria-hidden="true">'.Glyph::Close->svg().'</span>');
+});
+
+it('mirrors a glyph that points a direction', function () {
+    expect(Blade::render('<x-plinth::icon-button label="Back" icon="back" href="/" />'))
+        ->toContain('data-icon="back"')
+        ->toContain('data-mirror');
+});
+
+it('shows the slot for a glyph it does not know', function () use ($svg) {
+    expect(squish(Blade::render("<x-plinth::icon-button label=\"Close\" icon=\"rocket\">{$svg}</x-plinth::icon-button>")))
+        ->toContain('<span class="plinth-icon" data-size="md" aria-hidden="true">'.$svg.'</span>');
 });

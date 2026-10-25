@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/html-vite';
-import { icon, iconSizes, type IconArgs } from './icon.ts';
+import { icon, iconNames, iconSizes, type IconArgs } from './icon.ts';
 import { sampleIcons } from './icons.ts';
 import '@ptbdynamic/plinth-css/src/components/icon.css';
 
@@ -8,6 +8,7 @@ const meta = {
   render: (args) => icon(args),
   args: { size: 'md', mirror: false, svg: sampleIcons.check },
   argTypes: {
+    name: { control: 'select', options: [undefined, ...iconNames] },
     size: { control: 'inline-radio', options: iconSizes },
     label: { control: 'text' },
     mirror: { control: 'boolean' },
@@ -17,7 +18,7 @@ const meta = {
     docs: {
       description: {
         component:
-          'A project’s own SVG, sized by Plinth (16, 20 or 24 px) and coloured by the text around it. Plinth ships no icons: pass an inline SVG, or a sprite `<use>`, drawn with `currentColor`. An icon is decorative and hidden from screen readers unless it has a `label` (or an `aria-label`); give it one only when the icon carries meaning that nothing next to it says. Set `mirror` on icons that point a direction (arrows, chevrons, back, send), so they flip in right-to-left text; it changes nothing in left-to-right text. Switch **Direction** in the toolbar to see it.',
+          'An SVG sized by Plinth (16, 20 or 24 px) and coloured by the text around it: one of Plinth’s built-in interface glyphs by `name` (menu, close, chevrons, back, check, plus, search, more, external, sign out, sun, moon, system, info, warning), or the project’s own SVG in the slot, inline or as a sprite `<use>`, drawn with `currentColor`. The built-in set is small on purpose; brand and domain icons stay in the app. An icon is decorative and hidden from screen readers unless it has a `label` (or an `aria-label`); give it one only when the icon carries meaning that nothing next to it says. Set `mirror` on icons that point a direction (arrows, chevrons, back, send), so they flip in right-to-left text; it changes nothing in left-to-right text. The built-in glyphs that point a direction (back, the side chevrons, sign out) flip without it. Switch **Direction** in the toolbar to see it.',
       },
     },
   },
@@ -35,6 +36,25 @@ export const Filled: Story = { args: { svg: sampleIcons.star } };
 export const Mirrored: Story = {
   args: { svg: sampleIcons.arrow, mirror: true },
   decorators: [(story) => `<div dir="rtl">${story() as string}</div>`],
+};
+
+/** A built-in glyph by name, instead of an SVG in the slot. */
+export const Glyph: Story = { args: { name: 'menu' } };
+/** A built-in glyph that points a direction flips in right-to-left text on its own. */
+export const DirectionalGlyph: Story = {
+  args: { name: 'back' },
+  decorators: [(story) => `<div dir="rtl">${story() as string}</div>`],
+};
+
+/** Every built-in glyph, with its name. */
+export const Glyphs: Story = {
+  render: () =>
+    `<ul style="display: grid; grid-template-columns: repeat(auto-fill, minmax(8rem, 1fr)); gap: var(--plinth-space-4); padding: 0; margin: 0; list-style: none;">${iconNames
+      .map(
+        (name) =>
+          `<li style="display: flex; gap: var(--plinth-space-2); align-items: center;">${icon({ name, size: 'md', mirror: false })}<code>${name}</code></li>`,
+      )
+      .join('')}</ul>`,
 };
 
 /** Every size, and the icon taking its colour from the text around it. */

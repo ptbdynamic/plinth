@@ -1,6 +1,7 @@
 {{-- Markup contract: packages/css/src/components/button.css (icon button) --}}
 @props([
     'label' => null,
+    'icon' => null,
     'variant' => 'ghost',
     'size' => 'md',
     'href' => null,
@@ -17,6 +18,8 @@
     }
     $variant = \BDynamic\Plinth\Enums\ButtonVariant::resolve($variant ?? \BDynamic\Plinth\Enums\ButtonVariant::Ghost);
     $size = \BDynamic\Plinth\Enums\Size::resolve($size, \BDynamic\Plinth\Enums\Size::controls());
+    // A built-in glyph by name; the slot shows when it is missing or not one.
+    $glyph = \BDynamic\Plinth\Enums\Glyph::resolve($icon);
     $isLink = filled($href);
     $isBusy = $busy && ! $disabled;
     $root = array_filter([
@@ -37,6 +40,6 @@
     @if ($isBusy)
         <span class="plinth-button-spinner" aria-hidden="true"></span>
     @else
-        <span class="plinth-icon" data-size="{{ $size->iconSize()->value }}" @if ($mirror) data-mirror @endif aria-hidden="true">{{ $slot }}</span>
+        <span class="plinth-icon" data-size="{{ $size->iconSize()->value }}" @if ($glyph) data-icon="{{ $glyph->value }}" @endif @if ($mirror || $glyph?->mirrors()) data-mirror @endif aria-hidden="true">@if ($glyph){!! $glyph->svg() !!}@else{{ $slot }}@endif</span>
     @endif
 </{{ $isLink ? 'a' : 'button' }}>

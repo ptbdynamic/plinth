@@ -1,6 +1,6 @@
 import { mount } from '@vue/test-utils';
 import { describe, expect, it } from 'vitest';
-import { iconSizes, PlinthIcon } from '../src/index.ts';
+import { iconGlyph, iconNames, iconSizes, mirroredIconNames, PlinthIcon } from '../src/index.ts';
 
 const svg = '<svg viewBox="0 0 24 24"><path d="M5 12l5 5L19 7"></path></svg>';
 const slots = { default: svg };
@@ -72,5 +72,32 @@ describe('PlinthIcon', () => {
     const wrapper = mount(PlinthIcon, { attrs: { 'aria-hidden': 'false' }, slots });
 
     expect(wrapper.attributes('aria-hidden')).toBe('false');
+  });
+
+  it('prints a built-in glyph by name instead of the slot', () => {
+    const wrapper = mount(PlinthIcon, { props: { name: 'check' }, slots });
+
+    expect(wrapper.html()).toBe(
+      `<span class="plinth-icon" data-size="md" data-icon="check" aria-hidden="true">${iconGlyph('check')}</span>`,
+    );
+  });
+
+  it.each(iconNames)('prints the %s glyph', (name) => {
+    const wrapper = mount(PlinthIcon, { props: { name } });
+
+    expect(wrapper.attributes('data-icon')).toBe(name);
+    expect(wrapper.html()).toContain(iconGlyph(name));
+    expect(wrapper.attributes('data-mirror')).toBe(
+      mirroredIconNames.includes(name) ? '' : undefined,
+    );
+  });
+
+  it('shows the slot for a glyph it does not know', () => {
+    // @ts-expect-error: an unknown glyph, as a project might pass from untyped data.
+    const wrapper = mount(PlinthIcon, { props: { name: 'rocket' }, slots });
+
+    expect(wrapper.html()).toBe(
+      `<span class="plinth-icon" data-size="md" aria-hidden="true">${svg}</span>`,
+    );
   });
 });

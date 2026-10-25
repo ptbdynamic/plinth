@@ -469,6 +469,29 @@ const cases: ParityCase[] = [
     { size: 'md', mirror: false, svg: sampleIcons.check },
     { 'aria-hidden': 'false' },
   ),
+  iconCase('Icon/a glyph and a slot', {
+    name: 'check',
+    size: 'sm',
+    mirror: false,
+    svg: sampleIcons.star,
+  }),
+  iconCase('Icon/an unknown glyph', {
+    name: 'rocket' as IconArgs['name'],
+    size: 'md',
+    mirror: false,
+    svg: sampleIcons.star,
+  }),
+  iconCase('Icon/a labelled glyph with mirror', {
+    name: 'external',
+    size: 'lg',
+    label: 'Opens in a new tab',
+    mirror: true,
+  }),
+  iconCase(
+    'Icon/a glyph with a clashing attribute',
+    { name: 'chevron-right', size: 'md', mirror: false },
+    { 'data-icon': 'arrow' },
+  ),
   ...storyArgs<ButtonArgs>(buttonStories).map(([story, args]) =>
     buttonCase(`Button/${story}`, args),
   ),
@@ -575,6 +598,24 @@ const cases: ParityCase[] = [
     },
     { role: 'button' },
   ),
+  iconButtonCase('Icon button/a directional glyph link', {
+    label: 'Back to runs',
+    icon: 'back',
+    variant: 'secondary',
+    size: 'sm',
+    href: '/runs',
+    disabled: false,
+    busy: false,
+  }),
+  iconButtonCase('Icon button/an unknown glyph', {
+    label: 'Favourite',
+    icon: 'rocket' as IconButtonArgs['icon'],
+    variant: 'ghost',
+    size: 'md',
+    disabled: false,
+    busy: false,
+    svg: sampleIcons.star,
+  }),
   ...storyArgs<AvatarArgs>(avatarStories).map(([story, args]) =>
     avatarCase(`Avatar/${story}`, args),
   ),
@@ -1268,6 +1309,7 @@ function iconButtonCase(
 ): ParityCase {
   const props = {
     ...(args.label ? { label: args.label } : {}),
+    ...(args.icon ? { icon: args.icon } : {}),
     variant: args.variant,
     size: args.size,
     disabled: args.disabled,
@@ -1282,10 +1324,10 @@ function iconButtonCase(
     vue: {
       component: PlinthIconButton,
       props: { ...props, ...attributes },
-      slot: args.svg,
+      slot: args.svg ?? '',
       html: true,
     },
-    blade: { component: 'icon-button', props, attributes, slot: args.svg },
+    blade: { component: 'icon-button', props, attributes, slot: args.svg ?? '' },
   };
 }
 
@@ -1686,15 +1728,17 @@ function sheetCase(
 
 function iconCase(story: string, args: IconArgs, attributes: Attributes = {}): ParityCase {
   const props = {
+    ...(args.name ? { name: args.name } : {}),
     size: args.size,
     mirror: args.mirror,
     ...(args.label ? { label: args.label } : {}),
   };
+  const slot = args.svg ?? '';
   return {
     story,
     markup: icon(args, attributes),
-    vue: { component: PlinthIcon, props: { ...props, ...attributes }, slot: args.svg, html: true },
-    blade: { component: 'icon', props, attributes, slot: args.svg },
+    vue: { component: PlinthIcon, props: { ...props, ...attributes }, slot, html: true },
+    blade: { component: 'icon', props, attributes, slot },
   };
 }
 
@@ -2005,8 +2049,14 @@ describe('parity with the stories', () => {
       'Icon/Labelled',
       'Icon/Filled',
       'Icon/Mirrored',
+      'Icon/Glyph',
+      'Icon/DirectionalGlyph',
       'Icon/with extra attributes',
       'Icon/with a clashing attribute',
+      'Icon/a glyph and a slot',
+      'Icon/an unknown glyph',
+      'Icon/a labelled glyph with mirror',
+      'Icon/a glyph with a clashing attribute',
       'Button/Primary',
       'Button/Accent',
       'Button/Secondary',
@@ -2037,6 +2087,7 @@ describe('parity with the stories', () => {
       'Icon button/Pressed',
       'Icon button/NotPressed',
       'Icon button/Link',
+      'Icon button/WithGlyph',
       'Icon button/Disabled',
       'Icon button/DisabledPressed',
       'Icon button/Busy',
@@ -2046,6 +2097,8 @@ describe('parity with the stories', () => {
       'Icon button/with a clashing attribute',
       'Icon button/pressed link',
       'Icon button/link with a clashing attribute',
+      'Icon button/a directional glyph link',
+      'Icon button/an unknown glyph',
       'Avatar/Initials',
       'Avatar/Image',
       'Avatar/GivenInitials',

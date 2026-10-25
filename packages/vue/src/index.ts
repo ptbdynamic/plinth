@@ -112,7 +112,15 @@ export {
 } from './drawer';
 export { headingLevel, headingLevels, type HeadingLevel } from './heading';
 export { controlSizes, iconSizeFor, resolveSize, sizes, type ControlSize, type Size } from './size';
-export { iconSizes, type IconSize } from './icon';
+export {
+  iconGlyph,
+  iconGlyphs,
+  iconNames,
+  iconSizes,
+  mirroredIconNames,
+  type IconName,
+  type IconSize,
+} from './icon';
 export { listRowChevron } from './list-row';
 export { menuIdKey, menuItemTone, menuItemTones, type MenuItemTone } from './menu';
 export { pageHeaderLevel, pageHeaderLevels, type PageHeaderLevel } from './page-header';

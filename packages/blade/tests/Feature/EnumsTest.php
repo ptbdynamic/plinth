@@ -10,6 +10,7 @@ use BDynamic\Plinth\Enums\DataTableSort;
 use BDynamic\Plinth\Enums\DialogSidePhone;
 use BDynamic\Plinth\Enums\DrawerDesktop;
 use BDynamic\Plinth\Enums\DrawerSnap;
+use BDynamic\Plinth\Enums\Glyph;
 use BDynamic\Plinth\Enums\HeadingLevel;
 use BDynamic\Plinth\Enums\MenuItemTone;
 use BDynamic\Plinth\Enums\PageHeaderLevel;
@@ -124,6 +125,21 @@ it('matches the lists the Vue layer and the stories use', function () {
     foreach (MenuItemTone::values() as $value) {
         expect($vue('menu.ts'))->toContain("'{$value}'");
     }
+    foreach (Glyph::cases() as $glyph) {
+        // The glyph's paths, as Vue writes them in iconGlyphs, and the glyphs it mirrors.
+        preg_match('/<svg[^>]*>(.*)<\/svg>/', $glyph->svg(), $paths);
+        expect($vue('icon.ts'))->toContain("'{$glyph->value}'")->toContain("'{$paths[1]}'");
+        preg_match('/mirroredIconNames[^=]*=\s*\[([^\]]*)\]/', $vue('icon.ts'), $mirrored);
+        expect(str_contains($mirrored[1], "'{$glyph->value}'"))->toBe($glyph->mirrors());
+    }
+});
+
+it('resolves a glyph, its name, or nothing it knows to a glyph or nothing', function () {
+    expect(Glyph::resolve(Glyph::Sun))->toBe(Glyph::Sun)
+        ->and(Glyph::resolve('sign-out'))->toBe(Glyph::SignOut)
+        ->and(Glyph::resolve('rocket'))->toBeNull()
+        ->and(Glyph::resolve(null))->toBeNull()
+        ->and(Glyph::values())->toContain('chevron-down');
 });
 
 it('reads a drawer\'s snap points and the one it opens at', function () {
