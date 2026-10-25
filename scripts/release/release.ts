@@ -1,10 +1,10 @@
 /**
- * `npm run release`: publishes the version `npm run release:version` set, from main.
+ * `npm run release`: releases the version `npm run release:version` set, from main.
  *
- * It builds everything, then makes the tag `v<version>` and pushes it (Packagist reads the
- * Composer package, `ptbdynamic/plinth`, from the root composer.json at that tag, and its version
- * from the tag), and publishes `@ptbdynamic/plinth` to npm with the same version. While the root
- * package.json is private, the npm step is skipped.
+ * It checks and builds everything, then makes the tag `v<version>` and pushes it. The tag does the
+ * rest: Packagist reads the Composer package, `ptbdynamic/plinth`, from the root composer.json at
+ * that tag (and its version from the tag), and the release workflow (.github/workflows/release.yml,
+ * `npm run release:publish`) publishes `@ptbdynamic/plinth` to npm and makes the GitHub release.
  *
  * `npm run release -- --dry-run` changes nothing: it checks the version and the Composer package
  * (`composer validate`, and what `git archive` would ship), builds, lists what the npm package
@@ -12,8 +12,7 @@
  */
 import { execFileSync } from 'node:child_process';
 import { readFileSync } from 'node:fs';
-import { join } from 'node:path';
-import { archiveProblems, composerProblems, readPackage, sharedVersion } from './lib.ts';
+import { archiveProblems, readPackage, releaseProblems, sharedVersion } from './lib.ts';
 
 const root = process.cwd();
 const dryRun = process.argv.includes('--dry-run');
@@ -26,19 +25,11 @@ const fail = (message: string): never => {
   process.exit(1);
 };
 
+const problems = releaseProblems(root);
+if (problems.length > 0) fail(problems.join('\n'));
 const pkg = readPackage(root);
 const version = sharedVersion(root);
-if (pkg.version !== version) {
-  fail(
-    `package.json is ${pkg.version} but the workspaces are ${version}; run npm run release:version.`,
-  );
-}
-
-const readComposer = (dir: string) =>
-  JSON.parse(readFileSync(join(root, dir, 'composer.json'), 'utf8'));
-const composer = readComposer('.');
-const composerErrors = composerProblems(composer, readComposer('packages/blade'));
-if (composerErrors.length > 0) fail(composerErrors.join('\n'));
+const composer = JSON.parse(readFileSync('composer.json', 'utf8')) as { name: string };
 run('composer', ['validate', '--strict', '--no-check-lock']);
 
 const tag = `v${version}`;
@@ -79,9 +70,7 @@ if (dryRun) {
   console.log('');
   console.log(tagged ? `${tag} already exists.` : `Dry run: would tag ${tag} and push it.`);
   console.log(
-    pkg.private
-      ? 'Dry run: npm would be skipped, because package.json is private.'
-      : `Dry run: would publish ${pkg.name}@${version} to npm.`,
+    `Dry run: the release workflow would then publish ${pkg.name}@${version} to npm and make the GitHub release.`,
   );
   process.exit(0);
 }
@@ -89,8 +78,7 @@ if (dryRun) {
 run('git', ['tag', '--annotate', tag, '--message', tag]);
 run('git', ['push', 'origin', tag]);
 
-if (pkg.private) {
-  console.log(`Skipped npm: package.json is private. Remove "private" to publish ${pkg.name}.`);
-} else {
-  run('npm', ['publish', '--access', 'public', '--ignore-scripts']);
-}
+console.log('');
+console.log(
+  `Pushed ${tag}. The release workflow publishes ${pkg.name}@${version} to npm and makes the GitHub release; follow it with gh run watch.`,
+);

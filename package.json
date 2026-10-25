@@ -3,6 +3,10 @@
   "version": "0.2.0",
   "description": "The design system of BDynamic's projects: tokens, plain HTML and CSS components, and thin Blade, Vue and React layers.",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ptbdynamic/plinth.git"
+  },
   "type": "module",
   "packageManager": "npm@10.9.9",
   "engines": {
@@ -69,7 +73,8 @@
     "test:scripts": "vitest run --config scripts/vitest.config.ts --coverage",
     "changeset": "changeset",
     "release:version": "node scripts/release/version.ts",
-    "release": "node scripts/release/release.ts"
+    "release": "node scripts/release/release.ts",
+    "release:publish": "node scripts/release/publish.ts"
   },
   "devDependencies": {
     "@changesets/cli": "^2.31.1",

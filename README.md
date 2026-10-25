@@ -234,7 +234,7 @@ Plinth has one version for npm and Packagist, and one tag, `v<version>`
 npx changeset                    # in a pull request that changes a package: the bump and a line for the changelog
 npm run release:version          # on a branch: the next version, in every package and the changelog
 npm run release -- --dry-run     # what npm and Packagist would get, without tagging or publishing
-npm run release                  # on main, after the version pull request merges: tag and publish
+npm run release                  # on main, after the version pull request merges: tag and push
 ```
 
 The dry run (CI runs it on every pull request) also checks the Composer side: the root
@@ -243,12 +243,27 @@ requirements and provider and have no `version` (Packagist takes it from the tag
 `composer validate --strict` passes on the root one, and `git archive` of the tag (or of `HEAD`
 before tagging) holds what the package needs and nothing else.
 
+Pushing the tag starts the release workflow (`.github/workflows/release.yml`). It runs the same
+checks, builds the packages, publishes `@ptbdynamic/plinth` to npm with
+[trusted publishing](https://docs.npmjs.com/trusted-publishers) and provenance (no npm token is
+stored and no one-time code is asked for), and makes the GitHub release with the version's
+section of `CHANGELOG.md` as its notes. Packagist publishes the tag through its GitHub hook. A
+version already on npm, or a release that already exists, is skipped, so to repeat a release run
+the workflow by hand with its tag:
+
+```bash
+gh workflow run release.yml -f tag=v1.2.0
+```
+
+A run started by hand builds the commit it runs on (main), and refuses if what the npm package
+ships has changed since the tag.
+
 ### One-time steps for the owner
 
-Both registries are set up: Packagist publishes each tag through its GitHub hook, and
-`npm run release` publishes `@ptbdynamic/plinth` to npm under the `ptbdynamic` organisation
-(the person releasing runs `npm login` first, with a one-time code if their account uses
-two-factor authentication).
+Packagist is set up through its GitHub hook. For npm, on npmjs.com open the package
+`@ptbdynamic/plinth` → **Settings** → **Trusted Publisher**, choose **GitHub Actions** and enter
+the organisation `ptbdynamic`, the repository `plinth` and the workflow `release.yml` (no
+environment). Nobody needs to run `npm login` to release.
 
 ## Contributing
 

@@ -50,8 +50,9 @@ off; Plinth keeps one `CHANGELOG.md` at the root, for both registries.
    titled `chore: release <version>`, like any other change.
 2. `npm run release` on `main` after it merges: it checks that every workspace and the root
    share the version and that `composer.json` has none, builds everything, tags `v<version>`
-   and pushes the tag, and publishes the npm package. While the root `package.json` is private,
-   it skips npm.
+   and pushes the tag. The tag starts the release workflow, which publishes the npm package and
+   makes the GitHub release (see the third amendment below). While the root `package.json` is
+   private, it skips npm.
 
 `npm run release -- --dry-run` does the checks and the build and prints what each registry would
 get, without tagging or publishing. CI runs it on every pull request, so the versions can't
@@ -89,3 +90,18 @@ token's pull requests don't start other workflows).
 - Amended 2026-10-25: the npm package is `@ptbdynamic/plinth`, under the `ptbdynamic` npm
   organisation, to match the GitHub organisation and the Composer package (nothing was published
   under `@bdynamic`). The root `package.json` is public, so `npm run release` publishes it.
+
+- Amended 2026-10-25 ([#146](https://github.com/ptbdynamic/plinth/issues/146)): npm publishing
+  moves to GitHub Actions. `npm publish` from a laptop stopped at npm's one-time code, so a person
+  had to finish every release by hand. `npm run release` now checks, builds, tags and pushes, and
+  stops there. The tag starts `.github/workflows/release.yml`, which runs the same checks (one
+  version everywhere, the tag is `v<version>`, no version in `composer.json`), builds the
+  packages, publishes with npm's trusted publishing and `--provenance` (npm 11.5.1 or later takes
+  the workflow's OIDC token, so no npm token is stored anywhere), and makes the GitHub release
+  with the version's section of `CHANGELOG.md` as its notes. A version already on npm and a
+  release that already exists are skipped, so the workflow can be run again by hand
+  (`workflow_dispatch` with the tag); such a run builds the commit it runs on and refuses if the
+  workspaces the npm package ships changed after the tag. Provenance needs the root
+  `package.json` to name the repository, so it does. The one-time setup only the owner can do:
+  on npmjs.com, package `@ptbdynamic/plinth` → Settings → Trusted Publisher → GitHub Actions,
+  organisation `ptbdynamic`, repository `plinth`, workflow `release.yml`.

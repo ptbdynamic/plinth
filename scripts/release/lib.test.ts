@@ -9,6 +9,8 @@ import {
   composerProblems,
   prependSection,
   readPackage,
+  releaseNotes,
+  releaseProblems,
   sharedVersion,
   versioned,
 } from './lib.ts';
@@ -186,5 +188,89 @@ describe('archiveProblems', () => {
       'The archive should not ship packages/blade/tests/Pest.php.',
       'The archive is missing composer.json.',
     ]);
+  });
+});
+
+describe('releaseProblems', () => {
+  const blade = {
+    name: 'ptbdynamic/plinth',
+    autoload: { 'psr-4': { 'BDynamic\\Plinth\\': 'src/' } },
+  };
+  const release = (
+    versions: string[],
+    rootVersion = versions[0],
+    rootComposer: object = {
+      ...blade,
+      autoload: { 'psr-4': { 'BDynamic\\Plinth\\': 'packages/blade/src/' } },
+    },
+  ) => {
+    const root = mkdtempSync(join(tmpdir(), 'plinth-release-'));
+    writeFileSync(
+      join(root, 'package.json'),
+      JSON.stringify({ name: '@ptbdynamic/plinth', version: rootVersion }),
+    );
+    writeFileSync(join(root, 'composer.json'), JSON.stringify(rootComposer));
+    versioned.forEach((dir, index) => {
+      mkdirSync(join(root, dir), { recursive: true });
+      writeFileSync(
+        join(root, dir, 'package.json'),
+        JSON.stringify({ name: dir, version: versions[index] }),
+      );
+    });
+    writeFileSync(join(root, 'packages/blade/composer.json'), JSON.stringify(blade));
+    return root;
+  };
+  const same = ['0.2.0', '0.2.0', '0.2.0', '0.2.0', '0.2.0'];
+
+  it('accepts one version everywhere, and its tag', () => {
+    expect(releaseProblems(release(same))).toEqual([]);
+    expect(releaseProblems(release(same), 'v0.2.0')).toEqual([]);
+  });
+
+  it('stops at workspaces that have drifted apart', () => {
+    expect(releaseProblems(release(['0.2.0', '0.1.0', '0.2.0', '0.2.0', '0.2.0']))).toEqual([
+      'The packages should share one version, but they have packages/tokens 0.2.0, packages/css 0.1.0, packages/vue 0.2.0, packages/react 0.2.0, packages/blade 0.2.0.',
+    ]);
+  });
+
+  it('lists a root version, a Composer version and a tag that disagree', () => {
+    expect(
+      releaseProblems(release(same, '0.1.0', { ...blade, version: '0.2.0' }), 'v0.1.0'),
+    ).toEqual([
+      'package.json is 0.1.0 but the workspaces are 0.2.0; run npm run release:version.',
+      'composer.json must not have a version: Packagist takes it from the tag.',
+      "composer.json's autoload must point at packages/blade's.",
+      'The tag is v0.1.0 but the version is 0.2.0: it should be v0.2.0.',
+    ]);
+  });
+});
+
+describe('releaseNotes', () => {
+  const changelog = [
+    '# Changelog',
+    '',
+    '## 0.2.0 (2026-10-25)',
+    '',
+    '### New',
+    '',
+    '- Add the menu',
+    '',
+    '## 0.1.1',
+    '',
+    '### Fixes',
+    '',
+    '- Rename the package',
+    '',
+  ].join('\n');
+
+  it("takes a version's section, without its heading", () => {
+    expect(releaseNotes(changelog, '0.2.0')).toBe('### New\n\n- Add the menu');
+    expect(releaseNotes(changelog, '0.1.1')).toBe('### Fixes\n\n- Rename the package');
+  });
+
+  it('refuses a version the changelog does not have', () => {
+    expect(() => releaseNotes(changelog, '0.1.0')).toThrow(
+      'CHANGELOG.md has no section for 0.1.0.',
+    );
   });
 });

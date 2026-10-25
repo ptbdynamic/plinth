@@ -40,11 +40,17 @@ or the tooling need no changeset.
 ```bash
 npm run release:version          # on a branch: the next version, in every package and the changelog
 npm run release -- --dry-run     # what npm and Packagist would get, without tagging or publishing
-npm run release                  # on main, after the version pull request merges: tag and publish
+npm run release                  # on main, after the version pull request merges: tag and push
 ```
 
 The version goes to `main` in a pull request titled `chore: release <version>`, like any other
 change. CI runs the dry run on every pull request, so the versions can't drift apart unnoticed.
+
+The pushed tag starts the release workflow. It publishes `@ptbdynamic/plinth` to npm with trusted
+publishing and provenance, so no npm token is stored and nobody types a one-time code, and it
+makes the GitHub release with the version's section of the changelog as its notes. What is
+already done is skipped, so a release can be repeated by running the workflow by hand with its
+tag (`gh workflow run release.yml -f tag=v1.2.0`).
 
 Packagist reads the Composer package from the `composer.json` at the root of the repository, at
 each tag, and takes the version from the tag. That file points the autoload and the Laravel
