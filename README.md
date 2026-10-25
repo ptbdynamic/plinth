@@ -74,7 +74,7 @@ What the tests cover:
   test runner opens every story in light and dark at 390, 768 and 1440 px and checks it with axe.
 
 Screenshot comparison is paused until the foundations settle
-([#9](https://github.com/bdynamicpt/plinth/issues/9)).
+([#9](https://github.com/ptbdynamic/plinth/issues/9)).
 
 ## Tokens
 

@@ -24,7 +24,7 @@ it('lists what is coming, by its issue', function () {
     $this->get('/components')
         ->assertOk()
         ->assertSee('Coming next')
-        ->assertSee('href="https://github.com/bdynamicpt/plinth/issues/99"', false)
+        ->assertSee('href="https://github.com/ptbdynamic/plinth/issues/99"', false)
         ->assertSee('Switches between views.');
 });
 
@@ -46,8 +46,8 @@ it('has a page for every component, in the docs layout, with its stories and sou
             ->assertSee('<h1 class="site-docs-title">'.$component->name.'</h1>', false)
             ->assertSee('<a class="site-docs-nav-link" href="'.$component->url().'"  aria-current="page" >', false)
             ->assertSee('href="'.$component->stories().'"', false)
-            ->assertSee('href="https://github.com/bdynamicpt/plinth/blob/main/'.$component->files[0].'"', false)
-            ->assertSee('href="https://github.com/bdynamicpt/plinth/edit/main/site/components/'.$component->slug.'.md"', false)
+            ->assertSee('href="https://github.com/ptbdynamic/plinth/blob/main/'.$component->files[0].'"', false)
+            ->assertSee('href="https://github.com/ptbdynamic/plinth/edit/main/site/components/'.$component->slug.'.md"', false)
             ->assertSee('When not to use it')
             ->assertSee('Accessibility');
     }

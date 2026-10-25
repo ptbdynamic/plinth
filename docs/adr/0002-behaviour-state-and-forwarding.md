@@ -2,7 +2,7 @@
 
 - Status: accepted
 - Date: 2026-10-18
-- Issue: [#3](https://github.com/bdynamicpt/plinth/issues/3)
+- Issue: [#3](https://github.com/ptbdynamic/plinth/issues/3)
 
 ## Context
 
@@ -137,7 +137,7 @@ With `scrollbar-gutter: stable` on `html` (superseded, below), so the page doesn
 scrollbar goes, and `overscroll-behavior: contain` on the sheet's scrolling area, so scrolling past
 its end doesn't move the page. This ships with the sheet.
 
-Superseded in [#104](https://github.com/bdynamicpt/plinth/issues/104): the stable gutter was
+Superseded in [#104](https://github.com/ptbdynamic/plinth/issues/104): the stable gutter was
 removed. The browser never draws the top layer in the scrollbar gutter, so it left a strip of the
 page beside an open sheet. While a modal is open the page now has no gutter, and where the
 scrollbar takes space the page shifts by its width under the backdrop.
@@ -145,7 +145,7 @@ scrollbar takes space the page shifts by its width under the backdrop.
 ### 8. No bottom bar
 
 This ADR first decided how a bottom bar would stay usable with the on-screen keyboard. The phone
-shell has since dropped the bottom bar ([#25](https://github.com/bdynamicpt/plinth/issues/25)), so
+shell has since dropped the bottom bar ([#25](https://github.com/ptbdynamic/plinth/issues/25)), so
 that decision no longer applies. A component that later sits at the bottom of the screen
 revisits the keyboard question in its own issue.
 
@@ -161,6 +161,6 @@ revisits the keyboard question in its own issue.
   per component keep Blade, Vue and React forwarding the same attributes.
 - A project can override any attribute on a root, including the ARIA the contract sets, and is
   then responsible for what it says.
-- Amended 2026-10-20 ([#71](https://github.com/bdynamicpt/plinth/issues/71)): the project's
+- Amended 2026-10-20 ([#71](https://github.com/ptbdynamic/plinth/issues/71)): the project's
   attribute wins a clash in every layer. The icon and icon button's Vue and React layers had let
   Plinth's value win, unlike Blade.

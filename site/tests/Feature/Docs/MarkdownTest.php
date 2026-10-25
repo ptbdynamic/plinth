@@ -106,7 +106,7 @@ it('makes repository links the site\'s, so the Markdown works on GitHub too', fu
     expect($html)
         ->toContain('href="/docs/colour#light"')
         ->toContain('href="/docs/decisions/0003-visual-direction"')
-        ->toContain('href="https://github.com/bdynamicpt/plinth/blob/main/README.md"')
+        ->toContain('href="https://github.com/ptbdynamic/plinth/blob/main/README.md"')
         ->toContain('href="https://example.com"')
         ->toContain('href="#here"')
         ->toContain('href="/storybook/"');
