@@ -152,3 +152,46 @@ export function archiveProblems(paths: string[]): string[] {
       .map((path) => `The archive is missing ${path}.`),
   ];
 }
+
+/**
+ * What stops `version` from being released from `root`: workspaces that drifted apart, a root
+ * package.json with another version, composer.json files that disagree or carry a version, and,
+ * given a tag, one that isn't `v<version>`. `npm run release` and the release workflow both
+ * check it.
+ */
+export function releaseProblems(root: string, tag?: string): string[] {
+  let version: string;
+  try {
+    version = sharedVersion(root);
+  } catch (error) {
+    return [(error as Error).message];
+  }
+  const problems: string[] = [];
+  const pkg = readPackage(root);
+  if (pkg.version !== version) {
+    problems.push(
+      `package.json is ${pkg.version} but the workspaces are ${version}; run npm run release:version.`,
+    );
+  }
+  const readComposer = (dir: string): ComposerJson =>
+    JSON.parse(readFileSync(join(root, dir, 'composer.json'), 'utf8'));
+  problems.push(...composerProblems(readComposer('.'), readComposer('packages/blade')));
+  if (tag !== undefined && tag !== `v${version}`) {
+    problems.push(`The tag is ${tag} but the version is ${version}: it should be v${version}.`);
+  }
+  return problems;
+}
+
+/** A version's section of CHANGELOG.md, without its heading: the notes of its GitHub release. */
+export function releaseNotes(changelog: string, version: string): string {
+  const lines = changelog.split('\n');
+  const start = lines.findIndex(
+    (line) => line === `## ${version}` || line.startsWith(`## ${version} `),
+  );
+  if (start === -1) throw new Error(`CHANGELOG.md has no section for ${version}.`);
+  const end = lines.findIndex((line, index) => index > start && line.startsWith('## '));
+  return lines
+    .slice(start + 1, end === -1 ? undefined : end)
+    .join('\n')
+    .trim();
+}
