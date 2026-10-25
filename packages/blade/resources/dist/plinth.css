@@ -2630,7 +2630,8 @@
  *       <button type="button" class="plinth-button plinth-icon-button plinth-dialog-close"
  *         data-variant="ghost" data-size="md" aria-label="Close" commandfor="settings"
  *         command="close">
- *         <span class="plinth-icon" data-size="md" aria-hidden="true"><svg>…</svg></span>
+ *         <span class="plinth-icon" data-size="md" data-icon="close" aria-hidden="true">
+ *           <svg>…</svg></span>
  *       </button>
  *     </div>
  *     <div class="plinth-dialog-body">…</div>
@@ -2747,7 +2748,8 @@
  *       <button type="button" class="plinth-button plinth-icon-button plinth-drawer-close"
  *         data-variant="ghost" data-size="md" aria-label="Close" commandfor="route"
  *         command="close">
- *         <span class="plinth-icon" data-size="md" aria-hidden="true"><svg>…</svg></span>
+ *         <span class="plinth-icon" data-size="md" data-icon="close" aria-hidden="true">
+ *           <svg>…</svg></span>
  *       </button>
  *     </div>
  *     <div class="plinth-drawer-body">…</div>
@@ -3274,13 +3276,14 @@
  *   </span>
  *   <span class="plinth-list-row-trailing">
  *     a value, a badge or a control
- *     <span class="plinth-icon plinth-list-row-chevron" data-size="sm" data-mirror
- *       aria-hidden="true"><svg>…</svg></span>
+ *     <span class="plinth-icon plinth-list-row-chevron" data-size="sm" data-icon="chevron-right"
+ *       data-mirror aria-hidden="true"><svg>…</svg></span>
  *   </span>
  * </div>
  *
  * The leading slot, the description and the trailing slot are optional; the chevron is the
- * row's own (chevron in Blade and Vue), and points the other way in right-to-left text.
+ * row's own (chevron in Blade and Vue), the built-in chevron-right glyph, which points the other
+ * way in right-to-left text.
  *
  * The root is the element the app talks to (ADR 2):
  * - a static row is a <div>;
@@ -4935,7 +4938,8 @@
  *       <button type="button" class="plinth-button plinth-icon-button plinth-sheet-close"
  *         data-variant="ghost" data-size="md" aria-label="Close" commandfor="filters"
  *         command="close">
- *         <span class="plinth-icon" data-size="md" aria-hidden="true"><svg>…</svg></span>
+ *         <span class="plinth-icon" data-size="md" data-icon="close" aria-hidden="true">
+ *           <svg>…</svg></span>
  *       </button>
  *     </div>
  *     <div class="plinth-sheet-body">…</div>
@@ -5311,8 +5315,8 @@
  * - a static tile is a <div>;
  * - a tile that leads to the detail behind the number is <a class="plinth-stat" href="…">, with
  *   the tile's own chevron as its last child, so the link shows without hover:
- *   <span class="plinth-icon plinth-stat-chevron" data-size="sm" data-mirror
- *     aria-hidden="true"><svg>…</svg></span>
+ *   <span class="plinth-icon plinth-stat-chevron" data-size="sm" data-icon="chevron-right"
+ *     data-mirror aria-hidden="true"><svg>…</svg></span>
  *   Its accessible name is its text: "Success rate 94% Up 2 points this week". It holds no other
  *   control.
  *
