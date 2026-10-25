@@ -28,6 +28,9 @@ import PlinthMenuGroup from './PlinthMenuGroup.vue';
 import PlinthMenuItem from './PlinthMenuItem.vue';
 import PlinthMenuSeparator from './PlinthMenuSeparator.vue';
 import PlinthMenuSheet from './PlinthMenuSheet.vue';
+import PlinthNavList from './PlinthNavList.vue';
+import PlinthNavListGroup from './PlinthNavListGroup.vue';
+import PlinthNavListItem from './PlinthNavListItem.vue';
 import PlinthPageHeader from './PlinthPageHeader.vue';
 import PlinthPill from './PlinthPill.vue';
 import PlinthPillRow from './PlinthPillRow.vue';
@@ -69,6 +72,9 @@ export {
   PlinthMenuItem,
   PlinthMenuSeparator,
   PlinthMenuSheet,
+  PlinthNavList,
+  PlinthNavListGroup,
+  PlinthNavListItem,
   PlinthPageHeader,
   PlinthPill,
   PlinthPillRow,
@@ -176,6 +182,9 @@ export const Plinth: Plugin = {
     app.component('PlinthMenuItem', PlinthMenuItem);
     app.component('PlinthMenuSeparator', PlinthMenuSeparator);
     app.component('PlinthMenuSheet', PlinthMenuSheet);
+    app.component('PlinthNavList', PlinthNavList);
+    app.component('PlinthNavListGroup', PlinthNavListGroup);
+    app.component('PlinthNavListItem', PlinthNavListItem);
     app.component('PlinthPageHeader', PlinthPageHeader);
     app.component('PlinthPill', PlinthPill);
     app.component('PlinthPillRow', PlinthPillRow);

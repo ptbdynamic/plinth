@@ -21,6 +21,7 @@ import '@ptbdynamic/plinth-css/src/components/sheet.css';
 import '@ptbdynamic/plinth-css/src/components/menu-sheet.css';
 import '@ptbdynamic/plinth-css/src/components/page-header.css';
 import '@ptbdynamic/plinth-css/src/components/split-view.css';
+import '@ptbdynamic/plinth-css/src/components/nav-list.css';
 import '@ptbdynamic/plinth-css/src/components/app-shell.css';
 
 /** The page around it, in the app shell's main: the page header, whose buttons follow the state. */

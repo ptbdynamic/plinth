@@ -27,6 +27,9 @@ import {
   PlinthMenuItem,
   PlinthMenuSeparator,
   PlinthMenuSheet,
+  PlinthNavList,
+  PlinthNavListGroup,
+  PlinthNavListItem,
   PlinthPageHeader,
   PlinthEmptyState,
   PlinthPill,
@@ -68,6 +71,9 @@ import {
   PlinthMenuItem as ReactMenuItem,
   PlinthMenuSeparator as ReactMenuSeparator,
   PlinthMenuSheet as ReactMenuSheet,
+  PlinthNavList as ReactNavList,
+  PlinthNavListGroup as ReactNavListGroup,
+  PlinthNavListItem as ReactNavListItem,
   PlinthPageHeader as ReactPageHeader,
   PlinthEmptyState as ReactEmptyState,
   PlinthPill as ReactPill,
@@ -103,6 +109,15 @@ import {
   type AppNavArgs,
   type AppNavItemArgs,
 } from '../stories/components/app-nav.ts';
+import * as navListStories from '../stories/components/NavList.stories.ts';
+import {
+  navList,
+  navListGroup,
+  navListItem,
+  type NavListArgs,
+  type NavListGroupArgs,
+  type NavListItemArgs,
+} from '../stories/components/nav-list.ts';
 import * as avatarStories from '../stories/components/Avatar.stories.ts';
 import { avatar, type AvatarArgs } from '../stories/components/avatar.ts';
 import * as badgeStories from '../stories/components/Badge.stories.ts';
@@ -238,6 +253,9 @@ const reactComponents = new Map<Component, unknown>([
   [PlinthAppShell, ReactAppShell],
   [PlinthSplitView, ReactSplitView],
   [PlinthAppNavItem, ReactAppNavItem],
+  [PlinthNavList, ReactNavList],
+  [PlinthNavListGroup, ReactNavListGroup],
+  [PlinthNavListItem, ReactNavListItem],
   [PlinthAvatar, ReactAvatar],
   [PlinthBadge, ReactBadge],
   [PlinthStat, ReactStat],
@@ -393,6 +411,13 @@ const appNavItemDefaults: AppNavItemArgs = {
   href: '#support',
   icon: '<span class="plinth-icon" data-size="md" aria-hidden="true"><svg viewBox="0 0 24 24"></svg></span>',
   current: false,
+};
+
+const navListItemDefaults: NavListItemArgs = { label: 'Open', href: '#open', current: false };
+
+const navListGroupDefaults: NavListGroupArgs = {
+  heading: 'Views',
+  items: [navListItemDefaults],
 };
 
 const sectionMenuItemDefaults: SectionMenuItemArgs = {
@@ -811,6 +836,68 @@ const cases: ParityCase[] = [
   appNavItemCase(
     'App nav item/with a clashing attribute',
     { ...appNavItemDefaults, current: true },
+    { 'aria-current': 'location' },
+  ),
+  ...storyArgs<NavListArgs>(navListStories).map(([story, args]) =>
+    navListCase(`Nav list/${story}`, args),
+  ),
+  navListCase(
+    'Nav list/with extra attributes',
+    { label: 'Folders', groups: [navListGroupDefaults] },
+    { class: 'is-wide', id: 'folders', 'data-testid': 'folders', 'aria-describedby': 'help' },
+  ),
+  navListCase(
+    'Nav list/with a clashing attribute',
+    { label: 'Folders', groups: [navListGroupDefaults] },
+    { 'aria-label': 'Mail' },
+  ),
+  navListCase('Nav list/blank label', { label: ' ', groups: [] }),
+  navListCase('Nav list/escaped label', { label: '"><b>x</b>', groups: [] }),
+  navListGroupCase('Nav list group/Default', navListGroupDefaults),
+  navListGroupCase('Nav list group/WithoutHeading', { items: [navListItemDefaults] }),
+  navListGroupCase('Nav list group/HeadingLevel', { ...navListGroupDefaults, headingLevel: 'h4' }),
+  navListGroupCase('Nav list group/unknown level and blank heading', {
+    heading: ' ',
+    headingLevel: 'h1' as 'h2',
+    items: [navListItemDefaults],
+  }),
+  navListGroupCase('Nav list group/unknown level', {
+    ...navListGroupDefaults,
+    headingLevel: 'h1' as 'h2',
+  }),
+  navListGroupCase('Nav list group/escaped heading', {
+    ...navListGroupDefaults,
+    heading: '<b>Views</b>',
+  }),
+  navListGroupCase('Nav list group/with extra attributes', navListGroupDefaults, {
+    class: 'is-pinned',
+    id: 'views',
+    'data-testid': 'views',
+    'aria-describedby': 'help',
+  }),
+  navListItemCase('Nav list item/Default', navListItemDefaults),
+  navListItemCase('Nav list item/Current', { ...navListItemDefaults, current: true }),
+  navListItemCase('Nav list item/WithCount', { ...navListItemDefaults, count: 12 }),
+  navListItemCase('Nav list item/ZeroCount', { ...navListItemDefaults, count: 0 }),
+  navListItemCase('Nav list item/blank href and count', {
+    ...navListItemDefaults,
+    href: ' ',
+    count: ' ',
+  }),
+  navListItemCase('Nav list item/escaped text', {
+    ...navListItemDefaults,
+    label: '<b>Open</b>',
+    href: '/?a=1&b="2"',
+    count: '<b>1</b>',
+  }),
+  navListItemCase(
+    'Nav list item/with extra attributes',
+    { ...navListItemDefaults, count: 3 },
+    { class: 'is-new', id: 'open', 'data-testid': 'open', 'wire:navigate': '' },
+  ),
+  navListItemCase(
+    'Nav list item/with a clashing attribute',
+    { ...navListItemDefaults, current: true },
     { 'aria-current': 'location' },
   ),
   ...storyArgs<AppShellArgs>(appShellStories).map(([story, args]) =>
@@ -1683,6 +1770,60 @@ function appNavCase(story: string, args: AppNavArgs, attributes: Attributes = {}
   };
 }
 
+function navListItemCase(
+  story: string,
+  args: NavListItemArgs,
+  attributes: Attributes = {},
+): ParityCase {
+  const props = {
+    href: args.href,
+    ...(args.count !== undefined ? { count: args.count } : {}),
+    current: args.current,
+  };
+  return {
+    story,
+    markup: navListItem(args, attributes),
+    vue: {
+      component: PlinthNavListItem,
+      props: { ...props, ...attributes },
+      slot: escape(args.label),
+      html: true,
+    },
+    blade: { component: 'nav-list-item', props, attributes, slot: escape(args.label) },
+  };
+}
+
+/** A group's own parity; its items are each an item case's markup, passed in as the slot. */
+function navListGroupCase(
+  story: string,
+  args: NavListGroupArgs,
+  attributes: Attributes = {},
+): ParityCase {
+  const props = {
+    ...(args.heading !== undefined ? { heading: args.heading } : {}),
+    ...(args.headingLevel !== undefined ? { headingLevel: args.headingLevel } : {}),
+  };
+  const slot = args.items.map((item) => navListItem(item)).join('');
+  return {
+    story,
+    markup: navListGroup(args, attributes),
+    vue: { component: PlinthNavListGroup, props: { ...props, ...attributes }, slot, html: true },
+    blade: { component: 'nav-list-group', props, attributes, slot },
+  };
+}
+
+/** The nav's own parity; its groups are each a group case's markup, passed in as the slot. */
+function navListCase(story: string, args: NavListArgs, attributes: Attributes = {}): ParityCase {
+  const props = args.label !== undefined ? { label: args.label } : {};
+  const slot = args.groups.map((group) => navListGroup(group)).join('');
+  return {
+    story,
+    markup: navList(args, attributes),
+    vue: { component: PlinthNavList, props: { ...props, ...attributes }, slot, html: true },
+    blade: { component: 'nav-list', props, attributes, slot },
+  };
+}
+
 /** The shell's parity; the nav, the bar and the page are markup, passed in as slots. */
 function appShellCase(story: string, args: AppShellArgs, attributes: Attributes = {}): ParityCase {
   const named = {
@@ -2468,6 +2609,30 @@ describe('parity with the stories', () => {
       'App nav item/escaped text',
       'App nav item/with extra attributes',
       'App nav item/with a clashing attribute',
+      'Nav list/Default',
+      'Nav list/WithoutHeadings',
+      'Nav list/NoneCurrent',
+      'Nav list/WithCounts',
+      'Nav list/LongLabels',
+      'Nav list/with extra attributes',
+      'Nav list/with a clashing attribute',
+      'Nav list/blank label',
+      'Nav list/escaped label',
+      'Nav list group/Default',
+      'Nav list group/WithoutHeading',
+      'Nav list group/HeadingLevel',
+      'Nav list group/unknown level and blank heading',
+      'Nav list group/unknown level',
+      'Nav list group/escaped heading',
+      'Nav list group/with extra attributes',
+      'Nav list item/Default',
+      'Nav list item/Current',
+      'Nav list item/WithCount',
+      'Nav list item/ZeroCount',
+      'Nav list item/blank href and count',
+      'Nav list item/escaped text',
+      'Nav list item/with extra attributes',
+      'Nav list item/with a clashing attribute',
       'App shell/Default',
       'App shell/WithoutBar',
       'App shell/WithoutNav',
