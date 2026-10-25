@@ -956,7 +956,8 @@
  *   bottom; the bar sits at the top of the other column and the main below it. The main scrolls
  *   on its own (the screen doesn't), and it is a flex column, so a split view in it fills the
  *   height left under the page header. A page header in it sticks to the main's top: leave
- *   --plinth-page-header-offset at 0 and data-top off.
+ *   --plinth-page-header-offset at 0. Give it data-top for the phone; under the bar the shell
+ *   drops the safe area it adds, since the bar is then the top of the screen.
  *
  * Sides are logical: in right-to-left text the nav is on the right. The shell has no states; the
  * app's layout state lives on its parts (aria-current on the nav's items, data-pane on a split
@@ -1012,6 +1013,14 @@
       min-block-size: 0;
       overflow-y: auto;
       overscroll-behavior-block: contain;
+    }
+
+    /* Under the app bar the page header isn't the screen's top bar, so it adds no safe area. */
+    .plinth-app-shell:has(> .plinth-app-shell-bar)
+      > .plinth-app-shell-main
+      > .plinth-page-header[data-top] {
+      min-block-size: var(--plinth-page-header-height);
+      padding-block-start: 0;
     }
   }
 }
