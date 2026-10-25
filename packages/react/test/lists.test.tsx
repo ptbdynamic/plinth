@@ -9,6 +9,7 @@ import * as vueSwipe from '../../vue/src/swipe.ts';
 import * as vueHeading from '../../vue/src/heading.ts';
 import * as vuePageHeader from '../../vue/src/page-header.ts';
 import * as vueListRow from '../../vue/src/list-row.ts';
+import * as vueMenu from '../../vue/src/menu.ts';
 import * as vueSheet from '../../vue/src/sheet.ts';
 import * as vueButton from '../../vue/src/button.ts';
 import * as vueIcon from '../../vue/src/icon.ts';
@@ -55,6 +56,8 @@ import {
   iconSizeFor,
   iconSizes,
   listRowChevron,
+  menuItemTone,
+  menuItemTones,
   resolveSize,
   sheetCloseIcon,
   sheetSide,
@@ -85,6 +88,7 @@ describe('the shared lists', () => {
     expect(headingLevels).toEqual(vueHeading.headingLevels);
     expect(pageHeaderLevels).toEqual(vuePageHeader.pageHeaderLevels);
     expect(listRowChevron).toBe(vueListRow.listRowChevron);
+    expect(menuItemTones).toEqual(vueMenu.menuItemTones);
     expect(sheetSides).toEqual(vueSheet.sheetSides);
     expect(sheetCloseIcon).toBe(vueSheet.sheetCloseIcon);
     expect(dialogSidePhones).toEqual(vueDialog.dialogSidePhones);
@@ -129,6 +133,7 @@ describe('the shared lists', () => {
     expect(confirmDialogKind('password')).toBe('password');
     expect(confirmDialogTone('loud')).toBe('neutral');
     expect(confirmDialogTone('danger')).toBe('danger');
+    expect(menuItemTone('loud')).toBe(vueMenu.menuItemTone('loud'));
     expect(sizes.map(iconSizeFor)).toEqual(['sm', 'sm', 'md', 'md', 'md']);
   });
 });

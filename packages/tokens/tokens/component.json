@@ -66,6 +66,18 @@
       "$description": "An item's height (40px), its touch target too."
     }
   },
+  "menu": {
+    "min-width": {
+      "$type": "dimension",
+      "$value": "{size.menu.min}",
+      "$description": "A menu's least width (192px); it grows with its longest item."
+    },
+    "max-width": {
+      "$type": "dimension",
+      "$value": "{size.menu.max}",
+      "$description": "A menu's most width (320px), and never more than the screen less a margin."
+    }
+  },
   "text-field": {
     "trailing-size": {
       "$type": "dimension",

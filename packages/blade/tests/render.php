@@ -3,7 +3,7 @@
 /**
  * Renders Plinth's Blade components for the parity tests in storybook/.
  *
- * Reads a JSON list of cases from stdin, each {"component": "badge", "props": {...},
+ * Reads a JSON list of cases from stdin, each {"template": "<x-plinth::…>"} or {"component": "badge", "props": {...},
  * "attributes": {...}, "slot": "...", "named": {"icon": "..."}}, and writes the rendered HTML of each, as a JSON list, to
  * stdout. Props are passed as PHP values (`:tone="$props['tone']"`), so booleans and arrays arrive
  * as they would from a view. Attributes are written as plain ones (`id="status"`), the way a
@@ -24,6 +24,11 @@ Application::create(resolvingCallback: function ($app) {
 $cases = json_decode(stream_get_contents(STDIN), true, flags: JSON_THROW_ON_ERROR);
 
 $rendered = array_map(function (array $case): string {
+    // A case can be a whole template, for components nested in each other.
+    if (isset($case['template'])) {
+        return Blade::render($case['template']);
+    }
+
     $props = $case['props'] ?? [];
     $bindings = collect(array_keys($props))
         ->map(fn (string $name) => sprintf(':%s="$props[%s]"', Str::kebab($name), var_export($name, true)))

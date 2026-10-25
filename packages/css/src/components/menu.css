@@ -1,0 +1,245 @@
+/*
+ * Menu: a short list of actions that opens from a button, in a popover anchored to it.
+ *
+ * <button type="button" class="plinth-button plinth-icon-button" popovertarget="ticket-actions"
+ *   aria-label="More actions">…</button>
+ * <div class="plinth-menu" id="ticket-actions" popover="auto">
+ *   <button type="button" class="plinth-menu-item" commandfor="ticket-actions"
+ *     command="hide-popover">
+ *     <span class="plinth-menu-icon" aria-hidden="true"><svg>…</svg></span>
+ *     <span class="plinth-menu-label">Assign to me</span>
+ *     <kbd class="plinth-menu-shortcut" aria-hidden="true">A</kbd>
+ *   </button>
+ *   <a class="plinth-menu-item" href="/tickets/42/print">
+ *     <span class="plinth-menu-label">Print</span>
+ *   </a>
+ *   <hr class="plinth-menu-separator">
+ *   <div class="plinth-menu-group" role="group" aria-label="Move to">
+ *     <div class="plinth-menu-heading" aria-hidden="true">Move to</div>
+ *     <button type="button" class="plinth-menu-item" commandfor="ticket-actions"
+ *       command="hide-popover"><span class="plinth-menu-label">Archive</span></button>
+ *   </div>
+ *   <hr class="plinth-menu-separator">
+ *   <button type="button" class="plinth-menu-item" commandfor="ticket-actions"
+ *     command="hide-popover" data-tone="danger">
+ *     <span class="plinth-menu-label">Delete</span>
+ *   </button>
+ * </div>
+ *
+ * The root is a <div popover="auto"> with an id (required in Blade, Vue and React), which the
+ * app's button names in popovertarget (or commandfor with command="toggle-popover"). The browser
+ * opens and closes it (ADR 2): the top layer, a click outside or Escape closes it, focus goes back
+ * to the button, and the browser tells assistive technology whether the button's menu is
+ * expanded. The button is the app's own (an icon button or a button); it is not part of the menu.
+ *
+ * It is not role="menu". The ARIA menu pattern needs arrow keys and a roving focus, which would be
+ * script in every layer; this is a list of buttons and links, reached with Tab, as ADR 2 decides
+ * for menus of actions. So the button has no aria-haspopup, and the items are plain buttons and
+ * links that read as such.
+ *
+ * Parts, each its own component in Blade, Vue and React:
+ * - item: a <button type="button">, or an <a href> when it navigates. A button item closes its
+ *   menu when pressed: commandfor="<the menu's id>" command="hide-popover", which the layers take
+ *   from the menu around the item. A link closes the menu by leaving the page; an app that routes
+ *   without loading a page closes it with hidePopover(). The icon is the project's SVG, decorative;
+ *   the label is the item's name. The shortcut is a hint for the eye, aria-hidden; the app that
+ *   has the shortcut adds aria-keyshortcuts to the item.
+ * - separator: an <hr> between items.
+ * - group: a <div role="group"> named by its heading (aria-label), with the heading shown above
+ *   its items and hidden from assistive technology, which reads the group's name instead.
+ *
+ * Variants and states:
+ * - data-tone="danger" on an item that deletes or removes something: the danger text colour and a
+ *   danger tint on hover. The label still says what it does; the colour is not the only signal.
+ * - disabled: `disabled` on a <button>; on a link, no href, role="link" and aria-disabled="true".
+ * - hover only where the device can hover; pressed takes the sunken surface; the focus ring on
+ *   :focus-visible, drawn inside the item (focus-ring.offset-inset).
+ * - open is the native one (:popover-open), never a class.
+ *
+ * Placement: below the button, starting at its start edge, through CSS anchor positioning (the
+ * popover's button is its implicit anchor). It takes the side of the button with more room, above
+ * or below, and is never taller than that room: a long menu scrolls. When it would leave the
+ * screen sideways it flips to the button's end edge. It is the same at every width; a phone gets no bottom sheet,
+ * since a menu is a few actions next to the button that opened them (a long list belongs in a
+ * sheet). A browser without anchor positioning shows the menu in the middle of the screen, where
+ * it still works. Script opens it with showPopover({ source: button }), so it has its anchor;
+ * without a source it has none, and sits in the screen's start corner.
+ *
+ * Size: --plinth-menu-min-width (192px) to --plinth-menu-max-width (320px), never wider than the
+ * screen less a margin, and never taller than the room it has. Items are --plinth-touch-target
+ * (40px) tall; with a mouse from 768px up, --plinth-control-md (32px). A long label wraps.
+ * It fades in and out on the motion tokens, which drop to 0ms under prefers-reduced-motion.
+ */
+
+@layer plinth {
+  .plinth-menu {
+    /* The browser's popover rules centre it on the screen: the fallback without anchoring. */
+    box-sizing: border-box;
+    min-inline-size: min(var(--plinth-menu-min-width), 100vi - 2 * var(--plinth-space-2));
+    max-inline-size: min(var(--plinth-menu-max-width), 100vi - 2 * var(--plinth-space-2));
+    max-block-size: calc(100dvb - 2 * var(--plinth-space-2));
+    padding: var(--plinth-space-1);
+    overflow: hidden auto;
+    overscroll-behavior: contain;
+    font-family: var(--plinth-font-family-body);
+    font-size: var(--plinth-font-size-md);
+    line-height: var(--plinth-font-leading-tight);
+    color: var(--plinth-color-text);
+    background-color: var(--plinth-color-surface-raised);
+    border: var(--plinth-border-width-thin) solid var(--plinth-color-border);
+    border-radius: var(--plinth-radius-container);
+    box-shadow: var(--plinth-elevation-2);
+    opacity: 0;
+    transition:
+      opacity var(--plinth-duration-fast) var(--plinth-easing-exit),
+      overlay var(--plinth-duration-fast) allow-discrete,
+      display var(--plinth-duration-fast) allow-discrete;
+  }
+
+  .plinth-menu:popover-open {
+    opacity: 1;
+    transition-timing-function: var(--plinth-easing-enter);
+  }
+
+  @starting-style {
+    .plinth-menu:popover-open {
+      opacity: 0;
+    }
+  }
+
+  @supports (position-area: block-end) {
+    .plinth-menu {
+      inset: auto;
+      max-block-size: calc(100% - 2 * var(--plinth-space-1));
+      margin-block: var(--plinth-space-1);
+      margin-inline: 0;
+      position-area: block-end span-inline-end;
+      position-try-order: most-block-size;
+      position-try-fallbacks:
+        flip-block,
+        flip-inline,
+        flip-block flip-inline;
+    }
+  }
+
+  .plinth-menu-item {
+    box-sizing: border-box;
+    display: flex;
+    gap: var(--plinth-space-2);
+    align-items: center;
+    inline-size: 100%;
+    min-block-size: var(--plinth-touch-target);
+    padding-block: var(--plinth-space-1);
+    padding-inline: var(--plinth-space-2);
+    margin: 0;
+    font: inherit;
+    color: var(--plinth-color-text);
+    text-align: start;
+    text-decoration: none;
+    cursor: pointer;
+    user-select: none;
+    background-color: transparent;
+    border: 0;
+    border-radius: var(--plinth-radius-control);
+    transition:
+      background-color var(--plinth-duration-fast) var(--plinth-easing-standard),
+      color var(--plinth-duration-fast) var(--plinth-easing-standard);
+  }
+
+  .plinth-menu-item[data-tone='danger'] {
+    color: var(--plinth-color-danger-text);
+  }
+
+  @media (hover: hover) {
+    a.plinth-menu-item[href]:hover,
+    button.plinth-menu-item:enabled:hover {
+      background-color: var(--plinth-color-surface-hover);
+    }
+
+    a.plinth-menu-item[href][data-tone='danger']:hover,
+    button.plinth-menu-item:enabled[data-tone='danger']:hover {
+      background-color: var(--plinth-color-danger-surface);
+    }
+  }
+
+  a.plinth-menu-item[href]:active,
+  button.plinth-menu-item:enabled:active {
+    background-color: var(--plinth-color-surface-sunken);
+  }
+
+  .plinth-menu-item:focus-visible {
+    outline: var(--plinth-focus-ring-width) solid var(--plinth-color-focus-ring);
+    outline-offset: var(--plinth-focus-ring-offset-inset);
+  }
+
+  .plinth-menu-item:disabled,
+  .plinth-menu-item[aria-disabled='true'] {
+    cursor: not-allowed;
+    opacity: var(--plinth-opacity-disabled);
+  }
+
+  .plinth-menu-icon {
+    display: inline-flex;
+    flex: none;
+    inline-size: var(--plinth-size-icon-sm);
+    block-size: var(--plinth-size-icon-sm);
+    color: var(--plinth-color-text-muted);
+  }
+
+  .plinth-menu-item[data-tone='danger'] .plinth-menu-icon {
+    color: inherit;
+  }
+
+  .plinth-menu-icon > svg {
+    inline-size: 100%;
+    block-size: 100%;
+  }
+
+  .plinth-menu-label {
+    flex: 1 1 auto;
+    min-inline-size: 0;
+    overflow-wrap: anywhere;
+  }
+
+  .plinth-menu-shortcut {
+    flex: none;
+    padding-inline-start: var(--plinth-space-4);
+    margin-inline-start: auto;
+    font-family: var(--plinth-font-family-mono);
+    font-size: var(--plinth-font-size-xs);
+    color: var(--plinth-color-text-subtle);
+  }
+
+  .plinth-menu-separator {
+    block-size: 0;
+    margin-block: var(--plinth-space-1);
+    margin-inline: calc(-1 * var(--plinth-space-1));
+    border: 0;
+    border-block-start: var(--plinth-border-width-thin) solid var(--plinth-color-divider);
+  }
+
+  .plinth-menu-group {
+    margin: 0;
+  }
+
+  .plinth-menu-heading {
+    padding-block: var(--plinth-space-2) var(--plinth-space-1);
+    padding-inline: var(--plinth-space-2);
+    font-size: var(--plinth-font-size-xs);
+    font-weight: var(--plinth-font-weight-medium);
+    color: var(--plinth-color-text-subtle);
+  }
+
+  @media (min-width: 768px) and (pointer: fine) {
+    .plinth-menu-item {
+      min-block-size: var(--plinth-control-md);
+    }
+  }
+
+  @media (forced-colors: active) {
+    .plinth-menu-item:disabled,
+    .plinth-menu-item[aria-disabled='true'] {
+      color: GrayText;
+    }
+  }
+}
