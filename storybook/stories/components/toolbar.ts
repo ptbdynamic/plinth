@@ -110,11 +110,11 @@ export function toolbarSearch(
   const { extra } = rootAttributes('', others);
   const classes = ['plinth-toolbar-search', extraClass].filter(Boolean).join(' ');
   return [
-    `<div class="${classes}" role="search">`,
+    `<search class="${classes}">`,
     icon({ name: 'search', size: 'sm', mirror: false }),
     `<input type="${escape(type)}" class="plinth-toolbar-search-input"${extra} aria-label="${escape(label)}">`,
     scope?.trim() ? scope : '',
-    '</div>',
+    '</search>',
   ].join('');
 }
 

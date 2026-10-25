@@ -169,7 +169,7 @@ describe('PlinthToolbarScope', () => {
 describe('PlinthToolbarSearch', () => {
   it('prints the search with its icon and field, named Search by default', () => {
     expect(renderToStaticMarkup(<PlinthToolbarSearch />)).toBe(
-      `<div class="plinth-toolbar-search" role="search"><span class="plinth-icon" data-size="sm" data-icon="search" aria-hidden="true">${iconGlyph('search')}</span><input type="search" class="plinth-toolbar-search-input" aria-label="Search"/></div>`,
+      `<search class="plinth-toolbar-search"><span class="plinth-icon" data-size="sm" data-icon="search" aria-hidden="true">${iconGlyph('search')}</span><input type="search" class="plinth-toolbar-search-input" aria-label="Search"/></search>`,
     );
   });
 
@@ -250,6 +250,14 @@ describe('toolbarKeys', () => {
 
   it('turns the arrows round in right-to-left text', () => {
     const toolbar = bar('<button>A</button><button>B</button>', 'rtl');
+    const real = window.getComputedStyle;
+    vi.spyOn(window, 'getComputedStyle').mockImplementation(
+      (element: Element) =>
+        ({
+          ...real(element),
+          direction: element === toolbar ? 'rtl' : 'ltr',
+        }) as CSSStyleDeclaration,
+    );
     toolbarKeys(toolbar);
     const [a, b] = [...toolbar.children] as HTMLElement[];
 

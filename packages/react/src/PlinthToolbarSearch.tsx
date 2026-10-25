@@ -28,7 +28,7 @@ export function PlinthToolbarSearch({
   }
 
   return (
-    <div className={classNames('plinth-toolbar-search', className)} role="search">
+    <search className={classNames('plinth-toolbar-search', className)}>
       <span className="plinth-icon" data-size="sm" data-icon="search" aria-hidden="true">
         <svg
           viewBox="0 0 24 24"
@@ -42,6 +42,6 @@ export function PlinthToolbarSearch({
       </span>
       <input type="search" className="plinth-toolbar-search-input" aria-label={label} {...rest} />
       {hasContent(scope) ? scope : null}
-    </div>
+    </search>
   );
 }

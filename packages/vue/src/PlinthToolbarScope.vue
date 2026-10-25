@@ -8,7 +8,7 @@ const props = defineProps<{
 }>();
 
 if (!props.label?.trim()) {
-  throw new Error('<PlinthToolbarScope> needs a label: it is the button\'s text and name.');
+  throw new Error("<PlinthToolbarScope> needs a label: it is the button's text and name.");
 }
 </script>
 

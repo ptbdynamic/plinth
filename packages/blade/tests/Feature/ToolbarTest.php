@@ -9,7 +9,7 @@ it('prints the actions in a toolbar named Actions by default, with its keys', fu
 
     expect(squish($html))->toBe(
         '<div class="plinth-toolbar">'
-        .'<div class="plinth-toolbar-actions" role="toolbar" aria-label="Actions" x-init="'.e(ToolbarKeys::ALPINE).'"><button>Assign</button></div>'
+        .'<div class="plinth-toolbar-actions" role="toolbar" aria-label="Actions" x-data="'.e(ToolbarKeys::X_DATA).'"><button>Assign</button></div>'
         .'</div>'
     );
 });
@@ -108,9 +108,9 @@ it('needs the scope\'s label', function () {
 
 it('prints the search with its icon and field, named Search by default', function () {
     expect(squish(Blade::render('<x-plinth::toolbar-search />')))->toBe(
-        '<div class="plinth-toolbar-search" role="search">'
+        '<search class="plinth-toolbar-search">'
         .'<span class="plinth-icon" data-size="sm" data-icon="search" aria-hidden="true">'.Glyph::Search->svg().'</span>'
-        .'<input type="search" class="plinth-toolbar-search-input" aria-label="Search"></div>'
+        .'<input type="search" class="plinth-toolbar-search-input" aria-label="Search"></search>'
     );
 });
 
@@ -122,9 +122,9 @@ it('prints the scope, the class on the root and every other attribute on the fie
         BLADE);
 
     expect(squish($html))
-        ->toStartWith('<div class="plinth-toolbar-search x" role="search">')
+        ->toStartWith('<search class="plinth-toolbar-search x">')
         ->toContain('<input type="search" class="plinth-toolbar-search-input" aria-label="Find" name="q" wire:model.live="q">')
-        ->toEndWith('<button class="scope">In: Open</button></div>');
+        ->toEndWith('<button class="scope">In: Open</button></search>');
 });
 
 it('leaves out an empty scope', function () {

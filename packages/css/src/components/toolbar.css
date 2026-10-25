@@ -4,7 +4,7 @@
  * 768px; on a phone it is not shown, and the actions live in the page header.
  *
  * <div class="plinth-toolbar">
- *   <div class="plinth-toolbar-search" role="search">
+ *   <search class="plinth-toolbar-search">
  *     <span class="plinth-icon" data-size="sm" data-icon="search" aria-hidden="true"><svg>…</svg></span>
  *     <input type="search" class="plinth-toolbar-search-input" aria-label="Search tickets">
  *     <button type="button" class="plinth-toolbar-scope" popovertarget="search-scope">
@@ -12,7 +12,7 @@
  *       <span class="plinth-icon" data-size="sm" data-icon="chevron-down" aria-hidden="true">…</span>
  *     </button>
  *     <div class="plinth-menu" id="search-scope" popover="auto">…</div>
- *   </div>
+ *   </search>
  *   <p class="plinth-toolbar-target">2 selected</p>
  *   <div class="plinth-toolbar-actions" role="toolbar" aria-label="Ticket actions">
  *     <div class="plinth-toolbar-group" role="group">
@@ -37,10 +37,11 @@
  * </div>
  *
  * The root is a <div>, and each part is printed only when it has content:
- * - the search (<x-plinth::toolbar-search>, PlinthToolbarSearch): a <div role="search"> around a
- *   search icon, an <input type="search"> and the scope. The label is the input's name
- *   (aria-label), required, since the field shows no label of its own. The app's attributes
- *   (name, value, placeholder, wire:model, …) go to the input, and only a class to the root.
+ * - the search (<x-plinth::toolbar-search>, PlinthToolbarSearch): a <search> element (the
+ *   search landmark, native since 2023) around a search icon, an <input type="search"> and the
+ *   scope. The label is the input's name (aria-label), Search by default and never blank, since
+ *   the field shows no label of its own. The app's attributes (name, value, placeholder,
+ *   wire:model, …) go to the input, and only a class to the root.
  * - the scope (<x-plinth::toolbar-scope>, PlinthToolbarScope): a <button> joined to the field's
  *   end, whose text says where the search looks (In: Open, All folders) and is its name. The app
  *   opens its own menu of scopes with it (popovertarget), and changes the text when one is picked.
@@ -58,7 +59,9 @@
  * Overflow: data-overflow on an action hides it below 1280px, where the room runs out; the app
  * puts the same action in the ⋯ menu with data-overflow on that item too (and on a separator
  * next to them), and inside a toolbar the menu shows those only below 1280px. A group whose
- * actions all overflow is hidden with them. Plinth doesn't measure: the app picks what overflows.
+ * actions all overflow is hidden with them, and so is its divider. From 1280px the ⋯ button is
+ * hidden when every entry of the menu right after it overflows, so it never opens an empty menu.
+ * Plinth doesn't measure: the app picks what overflows.
  *
  * Keyboard: the actions are one tab stop, and the arrow keys move between their buttons and links
  * (Left and Right, the other way round in right-to-left text, Home and End), wrapping at the
@@ -216,7 +219,14 @@
     align-items: center;
   }
 
-  .plinth-toolbar-group + .plinth-toolbar-group {
+  /* What overflows is in the ⋯ menu below 1280px, and in the toolbar from there. */
+  .plinth-toolbar-action[data-overflow],
+  .plinth-toolbar-group:not(:has(> :not([data-overflow]))) {
+    display: none;
+  }
+
+  /* A divider after a group that shows; from 1280px every group shows. */
+  .plinth-toolbar-group:has(> :not([data-overflow])) + .plinth-toolbar-group {
     padding-inline-start: var(--plinth-space-2);
     border-inline-start: var(--plinth-border-width-thin) solid var(--plinth-color-divider);
   }
@@ -235,12 +245,6 @@
     overflow: hidden;
     white-space: nowrap;
     clip-path: inset(50%);
-  }
-
-  /* What overflows is in the ⋯ menu below 1280px, and in the toolbar from there. */
-  .plinth-toolbar-action[data-overflow],
-  .plinth-toolbar-group:not(:has(> :not([data-overflow]))) {
-    display: none;
   }
 
   @media (pointer: coarse) {
@@ -291,7 +295,17 @@
       display: flex;
     }
 
+    .plinth-toolbar-group + .plinth-toolbar-group {
+      padding-inline-start: var(--plinth-space-2);
+      border-inline-start: var(--plinth-border-width-thin) solid var(--plinth-color-divider);
+    }
+
     .plinth-toolbar .plinth-menu [data-overflow] {
+      display: none;
+    }
+
+    /* A ⋯ menu that holds only what overflows has nothing to show here. */
+    .plinth-toolbar-actions > :has(+ .plinth-menu:not(:has(> :not([data-overflow])))) {
       display: none;
     }
   }

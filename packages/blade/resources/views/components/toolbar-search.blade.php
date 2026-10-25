@@ -15,10 +15,10 @@
         'aria-label' => $label,
     ];
 @endphp
-<div {{ $attributes->only('class')->merge(['class' => 'plinth-toolbar-search']) }} role="search">
+<search {{ $attributes->only('class')->merge(['class' => 'plinth-toolbar-search']) }}>
     <x-plinth::icon name="search" size="sm" />
     <input {{ $attributes->except('class')->merge($input) }}>
     @if ($hasScope)
         {{ $scope }}
     @endif
-</div>
+</search>

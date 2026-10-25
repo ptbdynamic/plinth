@@ -17,12 +17,14 @@ const props = withDefaults(
 );
 
 if (!props.label?.trim()) {
-  throw new Error('<PlinthToolbarAction> needs a label: it is the action\'s name.');
+  throw new Error("<PlinthToolbarAction> needs a label: it is the action's name.");
 }
 
 // The glyph's SVG is iconGlyph(icon) (icon.ts), written out; parity keeps the copies equal.
 const glyph = computed(() => iconName(props.icon));
-const mirrored = computed(() => glyph.value !== undefined && mirroredIconNames.includes(glyph.value));
+const mirrored = computed(
+  () => glyph.value !== undefined && mirroredIconNames.includes(glyph.value),
+);
 </script>
 
 <template>

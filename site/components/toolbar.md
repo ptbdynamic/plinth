@@ -60,7 +60,9 @@ its name for a screen reader.
 Plinth doesn't measure the toolbar: the app picks what gives way. Mark an action **`overflow`**
 and it is hidden below 1280px; put the same action in the ⋯ menu with `data-overflow` on its item
 (and on a separator next to them), and inside a toolbar the menu shows those only below 1280px. A
-group whose actions all overflow is hidden with them.
+group whose actions all overflow is hidden with them, and so is its divider. From 1280px the ⋯
+button is hidden when every entry of the menu right after it overflows, so it never opens an
+empty menu.
 
 ```blade example layout="stack"
 <x-plinth::toolbar label="Ticket actions" target="#1042">
@@ -113,7 +115,7 @@ Blade, Vue and React print exactly this markup, and the parity tests hold them t
 | Part                          | Element                          | Holds                                                     |
 | ----------------------------- | -------------------------------- | --------------------------------------------------------- |
 | `plinth-toolbar`              | `<div>`                          | the root                                                  |
-| `plinth-toolbar-search`       | `<div role="search">`            | the search icon, the field and the scope                  |
+| `plinth-toolbar-search`       | `<search>`                       | the search icon, the field and the scope                  |
 | `plinth-toolbar-search-input` | `<input type="search">`          | the field, named by `aria-label`                          |
 | `plinth-toolbar-scope`        | `<button>`                       | the scope's label and a chevron                           |
 | `plinth-toolbar-scope-label`  | `<span>`                         | where the search looks                                    |
@@ -156,7 +158,7 @@ The same names in every layer. React takes the Vue props, with slots as props th
 
 Extra attributes go to each component's root, and the project's win a clash (`class` is added),
 except on the search: its class goes on the root and every other attribute (`name`, `value`,
-`placeholder`, `wire:model`, `v-model`, `onChange`, `ref`) on the `<input>`. None of them emits an
+`placeholder`, `wire:model`, `@input`, `onChange`, `ref`) on the `<input>`. None of them emits an
 event: the actions are buttons with the app's own listeners.
 
 ```blade tab="Blade"
@@ -185,7 +187,12 @@ event: the actions are buttons with the app's own listeners.
 ```vue tab="Vue"
 <PlinthToolbar label="Ticket actions" :target="`${selected.size} selected`">
   <template #search>
-    <PlinthToolbarSearch v-model="search" label="Search tickets" placeholder="Search">
+    <PlinthToolbarSearch
+      label="Search tickets"
+      placeholder="Search"
+      :value="search"
+      @input="search = $event.target.value"
+    >
       <template #scope>
         <PlinthToolbarScope :label="scopeLabel" popovertarget="search-scope" />
         <PlinthMenu id="search-scope">…</PlinthMenu>

@@ -19,5 +19,5 @@
     @endif
     {{-- What Vue and React do in the Blade layer, with Alpine: one tab stop, and the arrow keys
          between the actions (BDynamic\Plinth\Support\ToolbarKeys). --}}
-    <div class="plinth-toolbar-actions" role="toolbar" aria-label="{{ $label }}" x-init="{{ \BDynamic\Plinth\Support\ToolbarKeys::ALPINE }}">{{ $slot }}</div>
+    <div class="plinth-toolbar-actions" role="toolbar" aria-label="{{ $label }}" x-data="{{ \BDynamic\Plinth\Support\ToolbarKeys::X_DATA }}">{{ $slot }}</div>
 </div>

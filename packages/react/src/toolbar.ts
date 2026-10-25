@@ -30,7 +30,7 @@ export function toolbarKeys(toolbar: HTMLElement): () => void {
     const list = controls();
     const index = list.indexOf(event.target as HTMLElement);
     if (index < 0 || event.altKey || event.ctrlKey || event.metaKey) return;
-    const forward = toolbar.closest('[dir]')?.getAttribute('dir') === 'rtl' ? -1 : 1;
+    const forward = getComputedStyle(toolbar).direction === 'rtl' ? -1 : 1;
     const step: Record<string, number> = { ArrowRight: forward, ArrowLeft: -forward };
     const next =
       event.key === 'Home'
@@ -44,13 +44,14 @@ export function toolbarKeys(toolbar: HTMLElement): () => void {
     event.preventDefault();
     next.focus();
   };
-  // The app adds and removes actions, and enables and disables them; the CSS hides some at a width.
+  // The app adds and removes actions, enables, disables, hides and shows them; the CSS hides some
+  // at a width.
   const observer = new MutationObserver(update);
   observer.observe(toolbar, {
     subtree: true,
     childList: true,
     attributes: true,
-    attributeFilter: ['disabled', 'hidden'],
+    attributeFilter: ['disabled', 'hidden', 'data-overflow', 'class', 'style'],
   });
   const view = toolbar.ownerDocument.defaultView!;
   view.addEventListener('resize', update);

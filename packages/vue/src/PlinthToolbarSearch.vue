@@ -20,7 +20,7 @@ defineSlots<{
 }>();
 
 if (!props.label?.trim()) {
-  throw new Error('<PlinthToolbarSearch> needs a label: it is the field\'s name.');
+  throw new Error("<PlinthToolbarSearch> needs a label: it is the field's name.");
 }
 
 const attrs = useAttrs();
@@ -33,7 +33,7 @@ const input = computed(() =>
 </script>
 
 <template>
-  <div :class="['plinth-toolbar-search', attrs.class]" role="search">
+  <search :class="['plinth-toolbar-search', attrs.class]">
     <span class="plinth-icon" data-size="sm" data-icon="search" aria-hidden="true"
       ><svg
         viewBox="0 0 24 24"
@@ -47,5 +47,5 @@ const input = computed(() =>
     ></span>
     <input type="search" class="plinth-toolbar-search-input" :aria-label="label" v-bind="input" />
     <slot v-if="hasContent(slots.scope?.())" name="scope" />
-  </div>
+  </search>
 </template>
