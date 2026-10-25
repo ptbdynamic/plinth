@@ -30,12 +30,14 @@
  *   apart. Items always go in a group, a list with no headings in one group without one.
  * - items (<x-plinth::nav-list-item>, PlinthNavListItem): links, each its own component so the
  *   app's attributes and listeners land on the link (ADR 2). An item has a label, which wraps
- *   when it is long, and an optional count on the end edge, in the mono face.
+ *   when it is long, and an optional count on the end edge, in the mono face. Give every item
+ *   its href: without one it prints a plain <a>, which is no link and can't be reached with
+ *   Tab, so keep that for a placeholder.
  *   plinth-nav-list-label has no rule of its own beyond its layout: it is a hook for a project.
  *
  * State, set by the app: aria-current="page" on the item of the view being shown. The current
  * item takes the selection tint (accent-subtle, accent-text), a 2px accent edge on its start side
- * (border-width.thick) and a heavier label, so colour is not its only cue (#113); in forced
+ * (border-width.thick), clear of the focus ring, and a heavier label, so colour is not its only cue (#113); in forced
  * colours it takes the system highlight. The others are muted text on no surface, a step of
  * surface on hover (where the device can hover) and press. The focus ring sits inside the row
  * (focus-ring.offset-inset), so a scrolling pane does not cut it off.
@@ -140,7 +142,9 @@
   .plinth-nav-list-item[aria-current='page']::before {
     position: absolute;
     inset-block: var(--plinth-space-2);
-    inset-inline-start: 0;
+
+    /* Clear of the focus ring, drawn inside the row, so focus doesn't hide the edge. */
+    inset-inline-start: var(--plinth-focus-ring-width);
     inline-size: var(--plinth-border-width-thick);
     content: '';
     background-color: var(--plinth-color-accent);

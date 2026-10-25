@@ -18,7 +18,9 @@ Name the nav with **`label`** (_Folders_), so it reads apart from the app nav. P
 groups: a group takes an optional **`heading`**, an `<h2>` unless **`heading-level`** says
 otherwise (h2 to h6). Give each item the `href` of its view, an optional **`count`**, and set
 **`current`** on the item of the view being shown, which prints `aria-current="page"`. The current
-item takes the selection tint, a 2px accent edge on its start side and a heavier label.
+item takes the selection tint, a 2px accent edge on its start side and a heavier label. No item
+is current on a page outside every view. Give every item its `href`: without one it prints a
+plain `<a>`, which is no link and can't be reached with Tab.
 
 ```blade example
 <x-plinth::nav-list label="Folders" style="max-inline-size: 15rem">
