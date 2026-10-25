@@ -296,6 +296,26 @@ return [
             ],
         ],
 
+        'timeline' => [
+            'name' => 'Timeline',
+            'group' => 'Content',
+            'description' => 'A conversation or an activity feed on one line: posts, internal notes and events.',
+            'playground' => [
+                'template' => "<x-plinth::timeline label=\"Conversation\">\n    <x-plinth::timeline-post author=\"Sam Lee\" detail=\"{detail}\" time=\"09:21\"{attributes}>\n        <p>{body}</p>\n    </x-plinth::timeline-post>\n</x-plinth::timeline>",
+                'options' => [
+                    'kind' => [
+                        'values' => ['team', 'customer', 'note'],
+                        'default' => 'team',
+                        'content' => [
+                            'team' => ['{detail}' => 'Support team', '{body}' => 'Thanks, we are on it.'],
+                            'customer' => ['{detail}' => 'sam.lee@example.com', '{body}' => 'The export stops with an error.'],
+                            'note' => ['{detail}' => 'Support team', '{body}' => 'Only reports over 3,000 rows fail.'],
+                        ],
+                    ],
+                ],
+            ],
+        ],
+
         'app-shell' => [
             'name' => 'App shell',
             'group' => 'Layout',
