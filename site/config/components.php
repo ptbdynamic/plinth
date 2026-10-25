@@ -1,5 +1,7 @@
 <?php
 
+use BDynamic\Plinth\Enums\Glyph;
+
 /*
 | Plinth's components, as the site lists them: each has a page from its Markdown in
 | site/components, a card on the components page, and, where it has variants, sizes or states, a
@@ -50,7 +52,7 @@ return [
             'description' => 'A button with only an icon, for toolbars, headers and closing a sheet.',
             'css' => 'button',
             'playground' => [
-                'template' => '<x-plinth::icon-button label="Search"{attributes}><x-site.glyph name="search" /></x-plinth::icon-button>',
+                'template' => '<x-plinth::icon-button label="Search" icon="search"{attributes} />',
                 'options' => [
                     'variant' => ['values' => $variants, 'default' => 'ghost'],
                     'size' => $controls,
@@ -184,10 +186,12 @@ return [
         'icon' => [
             'name' => 'Icon',
             'group' => 'Content',
-            'description' => 'Sizes and colours a project\'s own SVG, and mirrors arrows in right-to-left text.',
+            'description' => 'A built-in interface glyph by name, or a project\'s own SVG, sized and coloured by Plinth.',
             'playground' => [
-                'template' => '<x-plinth::icon{attributes}><x-site.glyph name="check" /></x-plinth::icon>',
+                'template' => '<x-plinth::icon{attributes} />',
                 'options' => [
+                    // The default glyph is printed too: without a name the icon would be empty.
+                    'name' => ['values' => Glyph::values(), 'default' => 'menu', 'print' => ['menu' => 'name="menu"']],
                     'size' => ['values' => ['sm', 'md', 'lg'], 'default' => 'md'],
                 ],
             ],
