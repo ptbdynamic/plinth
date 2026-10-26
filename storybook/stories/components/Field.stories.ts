@@ -38,9 +38,9 @@ const storySelect = `<style>
 function select(
   args: Pick<FieldArgs, 'id' | 'description' | 'error'> & { required?: boolean },
 ): string {
-  const { id, describedBy, invalid } = fieldControl(args.id, false, args.description, args.error);
+  const { describedBy, invalid } = fieldControl(args.id, false, args.description, args.error);
   return [
-    `<select class="story-select" id="${escape(id)}"`,
+    `<select class="story-select" id="${escape(args.id)}"`,
     args.required ? ' required' : '',
     describedBy ? ` aria-describedby="${escape(describedBy)}"` : '',
     invalid ? ' aria-invalid="true"' : '',
