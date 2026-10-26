@@ -1,0 +1,133 @@
+/*
+ * Checkbox: a choice submitted with the form, with its label beside it, an optional description
+ * and an error under the label. It is the native checkbox, so it is checked, submitted and reset
+ * the way a form expects, and toggles with Space and from its label.
+ *
+ * <div class="plinth-checkbox">
+ *   <input type="checkbox" class="plinth-checkbox-input" id="updates" name="updates" value="1"
+ *     checked aria-describedby="updates-description updates-error" aria-invalid="true">
+ *   <label class="plinth-checkbox-label" for="updates">Email me product updates</label>
+ *   <p class="plinth-checkbox-description" id="updates-description">About once a month.</p>
+ *   <p class="plinth-checkbox-error" id="updates-error">Choose whether to get updates.</p>
+ * </div>
+ *
+ * The input needs an id: the label points at it with for, and the description's and error's ids
+ * are the input's id with -description and -error, as in a field (field.css). The description
+ * and the error are optional; aria-describedby lists the description, then the error, and is left
+ * out when there is neither.
+ *
+ * Attributes go to the input, not the root (name, value, checked, required, form, wire:model,
+ * x-model, data-*, aria-*), so the app talks to the input; only a project's class is added to the
+ * root's. Without a value, a checked box submits "on", as the browser does.
+ *
+ * Several checkboxes that answer one question go in a field with `group` (a fieldset and its
+ * legend, field.css), each with its own label.
+ *
+ * States:
+ * - checked: `checked` on the input (the app's; Vue's v-model, React's checked or defaultChecked).
+ * - indeterminate: the input's indeterminate property, set by script, as there is no attribute
+ *   for it: Vue and React set it in an effect, Blade with Alpine (x-init). A "select all" box
+ *   shows it when some, not all, of its boxes are checked. Clicking it checks it.
+ * - error: aria-invalid="true" on the input and the error message under the label, in the
+ *   danger text colour; the message says what to fix, so it isn't only a colour. Checked, the box
+ *   fills with the danger colour; the browser draws an unchecked box's edge, so there the message
+ *   alone carries the error.
+ * - disabled: `disabled` on the input; the checkbox and its label are faded and it can't be
+ *   focused.
+ * - the focus ring on the input's :focus-visible.
+ *
+ * The box is the size of a small icon (16px), in the accent colour when checked. Its label fills
+ * the row beside it, so the box and the label together are one target: 32px tall, and 40px on a
+ * touch screen.
+ */
+
+@layer plinth {
+  .plinth-checkbox {
+    --plinth-checkbox-row: var(--plinth-control-md);
+
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    column-gap: var(--plinth-space-2);
+    align-items: start;
+    min-inline-size: 0;
+    font-family: var(--plinth-font-family-body);
+  }
+
+  /* The native checkbox, in the accent, the size of a small icon, beside the label's first line. */
+  .plinth-checkbox-input {
+    grid-row: 1;
+    grid-column: 1;
+    inline-size: var(--plinth-size-icon-sm);
+    block-size: var(--plinth-size-icon-sm);
+    margin: 0;
+    margin-block-start: calc((var(--plinth-checkbox-row) - var(--plinth-size-icon-sm)) / 2);
+    accent-color: var(--plinth-color-accent);
+    cursor: pointer;
+  }
+
+  /* Off the box, so the ring stays apart from a checked box's accent fill. */
+  .plinth-checkbox-input:focus-visible {
+    outline: var(--plinth-focus-ring-width) solid var(--plinth-color-focus-ring);
+    outline-offset: var(--plinth-focus-ring-offset-filled);
+  }
+
+  /* An invalid box that is checked fills with the danger colour; the message says what to fix. */
+  .plinth-checkbox-input[aria-invalid='true'] {
+    accent-color: var(--plinth-color-danger-solid);
+  }
+
+  .plinth-checkbox-input:disabled {
+    cursor: not-allowed;
+  }
+
+  /* Its first line is centred in the row, so the label is a target as tall as the row. */
+  .plinth-checkbox-label {
+    grid-row: 1;
+    grid-column: 2;
+    padding-block: calc((var(--plinth-checkbox-row) - 1lh) / 2);
+    font-size: var(--plinth-font-size-md);
+    line-height: var(--plinth-font-leading-normal);
+    color: var(--plinth-color-text);
+    overflow-wrap: anywhere;
+    cursor: pointer;
+  }
+
+  .plinth-checkbox-description,
+  .plinth-checkbox-error {
+    grid-column: 2;
+    margin: 0;
+    font-size: var(--plinth-font-size-sm);
+    line-height: var(--plinth-font-leading-normal);
+    overflow-wrap: anywhere;
+  }
+
+  .plinth-checkbox-description {
+    color: var(--plinth-color-text-muted);
+  }
+
+  .plinth-checkbox-error {
+    color: var(--plinth-color-danger-text);
+  }
+
+  /* The control and its label fade; the description stays readable, since it may say why. */
+  .plinth-checkbox:has(> .plinth-checkbox-input:disabled)
+    > :is(.plinth-checkbox-input, .plinth-checkbox-label) {
+    opacity: var(--plinth-opacity-disabled);
+  }
+
+  .plinth-checkbox:has(> .plinth-checkbox-input:disabled) > .plinth-checkbox-label {
+    cursor: not-allowed;
+  }
+
+  @media (pointer: coarse) {
+    .plinth-checkbox {
+      --plinth-checkbox-row: var(--plinth-touch-target);
+    }
+  }
+
+  @media (forced-colors: active) {
+    .plinth-checkbox:has(> .plinth-checkbox-input:disabled) > :is(.plinth-checkbox-label, p) {
+      color: GrayText;
+    }
+  }
+}

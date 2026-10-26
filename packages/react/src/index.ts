@@ -7,6 +7,7 @@ export { PlinthAvatar, type PlinthAvatarProps } from './PlinthAvatar';
 export { PlinthBadge, type PlinthBadgeProps } from './PlinthBadge';
 export { PlinthButton, type PlinthButtonProps } from './PlinthButton';
 export { PlinthCallout, type PlinthCalloutProps } from './PlinthCallout';
+export { PlinthCheckbox, type PlinthCheckboxProps } from './PlinthCheckbox';
 export { PlinthCodeBlock, type PlinthCodeBlockProps } from './PlinthCodeBlock';
 export { PlinthConfirmDialog, type PlinthConfirmDialogProps } from './PlinthConfirmDialog';
 export { PlinthDataTable, type PlinthDataTableProps } from './PlinthDataTable';
@@ -41,6 +42,7 @@ export { PlinthSectionMenuItem, type PlinthSectionMenuItemProps } from './Plinth
 export { PlinthSheet, type PlinthSheetProps } from './PlinthSheet';
 export { PlinthSplitView, type PlinthSplitViewProps } from './PlinthSplitView';
 export { PlinthStat, type PlinthStatProps } from './PlinthStat';
+export { PlinthSwitch, type PlinthSwitchProps } from './PlinthSwitch';
 export { PlinthTextarea, type PlinthTextareaProps } from './PlinthTextarea';
 export { PlinthTextField, type PlinthTextFieldProps } from './PlinthTextField';
 export { PlinthTimeline, type PlinthTimelineProps } from './PlinthTimeline';

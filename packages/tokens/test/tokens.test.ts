@@ -110,6 +110,8 @@ describe('tiers', () => {
       'toolbar.search-width',
       'toolbar.search-min-width',
       'text-field.trailing-size',
+      'switch.width',
+      'switch.height',
       ...['neutral', 'info', 'success', 'warning', 'danger'].flatMap((tone) => [
         `callout.${tone}-surface`,
         `callout.${tone}-border`,

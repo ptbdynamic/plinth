@@ -239,6 +239,8 @@
     --plinth-toolbar-search-width: var(--plinth-size-search);
     --plinth-toolbar-search-min-width: var(--plinth-size-search-min);
     --plinth-text-field-trailing-size: var(--plinth-control-md);
+    --plinth-switch-width: var(--plinth-control-md);
+    --plinth-switch-height: var(--plinth-size-icon-md);
   }
 
   :root,
@@ -1668,6 +1670,141 @@
   @media (pointer: coarse) {
     .plinth-callout-actions {
       row-gap: var(--plinth-space-3);
+    }
+  }
+}
+
+/* checkbox.css */
+/*
+ * Checkbox: a choice submitted with the form, with its label beside it, an optional description
+ * and an error under the label. It is the native checkbox, so it is checked, submitted and reset
+ * the way a form expects, and toggles with Space and from its label.
+ *
+ * <div class="plinth-checkbox">
+ *   <input type="checkbox" class="plinth-checkbox-input" id="updates" name="updates" value="1"
+ *     checked aria-describedby="updates-description updates-error" aria-invalid="true">
+ *   <label class="plinth-checkbox-label" for="updates">Email me product updates</label>
+ *   <p class="plinth-checkbox-description" id="updates-description">About once a month.</p>
+ *   <p class="plinth-checkbox-error" id="updates-error">Choose whether to get updates.</p>
+ * </div>
+ *
+ * The input needs an id: the label points at it with for, and the description's and error's ids
+ * are the input's id with -description and -error, as in a field (field.css). The description
+ * and the error are optional; aria-describedby lists the description, then the error, and is left
+ * out when there is neither.
+ *
+ * Attributes go to the input, not the root (name, value, checked, required, form, wire:model,
+ * x-model, data-*, aria-*), so the app talks to the input; only a project's class is added to the
+ * root's. Without a value, a checked box submits "on", as the browser does.
+ *
+ * Several checkboxes that answer one question go in a field with `group` (a fieldset and its
+ * legend, field.css), each with its own label.
+ *
+ * States:
+ * - checked: `checked` on the input (the app's; Vue's v-model, React's checked or defaultChecked).
+ * - indeterminate: the input's indeterminate property, set by script, as there is no attribute
+ *   for it: Vue and React set it in an effect, Blade with Alpine (x-init). A "select all" box
+ *   shows it when some, not all, of its boxes are checked. Clicking it checks it.
+ * - error: aria-invalid="true" on the input and the error message under the label, in the
+ *   danger text colour; the message says what to fix, so it isn't only a colour. Checked, the box
+ *   fills with the danger colour; the browser draws an unchecked box's edge, so there the message
+ *   alone carries the error.
+ * - disabled: `disabled` on the input; the checkbox and its label are faded and it can't be
+ *   focused.
+ * - the focus ring on the input's :focus-visible.
+ *
+ * The box is the size of a small icon (16px), in the accent colour when checked. Its label fills
+ * the row beside it, so the box and the label together are one target: 32px tall, and 40px on a
+ * touch screen.
+ */
+
+@layer plinth {
+  .plinth-checkbox {
+    --plinth-checkbox-row: var(--plinth-control-md);
+
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    column-gap: var(--plinth-space-2);
+    align-items: start;
+    min-inline-size: 0;
+    font-family: var(--plinth-font-family-body);
+  }
+
+  /* The native checkbox, in the accent, the size of a small icon, beside the label's first line. */
+  .plinth-checkbox-input {
+    grid-row: 1;
+    grid-column: 1;
+    inline-size: var(--plinth-size-icon-sm);
+    block-size: var(--plinth-size-icon-sm);
+    margin: 0;
+    margin-block-start: calc((var(--plinth-checkbox-row) - var(--plinth-size-icon-sm)) / 2);
+    accent-color: var(--plinth-color-accent);
+    cursor: pointer;
+  }
+
+  /* Off the box, so the ring stays apart from a checked box's accent fill. */
+  .plinth-checkbox-input:focus-visible {
+    outline: var(--plinth-focus-ring-width) solid var(--plinth-color-focus-ring);
+    outline-offset: var(--plinth-focus-ring-offset-filled);
+  }
+
+  /* An invalid box that is checked fills with the danger colour; the message says what to fix. */
+  .plinth-checkbox-input[aria-invalid='true'] {
+    accent-color: var(--plinth-color-danger-solid);
+  }
+
+  .plinth-checkbox-input:disabled {
+    cursor: not-allowed;
+  }
+
+  /* Its first line is centred in the row, so the label is a target as tall as the row. */
+  .plinth-checkbox-label {
+    grid-row: 1;
+    grid-column: 2;
+    padding-block: calc((var(--plinth-checkbox-row) - 1lh) / 2);
+    font-size: var(--plinth-font-size-md);
+    line-height: var(--plinth-font-leading-normal);
+    color: var(--plinth-color-text);
+    overflow-wrap: anywhere;
+    cursor: pointer;
+  }
+
+  .plinth-checkbox-description,
+  .plinth-checkbox-error {
+    grid-column: 2;
+    margin: 0;
+    font-size: var(--plinth-font-size-sm);
+    line-height: var(--plinth-font-leading-normal);
+    overflow-wrap: anywhere;
+  }
+
+  .plinth-checkbox-description {
+    color: var(--plinth-color-text-muted);
+  }
+
+  .plinth-checkbox-error {
+    color: var(--plinth-color-danger-text);
+  }
+
+  /* The control and its label fade; the description stays readable, since it may say why. */
+  .plinth-checkbox:has(> .plinth-checkbox-input:disabled)
+    > :is(.plinth-checkbox-input, .plinth-checkbox-label) {
+    opacity: var(--plinth-opacity-disabled);
+  }
+
+  .plinth-checkbox:has(> .plinth-checkbox-input:disabled) > .plinth-checkbox-label {
+    cursor: not-allowed;
+  }
+
+  @media (pointer: coarse) {
+    .plinth-checkbox {
+      --plinth-checkbox-row: var(--plinth-touch-target);
+    }
+  }
+
+  @media (forced-colors: active) {
+    .plinth-checkbox:has(> .plinth-checkbox-input:disabled) > :is(.plinth-checkbox-label, p) {
+      color: GrayText;
     }
   }
 }
@@ -5779,6 +5916,221 @@
 
   .plinth-stat-tone {
     flex: none;
+  }
+}
+
+/* switch.css */
+/*
+ * Switch: a setting that is on or off, such as "Enabled", which takes effect when it is flipped.
+ * Its label sits beside it, with an optional description and an error under the label. It is a
+ * native checkbox with the switch role, so it is announced as a switch that is on or off, toggles
+ * with Space and from its label, and is submitted with a plain form when it is on.
+ *
+ * <div class="plinth-switch">
+ *   <input type="checkbox" role="switch" class="plinth-switch-input" id="enabled" name="enabled"
+ *     value="1" checked aria-describedby="enabled-description enabled-error"
+ *     aria-invalid="true">
+ *   <label class="plinth-switch-label" for="enabled">Enabled</label>
+ *   <p class="plinth-switch-description" id="enabled-description">People can sign in with it.</p>
+ *   <p class="plinth-switch-error" id="enabled-error">Add a client ID first.</p>
+ * </div>
+ *
+ * The input needs an id: the label points at it with for, and the description's and error's ids
+ * are the input's id with -description and -error, as in a field (field.css). The description
+ * and the error are optional; aria-describedby lists the description, then the error, and is left
+ * out when there is neither. The switch's state is the input's checked state; it needs no
+ * aria-checked.
+ *
+ * Attributes go to the input, not the root (name, value, checked, form, wire:model, x-model,
+ * data-*, aria-*), so the app talks to the input; only a project's class is added to the root's.
+ * Off, it submits nothing, as a checkbox doesn't; an app that must hear "off" reads the change
+ * itself, or puts a hidden input with the same name before it.
+ *
+ * Use a switch for a setting that applies at once; for a choice that is only sent with a form's
+ * other answers, use a checkbox.
+ *
+ * States:
+ * - on: `checked` on the input (the app's; Vue's v-model, React's checked or defaultChecked). The
+ *   track fills with the accent colour and the thumb moves to the end, so it isn't only a colour.
+ * - error: aria-invalid="true" on the input and the error message under the label, in the
+ *   danger text colour; the track's edge turns danger too, and the message says what to fix.
+ * - disabled: `disabled` on the input; the switch and its label are faded and it can't be focused.
+ * - the focus ring on the input's :focus-visible.
+ *
+ * The track is --plinth-switch-width by --plinth-switch-height (32 by 20px); the thumb is drawn in
+ * it and slides on --plinth-duration-fast, which is 0 with reduced motion. Its label fills the row
+ * beside it, so the switch and the label together are one target: 32px tall, and 40px on a touch
+ * screen.
+ */
+
+@layer plinth {
+  .plinth-switch {
+    --plinth-switch-row: var(--plinth-control-md);
+
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    column-gap: var(--plinth-space-2);
+    align-items: start;
+    min-inline-size: 0;
+    font-family: var(--plinth-font-family-body);
+  }
+
+  /*
+   * The input is the track, and the thumb a circle drawn in it, at the start when off and the end
+   * when on (the start is the right in a right-to-left page).
+   */
+  .plinth-switch-input {
+    --plinth-switch-thumb: var(--plinth-color-text-subtle);
+    --plinth-switch-thumb-at: 0%;
+    --plinth-switch-thumb-room: calc(
+      var(--plinth-switch-height) - 2 * var(--plinth-border-width-thin)
+    );
+
+    box-sizing: border-box;
+    grid-row: 1;
+    grid-column: 1;
+    inline-size: var(--plinth-switch-width);
+    block-size: var(--plinth-switch-height);
+    margin: 0;
+    margin-block-start: calc((var(--plinth-switch-row) - var(--plinth-switch-height)) / 2);
+    appearance: none;
+    cursor: pointer;
+    background-color: var(--plinth-color-surface-sunken);
+    background-image: radial-gradient(
+      circle closest-side,
+      var(--plinth-switch-thumb) calc(100% - var(--plinth-space-0-5)),
+      transparent calc(100% - var(--plinth-space-0-5) + var(--plinth-border-width-thin))
+    );
+    background-repeat: no-repeat;
+    background-position: var(--plinth-switch-thumb-at) 50%;
+    background-size: var(--plinth-switch-thumb-room) var(--plinth-switch-thumb-room);
+    border: var(--plinth-border-width-thin) solid var(--plinth-color-text-subtle);
+    border-radius: var(--plinth-radius-pill);
+    transition:
+      background-position var(--plinth-duration-fast) var(--plinth-easing-standard),
+      background-color var(--plinth-duration-fast) var(--plinth-easing-standard),
+      border-color var(--plinth-duration-fast) var(--plinth-easing-standard);
+  }
+
+  .plinth-switch-input:focus-visible {
+    outline: var(--plinth-focus-ring-width) solid var(--plinth-color-focus-ring);
+    outline-offset: var(--plinth-focus-ring-offset-filled);
+  }
+
+  .plinth-switch-input:disabled {
+    cursor: not-allowed;
+  }
+
+  .plinth-switch-input:dir(rtl) {
+    --plinth-switch-thumb-at: 100%;
+  }
+
+  .plinth-switch-input:checked {
+    --plinth-switch-thumb: var(--plinth-color-on-accent);
+    --plinth-switch-thumb-at: 100%;
+
+    background-color: var(--plinth-color-accent);
+    border-color: var(--plinth-color-accent);
+  }
+
+  .plinth-switch-input:checked:dir(rtl) {
+    --plinth-switch-thumb-at: 0%;
+  }
+
+  .plinth-switch-input[aria-invalid='true'] {
+    border-color: var(--plinth-color-danger);
+  }
+
+  @media (hover: hover) {
+    .plinth-switch-input:hover:enabled:not(:checked, [aria-invalid='true']) {
+      --plinth-switch-thumb: var(--plinth-color-text-muted);
+
+      border-color: var(--plinth-color-text-muted);
+    }
+
+    .plinth-switch-input:hover:enabled:checked {
+      background-color: var(--plinth-color-accent-hover);
+      border-color: var(--plinth-color-accent-hover);
+    }
+  }
+
+  /* Its first line is centred in the row, so the label is a target as tall as the row. */
+  .plinth-switch-label {
+    grid-row: 1;
+    grid-column: 2;
+    padding-block: calc((var(--plinth-switch-row) - 1lh) / 2);
+    font-size: var(--plinth-font-size-md);
+    line-height: var(--plinth-font-leading-normal);
+    color: var(--plinth-color-text);
+    overflow-wrap: anywhere;
+    cursor: pointer;
+  }
+
+  .plinth-switch-description,
+  .plinth-switch-error {
+    grid-column: 2;
+    margin: 0;
+    font-size: var(--plinth-font-size-sm);
+    line-height: var(--plinth-font-leading-normal);
+    overflow-wrap: anywhere;
+  }
+
+  .plinth-switch-description {
+    color: var(--plinth-color-text-muted);
+  }
+
+  .plinth-switch-error {
+    color: var(--plinth-color-danger-text);
+  }
+
+  /* The control and its label fade; the description stays readable, since it may say why. */
+  .plinth-switch:has(> .plinth-switch-input:disabled)
+    > :is(.plinth-switch-input, .plinth-switch-label) {
+    opacity: var(--plinth-opacity-disabled);
+  }
+
+  .plinth-switch:has(> .plinth-switch-input:disabled) > .plinth-switch-label {
+    cursor: not-allowed;
+  }
+
+  @media (pointer: coarse) {
+    .plinth-switch {
+      --plinth-switch-row: var(--plinth-touch-target);
+    }
+  }
+
+  /* The track and thumb are colours, so they take the system's: the thumb in the text colour, on
+   * a highlighted track when on. */
+  @media (forced-colors: active) {
+    .plinth-switch-input {
+      --plinth-switch-thumb: CanvasText;
+
+      forced-color-adjust: none;
+      background-color: Canvas;
+      border-color: CanvasText;
+    }
+
+    .plinth-switch-input:checked {
+      --plinth-switch-thumb: HighlightText;
+
+      background-color: Highlight;
+      border-color: Highlight;
+    }
+
+    .plinth-switch-input:focus-visible {
+      outline-color: Highlight;
+    }
+
+    .plinth-switch-input:disabled {
+      --plinth-switch-thumb: GrayText;
+
+      background-color: Canvas;
+      border-color: GrayText;
+    }
+
+    .plinth-switch:has(> .plinth-switch-input:disabled) > :is(.plinth-switch-label, p) {
+      color: GrayText;
+    }
   }
 }
 

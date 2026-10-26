@@ -144,5 +144,17 @@
       "$value": "{control.md}",
       "$description": "The room a text field keeps at its end for its trailing slot (32px): a small icon button or a short keyboard hint. A project with a wider hint raises it."
     }
+  },
+  "switch": {
+    "width": {
+      "$type": "dimension",
+      "$value": "{control.md}",
+      "$description": "The width of a switch's track (32px)."
+    },
+    "height": {
+      "$type": "dimension",
+      "$value": "{size.icon.md}",
+      "$description": "The height of a switch's track (20px); the thumb sits inside it, a little smaller."
+    }
   }
 }

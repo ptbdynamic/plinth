@@ -131,6 +131,40 @@ return [
             ],
         ],
 
+        'checkbox' => [
+            'name' => 'Checkbox',
+            'group' => 'Forms',
+            'description' => 'A choice sent with the form, with its label beside it, a description and an error.',
+            'playground' => [
+                'template' => '<x-plinth::checkbox label="Email me product updates" description="About once a month."{attributes} />',
+                'options' => [
+                    'error' => [
+                        'values' => ['none', 'shown'],
+                        'default' => 'none',
+                        'print' => ['shown' => 'error="Choose whether to get updates."'],
+                    ],
+                ],
+                'states' => ['checked', 'indeterminate', 'disabled'],
+            ],
+        ],
+
+        'switch' => [
+            'name' => 'Switch',
+            'group' => 'Forms',
+            'description' => 'A setting that is on or off and applies at once, with its label beside it.',
+            'playground' => [
+                'template' => '<x-plinth::switch label="Enabled" description="People can sign in with this provider."{attributes} />',
+                'options' => [
+                    'error' => [
+                        'values' => ['none', 'shown'],
+                        'default' => 'none',
+                        'print' => ['shown' => 'error="Add a client ID before you turn it on."'],
+                    ],
+                ],
+                'states' => ['checked', 'disabled'],
+            ],
+        ],
+
         'avatar' => [
             'name' => 'Avatar',
             'group' => 'Content',
