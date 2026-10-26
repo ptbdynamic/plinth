@@ -3040,6 +3040,129 @@
   }
 }
 
+/* field.css */
+/*
+ * Field: a label, an optional description and an error around a control the app brings, such as
+ * a select, a switch or a group of pills, radios or checkboxes. The text field and the textarea
+ * print the same parts for their own input.
+ *
+ * One control:
+ *
+ * <div class="plinth-field">
+ *   <label class="plinth-field-label" id="team-label" for="team">
+ *     Team<span class="plinth-field-required" aria-hidden="true">*</span>
+ *   </label>
+ *   <select id="team" required aria-describedby="team-description team-error"
+ *     aria-invalid="true">…</select>
+ *   <p class="plinth-field-description" id="team-description">Who answers it first.</p>
+ *   <p class="plinth-field-error" id="team-error">Pick a team.</p>
+ * </div>
+ *
+ * A group of controls (data-group is not printed; the root is a fieldset):
+ *
+ * <fieldset class="plinth-field" id="status" aria-describedby="status-description status-error">
+ *   <legend class="plinth-field-label" id="status-label">Status</legend>
+ *   <div class="plinth-pill-row" role="group">…</div>
+ *   <p class="plinth-field-description" id="status-description">Tickets in these states.</p>
+ *   <p class="plinth-field-error" id="status-error">Pick at least one.</p>
+ * </fieldset>
+ *
+ * The field has an id, and its parts' ids are made from it: the label's is the id with -label,
+ * the description's with -description and the error's with -error. With one control, the control
+ * takes the id itself, so the label points at it with for, and it sets aria-describedby (the
+ * description's id, then the error's, left out when there is neither) and aria-invalid="true"
+ * when there is an error; a control that a <label> can't name (one that isn't an input, select,
+ * textarea or button) sets aria-labelledby to the label's id. Blade, Vue and React give these to
+ * the control: Vue's slot props and React's children function (id, labelId, describedBy,
+ * invalid), and in Blade \BDynamic\Plinth\Support\Field::describedBy().
+ *
+ * In a group, the fieldset takes the id and aria-describedby, the legend names the group, and the
+ * controls inside it keep their own labels. `disabled` on the fieldset disables every control in
+ * it, natively, and fades the legend.
+ *
+ * Every attribute the app adds goes to the root (class, data-*, aria-*, wire:key, x-show; on a
+ * fieldset, disabled and name).
+ *
+ * - required: a mark after the label, hidden from screen readers. The control says it is required
+ *   itself (`required` on an input or select, aria-required on a radiogroup); for a group of
+ *   checkboxes, the description says how many to pick.
+ * - data-label="hidden" on the root hides the label visually; screen readers still read it. Use it
+ *   only where the field's purpose is plain without it.
+ * - the description and the error are optional and print only with text.
+ *
+ * States:
+ * - error: the error message under the control, in the danger text colour; the message says what
+ *   to fix, so it isn't only a colour. The control marks itself invalid (aria-invalid).
+ * - disabled (a group): `disabled` on the fieldset.
+ *
+ * The field has no focusable element of its own; the control brings its focus ring.
+ */
+
+@layer plinth {
+  .plinth-field {
+    display: grid;
+    gap: var(--plinth-space-2);
+    min-inline-size: 0;
+    padding: 0;
+    margin: 0;
+    font-family: var(--plinth-font-family-body);
+    border: 0;
+  }
+
+  .plinth-field-label {
+    /* A floated legend is laid out like any other part of the grid, under the same gap. */
+    float: inline-start;
+    padding: 0;
+    font-size: var(--plinth-font-size-sm);
+    font-weight: var(--plinth-font-weight-medium);
+    line-height: var(--plinth-font-leading-normal);
+    color: var(--plinth-color-text-muted);
+    overflow-wrap: anywhere;
+  }
+
+  .plinth-field-required {
+    margin-inline-start: var(--plinth-space-1);
+    color: var(--plinth-color-danger-text);
+  }
+
+  /* Hidden from sight, still read by screen readers. */
+  .plinth-field[data-label='hidden'] > .plinth-field-label {
+    position: absolute;
+    inline-size: 1px;
+    block-size: 1px;
+    overflow: hidden;
+    white-space: nowrap;
+    clip-path: inset(50%);
+  }
+
+  .plinth-field-description,
+  .plinth-field-error {
+    margin: 0;
+    font-size: var(--plinth-font-size-sm);
+    line-height: var(--plinth-font-leading-normal);
+    overflow-wrap: anywhere;
+  }
+
+  .plinth-field-description {
+    color: var(--plinth-color-text-muted);
+  }
+
+  .plinth-field-error {
+    color: var(--plinth-color-danger-text);
+  }
+
+  .plinth-field:disabled > .plinth-field-label,
+  .plinth-field:disabled > .plinth-field-description {
+    opacity: var(--plinth-opacity-disabled);
+  }
+
+  @media (forced-colors: active) {
+    .plinth-field:disabled > .plinth-field-label {
+      color: GrayText;
+    }
+  }
+}
+
 /* icon.css */
 /*
  * Icon: a built-in glyph or a project's own SVG, sized by Plinth.

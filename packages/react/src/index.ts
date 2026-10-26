@@ -18,6 +18,7 @@ export { PlinthDataTableSort, type PlinthDataTableSortProps } from './PlinthData
 export { PlinthDialog, type PlinthDialogProps } from './PlinthDialog';
 export { PlinthDrawer, type PlinthDrawerProps } from './PlinthDrawer';
 export { PlinthEmptyState, type PlinthEmptyStateProps } from './PlinthEmptyState';
+export { PlinthField, type PlinthFieldProps } from './PlinthField';
 export { PlinthIcon, type PlinthIconProps } from './PlinthIcon';
 export { PlinthIconButton, type PlinthIconButtonProps } from './PlinthIconButton';
 export { PlinthListCard, type PlinthListCardProps } from './PlinthListCard';
@@ -113,6 +114,7 @@ export {
 } from './drawer';
 export { swipeToClose, useSwipeToClose } from './swipe';
 export { toolbarKeys } from './toolbar';
+export { fieldControl, type FieldControl } from './field';
 export { fieldDescribedBy, textFieldSize, textFieldSizes, type TextFieldSize } from './text-field';
 export { splitViewPane, splitViewPanes, type SplitViewPane } from './split-view';
 export { sheetCloseIcon, sheetSide, sheetSidePhone, sheetSides, type SheetSide } from './sheet';

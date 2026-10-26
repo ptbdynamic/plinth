@@ -61,6 +61,23 @@ return [
             ],
         ],
 
+        'field' => [
+            'name' => 'Field',
+            'group' => 'Forms',
+            'description' => 'A label, a description and an error around any control, or a fieldset around a group.',
+            'playground' => [
+                'template' => "<x-plinth::field id=\"playground-status\" label=\"Status\" group description=\"Show tickets in these states.\"{attributes}>\n    <x-plinth::pill-row>\n        <x-plinth::pill selected>Open</x-plinth::pill>\n        <x-plinth::pill>Pending</x-plinth::pill>\n        <x-plinth::pill>Closed</x-plinth::pill>\n    </x-plinth::pill-row>\n</x-plinth::field>",
+                'options' => [
+                    'error' => [
+                        'values' => ['none', 'shown'],
+                        'default' => 'none',
+                        'print' => ['shown' => 'error="Pick at least one status."'],
+                    ],
+                ],
+                'states' => ['required', 'hide-label', 'disabled'],
+            ],
+        ],
+
         'text-field' => [
             'name' => 'Text field',
             'group' => 'Forms',

@@ -19,6 +19,7 @@ import PlinthDataTableSort from './PlinthDataTableSort.vue';
 import PlinthDialog from './PlinthDialog.vue';
 import PlinthDrawer from './PlinthDrawer.vue';
 import PlinthEmptyState from './PlinthEmptyState.vue';
+import PlinthField from './PlinthField.vue';
 import PlinthIcon from './PlinthIcon.vue';
 import PlinthIconButton from './PlinthIconButton.vue';
 import PlinthListCard from './PlinthListCard.vue';
@@ -72,6 +73,7 @@ export {
   PlinthDialog,
   PlinthDrawer,
   PlinthEmptyState,
+  PlinthField,
   PlinthIcon,
   PlinthIconButton,
   PlinthListCard,
@@ -163,6 +165,7 @@ export { menuIdKey, menuItemTone, menuItemTones, type MenuItemTone } from './men
 export { pageHeaderLevel, pageHeaderLevels, type PageHeaderLevel } from './page-header';
 export { splitViewPane, splitViewPanes, type SplitViewPane } from './split-view';
 export { sheetCloseIcon, sheetSide, sheetSidePhone, sheetSides, type SheetSide } from './sheet';
+export { fieldControl, type FieldControl } from './field';
 export { fieldDescribedBy, textFieldSize, textFieldSizes, type TextFieldSize } from './text-field';
 export { swipeToClose, useSwipeToClose } from './swipe';
 export { statChevron } from './stat';
@@ -193,6 +196,7 @@ export const Plinth: Plugin = {
     app.component('PlinthDialog', PlinthDialog);
     app.component('PlinthDrawer', PlinthDrawer);
     app.component('PlinthEmptyState', PlinthEmptyState);
+    app.component('PlinthField', PlinthField);
     app.component('PlinthIcon', PlinthIcon);
     app.component('PlinthIconButton', PlinthIconButton);
     app.component('PlinthListCard', PlinthListCard);
