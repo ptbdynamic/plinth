@@ -33,6 +33,7 @@ import {
   PlinthNavListItem,
   PlinthPageHeader,
   PlinthEmptyState,
+  PlinthField,
   PlinthPill,
   PlinthPillRow,
   PlinthSectionMenu,
@@ -93,6 +94,7 @@ import {
   PlinthSheet as ReactSheet,
   PlinthSplitView as ReactSplitView,
   PlinthStat as ReactStat,
+  PlinthField as ReactField,
   PlinthTextarea as ReactTextarea,
   PlinthTextField as ReactTextField,
   PlinthTimeline as ReactTimeline,
@@ -216,6 +218,8 @@ import * as sheetStories from '../stories/components/Sheet.stories.ts';
 import { sheet, type SheetArgs } from '../stories/components/sheet.ts';
 import * as statStories from '../stories/components/Stat.stories.ts';
 import { stat, type StatArgs } from '../stories/components/stat.ts';
+import * as fieldStories from '../stories/components/Field.stories.ts';
+import { field, type FieldArgs } from '../stories/components/field.ts';
 import * as textareaStories from '../stories/components/Textarea.stories.ts';
 import { textarea, type TextareaArgs } from '../stories/components/textarea.ts';
 import * as textFieldStories from '../stories/components/TextField.stories.ts';
@@ -330,6 +334,7 @@ const reactComponents = new Map<Component, unknown>([
   [PlinthSectionMenu, ReactSectionMenu],
   [PlinthSectionMenuItem, ReactSectionMenuItem],
   [PlinthSheet, ReactSheet],
+  [PlinthField, ReactField],
   [PlinthTextarea, ReactTextarea],
   [PlinthTextField, ReactTextField],
   [PlinthTimeline, ReactTimeline],
@@ -544,6 +549,23 @@ const textareaDefaults: TextareaArgs = {
   maxRows: 8,
   disabled: false,
   readonly: false,
+};
+
+const fieldDefaults: FieldArgs = {
+  id: 'team',
+  label: 'Team',
+  hideLabel: false,
+  group: false,
+  required: false,
+  control: '<select id="team"><option>Billing</option></select>',
+};
+
+const fieldGroupDefaults: FieldArgs = {
+  ...fieldDefaults,
+  id: 'status',
+  label: 'Status',
+  group: true,
+  control: '<label><input type="checkbox" name="status[]" value="open"> Open</label>',
 };
 
 const toolbarActionDefaults: ToolbarActionArgs = {
@@ -1663,6 +1685,32 @@ const cases: ParityCase[] = [
     label: 'Note <b>',
     value: 'A & B <i>',
     description: '"quoted"',
+  }),
+  ...storyArgs<FieldArgs>(fieldStories).map(([story, args]) => fieldCase(`Field/${story}`, args)),
+  fieldCase('Field/with extra attributes', fieldDefaults, {
+    class: 'mb-4',
+    'data-testid': 'team',
+    'aria-live': 'polite',
+  }),
+  fieldCase(
+    'Field/with a clashing attribute',
+    { ...fieldGroupDefaults, description: 'Show tickets in these states.' },
+    { 'aria-describedby': 'my-help' },
+  ),
+  fieldCase('Field/a disabled group', fieldGroupDefaults, { disabled: '', name: 'filters' }),
+  fieldCase('Field/a group with a description and an error', {
+    ...fieldGroupDefaults,
+    hideLabel: true,
+    required: true,
+    description: 'Show tickets in these states.',
+    error: 'Pick at least one.',
+  }),
+  fieldCase('Field/blank messages', { ...fieldDefaults, description: ' ', error: '' }),
+  fieldCase('Field/escaped text', {
+    ...fieldDefaults,
+    label: 'Team <b>',
+    description: 'A & B',
+    error: 'Not <this>',
   }),
   ...storyArgs<ToolbarArgs>(toolbarStories).map(([story, args]) =>
     toolbarCase(`Toolbar/${story}`, args),
@@ -2873,6 +2921,30 @@ function textFieldCase(
   };
 }
 
+function fieldCase(story: string, args: FieldArgs, attributes: Attributes = {}): ParityCase {
+  const props = {
+    id: args.id,
+    label: args.label,
+    hideLabel: args.hideLabel,
+    group: args.group,
+    required: args.required,
+    ...(args.description !== undefined ? { description: args.description } : {}),
+    ...(args.error !== undefined ? { error: args.error } : {}),
+  };
+  return {
+    story,
+    markup: field(args, attributes),
+    vue: {
+      component: PlinthField,
+      // A fieldset's disabled is a boolean: true in Vue and React, as Blade's disabled="".
+      props: { ...props, ...attributes, ...('disabled' in attributes ? { disabled: true } : {}) },
+      slot: args.control,
+      html: true,
+    },
+    blade: { component: 'field', props, attributes, slot: args.control },
+  };
+}
+
 function textareaCase(story: string, args: TextareaArgs, attributes: Attributes = {}): ParityCase {
   const props = {
     id: args.id,
@@ -3467,6 +3539,19 @@ describe('parity with the stories', () => {
       'Textarea/growing with its own style',
       'Textarea/with a description and an error',
       'Textarea/escaped text',
+      'Field/Default',
+      'Field/WithDescription',
+      'Field/WithError',
+      'Field/Required',
+      'Field/HiddenLabel',
+      'Field/Group',
+      'Field/GroupWithError',
+      'Field/with extra attributes',
+      'Field/with a clashing attribute',
+      'Field/a disabled group',
+      'Field/a group with a description and an error',
+      'Field/blank messages',
+      'Field/escaped text',
       'Toolbar/Default',
       'Toolbar/OneTicket',
       'Toolbar/AllFolders',
