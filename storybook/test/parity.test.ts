@@ -514,6 +514,8 @@ const codeBlockDefaults: CodeBlockArgs = {
   copy: true,
   copyLabel: 'Copy',
   copiedLabel: 'Copied',
+  downloadLabel: 'Download',
+  downloadedLabel: 'Downloaded',
 };
 
 const calloutDefaults: CalloutArgs = {
@@ -1544,6 +1546,17 @@ const cases: ParityCase[] = [
   ),
   codeBlockCase('Code block/blank label and id', { ...codeBlockDefaults, id: ' ', label: '  ' }),
   codeBlockCase('Code block/blank label slot', { ...codeBlockDefaults, labelHtml: ' ' }),
+  codeBlockCase('Code block/blank download', { ...codeBlockDefaults, download: '  ' }),
+  codeBlockCase(
+    'Code block/download with its own words',
+    {
+      ...codeBlockDefaults,
+      download: 'codes.txt',
+      downloadLabel: 'Descarregar',
+      downloadedLabel: 'Descarregado',
+    },
+    { class: 'mt-4', 'data-testid': 'codes' },
+  ),
   codeBlockCase('Code block/highlighted tab and seven tabs', {
     ...codeBlockDefaults,
     id: 'many',
@@ -2799,6 +2812,9 @@ function codeBlockCase(
     copy: args.copy,
     copyLabel: args.copyLabel,
     copiedLabel: args.copiedLabel,
+    ...(args.download !== undefined ? { download: args.download } : {}),
+    downloadLabel: args.downloadLabel,
+    downloadedLabel: args.downloadedLabel,
   };
   const named: Record<string, string> = args.labelHtml ? { label: args.labelHtml } : {};
   const code = args.tabs ? '' : args.code;
@@ -3397,12 +3413,17 @@ describe('parity with the stories', () => {
       'Code block/Highlighted',
       'Code block/LongLine',
       'Code block/LongLabel',
+      'Code block/WithDownload',
+      'Code block/DownloadWithoutCopy',
+      'Code block/DownloadWithTabs',
       'Code block/WithoutCopy',
       'Code block/CodeOnly',
       'Code block/LabelWithBadge',
       'Code block/with extra attributes',
       'Code block/blank label and id',
       'Code block/blank label slot',
+      'Code block/blank download',
+      'Code block/download with its own words',
       'Code block/highlighted tab and seven tabs',
       'Code block/unknown selected tab',
       'Callout/Neutral',

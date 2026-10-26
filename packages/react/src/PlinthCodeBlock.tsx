@@ -9,7 +9,13 @@ import {
   type ReactNode,
 } from 'react';
 import { PlinthButton } from './PlinthButton';
-import { checkedTab, codeBlockTabs, codeBlockText, type CodeBlockTab } from './code-block';
+import {
+  checkedTab,
+  codeBlockTabs,
+  codeBlockText,
+  downloadText,
+  type CodeBlockTab,
+} from './code-block';
 import { classNames, hasContent } from './markup';
 
 interface CodeBlockOptions {
@@ -30,6 +36,13 @@ interface CodeBlockOptions {
   copiedLabel?: string;
   /** The code was copied to the clipboard (Vue's `copied` event). */
   onCopied?: (text: string) => void;
+  /** The file name the code is saved under, as text/plain; no download button without one. */
+  download?: string;
+  downloadLabel?: string;
+  /** What the download button and its status say for two seconds after saving. */
+  downloadedLabel?: string;
+  /** The code was saved as a file (Vue's `downloaded` event). */
+  onDownloaded?: (text: string) => void;
 }
 
 export type PlinthCodeBlockProps = CodeBlockOptions &
@@ -56,6 +69,10 @@ export function PlinthCodeBlock({
   copyLabel = 'Copy',
   copiedLabel = 'Copied',
   onCopied,
+  download,
+  downloadLabel = 'Download',
+  downloadedLabel = 'Downloaded',
+  onDownloaded,
   className,
   children,
   ...rest
@@ -65,15 +82,23 @@ export function PlinthCodeBlock({
   const name = `${rootId ?? `plinth-code-block-${generatedId}`}-language`;
   const tabs = codeBlockTabs(allTabs);
   const checked = checkedTab(tabs, selected);
+  const filename = download?.trim() || undefined;
 
-  // The clipboard is only there in the browser, so the button shows once mounted.
+  // The clipboard and downloads are only there in the browser, so the buttons show once mounted.
+  const [mounted, setMounted] = useState(false);
   const [canCopy, setCanCopy] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [downloaded, setDownloaded] = useState(false);
   const timer = useRef<ReturnType<typeof setTimeout>>(undefined);
+  const downloadTimer = useRef<ReturnType<typeof setTimeout>>(undefined);
 
   useEffect(() => {
+    setMounted(true);
     setCanCopy(Boolean(navigator.clipboard));
-    return () => clearTimeout(timer.current);
+    return () => {
+      clearTimeout(timer.current);
+      clearTimeout(downloadTimer.current);
+    };
   }, []);
 
   async function copyCode(event: MouseEvent<HTMLButtonElement>) {
@@ -87,6 +112,15 @@ export function PlinthCodeBlock({
     clearTimeout(timer.current);
     timer.current = setTimeout(() => setCopied(false), 2000);
     onCopied?.(text);
+  }
+
+  function downloadCode(event: MouseEvent<HTMLButtonElement>) {
+    const text = codeBlockText(event.currentTarget);
+    downloadText(filename!, text);
+    setDownloaded(true);
+    clearTimeout(downloadTimer.current);
+    downloadTimer.current = setTimeout(() => setDownloaded(false), 2000);
+    onDownloaded?.(text);
   }
 
   return (
@@ -108,21 +142,41 @@ export function PlinthCodeBlock({
             ))}
           </div>
         ) : null}
-        {copy ? (
-          <>
-            <PlinthButton
-              className="plinth-code-block-copy"
-              variant="ghost"
-              size="sm"
-              hidden={!canCopy}
-              onClick={copyCode}
-            >
-              {copied ? copiedLabel : copyLabel}
-            </PlinthButton>
-            <span className="plinth-code-block-status" role="status">
-              {copied ? copiedLabel : ''}
-            </span>
-          </>
+        {copy || filename ? (
+          <div className="plinth-code-block-actions">
+            {copy ? (
+              <>
+                <PlinthButton
+                  className="plinth-code-block-copy"
+                  variant="ghost"
+                  size="sm"
+                  hidden={!canCopy}
+                  onClick={copyCode}
+                >
+                  {copied ? copiedLabel : copyLabel}
+                </PlinthButton>
+                <span className="plinth-code-block-status" role="status">
+                  {copied ? copiedLabel : ''}
+                </span>
+              </>
+            ) : null}
+            {filename ? (
+              <>
+                <PlinthButton
+                  className="plinth-code-block-download"
+                  variant="ghost"
+                  size="sm"
+                  hidden={!mounted}
+                  onClick={downloadCode}
+                >
+                  {downloaded ? downloadedLabel : downloadLabel}
+                </PlinthButton>
+                <span className="plinth-code-block-status" role="status">
+                  {downloaded ? downloadedLabel : ''}
+                </span>
+              </>
+            ) : null}
+          </div>
         ) : null}
       </div>
       {tabs.length ? (
