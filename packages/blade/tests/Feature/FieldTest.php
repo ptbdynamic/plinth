@@ -52,7 +52,7 @@ it('hides the label visually', function () {
 });
 
 it('generates a group\'s id when it has none', function () {
-    expect(Blade::render('<x-plinth::field label="A" group>x</x-plinth::field>'))
+    expect(squish(Blade::render('<x-plinth::field label="A" group>x</x-plinth::field>')))
         ->toMatch('/<fieldset class="plinth-field" id="(plinth-field-[a-z0-9]{8})"><legend class="plinth-field-label" id="\1-label">/');
 });
 
