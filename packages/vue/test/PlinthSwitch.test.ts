@@ -56,7 +56,7 @@ describe('PlinthSwitch', () => {
             id: 'a',
             label: 'A',
             modelValue: value.value,
-            'onUpdate:modelValue': (next: boolean) => (value.value = next),
+            'onUpdate:modelValue': (next: boolean | undefined) => (value.value = Boolean(next)),
             onChange: () => seen.push(value.value),
           });
       },
