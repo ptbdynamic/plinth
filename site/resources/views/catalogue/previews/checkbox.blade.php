@@ -1,1 +1,1 @@
-<x-plinth::checkbox>Content</x-plinth::checkbox>
+<x-plinth::checkbox id="preview-checkbox" label="Email me product updates" checked />

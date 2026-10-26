@@ -1,1 +1,1 @@
-<x-plinth::switch>Content</x-plinth::switch>
+<x-plinth::switch id="preview-switch" label="Enabled" checked />
