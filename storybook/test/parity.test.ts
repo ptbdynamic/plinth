@@ -41,6 +41,7 @@ import {
   PlinthSheet,
   PlinthSplitView,
   PlinthStat,
+  PlinthOneTimeCode,
   PlinthTextarea,
   PlinthTextField,
   PlinthTimeline,
@@ -95,6 +96,7 @@ import {
   PlinthSplitView as ReactSplitView,
   PlinthStat as ReactStat,
   PlinthField as ReactField,
+  PlinthOneTimeCode as ReactOneTimeCode,
   PlinthTextarea as ReactTextarea,
   PlinthTextField as ReactTextField,
   PlinthTimeline as ReactTimeline,
@@ -220,6 +222,8 @@ import * as statStories from '../stories/components/Stat.stories.ts';
 import { stat, type StatArgs } from '../stories/components/stat.ts';
 import * as fieldStories from '../stories/components/Field.stories.ts';
 import { field, type FieldArgs } from '../stories/components/field.ts';
+import * as oneTimeCodeStories from '../stories/components/OneTimeCode.stories.ts';
+import { oneTimeCode, type OneTimeCodeArgs } from '../stories/components/one-time-code.ts';
 import * as textareaStories from '../stories/components/Textarea.stories.ts';
 import { textarea, type TextareaArgs } from '../stories/components/textarea.ts';
 import * as textFieldStories from '../stories/components/TextField.stories.ts';
@@ -335,6 +339,7 @@ const reactComponents = new Map<Component, unknown>([
   [PlinthSectionMenuItem, ReactSectionMenuItem],
   [PlinthSheet, ReactSheet],
   [PlinthField, ReactField],
+  [PlinthOneTimeCode, ReactOneTimeCode],
   [PlinthTextarea, ReactTextarea],
   [PlinthTextField, ReactTextField],
   [PlinthTimeline, ReactTimeline],
@@ -558,6 +563,15 @@ const fieldDefaults: FieldArgs = {
   group: false,
   required: false,
   control: '<select id="team"><option>Billing</option></select>',
+};
+
+const oneTimeCodeDefaults: OneTimeCodeArgs = {
+  id: 'code',
+  label: 'Verification code',
+  hideLabel: false,
+  length: 6,
+  disabled: false,
+  autosubmit: false,
 };
 
 const fieldGroupDefaults: FieldArgs = {
@@ -1709,6 +1723,39 @@ const cases: ParityCase[] = [
   fieldCase('Field/escaped text', {
     ...fieldDefaults,
     label: 'Team <b>',
+    description: 'A & B',
+    error: 'Not <this>',
+  }),
+  ...storyArgs<OneTimeCodeArgs>(oneTimeCodeStories).map(([story, args]) =>
+    oneTimeCodeCase(`One-time code/${story}`, args),
+  ),
+  oneTimeCodeCase('One-time code/with extra attributes', oneTimeCodeDefaults, {
+    class: 'mb-4',
+    name: 'code',
+    'data-testid': 'code',
+    'aria-describedby': 'code-help',
+  }),
+  oneTimeCodeCase(
+    'One-time code/with a clashing attribute',
+    { ...oneTimeCodeDefaults, description: 'From your authenticator app.' },
+    { 'aria-describedby': 'my-help', pattern: '[0-9]{4}' },
+  ),
+  oneTimeCodeCase('One-time code/unknown length and blank messages', {
+    ...oneTimeCodeDefaults,
+    length: 12,
+    description: ' ',
+    error: '',
+  }),
+  oneTimeCodeCase('One-time code/with a description and an error', {
+    ...oneTimeCodeDefaults,
+    length: 7,
+    description: 'From your authenticator app.',
+    error: 'Enter all 7 digits.',
+  }),
+  oneTimeCodeCase('One-time code/escaped text', {
+    ...oneTimeCodeDefaults,
+    label: 'Code <b>',
+    value: '"1" & <2>',
     description: 'A & B',
     error: 'Not <this>',
   }),
@@ -2921,6 +2968,30 @@ function textFieldCase(
   };
 }
 
+function oneTimeCodeCase(
+  story: string,
+  args: OneTimeCodeArgs,
+  attributes: Attributes = {},
+): ParityCase {
+  const props = {
+    id: args.id,
+    label: args.label,
+    hideLabel: args.hideLabel,
+    length: args.length,
+    disabled: args.disabled,
+    autosubmit: args.autosubmit,
+    ...(args.description !== undefined ? { description: args.description } : {}),
+    ...(args.error !== undefined ? { error: args.error } : {}),
+  };
+  const input = { ...(args.value !== undefined ? { value: args.value } : {}), ...attributes };
+  return {
+    story,
+    markup: oneTimeCode(args, attributes),
+    vue: { component: PlinthOneTimeCode, props: { ...props, ...input }, slot: '' },
+    blade: { component: 'one-time-code', props, attributes: input, slot: '' },
+  };
+}
+
 function fieldCase(story: string, args: FieldArgs, attributes: Attributes = {}): ParityCase {
   const props = {
     id: args.id,
@@ -3552,6 +3623,20 @@ describe('parity with the stories', () => {
       'Field/a group with a description and an error',
       'Field/blank messages',
       'Field/escaped text',
+      'One-time code/Default',
+      'One-time code/WithDescription',
+      'One-time code/Filled',
+      'One-time code/WithError',
+      'One-time code/FourDigits',
+      'One-time code/EightDigits',
+      'One-time code/HiddenLabel',
+      'One-time code/Disabled',
+      'One-time code/Autosubmit',
+      'One-time code/with extra attributes',
+      'One-time code/with a clashing attribute',
+      'One-time code/unknown length and blank messages',
+      'One-time code/with a description and an error',
+      'One-time code/escaped text',
       'Toolbar/Default',
       'Toolbar/OneTicket',
       'Toolbar/AllFolders',

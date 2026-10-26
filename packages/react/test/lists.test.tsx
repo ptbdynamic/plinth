@@ -19,6 +19,7 @@ import * as vueSize from '../../vue/src/size.ts';
 import * as vueTones from '../../vue/src/tones.ts';
 import * as vueTextField from '../../vue/src/text-field.ts';
 import * as vueTimeline from '../../vue/src/timeline.ts';
+import * as vueOneTimeCode from '../../vue/src/one-time-code.ts';
 import { buttonVariant } from '../src/button.ts';
 import { iconName } from '../src/icon.ts';
 import { swipeToClose } from '../src/swipe.ts';
@@ -67,6 +68,10 @@ import {
   statChevron,
   menuItemTone,
   menuItemTones,
+  oneTimeCodeDigits,
+  oneTimeCodeLength,
+  oneTimeCodeLengths,
+  pasteOneTimeCode,
   resolveSize,
   sheetCloseIcon,
   sheetSide,
@@ -111,6 +116,12 @@ describe('the shared lists', () => {
     expect(sheetSides).toEqual(vueSheet.sheetSides);
     expect(splitViewPanes).toEqual(vueSplitView.splitViewPanes);
     expect(timelineKinds).toEqual(vueTimeline.timelineKinds);
+    expect(oneTimeCodeLengths).toEqual(vueOneTimeCode.oneTimeCodeLengths);
+    // The paste is written once per layer; the React copy is the Vue one.
+    expect(pasteOneTimeCode.toString()).toBe(vueOneTimeCode.pasteOneTimeCode.toString());
+    expect(oneTimeCodeDigits('12a 34-567', 6)).toBe(
+      vueOneTimeCode.oneTimeCodeDigits('12a 34-567', 6),
+    );
     expect(sheetCloseIcon).toBe(vueSheet.sheetCloseIcon);
     expect(dialogSidePhones).toEqual(vueDialog.dialogSidePhones);
     expect(dialogCloseIcon).toBe(vueDialog.dialogCloseIcon);
@@ -132,6 +143,8 @@ describe('the shared lists', () => {
     expect(resolveSize('xl', controlSizes, 'md')).toBe('md');
     expect(textFieldSize('lg')).toBe('md');
     expect(textFieldSize('sm')).toBe('sm');
+    expect(oneTimeCodeLength(9)).toBe(vueOneTimeCode.oneTimeCodeLength(9));
+    expect(oneTimeCodeLength('4')).toBe(4);
     expect(calloutTone('loud')).toBe('neutral');
     expect(calloutTone('info')).toBe('info');
     expect(calloutRole('log')).toBe('note');

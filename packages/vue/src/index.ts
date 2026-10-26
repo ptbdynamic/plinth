@@ -33,6 +33,7 @@ import PlinthMenuSheet from './PlinthMenuSheet.vue';
 import PlinthNavList from './PlinthNavList.vue';
 import PlinthNavListGroup from './PlinthNavListGroup.vue';
 import PlinthNavListItem from './PlinthNavListItem.vue';
+import PlinthOneTimeCode from './PlinthOneTimeCode.vue';
 import PlinthPageHeader from './PlinthPageHeader.vue';
 import PlinthPill from './PlinthPill.vue';
 import PlinthPillRow from './PlinthPillRow.vue';
@@ -87,6 +88,7 @@ export {
   PlinthNavList,
   PlinthNavListGroup,
   PlinthNavListItem,
+  PlinthOneTimeCode,
   PlinthPageHeader,
   PlinthPill,
   PlinthPillRow,
@@ -161,6 +163,13 @@ export {
   type IconSize,
 } from './icon';
 export { listRowChevron } from './list-row';
+export {
+  oneTimeCodeDigits,
+  oneTimeCodeLength,
+  oneTimeCodeLengths,
+  pasteOneTimeCode,
+  type OneTimeCodeLength,
+} from './one-time-code';
 export { menuIdKey, menuItemTone, menuItemTones, type MenuItemTone } from './menu';
 export { pageHeaderLevel, pageHeaderLevels, type PageHeaderLevel } from './page-header';
 export { splitViewPane, splitViewPanes, type SplitViewPane } from './split-view';
@@ -210,6 +219,7 @@ export const Plinth: Plugin = {
     app.component('PlinthNavList', PlinthNavList);
     app.component('PlinthNavListGroup', PlinthNavListGroup);
     app.component('PlinthNavListItem', PlinthNavListItem);
+    app.component('PlinthOneTimeCode', PlinthOneTimeCode);
     app.component('PlinthPageHeader', PlinthPageHeader);
     app.component('PlinthPill', PlinthPill);
     app.component('PlinthPillRow', PlinthPillRow);
