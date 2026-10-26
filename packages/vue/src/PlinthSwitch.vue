@@ -52,6 +52,8 @@ function onChange(event: Event) {
 
 <template>
   <div :class="['plinth-switch', attrs.class]">
+    <!-- The model's listener first, so the project's sees the new value. -->
+    <!-- eslint-disable vue/attributes-order -->
     <input
       :id="inputId"
       type="checkbox"
@@ -64,6 +66,7 @@ function onChange(event: Event) {
       @change="onChange"
       v-bind="inputAttrs"
     />
+    <!-- eslint-enable vue/attributes-order -->
     <label class="plinth-switch-label" :for="inputId">{{ label }}</label>
     <p v-if="hasDescription" :id="`${inputId}-description`" class="plinth-switch-description">
       {{ description }}
