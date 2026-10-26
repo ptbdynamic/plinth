@@ -9,9 +9,11 @@ function withoutAlpine(string $html): string
     return squish(preg_replace('/ x-[a-z:.-]+="[^"]*"/', '', $html) ?? '');
 }
 
-$copy = '<button class="plinth-button plinth-code-block-copy" type="button" data-variant="ghost" data-size="sm" hidden="">'
+$copyButton = '<button class="plinth-button plinth-code-block-copy" type="button" data-variant="ghost" data-size="sm" hidden="">'
     .'<span class="plinth-button-label">Copy</span></button>'
     .'<span class="plinth-code-block-status" role="status"></span>';
+
+$copy = '<div class="plinth-code-block-actions">'.$copyButton.'</div>';
 
 $tabs = [
     ['label' => 'Blade', 'code' => '<x-plinth::badge />'],
@@ -169,26 +171,42 @@ it('shows and wires the copy button with Alpine', function () {
         ->toContain('navigator.clipboard.writeText');
 });
 
-it('prints a download button after the copy button, with its own status', function () use ($copy) {
+it('prints a download button after the copy button, with its own status', function () use ($copyButton) {
     $html = Blade::render('<x-plinth::code-block label="Recovery codes" download=" recovery-codes.txt ">a1b2</x-plinth::code-block>');
 
     expect(withoutAlpine($html))->toBe(
         '<div class="plinth-code-block">'
         .'<div class="plinth-code-block-header">'
         .'<span class="plinth-code-block-label">Recovery codes</span>'
-        .$copy
+        .'<div class="plinth-code-block-actions">'
+        .$copyButton
         .'<button class="plinth-button plinth-code-block-download" type="button" data-variant="ghost" data-size="sm" hidden="">'
         .'<span class="plinth-button-label">Download</span></button>'
         .'<span class="plinth-code-block-status" role="status"></span>'
+        .'</div>'
         .'</div>'
         .'<pre class="plinth-code-block-code" dir="ltr" tabindex="0"><code>a1b2</code></pre>'
         .'</div>'
     );
 });
 
-it('leaves out the download button without a file name', function () {
+it('leaves out the download button without a file name, or with a bare attribute', function () {
     expect(Blade::render('<x-plinth::code-block download=" ">x</x-plinth::code-block>'))
+        ->not->toContain('plinth-code-block-download')
+        ->and(Blade::render('<x-plinth::code-block download>x</x-plinth::code-block>'))
         ->not->toContain('plinth-code-block-download');
+});
+
+it('escapes the download\'s words and file name', function () {
+    $html = Blade::render('<x-plinth::code-block :download="$name" :download-label="$label">x</x-plinth::code-block>', [
+        'name' => '"a\'</script>.txt',
+        'label' => '<s>d</s>',
+    ]);
+
+    expect($html)
+        ->not->toContain('<s>')
+        ->not->toContain('</script>')
+        ->toContain('&lt;s&gt;d&lt;/s&gt;');
 });
 
 it('prints the download button alone when copy is off', function () {

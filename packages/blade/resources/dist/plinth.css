@@ -1680,22 +1680,25 @@
  * <div class="plinth-code-block">
  *   <div class="plinth-code-block-header">
  *     <span class="plinth-code-block-label">resources/css/brand.css</span>
- *     <button type="button" class="plinth-button plinth-code-block-copy" data-variant="ghost"
- *       data-size="sm" hidden>
- *       <span class="plinth-button-label">Copy</span>
- *     </button>
- *     <span class="plinth-code-block-status" role="status"></span>
+ *     <div class="plinth-code-block-actions">
+ *       <button type="button" class="plinth-button plinth-code-block-copy" data-variant="ghost"
+ *         data-size="sm" hidden>
+ *         <span class="plinth-button-label">Copy</span>
+ *       </button>
+ *       <span class="plinth-code-block-status" role="status"></span>
+ *     </div>
  *   </div>
  *   <pre class="plinth-code-block-code" dir="ltr" tabindex="0"><code>…</code></pre>
  * </div>
  *
- * With a download, a second button and its own status follow the copy button's status:
+ * With a download, a second button and its own status follow the copy button's status in the
+ * actions, which sit at the header's end and wrap as one:
  *
- *     <button type="button" class="plinth-button plinth-code-block-download" data-variant="ghost"
- *       data-size="sm" hidden>
- *       <span class="plinth-button-label">Download</span>
- *     </button>
- *     <span class="plinth-code-block-status" role="status"></span>
+ *       <button type="button" class="plinth-button plinth-code-block-download"
+ *         data-variant="ghost" data-size="sm" hidden>
+ *         <span class="plinth-button-label">Download</span>
+ *       </button>
+ *       <span class="plinth-code-block-status" role="status"></span>
  *
  * With language tabs, the header holds a radio group after the label, and there is one <pre> per
  * tab, in the same order:
@@ -1731,14 +1734,14 @@
  * show it when the clipboard is there. It copies the text of the <pre> that shows, says Copied
  * (copied-label) for two seconds and puts the same word in the status, a polite live region,
  * hidden from sight. The plain HTML works without it, and the header keeps its place for the
- * button either way. copy: false in Blade, Vue and React leaves
- * the button and the status out.
+ * button either way. copy: false in Blade, Vue and React leaves the button and the status out,
+ * and the actions too when there is no download.
  *
  * Download: with a file name (download), the layers print a second button, hidden like Copy, and
  * show it once they run. It saves the text of the <pre> that shows as a text/plain file of that
  * name, through a Blob and a temporary link, so nothing leaves the browser; it says Downloaded
- * (downloaded-label) for two seconds, in its own status too. Copy sits at the header's end and
- * Download after it; when Copy is hidden or left out, Download takes its place.
+ * (downloaded-label) for two seconds, in its own status too. Download follows Copy; when Copy is
+ * hidden or left out, Download takes its place.
  *
  * States: the checked tab (input:checked) is a raised surface with a strong edge; hover only
  * where the device can hover; the focus ring on :focus-visible, on the tab's input (it covers the
@@ -1785,8 +1788,8 @@
     :has(
       .plinth-code-block-label,
       .plinth-code-block-tabs,
-      .plinth-code-block-copy,
-      .plinth-code-block-download
+      .plinth-code-block-actions,
+      .plinth-code-block-copy
     )
   ) {
     display: none;
@@ -1893,14 +1896,18 @@
     }
   }
 
-  .plinth-code-block-copy,
-  .plinth-code-block-download {
+  /* The buttons stay together at the end, so a narrow header wraps them as one. */
+  .plinth-code-block-actions {
+    display: flex;
+    flex: 0 0 auto;
+    gap: var(--plinth-space-2);
+    align-items: center;
     margin-inline-start: auto;
   }
 
-  /* Download follows a copy button that shows. */
-  .plinth-code-block-copy:not([hidden]) ~ .plinth-code-block-download {
-    margin-inline-start: 0;
+  /* Markup from before the actions: the copy button on its own at the end. */
+  .plinth-code-block-header > .plinth-code-block-copy {
+    margin-inline-start: auto;
   }
 
   /* The button's own display would beat the hidden attribute. */

@@ -83,8 +83,9 @@ export function codeBlock(
       { label, variant: 'ghost', size: 'sm', disabled: false, busy: false },
       { class: `plinth-code-block-${part}`, hidden: '' },
     ) + '<span class="plinth-code-block-status" role="status"></span>';
-  const copyButton = copy ? action(copyLabel, 'copy') : '';
-  const downloadButton = download?.trim() ? action(downloadLabel, 'download') : '';
+  const actions =
+    (copy ? action(copyLabel, 'copy') : '') +
+    (download?.trim() ? action(downloadLabel, 'download') : '');
   const panels = tabs.length
     ? tabs.map((tab) => pre(tab.html ?? escape(tab.code))).join('')
     : pre(html ?? escape(code));
@@ -93,8 +94,7 @@ export function codeBlock(
     '<div class="plinth-code-block-header">',
     labelContent ? `<span class="plinth-code-block-label">${labelContent}</span>` : '',
     tabGroup,
-    copyButton,
-    downloadButton,
+    actions ? `<div class="plinth-code-block-actions">${actions}</div>` : '',
     '</div>',
     panels,
     '</div>',

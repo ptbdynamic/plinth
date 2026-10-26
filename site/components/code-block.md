@@ -120,18 +120,19 @@ React.
 
 ## Markup contract
 
-| Part                           | Element                        | Required             | What it is                                                   |
-| ------------------------------ | ------------------------------ | -------------------- | ------------------------------------------------------------ |
-| `.plinth-code-block`           | `<div>`                        | yes                  | The root; it takes the app's id and attributes               |
-| `.plinth-code-block-header`    | `<div>`                        | yes                  | The bar above the code; it hides when it has nothing to show |
-| `.plinth-code-block-label`     | `<span>`                       | no                   | A file name or a short label, cut short with an ellipsis     |
-| `.plinth-code-block-tabs`      | `<div role="radiogroup">`      | with tabs            | The language tabs, named by `aria-label`                     |
-| `.plinth-code-block-tab`       | `<label>`                      | with tabs            | One tab                                                      |
-| `.plinth-code-block-tab-input` | `<input type="radio">`         | with tabs            | The radio, covering its tab; `checked` on the one that shows |
-| `.plinth-code-block-copy`      | `<button>` (the button)        | unless `copy` is off | Copies the code that shows; printed `hidden`                 |
-| `.plinth-code-block-status`    | `<span role="status">`         | after each button    | Says _Copied_ or _Downloaded_ to a screen reader; not shown  |
-| `.plinth-code-block-download`  | `<button>` (the button)        | with `download`      | Saves the code that shows as a file; printed `hidden`        |
-| `.plinth-code-block-code`      | `<pre dir="ltr" tabindex="0">` | yes, one per tab     | The code, in a `<code>`                                      |
+| Part                           | Element                        | Required              | What it is                                                   |
+| ------------------------------ | ------------------------------ | --------------------- | ------------------------------------------------------------ |
+| `.plinth-code-block`           | `<div>`                        | yes                   | The root; it takes the app's id and attributes               |
+| `.plinth-code-block-header`    | `<div>`                        | yes                   | The bar above the code; it hides when it has nothing to show |
+| `.plinth-code-block-label`     | `<span>`                       | no                    | A file name or a short label, cut short with an ellipsis     |
+| `.plinth-code-block-tabs`      | `<div role="radiogroup">`      | with tabs             | The language tabs, named by `aria-label`                     |
+| `.plinth-code-block-tab`       | `<label>`                      | with tabs             | One tab                                                      |
+| `.plinth-code-block-tab-input` | `<input type="radio">`         | with tabs             | The radio, covering its tab; `checked` on the one that shows |
+| `.plinth-code-block-actions`   | `<div>`                        | with copy or download | The buttons, together at the header's end                    |
+| `.plinth-code-block-copy`      | `<button>` (the button)        | unless `copy` is off  | Copies the code that shows; printed `hidden`                 |
+| `.plinth-code-block-status`    | `<span role="status">`         | after each button     | Says _Copied_ or _Downloaded_ to a screen reader; not shown  |
+| `.plinth-code-block-download`  | `<button>` (the button)        | with `download`       | Saves the code that shows as a file; printed `hidden`        |
+| `.plinth-code-block-code`      | `<pre dir="ltr" tabindex="0">` | yes, one per tab      | The code, in a `<code>`                                      |
 
 | Attribute or state | On               | Values                                           | Default       |
 | ------------------ | ---------------- | ------------------------------------------------ | ------------- |
@@ -202,7 +203,8 @@ import { PlinthCodeBlock } from '@ptbdynamic/plinth/react';
   and the status, a polite live region, says the same to a screen reader.
 - The download button is a real `<button>` too, printed `hidden` until the layer runs. After
   saving it says _Downloaded_ for two seconds, and its own status says the same to a screen
-  reader.
+  reader. With more than one on a page, name what each saves (for example _Download recovery
+  codes_, with `download-label`), so the buttons don't all read _Download_.
 - The code reads left to right (`dir="ltr"`) on a right-to-left page too.
 - In forced colours, the checked tab takes the system highlight.
 

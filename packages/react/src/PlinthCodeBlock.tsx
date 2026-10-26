@@ -36,7 +36,7 @@ interface CodeBlockOptions {
   copiedLabel?: string;
   /** The code was copied to the clipboard (Vue's `copied` event). */
   onCopied?: (text: string) => void;
-  /** The file name the download button saves the code as (a .txt); no button without one. */
+  /** The file name the code is saved under, as text/plain; no download button without one. */
   download?: string;
   downloadLabel?: string;
   /** What the download button and its status say for two seconds after saving. */
@@ -142,37 +142,41 @@ export function PlinthCodeBlock({
             ))}
           </div>
         ) : null}
-        {copy ? (
-          <>
-            <PlinthButton
-              className="plinth-code-block-copy"
-              variant="ghost"
-              size="sm"
-              hidden={!canCopy}
-              onClick={copyCode}
-            >
-              {copied ? copiedLabel : copyLabel}
-            </PlinthButton>
-            <span className="plinth-code-block-status" role="status">
-              {copied ? copiedLabel : ''}
-            </span>
-          </>
-        ) : null}
-        {filename ? (
-          <>
-            <PlinthButton
-              className="plinth-code-block-download"
-              variant="ghost"
-              size="sm"
-              hidden={!mounted}
-              onClick={downloadCode}
-            >
-              {downloaded ? downloadedLabel : downloadLabel}
-            </PlinthButton>
-            <span className="plinth-code-block-status" role="status">
-              {downloaded ? downloadedLabel : ''}
-            </span>
-          </>
+        {copy || filename ? (
+          <div className="plinth-code-block-actions">
+            {copy ? (
+              <>
+                <PlinthButton
+                  className="plinth-code-block-copy"
+                  variant="ghost"
+                  size="sm"
+                  hidden={!canCopy}
+                  onClick={copyCode}
+                >
+                  {copied ? copiedLabel : copyLabel}
+                </PlinthButton>
+                <span className="plinth-code-block-status" role="status">
+                  {copied ? copiedLabel : ''}
+                </span>
+              </>
+            ) : null}
+            {filename ? (
+              <>
+                <PlinthButton
+                  className="plinth-code-block-download"
+                  variant="ghost"
+                  size="sm"
+                  hidden={!mounted}
+                  onClick={downloadCode}
+                >
+                  {downloaded ? downloadedLabel : downloadLabel}
+                </PlinthButton>
+                <span className="plinth-code-block-status" role="status">
+                  {downloaded ? downloadedLabel : ''}
+                </span>
+              </>
+            ) : null}
+          </div>
         ) : null}
       </div>
       {tabs.length ? (

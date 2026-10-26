@@ -11,6 +11,9 @@ const tabs = [
 ];
 
 const copyButton = (hidden: boolean) =>
+  '<div class="plinth-code-block-actions">' + copyButtonOnly(hidden) + '</div>';
+
+const copyButtonOnly = (hidden: boolean) =>
   `<button type="button" class="plinth-button plinth-code-block-copy" data-variant="ghost" data-size="sm"${hidden ? ' hidden' : ''}><span class="plinth-button-label">Copy</span></button>` +
   '<span class="plinth-code-block-status" role="status"></span>';
 
@@ -199,12 +202,18 @@ describe('PlinthCodeBlock', () => {
     expect(wrapper.get('code').html()).toBe('<code><span class="line">const</span></code>');
   });
 
-  it('escapes the label, the tabs and the code', () => {
+  it('escapes the label, the tabs, the code and the download’s words', () => {
     const wrapper = mount(PlinthCodeBlock, {
-      props: { label: '<b>x</b>', tabs: [{ label: '<i>y</i>', code: '<u>z</u>' }] },
+      props: {
+        label: '<b>x</b>',
+        tabs: [{ label: '<i>y</i>', code: '<u>z</u>' }],
+        download: '"a\'.txt',
+        downloadLabel: '<s>d</s>',
+      },
     });
 
-    expect(wrapper.html()).not.toMatch(/<(b|i|u)>/);
+    expect(wrapper.html()).not.toMatch(/<(b|i|u|s)>/);
+    expect(wrapper.html()).toContain('&lt;s&gt;d&lt;/s&gt;');
     expect(wrapper.html()).toContain('&lt;u&gt;z&lt;/u&gt;');
   });
 
@@ -251,10 +260,11 @@ describe('PlinthCodeBlock', () => {
 
     expect(flat(html)).toBe(
       '<div class="plinth-code-block"><div class="plinth-code-block-header">' +
-        copyButton(true) +
+        '<div class="plinth-code-block-actions">' +
+        copyButtonOnly(true) +
         '<button type="button" class="plinth-button plinth-code-block-download" data-variant="ghost" data-size="sm" hidden><span class="plinth-button-label">Download</span></button>' +
         '<span class="plinth-code-block-status" role="status"></span>' +
-        '</div>' +
+        '</div></div>' +
         '<pre class="plinth-code-block-code" dir="ltr" tabindex="0"><code>a1b2</code></pre>' +
         '</div>',
     );
@@ -308,9 +318,11 @@ describe('PlinthCodeBlock', () => {
     vi.advanceTimersByTime(2000);
     await flushPromises();
 
-    expect(revokeObjectURL).toHaveBeenCalledWith('blob:codes');
+    expect(revokeObjectURL).not.toHaveBeenCalled();
     expect(wrapper.get('.plinth-button-label').text()).toBe('Descarregar');
     expect(wrapper.get('[role="status"]').text()).toBe('');
+    vi.advanceTimersByTime(40_000);
+    expect(revokeObjectURL).toHaveBeenCalledWith('blob:codes');
     wrapper.unmount();
     click.mockRestore();
   });

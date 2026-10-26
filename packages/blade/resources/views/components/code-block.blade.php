@@ -28,7 +28,7 @@
         .'this.say(this.copiedLabel, this.copiedLabel); clearTimeout(this.timer); '
         .'this.timer = setTimeout(() => this.say(this.copyLabel, \'\'), 2000); }, '
         .'say(label, status) { this.$el.querySelector(\'.plinth-button-label\').textContent = label; this.$el.nextElementSibling.textContent = status; } }';
-    $filename = filled($download) ? trim($download) : null;
+    $filename = is_string($download) && filled($download) ? trim($download) : null;
     // The download button, with Alpine: it saves the code that shows as a text file, through a
     // Blob and a temporary link, and says so for two seconds.
     $downloader = '{ downloadLabel: '.\Illuminate\Support\Js::from($downloadLabel).', downloadedLabel: '.\Illuminate\Support\Js::from($downloadedLabel).', filename: '.\Illuminate\Support\Js::from($filename).', timer: 0, '
@@ -36,7 +36,7 @@
         .'const index = Math.max(0, [...block.querySelectorAll(\'.plinth-code-block-tab-input\')].findIndex((input) => input.checked)); '
         .'const url = URL.createObjectURL(new Blob([block.querySelectorAll(\'.plinth-code-block-code\')[index].textContent], { type: \'text/plain\' })); '
         .'const link = document.createElement(\'a\'); link.href = url; link.download = this.filename; link.click(); '
-        .'setTimeout(() => URL.revokeObjectURL(url)); '
+        .'setTimeout(() => URL.revokeObjectURL(url), 40000); '
         .'this.say(this.downloadedLabel, this.downloadedLabel); clearTimeout(this.timer); '
         .'this.timer = setTimeout(() => this.say(this.downloadLabel, \'\'), 2000); }, '
         .'say(label, status) { this.$el.querySelector(\'.plinth-button-label\').textContent = label; this.$el.nextElementSibling.textContent = status; } }';
@@ -53,13 +53,17 @@
                 @endforeach
             </div>
         @endif
-        @if ($copy)
-            <x-plinth::button class="plinth-code-block-copy" variant="ghost" size="sm" hidden="" :x-data="$copier" x-init="$el.hidden = ! navigator.clipboard" x-on:click="copy">{{ $copyLabel }}</x-plinth::button>
-            <span class="plinth-code-block-status" role="status"></span>
-        @endif
-        @if ($filename !== null)
-            <x-plinth::button class="plinth-code-block-download" variant="ghost" size="sm" hidden="" :x-data="$downloader" x-init="$el.hidden = false" x-on:click="download">{{ $downloadLabel }}</x-plinth::button>
-            <span class="plinth-code-block-status" role="status"></span>
+        @if ($copy || $filename !== null)
+            <div class="plinth-code-block-actions">
+                @if ($copy)
+                    <x-plinth::button class="plinth-code-block-copy" variant="ghost" size="sm" hidden="" :x-data="$copier" x-init="$el.hidden = ! navigator.clipboard" x-on:click="copy">{{ $copyLabel }}</x-plinth::button>
+                    <span class="plinth-code-block-status" role="status"></span>
+                @endif
+                @if ($filename !== null)
+                    <x-plinth::button class="plinth-code-block-download" variant="ghost" size="sm" hidden="" :x-data="$downloader" x-init="$el.hidden = false" x-on:click="download">{{ $downloadLabel }}</x-plinth::button>
+                    <span class="plinth-code-block-status" role="status"></span>
+                @endif
+            </div>
         @endif
     </div>
     @if ($tabs->isNotEmpty())

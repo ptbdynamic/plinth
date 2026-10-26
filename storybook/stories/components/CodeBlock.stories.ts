@@ -21,17 +21,21 @@ const codeBlockText = (button: Element) => {
   return block.querySelectorAll('.plinth-code-block-code')[index]?.textContent ?? '';
 };
 
-/** Says `done` on the button and in its status for two seconds. */
-const say = (button: HTMLButtonElement, done: string) => {
+/** Says `done` on the button and in its status for two seconds, then `idle` again. */
+const timers = new WeakMap<Element, ReturnType<typeof setTimeout>>();
+const say = (button: HTMLButtonElement, done: string, idle: string) => {
   const label = button.querySelector('.plinth-button-label')!;
   const status = button.nextElementSibling!;
-  const idle = label.textContent;
   label.textContent = done;
   status.textContent = done;
-  setTimeout(() => {
-    label.textContent = idle;
-    status.textContent = '';
-  }, 2000);
+  clearTimeout(timers.get(button));
+  timers.set(
+    button,
+    setTimeout(() => {
+      label.textContent = idle;
+      status.textContent = '';
+    }, 2000),
+  );
 };
 
 const withActions: Decorator = (story, { args }) => {
@@ -42,7 +46,7 @@ const withActions: Decorator = (story, { args }) => {
     button.addEventListener('click', () => {
       void navigator.clipboard
         ?.writeText(codeBlockText(button))
-        .then(() => say(button, args.copiedLabel as string));
+        .then(() => say(button, args.copiedLabel as string, args.copyLabel as string));
     });
   });
   wrapper.querySelectorAll<HTMLButtonElement>('.plinth-code-block-download').forEach((button) => {
@@ -53,8 +57,8 @@ const withActions: Decorator = (story, { args }) => {
       link.href = url;
       link.download = (args.download as string).trim();
       link.click();
-      setTimeout(() => URL.revokeObjectURL(url));
-      say(button, args.downloadedLabel as string);
+      setTimeout(() => URL.revokeObjectURL(url), 40_000);
+      say(button, args.downloadedLabel as string, args.downloadLabel as string);
     });
   });
   return wrapper;

@@ -10,9 +10,11 @@ const tabs = [
   { label: 'Vue', code: '<PlinthBadge />' },
 ];
 
-const copyButton =
+const copyButtonOnly =
   '<button type="button" data-variant="ghost" data-size="sm" hidden="" class="plinth-button plinth-code-block-copy"><span class="plinth-button-label">Copy</span></button>' +
   '<span class="plinth-code-block-status" role="status"></span>';
+
+const copyButton = `<div class="plinth-code-block-actions">${copyButtonOnly}</div>`;
 
 describe('PlinthCodeBlock', () => {
   const writeText = vi.fn<(text: string) => Promise<void>>();
@@ -168,12 +170,18 @@ describe('PlinthCodeBlock', () => {
     ).toContain('<code><span class="line">const</span></code>');
   });
 
-  it('escapes the label, the tabs and the code', () => {
+  it('escapes the label, the tabs, the code and the download’s words', () => {
     const html = renderToStaticMarkup(
-      <PlinthCodeBlock label="<b>x</b>" tabs={[{ label: '<i>y</i>', code: '<u>z</u>' }]} />,
+      <PlinthCodeBlock
+        label="<b>x</b>"
+        tabs={[{ label: '<i>y</i>', code: '<u>z</u>' }]}
+        download={'"a\'.txt'}
+        downloadLabel="<s>d</s>"
+      />,
     );
 
-    expect(html).not.toMatch(/<(b|i|u)>/);
+    expect(html).not.toMatch(/<(b|i|u|s)>/);
+    expect(html).toContain('&lt;s&gt;d&lt;/s&gt;');
     expect(html).toContain('&lt;u&gt;z&lt;/u&gt;');
   });
 
@@ -225,10 +233,11 @@ describe('PlinthCodeBlock', () => {
       renderToStaticMarkup(<PlinthCodeBlock download=" codes.txt ">a1b2</PlinthCodeBlock>),
     ).toBe(
       '<div class="plinth-code-block"><div class="plinth-code-block-header">' +
-        copyButton +
+        '<div class="plinth-code-block-actions">' +
+        copyButtonOnly +
         '<button type="button" data-variant="ghost" data-size="sm" hidden="" class="plinth-button plinth-code-block-download"><span class="plinth-button-label">Download</span></button>' +
         '<span class="plinth-code-block-status" role="status"></span>' +
-        '</div>' +
+        '</div></div>' +
         '<pre class="plinth-code-block-code" dir="ltr" tabindex="0"><code>a1b2</code></pre>' +
         '</div>',
     );
@@ -284,9 +293,11 @@ describe('PlinthCodeBlock', () => {
     fireEvent.click(button);
     act(() => vi.advanceTimersByTime(2000));
 
-    expect(revokeObjectURL).toHaveBeenCalledWith('blob:codes');
+    expect(revokeObjectURL).not.toHaveBeenCalled();
     expect(label()).toBe('Descarregar');
     expect(status()).toBe('');
+    act(() => vi.advanceTimersByTime(40_000));
+    expect(revokeObjectURL).toHaveBeenCalledWith('blob:codes');
     unmount();
     click.mockRestore();
   });

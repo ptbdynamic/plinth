@@ -40,5 +40,6 @@ export function downloadText(filename: string, text: string): void {
   link.href = url;
   link.download = filename;
   link.click();
-  setTimeout(() => URL.revokeObjectURL(url));
+  // Later, not at once: a browser may still be reading the Blob (WebKit saves an empty file).
+  setTimeout(() => URL.revokeObjectURL(url), 40_000);
 }

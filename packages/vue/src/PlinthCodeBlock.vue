@@ -30,7 +30,7 @@ const props = withDefaults(
     copyLabel?: string;
     /** What the button and the status say for two seconds after copying. */
     copiedLabel?: string;
-    /** The file name the download button saves the code as (a .txt); no button without one. */
+    /** The file name the code is saved under, as text/plain; no download button without one. */
     download?: string;
     downloadLabel?: string;
     /** What the download button and its status say for two seconds after saving. */
@@ -131,30 +131,34 @@ function downloadCode(event: MouseEvent) {
           /><span class="plinth-code-block-tab-label">{{ tab.label }}</span></label
         >
       </div>
-      <template v-if="copy">
-        <PlinthButton
-          class="plinth-code-block-copy"
-          variant="ghost"
-          size="sm"
-          :hidden="!canCopy"
-          @click="copyCode"
-          >{{ copied ? copiedLabel : copyLabel }}</PlinthButton
-        >
-        <span class="plinth-code-block-status" role="status">{{ copied ? copiedLabel : '' }}</span>
-      </template>
-      <template v-if="filename">
-        <PlinthButton
-          class="plinth-code-block-download"
-          variant="ghost"
-          size="sm"
-          :hidden="!mounted"
-          @click="downloadCode"
-          >{{ downloaded ? downloadedLabel : downloadLabel }}</PlinthButton
-        >
-        <span class="plinth-code-block-status" role="status">{{
-          downloaded ? downloadedLabel : ''
-        }}</span>
-      </template>
+      <div v-if="copy || filename" class="plinth-code-block-actions">
+        <template v-if="copy">
+          <PlinthButton
+            class="plinth-code-block-copy"
+            variant="ghost"
+            size="sm"
+            :hidden="!canCopy"
+            @click="copyCode"
+            >{{ copied ? copiedLabel : copyLabel }}</PlinthButton
+          >
+          <span class="plinth-code-block-status" role="status">{{
+            copied ? copiedLabel : ''
+          }}</span>
+        </template>
+        <template v-if="filename">
+          <PlinthButton
+            class="plinth-code-block-download"
+            variant="ghost"
+            size="sm"
+            :hidden="!mounted"
+            @click="downloadCode"
+            >{{ downloaded ? downloadedLabel : downloadLabel }}</PlinthButton
+          >
+          <span class="plinth-code-block-status" role="status">{{
+            downloaded ? downloadedLabel : ''
+          }}</span>
+        </template>
+      </div>
     </div>
     <template v-if="shownTabs.length">
       <template v-for="(tab, i) in shownTabs" :key="i">
