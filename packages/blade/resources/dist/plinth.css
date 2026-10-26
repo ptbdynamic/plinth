@@ -1787,7 +1787,8 @@
   }
 
   /* The control and its label fade; the description stays readable, since it may say why. */
-  .plinth-checkbox:has(> .plinth-checkbox-input:disabled) > :is(.plinth-checkbox-input, .plinth-checkbox-label) {
+  .plinth-checkbox:has(> .plinth-checkbox-input:disabled)
+    > :is(.plinth-checkbox-input, .plinth-checkbox-label) {
     opacity: var(--plinth-opacity-disabled);
   }
 
@@ -6083,7 +6084,8 @@
   }
 
   /* The control and its label fade; the description stays readable, since it may say why. */
-  .plinth-switch:has(> .plinth-switch-input:disabled) > :is(.plinth-switch-input, .plinth-switch-label) {
+  .plinth-switch:has(> .plinth-switch-input:disabled)
+    > :is(.plinth-switch-input, .plinth-switch-label) {
     opacity: var(--plinth-opacity-disabled);
   }
 
