@@ -1,6 +1,6 @@
 {
   "name": "@ptbdynamic/plinth",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "The design system of BDynamic's projects: tokens, plain HTML and CSS components, and thin Blade, Vue and React layers.",
   "license": "MIT",
   "repository": {
