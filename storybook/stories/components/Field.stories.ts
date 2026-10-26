@@ -35,7 +35,9 @@ const storySelect = `<style>
 </style>`;
 
 /** A native select, with the ids the field gives it. */
-function select(args: Pick<FieldArgs, 'id' | 'description' | 'error' | 'required'>): string {
+function select(
+  args: Pick<FieldArgs, 'id' | 'description' | 'error'> & { required?: boolean },
+): string {
   const { id, describedBy, invalid } = fieldControl(args.id, false, args.description, args.error);
   return [
     `<select class="story-select" id="${escape(id)}"`,
