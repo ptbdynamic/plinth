@@ -48,16 +48,19 @@ function select(
   ].join('');
 }
 
-/** The pills a group holds: a status filter. */
-const statusPills = (selected: string[]) =>
-  pillRow({
-    nav: false,
-    pills: ['Open', 'Pending', 'Closed'].map((label) => ({
-      label,
-      selected: selected.includes(label),
-      disabled: false,
-    })),
-  });
+/** The pills a group holds, a status filter, named by the field's legend. */
+const statusPills = (id: string, selected: string[]) =>
+  pillRow(
+    {
+      nav: false,
+      pills: ['Open', 'Pending', 'Closed'].map((label) => ({
+        label,
+        selected: selected.includes(label),
+        disabled: false,
+      })),
+    },
+    { 'aria-labelledby': fieldControl(id, true, undefined, undefined).labelId },
+  );
 
 const meta = {
   title: 'Components/Field',
@@ -83,7 +86,7 @@ const meta = {
     docs: {
       description: {
         component:
-          "A label, an optional description and an error around a control the app brings: a select, a switch, or a group of pills, radios or checkboxes. With one control, the label points at the control's id, and the control sets aria-describedby and aria-invalid from the ids the field gives it (Vue's slot props, React's children function, Blade's Field::describedBy()). A group is a fieldset with a legend, described by the field's description and error, and `disabled` on it disables every control inside. The required mark is hidden from screen readers: the control says it is required itself. The text field and the textarea print the same parts for their own input.",
+          "A label, an optional description and an error around a control the app brings: a select, a switch, or a group of pills, radios or checkboxes. With one control, the label points at the control's id, and the control sets aria-describedby and aria-invalid from the ids the field gives it (Vue's slot props, React's children function, Blade's Field::describedBy()). A group is a fieldset with a legend, described by the field's description and error, and `disabled` on it disables every control inside. The required mark is hidden from screen readers: the control says it is required itself. A pill row in a group points aria-labelledby at the legend. In Blade, one control needs an id. The text field and the textarea look the same.",
       },
     },
   },
@@ -122,7 +125,7 @@ export const Group: Story = {
     label: 'Status',
     group: true,
     description: 'Show tickets in these states.',
-    control: statusPills(['Open']),
+    control: statusPills('status', ['Open']),
   },
 };
 export const GroupWithError: Story = {
@@ -131,9 +134,9 @@ export const GroupWithError: Story = {
     label: 'Status',
     group: true,
     required: true,
-    description: 'Show tickets in these states.',
+    description: 'Pick at least one state.',
     error: 'Pick at least one status.',
-    control: statusPills([]),
+    control: statusPills('status', []),
   },
 };
 
@@ -148,7 +151,7 @@ export const DisabledGroup: Story = {
         group: true,
         required: false,
         description: 'Filters are off while the export runs.',
-        control: statusPills(['Open']),
+        control: statusPills('status-disabled', ['Open']),
       },
       { disabled: '' },
     ),

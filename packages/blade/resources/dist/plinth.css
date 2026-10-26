@@ -3043,8 +3043,8 @@
 /* field.css */
 /*
  * Field: a label, an optional description and an error around a control the app brings, such as
- * a select, a switch or a group of pills, radios or checkboxes. The text field and the textarea
- * print the same parts for their own input.
+ * a select, a switch or a group of pills, radios or checkboxes. It has the same layout and look as
+ * the text field's and the textarea's own label and messages; keep the rules in step with theirs.
  *
  * One control:
  *
@@ -3058,11 +3058,11 @@
  *   <p class="plinth-field-error" id="team-error">Pick a team.</p>
  * </div>
  *
- * A group of controls (data-group is not printed; the root is a fieldset):
+ * A group of controls (`group` is a prop; the root is a fieldset):
  *
  * <fieldset class="plinth-field" id="status" aria-describedby="status-description status-error">
  *   <legend class="plinth-field-label" id="status-label">Status</legend>
- *   <div class="plinth-pill-row" role="group">…</div>
+ *   <div class="plinth-pill-row" role="group" aria-labelledby="status-label">…</div>
  *   <p class="plinth-field-description" id="status-description">Tickets in these states.</p>
  *   <p class="plinth-field-error" id="status-error">Pick at least one.</p>
  * </fieldset>
@@ -3074,10 +3074,12 @@
  * when there is an error; a control that a <label> can't name (one that isn't an input, select,
  * textarea or button) sets aria-labelledby to the label's id. Blade, Vue and React give these to
  * the control: Vue's slot props and React's children function (id, labelId, describedBy,
- * invalid), and in Blade \BDynamic\Plinth\Support\Field::describedBy().
+ * invalid), and in Blade \BDynamic\Plinth\Support\Field::describedBy(). Blade needs the id for
+ * one control, since its slot can't read a generated one; Vue and React generate one.
  *
  * In a group, the fieldset takes the id and aria-describedby, the legend names the group, and the
- * controls inside it keep their own labels. `disabled` on the fieldset disables every control in
+ * controls inside it keep their own labels. A control that is a group itself, such as a pill
+ * row, points aria-labelledby at the legend's id, so it isn't a second group without a name. `disabled` on the fieldset disables every control in
  * it, natively, and fades the legend.
  *
  * Every attribute the app adds goes to the root (class, data-*, aria-*, wire:key, x-show; on a
@@ -3157,7 +3159,8 @@
   }
 
   @media (forced-colors: active) {
-    .plinth-field:disabled > .plinth-field-label {
+    .plinth-field:disabled > .plinth-field-label,
+    .plinth-field:disabled > .plinth-field-description {
       color: GrayText;
     }
   }

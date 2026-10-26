@@ -124,7 +124,7 @@ describe('PlinthField', () => {
 describe('fieldControl', () => {
   it('leaves a group control without aria-describedby: its fieldset has it', () => {
     expect(fieldControl('s', true, 'D', 'E')).toEqual({
-      id: 's',
+      id: undefined,
       labelId: 's-label',
       describedBy: undefined,
       invalid: true,

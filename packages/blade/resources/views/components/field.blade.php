@@ -12,6 +12,9 @@
     if (blank($label)) {
         throw new InvalidArgumentException('<x-plinth::field> needs a label: it is the control\'s accessible name.');
     }
+    if (blank($id) && ! $group) {
+        throw new InvalidArgumentException('<x-plinth::field> needs an id: its control takes it, and the slot can\'t read a generated one.');
+    }
     $id = filled($id) ? trim($id) : 'plinth-field-'.\Illuminate\Support\Str::lower(\Illuminate\Support\Str::random(8));
     $tag = $group ? 'fieldset' : 'div';
     $labelTag = $group ? 'legend' : 'label';

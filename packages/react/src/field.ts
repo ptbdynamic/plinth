@@ -2,8 +2,8 @@ import { fieldDescribedBy } from './text-field';
 
 /** What a field gives the control in it (field.css): Vue's slot props, React's children function. */
 export interface FieldControl {
-  /** The control's id (a group's fieldset takes it instead). */
-  id: string;
+  /** The control's id, or nothing in a group, whose fieldset has it. */
+  id: string | undefined;
   /** The label's id, for a control's aria-labelledby. */
   labelId: string;
   /** What the control's aria-describedby lists, or nothing; a group's fieldset has it instead. */
@@ -20,7 +20,7 @@ export function fieldControl(
   error: string | undefined,
 ): FieldControl {
   return {
-    id,
+    id: group ? undefined : id,
     labelId: `${id}-label`,
     describedBy: group ? undefined : fieldDescribedBy(id, description, error),
     invalid: Boolean(error?.trim()),

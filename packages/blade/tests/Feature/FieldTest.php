@@ -51,13 +51,17 @@ it('hides the label visually', function () {
         ->toContain('<div class="plinth-field" data-label="hidden">');
 });
 
-it('generates an id when it has none', function () {
-    expect(Blade::render('<x-plinth::field label="A">x</x-plinth::field>'))
-        ->toMatch('/<label class="plinth-field-label" id="(plinth-field-[a-z0-9]{8})-label" for="\1">/');
+it('generates a group\'s id when it has none', function () {
+    expect(Blade::render('<x-plinth::field label="A" group>x</x-plinth::field>'))
+        ->toMatch('/<fieldset class="plinth-field" id="(plinth-field-[a-z0-9]{8})"><legend class="plinth-field-label" id="\1-label">/');
 });
 
+it('needs an id for one control', function () {
+    Blade::render('<x-plinth::field label="A">x</x-plinth::field>');
+})->throws(Exception::class, 'needs an id');
+
 it('needs a label', function () {
-    Blade::render('<x-plinth::field label=" ">x</x-plinth::field>');
+    Blade::render('<x-plinth::field id="a" label=" ">x</x-plinth::field>');
 })->throws(Exception::class, 'needs a label');
 
 it('escapes the label, the messages and the slot', function () {

@@ -1,7 +1,7 @@
 # Field
 
 A label, an optional description and an error around a control you bring: a select, a switch, or
-a group of pills, radios or checkboxes. It gives every control the same label and messages as the
+a group of pills, radios or checkboxes. It gives every control the same look of label and messages as the
 [text field](text-field.md) and the [textarea](textarea.md), and the ids the control points at,
 so a screen reader reads the description and the error with it.
 
@@ -18,11 +18,13 @@ so a screen reader reads the description and the error with it.
 
 Set **`group`** for controls that answer one question together: a row of filter pills, radios or
 checkboxes. The field is a `<fieldset>`, the label is its `<legend>`, and the fieldset is
-described by the description and the error. Each control inside keeps its own label.
+described by the description and the error. Each control inside keeps its own label. A control
+that is a group itself, such as a pill row, points `aria-labelledby` at the legend's id
+(`<id>-label`), so a screen reader doesn't meet a second group without a name.
 
 ```blade example
 <x-plinth::field id="status" label="Status" group description="Show tickets in these states.">
-    <x-plinth::pill-row>
+    <x-plinth::pill-row aria-labelledby="status-label">
         <x-plinth::pill selected>Open</x-plinth::pill>
         <x-plinth::pill>Pending</x-plinth::pill>
         <x-plinth::pill>Closed</x-plinth::pill>
@@ -36,8 +38,8 @@ The **`error`** prints under the control in the danger text colour, and says wha
 Blade, pass the validation message (`:error="$errors->first('status')"`).
 
 ```blade example
-<x-plinth::field id="status-error" label="Status" group required description="Show tickets in these states." error="Pick at least one status.">
-    <x-plinth::pill-row>
+<x-plinth::field id="status-error" label="Status" group required description="Pick at least one state." error="Pick at least one status.">
+    <x-plinth::pill-row aria-labelledby="status-error-label">
         <x-plinth::pill>Open</x-plinth::pill>
         <x-plinth::pill>Pending</x-plinth::pill>
         <x-plinth::pill>Closed</x-plinth::pill>
@@ -51,7 +53,7 @@ Blade, pass the validation message (`:error="$errors->first('status')"`).
 
 ```blade example
 <x-plinth::field id="status-disabled" label="Status" group disabled description="Filters are off while the export runs.">
-    <x-plinth::pill-row>
+    <x-plinth::pill-row aria-labelledby="status-disabled-label">
         <x-plinth::pill selected>Open</x-plinth::pill>
         <x-plinth::pill>Pending</x-plinth::pill>
         <x-plinth::pill>Closed</x-plinth::pill>
@@ -65,6 +67,8 @@ Without `group`, the label is a `<label>` that points at the control's id, so th
 the field's **`id`**. The control sets `aria-describedby` to the description's and the error's
 ids, and `aria-invalid="true"` when there is an error. Each layer gives you those: Vue's slot
 props, React's children function, and in Blade `\BDynamic\Plinth\Support\Field::describedBy()`.
+Blade needs the `id` for one control, since its slot can't read a generated one. Plinth has no
+select yet, so this example is code only; the stories show one control in every state.
 
 ```blade
 <x-plinth::field id="team" label="Team" required description="The team answers new tickets first." :error="$errors->first('team')">
@@ -109,16 +113,16 @@ own: the control brings its focus ring.
 The same names in every layer. Blade writes a camelCase prop in kebab-case (`hide-label`), as Vue
 can; React takes the Vue props, with the slot as `children`.
 
-| Prop        | Blade                             | Vue                    | React                 | Default         |
-| ----------- | --------------------------------- | ---------------------- | --------------------- | --------------- |
-| label       | `label="Team"`                    | `label="Team"`         | `label="Team"`        | required        |
-| hideLabel   | `hide-label`                      | `hide-label`           | `hideLabel`           | off             |
-| id          | `id="team"`                       | `id="team"`            | `id="team"`           | a generated one |
-| group       | `group`                           | `group`                | `group`               | off             |
-| required    | `required`                        | `required`             | `required`            | off             |
-| description | `description="…"`                 | `description="…"`      | `description="…"`     | none            |
-| error       | `:error="$errors->first('team')"` | `:error="errors.team"` | `error={errors.team}` | none            |
-| control     | the slot                          | the default slot       | `children`            | none            |
+| Prop        | Blade                             | Vue                    | React                 | Default                                   |
+| ----------- | --------------------------------- | ---------------------- | --------------------- | ----------------------------------------- |
+| label       | `label="Team"`                    | `label="Team"`         | `label="Team"`        | required                                  |
+| hideLabel   | `hide-label`                      | `hide-label`           | `hideLabel`           | off                                       |
+| id          | `id="team"`                       | `id="team"`            | `id="team"`           | generated; Blade needs it for one control |
+| group       | `group`                           | `group`                | `group`               | off                                       |
+| required    | `required`                        | `required`             | `required`            | off                                       |
+| description | `description="…"`                 | `description="…"`      | `description="…"`     | none                                      |
+| error       | `:error="$errors->first('team')"` | `:error="errors.team"` | `error={errors.team}` | none                                      |
+| control     | the slot                          | the default slot       | `children`            | none                                      |
 
 **The attributes go to the root:** in Blade through `$attributes` (`class`, `data-*`, `aria-*`,
 `wire:key`, `x-show`, and on a group `disabled` and `name`), in Vue by falling through, and in
