@@ -4542,7 +4542,8 @@
  *   <p class="plinth-field-error" id="code-error">That code didn't work. Try the newest one.</p>
  * </div>
  *
- * The root, the label, the description and the error are the field's, with its ids: the input
+ * The root, the label, the description and the error are the field's, with its ids
+ * (.plinth-one-time-code on the root is a hook for a project, with no styles of its own): the input
  * takes the id, the label points at it with for, and aria-describedby lists the description's
  * id, then the error's (left out when there is neither).
  *
@@ -4550,10 +4551,11 @@
  *   other); the input is as wide as its cells.
  * - inputmode="numeric" brings up the number pad, and autocomplete="one-time-code" lets the phone
  *   offer a code it was sent. The digits are always left to right, in a right-to-left page too.
- * - only digits: Blade (with Alpine), Vue and React strip anything else from what is typed,
- *   pasted or autofilled ("123 456" fills the field), and the pattern rejects it without them.
- * - autosubmit (a prop): the input's form is sent once every digit is in. Vue emits `complete`
- *   and React calls onComplete with the code then too.
+ * - only digits: Blade (with Alpine), Vue and React strip anything else from what is typed or
+ *   filled in, and from a paste before maxlength cuts it ("123 456" pasted fills the field); the
+ *   pattern rejects anything else without them.
+ * - autosubmit (a prop): the input's form is sent once every digit is in, once per code. Vue
+ *   emits `complete` and React calls onComplete with the code then too.
  *
  * Attributes go to the input, not the root (name, value, required, wire:model, x-model, data-*,
  * aria-*), so the app talks to the input; only a project's class is added to the root's.
@@ -4561,10 +4563,14 @@
  * States:
  * - error: aria-invalid="true" on the input and the error message under it; the edge turns
  *   danger and thick, so it isn't only a colour, and the message says what to fix.
- * - disabled: `disabled` on the input; the field is faded and can't be focused.
+ * - disabled: `disabled` on the input; the input is faded and can't be focused.
+ * - read-only: `readonly` on the input (an attribute); as the text field, without the fill and with
+ *   a dashed edge.
  * - the focus ring on the input's :focus-visible.
  *
- * The input is 40px tall at every width, and its digits are 18px, so iOS doesn't zoom in. The
+ * In forced colours the cells' dividers go, and it is a plain field with spaced digits.
+ *
+ * The input is at least 40px tall (the touch target) at every width, and its digits are 18px, so iOS doesn't zoom in. The
  * edge's transition runs on the motion tokens, which drop to 0ms under prefers-reduced-motion.
  */
 
@@ -4582,7 +4588,7 @@
         var(--plinth-one-time-code-gap) + 2 * var(--plinth-border-width-thick)
     );
     max-inline-size: 100%;
-    min-block-size: var(--plinth-control-lg);
+    min-block-size: max(var(--plinth-touch-target), var(--plinth-control-lg));
 
     /*
      * The first cell starts half a gap in, and each digit is followed by one gap (letter-spacing),
@@ -4653,7 +4659,7 @@
   }
 
   @media (hover: hover) {
-    .plinth-one-time-code-input:hover:not(:disabled, [aria-invalid='true']) {
+    .plinth-one-time-code-input:hover:not(:disabled, :read-only, [aria-invalid='true']) {
       border-color: var(--plinth-color-text-subtle);
     }
   }
@@ -4679,6 +4685,12 @@
       color: GrayText;
       border-color: GrayText;
     }
+  }
+
+  /* Without the fill, and with a dashed edge, so it doesn't read as a field to type in. */
+  .plinth-one-time-code-input:read-only:not(:disabled) {
+    background-color: transparent;
+    border-style: dashed;
   }
 }
 

@@ -28,7 +28,8 @@ accepts the right number of digits.
 
 Blade (with Alpine), Vue and React keep only the digits of whatever is typed, pasted or filled in,
 so a paste of _123 456_ or _Your code is 123456_ fills the field, and the code can't grow past its
-length. The plain markup without them still has the pattern and the length, and the form says
+length. The paste is cleaned before the length cuts it; anything typed or filled in past the
+length is cut first. The plain markup without them still has the pattern and the length, and the form says
 when the code doesn't match.
 
 ## Length
@@ -60,8 +61,9 @@ from your app_, not _Invalid code_. It marks the input invalid (`aria-invalid`) 
 red and thicker, so colour isn't the only cue. Clear the field after a wrong code, so the next one
 can be pasted in straight away, and move focus back to it.
 
-**Disabled** fades the field, and it can't be focused or sent; use it while the code is checked,
-not to hide the field.
+**Disabled** fades the input, and it can't be focused or sent; use it while the code is checked,
+not to hide the field. A `readonly` input, as on the [text field](text-field.md), has no fill and
+a dashed edge.
 
 ```blade example
 <x-plinth::one-time-code id="docs-error" label="Verification code" value="204861" error="That code didn't work. Enter the newest one from your app." />
@@ -165,7 +167,7 @@ import { PlinthOneTimeCode } from '@ptbdynamic/plinth/react';
 - **Colour is not the only cue:** an invalid input's edge is thicker as well as red, and the error
   says in words what to fix.
 - **The focus ring** shows on the input whenever it has focus.
-- **Touch:** the input is 40px tall at every width, and its digits are 18px, so iOS doesn't zoom
+- **Touch:** the input is at least 40px tall at every width, and its digits are 18px, so iOS doesn't zoom
   the page.
 - **Autosubmit** sends the form without a button press; say so in the description where the person
   might not expect it, and keep the submit button.

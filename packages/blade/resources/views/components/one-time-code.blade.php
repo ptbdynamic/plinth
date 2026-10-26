@@ -16,13 +16,18 @@
     $id = filled($id) ? trim($id) : 'plinth-one-time-code-'.\Illuminate\Support\Str::lower(\Illuminate\Support\Str::random(8));
     $length = \BDynamic\Plinth\Support\OneTimeCode::length($length);
     // What Vue and React do in the Blade layer, with Alpine: only digits stay, from typing, a paste
-    // or autofill, and with autosubmit the form is sent once every digit is in.
-    $behaviour = '{ length: '.$length.', autosubmit: '.($autosubmit ? 'true' : 'false').', '
+    // or autofill, and with autosubmit the form is sent once every digit is in (once per code).
+    $behaviour = '{ length: '.$length.', autosubmit: '.($autosubmit ? 'true' : 'false').', sent: \'\', '
         .'digits(value) { return value.replace(/\D/g, \'\').slice(0, this.length); }, '
-        .'input() { const code = this.digits(this.$el.value); if (this.$el.value !== code) this.$el.value = code; '
-        .'if (this.autosubmit && code.length === this.length) this.$el.form?.requestSubmit(); }, '
-        .'paste(event) { event.preventDefault(); const text = event.clipboardData?.getData(\'text\') ?? \'\'; '
+        // A cleaned value fires input again, so wire:model and x-model, which read it first, see it.
+        .'input() { const code = this.digits(this.$el.value); '
+        .'if (this.$el.value !== code) { this.$el.value = code; this.$el.dispatchEvent(new Event(\'input\', { bubbles: true })); return; } '
+        .'if (code.length < this.length) { this.sent = \'\'; return; } '
+        .'if (! this.autosubmit || code === this.sent) return; '
+        .'this.sent = code; this.$el.form?.requestSubmit(); }, '
+        .'paste(event) { if (event.defaultPrevented) return; event.preventDefault(); const text = event.clipboardData?.getData(\'text\') ?? \'\'; '
         .'this.$el.value = this.digits(this.$el.value.slice(0, this.$el.selectionStart) + text + this.$el.value.slice(this.$el.selectionEnd)); '
+        .'this.$el.setSelectionRange(this.$el.value.length, this.$el.value.length); '
         .'this.$el.dispatchEvent(new Event(\'input\', { bubbles: true })); } }';
     // The project's class goes on the root; every other attribute on the input, where it wins.
     $input = array_filter([

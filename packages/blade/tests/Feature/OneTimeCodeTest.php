@@ -69,7 +69,10 @@ it('keeps only digits and sends the form with autosubmit, with Alpine', function
     $autosubmit = Blade::render('<x-plinth::one-time-code id="c" label="C" autosubmit />');
 
     expect($plain)
-        ->toContain('x-data="{ length: 6, autosubmit: false, digits(value) { return value.replace(/\D/g, &#039;&#039;)')
+        ->toContain('x-data="{ length: 6, autosubmit: false, sent: &#039;&#039;, digits(value) { return value.replace(/\D/g, &#039;&#039;)')
+        ->toContain('this.$el.dispatchEvent(new Event(&#039;input&#039;, { bubbles: true })); return; }')
+        ->toContain('code === this.sent) return; this.sent = code;')
+        ->toContain('paste(event) { if (event.defaultPrevented) return;')
         ->toContain('x-on:input="input" x-on:paste="paste"')
         ->toContain('requestSubmit()')
         ->and($autosubmit)->toContain('x-data="{ length: 6, autosubmit: true,');

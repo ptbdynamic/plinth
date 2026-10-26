@@ -51,8 +51,9 @@ const attrs = useAttrs();
 const generatedId = useId();
 const inputId = computed(() => props.id?.trim() || `plinth-one-time-code-${generatedId}`);
 const digits = computed(() => oneTimeCodeLength(props.length));
-// The project's class goes on the root; every other attribute on the input, bound last so it
-// wins over Plinth's (docs/adr/0002).
+// The project's class goes on the root; every other attribute on the input, bound after Plinth's
+// so it wins (docs/adr/0002). The project's input listener runs after the digits are cleaned, and
+// its paste listener before Plinth's, which leaves a paste it prevented alone.
 const inputAttrs = computed(() =>
   Object.fromEntries(Object.entries(attrs).filter(([key]) => key !== 'class')),
 );
@@ -69,6 +70,7 @@ function onInput(event: Event) {
 }
 
 function onPaste(event: ClipboardEvent) {
+  if (event.defaultPrevented) return;
   pasteOneTimeCode(event.currentTarget as HTMLInputElement, event, digits.value);
 }
 </script>
@@ -95,8 +97,8 @@ function onPaste(event: ClipboardEvent) {
       :aria-describedby="control.describedBy"
       :aria-invalid="control.invalid ? 'true' : undefined"
       :disabled="disabled || undefined"
-      v-bind="inputAttrs"
       @input="onInput"
+      v-bind="inputAttrs"
       @paste="onPaste"
     />
   </PlinthField>

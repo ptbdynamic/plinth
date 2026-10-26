@@ -136,6 +136,25 @@ describe('PlinthOneTimeCode', () => {
     wrapper.unmount();
   });
 
+  it("leaves a paste alone when the project's listener prevented it, and runs its input listener on the digits", async () => {
+    const seen: string[] = [];
+    const wrapper = codeWith(
+      {},
+      {
+        onPaste: (event: Event) => event.preventDefault(),
+        onInput: (event: Event) => seen.push((event.target as HTMLInputElement).value),
+      },
+    );
+    const input = wrapper.find('input');
+
+    paste(input.element as HTMLInputElement, '123456');
+    expect((input.element as HTMLInputElement).value).toBe('');
+
+    await input.setValue('1a');
+    expect(seen).toEqual(['1']);
+    wrapper.unmount();
+  });
+
   it('pastes at the end when the input has no selection, and with no text', () => {
     const input = document.createElement('input');
     input.value = '12';
