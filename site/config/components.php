@@ -96,6 +96,24 @@ return [
             ],
         ],
 
+        'one-time-code' => [
+            'name' => 'One-time code',
+            'group' => 'Forms',
+            'description' => 'A code from an authenticator app or a text message, as one input in digit cells.',
+            'playground' => [
+                'template' => '<x-plinth::one-time-code label="Verification code" description="Enter the code from your authenticator app."{attributes} />',
+                'options' => [
+                    'length' => ['values' => ['4', '5', '6', '7', '8'], 'default' => '6'],
+                    'error' => [
+                        'values' => ['none', 'shown'],
+                        'default' => 'none',
+                        'print' => ['shown' => 'error="That code didn\'t work. Enter the newest one."'],
+                    ],
+                ],
+                'states' => ['hide-label', 'disabled'],
+            ],
+        ],
+
         'textarea' => [
             'name' => 'Textarea',
             'group' => 'Forms',

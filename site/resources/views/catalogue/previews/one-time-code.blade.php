@@ -1,1 +1,1 @@
-<x-plinth::one-time-code>Content</x-plinth::one-time-code>
+<x-plinth::one-time-code id="preview-one-time-code" label="Verification code" value="204816" />
