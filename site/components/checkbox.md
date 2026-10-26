@@ -41,8 +41,10 @@ error after the label.
 A "select all" box is **indeterminate** when some, but not all, of the boxes it controls are
 checked: it shows a dash. There is no HTML attribute for it, only the input's `indeterminate`
 property, so each layer sets it: Vue and React in an effect, Blade with Alpine (`x-init`), which
-Livewire and Filament already load. Clicking an indeterminate box checks it; the app then checks
-every box it controls.
+Livewire and Filament already load. Blade always prints that `x-init`, with `true` or `false`, so
+a box printed again after a change shows the new state; a project's own `x-init` on the checkbox
+replaces it, so it sets `$el.indeterminate` itself. Clicking an indeterminate box checks it; the
+app then checks every box it controls.
 
 ```blade example
 <x-plinth::checkbox id="docs-all" label="Select all tickets" indeterminate />

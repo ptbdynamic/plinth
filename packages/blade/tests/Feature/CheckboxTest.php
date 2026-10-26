@@ -7,7 +7,7 @@ it('prints the input, the label, the description and the error', function () {
 
     expect(squish($html))->toBe(
         '<div class="plinth-checkbox">'
-        .'<input id="updates" type="checkbox" class="plinth-checkbox-input" aria-describedby="updates-description updates-error" aria-invalid="true">'
+        .'<input id="updates" type="checkbox" class="plinth-checkbox-input" aria-describedby="updates-description updates-error" aria-invalid="true" x-init="$el.indeterminate = false">'
         .'<label class="plinth-checkbox-label" for="updates">Email me updates</label>'
         .'<p id="updates-description" class="plinth-checkbox-description">Once a month.</p>'
         .'<p id="updates-error" class="plinth-checkbox-error">Choose one.</p>'
@@ -23,7 +23,7 @@ it('is unchecked and enabled by default, with nothing to describe it', function 
         ->not->toContain('disabled')
         ->not->toContain('aria-describedby')
         ->not->toContain('aria-invalid')
-        ->not->toContain('x-init')
+        ->toContain('x-init="$el.indeterminate = false"')
         ->not->toContain('<p');
 });
 
@@ -57,5 +57,5 @@ it('puts the class on the root and every other attribute on the input, where it 
 
     expect(squish($html))
         ->toContain('<div class="plinth-checkbox mb-4">')
-        ->toContain('<input id="terms" type="checkbox" class="plinth-checkbox-input" aria-describedby="mine" name="terms" value="1" wire:model.live="terms" x-model="terms" data-testid="terms">');
+        ->toContain('<input id="terms" type="checkbox" class="plinth-checkbox-input" aria-describedby="mine" x-init="$el.indeterminate = false" name="terms" value="1" wire:model.live="terms" x-model="terms" data-testid="terms">');
 });

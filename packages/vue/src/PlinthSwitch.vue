@@ -39,7 +39,8 @@ const hasDescription = computed(() => Boolean(props.description?.trim()));
 const hasError = computed(() => Boolean(props.error?.trim()));
 const describedBy = computed(() => fieldDescribedBy(inputId.value, props.description, props.error));
 // The project's class goes on the root; every other attribute on the input, bound last so it
-// wins over Plinth's (docs/adr/0002).
+// wins over Plinth's (docs/adr/0002). The model's own change listener comes first, so the
+// project's listener sees the new value.
 const inputAttrs = computed(() =>
   Object.fromEntries(Object.entries(attrs).filter(([key]) => key !== 'class')),
 );
@@ -60,8 +61,8 @@ function onChange(event: Event) {
       :disabled="disabled || undefined"
       :aria-describedby="describedBy"
       :aria-invalid="hasError ? 'true' : undefined"
-      v-bind="inputAttrs"
       @change="onChange"
+      v-bind="inputAttrs"
     />
     <label class="plinth-switch-label" :for="inputId">{{ label }}</label>
     <p v-if="hasDescription" :id="`${inputId}-description`" class="plinth-switch-description">

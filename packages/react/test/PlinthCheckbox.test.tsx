@@ -118,4 +118,14 @@ describe('PlinthCheckbox', () => {
     unmount();
     expect(ref).toHaveBeenLastCalledWith(null);
   });
+
+  it("runs a ref callback's cleanup", () => {
+    const cleanup = vi.fn();
+    const ref = vi.fn(() => cleanup);
+    const { unmount } = render(<PlinthCheckbox ref={ref} id="a" label="A" />);
+
+    unmount();
+    expect(cleanup).toHaveBeenCalledOnce();
+    expect(ref).toHaveBeenCalledTimes(1);
+  });
 });

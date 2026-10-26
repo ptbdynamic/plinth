@@ -31,7 +31,7 @@
  * - on: `checked` on the input (the app's; Vue's v-model, React's checked or defaultChecked). The
  *   track fills with the accent colour and the thumb moves to the end, so it isn't only a colour.
  * - error: aria-invalid="true" on the input and the error message under the label, in the
- *   danger text colour; the message says what to fix.
+ *   danger text colour; the track's edge turns danger too, and the message says what to fix.
  * - disabled: `disabled` on the input; the switch and its text are faded and it can't be focused.
  * - the focus ring on the input's :focus-visible.
  *
@@ -65,7 +65,6 @@
     );
 
     box-sizing: border-box;
-    flex: none;
     grid-row: 1;
     grid-column: 1;
     inline-size: var(--plinth-switch-width);
@@ -83,7 +82,7 @@
     background-repeat: no-repeat;
     background-position: var(--plinth-switch-thumb-at) 50%;
     background-size: var(--plinth-switch-thumb-room) var(--plinth-switch-thumb-room);
-    border: var(--plinth-border-width-thin) solid var(--plinth-color-border-strong);
+    border: var(--plinth-border-width-thin) solid var(--plinth-color-text-subtle);
     border-radius: var(--plinth-radius-pill);
     transition:
       background-position var(--plinth-duration-fast) var(--plinth-easing-standard),
@@ -116,11 +115,15 @@
     --plinth-switch-thumb-at: 0%;
   }
 
+  .plinth-switch-input[aria-invalid='true'] {
+    border-color: var(--plinth-color-danger);
+  }
+
   @media (hover: hover) {
-    .plinth-switch-input:hover:enabled:not(:checked) {
+    .plinth-switch-input:hover:enabled:not(:checked, [aria-invalid='true']) {
       --plinth-switch-thumb: var(--plinth-color-text-muted);
 
-      border-color: var(--plinth-color-text-subtle);
+      border-color: var(--plinth-color-text-muted);
     }
 
     .plinth-switch-input:hover:enabled:checked {
@@ -188,6 +191,10 @@
 
       background-color: Highlight;
       border-color: Highlight;
+    }
+
+    .plinth-switch-input:focus-visible {
+      outline-color: Highlight;
     }
 
     .plinth-switch-input:disabled {

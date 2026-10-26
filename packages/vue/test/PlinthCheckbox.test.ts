@@ -1,5 +1,5 @@
 import { mount } from '@vue/test-utils';
-import { nextTick } from 'vue';
+import { defineComponent, h, nextTick, ref } from 'vue';
 import { describe, expect, it } from 'vitest';
 import { PlinthCheckbox } from '../src/index.ts';
 
@@ -45,6 +45,27 @@ describe('PlinthCheckbox', () => {
 
     await input.setValue(false);
     expect(wrapper.emitted('update:modelValue')).toEqual([[false]]);
+  });
+
+  it('updates v-model before a listener of the project hears the change', async () => {
+    const seen: boolean[] = [];
+    const Parent = defineComponent({
+      setup() {
+        const value = ref(false);
+        return () =>
+          h(PlinthCheckbox, {
+            id: 'a',
+            label: 'A',
+            modelValue: value.value,
+            'onUpdate:modelValue': (next: boolean) => (value.value = next),
+            onChange: () => seen.push(value.value),
+          });
+      },
+    });
+    const wrapper = mount(Parent);
+
+    await wrapper.find('input').setValue(true);
+    expect(seen).toEqual([true]);
   });
 
   it('is disabled', () => {

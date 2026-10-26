@@ -33,12 +33,12 @@ export function PlinthCheckbox({
 }: PlinthCheckboxProps) {
   const generatedId = useId();
   // Indeterminate is a property with no attribute, so it is set when the input is attached, and
-  // again when it changes; the project's ref gets the input too.
+  // again when it changes; the project's ref gets the input too, and its cleanup is kept.
   const inputRef = useCallback(
     (element: HTMLInputElement | null) => {
       if (element) element.indeterminate = indeterminate;
-      if (typeof ref === 'function') ref(element);
-      else if (ref) ref.current = element;
+      if (typeof ref === 'function') return ref(element);
+      if (ref) ref.current = element;
     },
     [indeterminate, ref],
   );
