@@ -1,0 +1,165 @@
+/*
+ * One-time code: the code from an authenticator app, an SMS or an email, in a field (field.css),
+ * as one real input styled as a row of monospaced digit cells. One input, not one box per digit,
+ * so paste, the browser's and the phone's autofill, and screen readers work as for any field.
+ *
+ * <div class="plinth-field plinth-one-time-code">
+ *   <label class="plinth-field-label" id="code-label" for="code">Code</label>
+ *   <input id="code" type="text" class="plinth-one-time-code-input" inputmode="numeric"
+ *     autocomplete="one-time-code" pattern="[0-9]{6}" maxlength="6"
+ *     aria-describedby="code-description code-error" aria-invalid="true">
+ *   <p class="plinth-field-description" id="code-description">From your authenticator app.</p>
+ *   <p class="plinth-field-error" id="code-error">That code didn't work. Try the newest one.</p>
+ * </div>
+ *
+ * The root, the label, the description and the error are the field's, with its ids
+ * (.plinth-one-time-code on the root is a hook for a project, with no styles of its own): the input
+ * takes the id, the label points at it with for, and aria-describedby lists the description's
+ * id, then the error's (left out when there is neither).
+ *
+ * - the length (maxlength, with the pattern to match): 4 to 8 digits, 6 by default (also for any
+ *   other); the input is as wide as its cells.
+ * - inputmode="numeric" brings up the number pad, and autocomplete="one-time-code" lets the phone
+ *   offer a code it was sent. The digits are always left to right, in a right-to-left page too.
+ * - only digits: Blade (with Alpine), Vue and React strip anything else from what is typed or
+ *   filled in, and from a paste before maxlength cuts it ("123 456" pasted fills the field); the
+ *   pattern rejects anything else without them.
+ * - autosubmit (a prop): the input's form is sent once every digit is in, once per code. Vue
+ *   emits `complete` and React calls onComplete with the code then too.
+ *
+ * Attributes go to the input, not the root (name, value, required, wire:model, x-model, data-*,
+ * aria-*), so the app talks to the input; only a project's class is added to the root's.
+ *
+ * States:
+ * - error: aria-invalid="true" on the input and the error message under it; the edge turns
+ *   danger and thick, so it isn't only a colour, and the message says what to fix.
+ * - disabled: `disabled` on the input; the input is faded and can't be focused.
+ * - read-only: `readonly` on the input (an attribute); as the text field, without the fill and with
+ *   a dashed edge.
+ * - the focus ring on the input's :focus-visible.
+ *
+ * In forced colours the cells' dividers go, and it is a plain field with spaced digits.
+ *
+ * The input is at least 40px tall (the touch target) at every width, and its digits are 18px, so iOS doesn't zoom in. The
+ * edge's transition runs on the motion tokens, which drop to 0ms under prefers-reduced-motion.
+ */
+
+@layer plinth {
+  .plinth-one-time-code-input {
+    --plinth-one-time-code-length: 6;
+    --plinth-one-time-code-gap: var(--plinth-space-4);
+    --plinth-one-time-code-edge: var(--plinth-border-width-thin);
+    --plinth-one-time-code-cell: calc(1ch + var(--plinth-one-time-code-gap));
+
+    box-sizing: border-box;
+    justify-self: start;
+    inline-size: calc(
+      var(--plinth-one-time-code-length) * var(--plinth-one-time-code-cell) +
+        var(--plinth-one-time-code-gap) + 2 * var(--plinth-border-width-thick)
+    );
+    max-inline-size: 100%;
+    min-block-size: max(var(--plinth-touch-target), var(--plinth-control-lg));
+
+    /*
+     * The first cell starts half a gap in, and each digit is followed by one gap (letter-spacing),
+     * so it sits in the middle of its cell. The padding makes up for the edge, so a thick one
+     * (an error) moves nothing.
+     */
+    padding-block: 0;
+    padding-inline: calc(
+        var(--plinth-one-time-code-gap) + var(--plinth-border-width-thick) -
+          var(--plinth-one-time-code-edge)
+      )
+      calc(var(--plinth-border-width-thick) - var(--plinth-one-time-code-edge));
+    margin: 0;
+    font-family: var(--plinth-font-family-mono);
+    font-size: var(--plinth-font-size-xl);
+    font-variant-numeric: tabular-nums;
+    line-height: var(--plinth-font-leading-tight);
+    color: var(--plinth-color-text);
+    text-align: start;
+    letter-spacing: var(--plinth-one-time-code-gap);
+    appearance: none;
+    background-color: var(--plinth-color-surface-sunken);
+    background-image: repeating-linear-gradient(
+      to right,
+      transparent 0 calc(var(--plinth-one-time-code-cell) - var(--plinth-border-width-thin)),
+      var(--plinth-color-divider)
+        calc(var(--plinth-one-time-code-cell) - var(--plinth-border-width-thin))
+        var(--plinth-one-time-code-cell)
+    );
+    background-repeat: no-repeat;
+    background-position: calc(
+        var(--plinth-border-width-thick) + var(--plinth-one-time-code-gap) / 2 +
+          var(--plinth-border-width-thin) / 2
+      )
+      center;
+    background-origin: border-box;
+    background-size: calc(
+        (var(--plinth-one-time-code-length) - 1) * var(--plinth-one-time-code-cell)
+      )
+      50%;
+    border: var(--plinth-one-time-code-edge) solid var(--plinth-color-border-strong);
+    border-radius: var(--plinth-radius-control);
+
+    /* The cells and their dividers are drawn left to right, as the digits are. */
+    direction: ltr;
+    transition: border-color var(--plinth-duration-fast) var(--plinth-easing-standard);
+  }
+
+  .plinth-one-time-code-input[maxlength='4'] {
+    --plinth-one-time-code-length: 4;
+  }
+
+  .plinth-one-time-code-input[maxlength='5'] {
+    --plinth-one-time-code-length: 5;
+  }
+
+  .plinth-one-time-code-input[maxlength='7'] {
+    --plinth-one-time-code-length: 7;
+  }
+
+  .plinth-one-time-code-input[maxlength='8'] {
+    --plinth-one-time-code-length: 8;
+  }
+
+  .plinth-one-time-code-input::placeholder {
+    color: var(--plinth-color-text-subtle);
+    opacity: 1;
+  }
+
+  @media (hover: hover) {
+    .plinth-one-time-code-input:hover:not(:disabled, :read-only, [aria-invalid='true']) {
+      border-color: var(--plinth-color-text-subtle);
+    }
+  }
+
+  .plinth-one-time-code-input:focus-visible {
+    outline: var(--plinth-focus-ring-width) solid var(--plinth-color-focus-ring);
+    outline-offset: var(--plinth-focus-ring-offset);
+  }
+
+  .plinth-one-time-code-input[aria-invalid='true'] {
+    --plinth-one-time-code-edge: var(--plinth-border-width-thick);
+
+    border-color: var(--plinth-color-danger);
+  }
+
+  .plinth-one-time-code-input:disabled {
+    cursor: not-allowed;
+    opacity: var(--plinth-opacity-disabled);
+  }
+
+  @media (forced-colors: active) {
+    .plinth-one-time-code-input:disabled {
+      color: GrayText;
+      border-color: GrayText;
+    }
+  }
+
+  /* Without the fill, and with a dashed edge, so it doesn't read as a field to type in. */
+  .plinth-one-time-code-input:read-only:not(:disabled) {
+    background-color: transparent;
+    border-style: dashed;
+  }
+}

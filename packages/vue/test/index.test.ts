@@ -36,6 +36,7 @@ import {
   PlinthNavList,
   PlinthNavListGroup,
   PlinthNavListItem,
+  PlinthOneTimeCode,
   PlinthPageHeader,
   PlinthPill,
   PlinthPillRow,
@@ -95,6 +96,7 @@ describe('the Plinth plugin', () => {
     expect(app.component('PlinthNavList')).toBe(PlinthNavList);
     expect(app.component('PlinthNavListGroup')).toBe(PlinthNavListGroup);
     expect(app.component('PlinthNavListItem')).toBe(PlinthNavListItem);
+    expect(app.component('PlinthOneTimeCode')).toBe(PlinthOneTimeCode);
     expect(app.component('PlinthPageHeader')).toBe(PlinthPageHeader);
     expect(app.component('PlinthPill')).toBe(PlinthPill);
     expect(app.component('PlinthPillRow')).toBe(PlinthPillRow);
