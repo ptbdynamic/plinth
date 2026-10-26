@@ -8,6 +8,7 @@ import {
   PlinthBadge,
   PlinthButton,
   PlinthCallout,
+  PlinthCheckbox,
   PlinthCodeBlock,
   PlinthConfirmDialog,
   PlinthDataTable,
@@ -42,6 +43,7 @@ import {
   PlinthSplitView,
   PlinthStat,
   PlinthOneTimeCode,
+  PlinthSwitch,
   PlinthTextarea,
   PlinthTextField,
   PlinthTimeline,
@@ -95,6 +97,8 @@ import {
   PlinthSheet as ReactSheet,
   PlinthSplitView as ReactSplitView,
   PlinthStat as ReactStat,
+  PlinthSwitch as ReactSwitch,
+  PlinthCheckbox as ReactCheckbox,
   PlinthField as ReactField,
   PlinthOneTimeCode as ReactOneTimeCode,
   PlinthTextarea as ReactTextarea,
@@ -226,6 +230,10 @@ import * as oneTimeCodeStories from '../stories/components/OneTimeCode.stories.t
 import { oneTimeCode, type OneTimeCodeArgs } from '../stories/components/one-time-code.ts';
 import * as textareaStories from '../stories/components/Textarea.stories.ts';
 import { textarea, type TextareaArgs } from '../stories/components/textarea.ts';
+import * as checkboxStories from '../stories/components/Checkbox.stories.ts';
+import { checkbox, type CheckboxArgs } from '../stories/components/checkbox.ts';
+import * as switchStories from '../stories/components/Switch.stories.ts';
+import { switchControl, type SwitchArgs } from '../stories/components/switch.ts';
 import * as textFieldStories from '../stories/components/TextField.stories.ts';
 import { textField, type TextFieldArgs } from '../stories/components/text-field.ts';
 import * as timelineStories from '../stories/components/Timeline.stories.ts';
@@ -342,6 +350,8 @@ const reactComponents = new Map<Component, unknown>([
   [PlinthOneTimeCode, ReactOneTimeCode],
   [PlinthTextarea, ReactTextarea],
   [PlinthTextField, ReactTextField],
+  [PlinthCheckbox, ReactCheckbox],
+  [PlinthSwitch, ReactSwitch],
   [PlinthTimeline, ReactTimeline],
   [PlinthTimelineEvent, ReactTimelineEvent],
   [PlinthTimelinePost, ReactTimelinePost],
@@ -543,6 +553,21 @@ const textFieldDefaults: TextFieldArgs = {
   size: 'md',
   disabled: false,
   readonly: false,
+};
+
+const checkboxDefaults: CheckboxArgs = {
+  id: 'updates',
+  label: 'Email me product updates',
+  checked: false,
+  indeterminate: false,
+  disabled: false,
+};
+
+const switchDefaults: SwitchArgs = {
+  id: 'enabled',
+  label: 'Enabled',
+  checked: false,
+  disabled: false,
 };
 
 const textareaDefaults: TextareaArgs = {
@@ -1668,6 +1693,46 @@ const cases: ParityCase[] = [
     label: 'Name <b>',
     value: '"quoted" & <tag>',
     description: 'A & B',
+    error: 'Not <this>',
+  }),
+  ...storyArgs<CheckboxArgs>(checkboxStories).map(([story, args]) =>
+    checkboxCase(`Checkbox/${story}`, args),
+  ),
+  checkboxCase('Checkbox/with extra attributes', checkboxDefaults, {
+    class: 'mb-4',
+    name: 'updates',
+    value: '1',
+    'data-testid': 'updates',
+    'aria-label': 'Product updates',
+  }),
+  checkboxCase(
+    'Checkbox/with a clashing attribute',
+    { ...checkboxDefaults, description: 'About once a month.' },
+    { 'aria-describedby': 'my-help' },
+  ),
+  checkboxCase('Checkbox/blank messages', { ...checkboxDefaults, description: ' ', error: '' }),
+  checkboxCase('Checkbox/escaped text', {
+    ...checkboxDefaults,
+    label: 'Fish & <chips>',
+    description: '"Quotes" & <tags>',
+    error: 'Not <this>',
+  }),
+  ...storyArgs<SwitchArgs>(switchStories).map(([story, args]) =>
+    switchCase(`Switch/${story}`, args),
+  ),
+  switchCase('Switch/with extra attributes', switchDefaults, {
+    class: 'mb-4',
+    name: 'enabled',
+    value: '1',
+    'data-testid': 'enabled',
+    'aria-label': 'Provider enabled',
+  }),
+  switchCase('Switch/with a clashing attribute', switchDefaults, { role: 'checkbox' }),
+  switchCase('Switch/blank messages', { ...switchDefaults, description: '', error: ' ' }),
+  switchCase('Switch/escaped text', {
+    ...switchDefaults,
+    label: 'Fish & <chips>',
+    description: '"Quotes" & <tags>',
     error: 'Not <this>',
   }),
   ...storyArgs<TextareaArgs>(textareaStories).map(([story, args]) =>
@@ -2992,6 +3057,47 @@ function oneTimeCodeCase(
   };
 }
 
+/** A checkbox's or a switch's props, and `checked`, which goes to the input as an attribute. */
+function choiceCase(
+  story: string,
+  markup: string,
+  component: Component,
+  args: Omit<CheckboxArgs, 'indeterminate'> & { indeterminate?: boolean },
+  attributes: Attributes,
+): ParityCase {
+  const props = {
+    id: args.id,
+    label: args.label,
+    disabled: args.disabled,
+    ...(args.indeterminate !== undefined ? { indeterminate: args.indeterminate } : {}),
+    ...(args.description !== undefined ? { description: args.description } : {}),
+    ...(args.error !== undefined ? { error: args.error } : {}),
+  };
+  return {
+    story,
+    markup,
+    vue: {
+      component,
+      props: { ...props, ...(args.checked ? { checked: true } : {}), ...attributes },
+      slot: '',
+    },
+    blade: {
+      component: component === PlinthCheckbox ? 'checkbox' : 'switch',
+      props,
+      attributes: { ...(args.checked ? { checked: '' } : {}), ...attributes },
+      slot: '',
+    },
+  };
+}
+
+function checkboxCase(story: string, args: CheckboxArgs, attributes: Attributes = {}): ParityCase {
+  return choiceCase(story, checkbox(args, attributes), PlinthCheckbox, args, attributes);
+}
+
+function switchCase(story: string, args: SwitchArgs, attributes: Attributes = {}): ParityCase {
+  return choiceCase(story, switchControl(args, attributes), PlinthSwitch, args, attributes);
+}
+
 function fieldCase(story: string, args: FieldArgs, attributes: Attributes = {}): ParityCase {
   const props = {
     id: args.id,
@@ -3597,6 +3703,29 @@ describe('parity with the stories', () => {
       'Text field/unknown size and blank messages',
       'Text field/with a description and an error',
       'Text field/escaped text',
+      'Checkbox/Default',
+      'Checkbox/Checked',
+      'Checkbox/Indeterminate',
+      'Checkbox/WithDescription',
+      'Checkbox/WithError',
+      'Checkbox/Disabled',
+      'Checkbox/DisabledChecked',
+      'Checkbox/LongLabel',
+      'Checkbox/with extra attributes',
+      'Checkbox/with a clashing attribute',
+      'Checkbox/blank messages',
+      'Checkbox/escaped text',
+      'Switch/Default',
+      'Switch/On',
+      'Switch/WithDescription',
+      'Switch/WithError',
+      'Switch/Disabled',
+      'Switch/DisabledOn',
+      'Switch/LongLabel',
+      'Switch/with extra attributes',
+      'Switch/with a clashing attribute',
+      'Switch/blank messages',
+      'Switch/escaped text',
       'Textarea/Default',
       'Textarea/WithDescription',
       'Textarea/WithError',

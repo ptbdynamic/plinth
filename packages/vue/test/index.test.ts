@@ -11,6 +11,7 @@ import {
   PlinthBadge,
   PlinthButton,
   PlinthCallout,
+  PlinthCheckbox,
   PlinthCodeBlock,
   PlinthConfirmDialog,
   PlinthDataTable,
@@ -45,6 +46,7 @@ import {
   PlinthSheet,
   PlinthSplitView,
   PlinthStat,
+  PlinthSwitch,
   PlinthTextarea,
   PlinthTextField,
   PlinthTimeline,
@@ -71,6 +73,7 @@ describe('the Plinth plugin', () => {
     expect(app.component('PlinthBadge')).toBe(PlinthBadge);
     expect(app.component('PlinthButton')).toBe(PlinthButton);
     expect(app.component('PlinthCallout')).toBe(PlinthCallout);
+    expect(app.component('PlinthCheckbox')).toBe(PlinthCheckbox);
     expect(app.component('PlinthCodeBlock')).toBe(PlinthCodeBlock);
     expect(app.component('PlinthConfirmDialog')).toBe(PlinthConfirmDialog);
     expect(app.component('PlinthDataTable')).toBe(PlinthDataTable);
@@ -105,6 +108,7 @@ describe('the Plinth plugin', () => {
     expect(app.component('PlinthSheet')).toBe(PlinthSheet);
     expect(app.component('PlinthSplitView')).toBe(PlinthSplitView);
     expect(app.component('PlinthStat')).toBe(PlinthStat);
+    expect(app.component('PlinthSwitch')).toBe(PlinthSwitch);
     expect(app.component('PlinthTextarea')).toBe(PlinthTextarea);
     expect(app.component('PlinthTextField')).toBe(PlinthTextField);
     expect(app.component('PlinthTimeline')).toBe(PlinthTimeline);

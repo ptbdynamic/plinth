@@ -8,6 +8,7 @@ import PlinthAvatar from './PlinthAvatar.vue';
 import PlinthBadge from './PlinthBadge.vue';
 import PlinthButton from './PlinthButton.vue';
 import PlinthCallout from './PlinthCallout.vue';
+import PlinthCheckbox from './PlinthCheckbox.vue';
 import PlinthCodeBlock from './PlinthCodeBlock.vue';
 import PlinthConfirmDialog from './PlinthConfirmDialog.vue';
 import PlinthDataTable from './PlinthDataTable.vue';
@@ -42,6 +43,7 @@ import PlinthSectionMenuItem from './PlinthSectionMenuItem.vue';
 import PlinthSheet from './PlinthSheet.vue';
 import PlinthSplitView from './PlinthSplitView.vue';
 import PlinthStat from './PlinthStat.vue';
+import PlinthSwitch from './PlinthSwitch.vue';
 import PlinthTextarea from './PlinthTextarea.vue';
 import PlinthTextField from './PlinthTextField.vue';
 import PlinthTimeline from './PlinthTimeline.vue';
@@ -63,6 +65,7 @@ export {
   PlinthBadge,
   PlinthButton,
   PlinthCallout,
+  PlinthCheckbox,
   PlinthCodeBlock,
   PlinthConfirmDialog,
   PlinthDataTable,
@@ -97,6 +100,7 @@ export {
   PlinthSheet,
   PlinthSplitView,
   PlinthStat,
+  PlinthSwitch,
   PlinthTextarea,
   PlinthTextField,
   PlinthTimeline,
@@ -194,6 +198,7 @@ export const Plinth: Plugin = {
     app.component('PlinthBadge', PlinthBadge);
     app.component('PlinthButton', PlinthButton);
     app.component('PlinthCallout', PlinthCallout);
+    app.component('PlinthCheckbox', PlinthCheckbox);
     app.component('PlinthCodeBlock', PlinthCodeBlock);
     app.component('PlinthConfirmDialog', PlinthConfirmDialog);
     app.component('PlinthDataTable', PlinthDataTable);
@@ -228,6 +233,7 @@ export const Plinth: Plugin = {
     app.component('PlinthSheet', PlinthSheet);
     app.component('PlinthSplitView', PlinthSplitView);
     app.component('PlinthStat', PlinthStat);
+    app.component('PlinthSwitch', PlinthSwitch);
     app.component('PlinthTextarea', PlinthTextarea);
     app.component('PlinthTextField', PlinthTextField);
     app.component('PlinthTimeline', PlinthTimeline);
