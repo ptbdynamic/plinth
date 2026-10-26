@@ -1,5 +1,32 @@
 # Changelog
 
+## 0.3.0 (2026-10-26)
+
+### New components
+
+- App nav (`<x-plinth::app-nav>`, `PlinthAppNav`, with `app-nav-item`): the app's main navigation, a 240px sidebar from 1280px and a 56px rail of icons from 768px, with the logo, items with an icon, a label and an optional count, and an optional footer; on a phone the menu sheet holds the same items. New tokens: `--plinth-app-nav-width`, `--plinth-app-nav-rail-width`, `--plinth-size-sidebar` and `--plinth-size-rail`.
+- App shell, app bar and split view (`<x-plinth::app-shell>`, `app-bar`, `app-bar-search`, `split-view`; `PlinthAppShell`, `PlinthAppBar`, `PlinthAppBarSearch`, `PlinthSplitView`; ADR 8): the frame of an app, with the app nav on the start side, the app bar (search, actions, account) above the content, and the page in a `<main>` that scrolls on its own from 768px. The split view shows a list beside its detail from 768px and a secondary column from 1280px; on a phone `pane` picks the one pane, and `secondary-closed` collapses the column. New tokens: `--plinth-app-bar-height`, `--plinth-app-bar-search-width`, `--plinth-split-view-list-width`, `--plinth-split-view-secondary-width`, `--plinth-size-list` and `--plinth-size-search`.
+- Checkbox and switch (`<x-plinth::checkbox>`, `<x-plinth::switch>`; `PlinthCheckbox`, `PlinthSwitch`): a native checkbox (the switch with the switch role) with its label beside it and an optional description and error, for `v-model` or a plain form; the checkbox can be indeterminate. New tokens: `--plinth-switch-width` and `--plinth-switch-height`.
+- Empty state (`<x-plinth::empty-state>`, `PlinthEmptyState`): a calm, centred message for a screen or section with nothing to show yet, with a heading and an optional icon, description and action; plain inside a card, or `framed` for a page section, and it takes a data table's empty cell padding.
+- Field (`<x-plinth::field>`, `PlinthField`): a label, an optional description and an error around a control the app brings, or with `group` a fieldset and legend around a group of controls. Blade's `Field::describedBy()`, Vue's slot props and React's children function give the control its ids; `fieldControl()` is exported from Vue and React.
+- List header (`<x-plinth::list-header>`, `PlinthListHeader`): the bar on top of a list, with its heading, an optional count and its actions; while the app selects rows, `selection` (such as _2 selected_) takes the heading's place in a status region. New token: `--plinth-list-header-height`.
+- Nav list (`<x-plinth::nav-list>`, `nav-list-group`, `nav-list-item`; `PlinthNavList`, `PlinthNavListGroup`, `PlinthNavListItem`): a vertical list of links for a page's own navigation, in groups under optional headings, with optional counts; the current item (`aria-current="page"`) takes a tint, a 2px accent edge and a heavier label.
+- One-time code (`<x-plinth::one-time-code>`, `PlinthOneTimeCode`): one input styled as a row of 4 to 8 digit cells (6 by default) for a two-factor code, with the number pad and the phone's code suggestion; it keeps only digits, and with `autosubmit` sends the form once every digit is in (Vue emits `complete`, React calls `onComplete`).
+- Stat (`<x-plinth::stat>`, `PlinthStat`): one metric on a dashboard tile, with a label, the value and an optional supporting line whose tone (success, warning, danger) adds its own icon; with `href` the tile links to the detail, and a missing value shows an em dash with an empty label for screen readers.
+- Timeline (`<x-plinth::timeline>`, `timeline-post`, `timeline-event`; `PlinthTimeline`, `PlinthTimelinePost`, `PlinthTimelineEvent`): a conversation or activity feed on one vertical line. Posts have the author's avatar ringed by `kind` (`team`, `customer` or `note`), a meta line, a `reference` from 1280px, the body and quiet actions; a note sits in a warning-tinted box under an _Internal note_ badge; events are a dot and one sentence. Blade has the `TimelineKind` enum, Vue and React `timelineKinds`. New tokens: `--plinth-timeline-note-surface` and `--plinth-timeline-note-border`.
+- Toolbar (`<x-plinth::toolbar>`, `toolbar-search`, `toolbar-scope`, `toolbar-group`, `toolbar-action`; `PlinthToolbar` and the matching Vue and React parts): the row of actions under a page header from 768px, with a search field and its scope button, the `target` the actions act on, grouped actions and the app's ⋯ menu. It responds to its own width: labels show from 1024px of room, `overflow` actions hide below it and `data-overflow` menu items show only there. It is a `role="toolbar"` with one tab stop and arrow keys (`toolbarKeys` in Vue and React). New tokens: `--plinth-toolbar-height`, `--plinth-toolbar-search-width` and `--plinth-toolbar-search-min-width`.
+
+### Changes
+
+- The icon has a built-in set of interface glyphs, used by name (`name` on the icon, `icon` on the icon button): menu, close, back, chevron-left, chevron-right, chevron-up, chevron-down, check, plus, search, more, external, sign-out, sun, moon, system, info and warning. The glyph prints `data-icon`, directional glyphs mirror in right-to-left text, and an unknown name shows the slot. Blade has the `Glyph` enum; Vue and React export `iconNames`, `iconGlyphs`, `iconGlyph()`, `iconName()`, `mirroredIconNames` and the `IconName` type.
+- The dialog, drawer and sheet draw their close button with the `close` glyph, and the list row and stat their chevron with `chevron-right`; their markup gains `data-icon`, and nothing else changes. `sheetCloseIcon`, `dialogCloseIcon`, `drawerCloseIcon`, `listRowChevron` and `statChevron` are still exported.
+- List rows can be selectable: `selectable` makes the row a `<label>` with a checkbox in the leading slot that never navigates, set by `selected`, `name` and `value`; Vue emits `update:selected` and React calls `onSelectedChange`.
+- The code block has a download action: give `download` a file name and a Download button follows Copy, saving the code as a text file; `download-label` and `downloaded-label` set its words, Vue emits `downloaded` and React calls `onDownloaded`.
+
+### Fixes
+
+- The installation guide tells projects to set Vite's `build.cssTarget` to Plinth's browsers, so `:dir(rtl)` survives minifying and icons and other right-to-left rules flip.
+
 ## 0.2.0 (2026-10-25)
 
 ### New
