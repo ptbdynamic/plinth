@@ -66,7 +66,7 @@ the same `name` with `[]` so a form sends the checked ones as a list.
 
 ## Disabled
 
-**Disabled** fades the checkbox and its text, and it can't be focused or sent with the form. Say
+**Disabled** fades the checkbox and its label, and it can't be focused or sent with the form. Say
 why in the description, when the reason isn't plain.
 
 ```blade example

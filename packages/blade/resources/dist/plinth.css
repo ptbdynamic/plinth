@@ -1709,7 +1709,7 @@
  *   danger text colour; the message says what to fix, so it isn't only a colour. Checked, the box
  *   fills with the danger colour; the browser draws an unchecked box's edge, so there the message
  *   alone carries the error.
- * - disabled: `disabled` on the input; the checkbox and its text are faded and it can't be
+ * - disabled: `disabled` on the input; the checkbox and its label are faded and it can't be
  *   focused.
  * - the focus ring on the input's :focus-visible.
  *
@@ -1786,7 +1786,8 @@
     color: var(--plinth-color-danger-text);
   }
 
-  .plinth-checkbox:has(> .plinth-checkbox-input:disabled) {
+  /* The control and its label fade; the description stays readable, since it may say why. */
+  .plinth-checkbox:has(> .plinth-checkbox-input:disabled) > :is(.plinth-checkbox-input, .plinth-checkbox-label) {
     opacity: var(--plinth-opacity-disabled);
   }
 
@@ -5952,7 +5953,7 @@
  *   track fills with the accent colour and the thumb moves to the end, so it isn't only a colour.
  * - error: aria-invalid="true" on the input and the error message under the label, in the
  *   danger text colour; the track's edge turns danger too, and the message says what to fix.
- * - disabled: `disabled` on the input; the switch and its text are faded and it can't be focused.
+ * - disabled: `disabled` on the input; the switch and its label are faded and it can't be focused.
  * - the focus ring on the input's :focus-visible.
  *
  * The track is --plinth-switch-width by --plinth-switch-height (32 by 20px); the thumb is drawn in
@@ -6081,7 +6082,8 @@
     color: var(--plinth-color-danger-text);
   }
 
-  .plinth-switch:has(> .plinth-switch-input:disabled) {
+  /* The control and its label fade; the description stays readable, since it may say why. */
+  .plinth-switch:has(> .plinth-switch-input:disabled) > :is(.plinth-switch-input, .plinth-switch-label) {
     opacity: var(--plinth-opacity-disabled);
   }
 

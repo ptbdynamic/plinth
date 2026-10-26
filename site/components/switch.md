@@ -52,7 +52,7 @@ the one that failed.
 
 ## Disabled
 
-**Disabled** fades the switch and its text, and it can't be focused or sent with the form. Say why
+**Disabled** fades the switch and its label, and it can't be focused or sent with the form. Say why
 in the description, when the reason isn't plain.
 
 ```blade example
