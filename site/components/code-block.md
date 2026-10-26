@@ -1,8 +1,9 @@
 # Code block
 
-A block of code with an optional file name or label, a copy button and optional language tabs
-(Blade, Vue, React, HTML). Use it for install commands, configuration and examples. The code
-keeps its lines and scrolls sideways inside its own box on a phone, never the page.
+A block of code with an optional file name or label, a copy button, an optional download button
+and optional language tabs (Blade, Vue, React, HTML). Use it for install commands, configuration,
+recovery codes and examples. The code keeps its lines and scrolls sideways inside its own box on a
+phone, never the page.
 
 ## When not to use it
 
@@ -71,6 +72,40 @@ status are left out, and with neither the header hides.
 <x-plinth::code-block :copy="false">npm run build</x-plinth::code-block>
 ```
 
+## Download
+
+Give `download` a file name and a _Download_ button follows _Copy_: it saves the code that shows
+as a text file of that name, such as recovery codes after turning on two-factor authentication.
+The file is made in the browser, from a Blob and a temporary link; nothing is sent anywhere.
+With `copy` off, the download button takes the copy button's place.
+
+```blade example layout="stack"
+<x-plinth::code-block label="Recovery codes" download="recovery-codes.txt">k7q2-9xmf
+p4wd-h3ra
+z8nc-2tle
+b6yv-m5ks</x-plinth::code-block>
+```
+
+```blade tab="Blade"
+<x-plinth::code-block label="Recovery codes" download="recovery-codes.txt">{{ $codes }}</x-plinth::code-block>
+```
+
+```vue tab="Vue"
+<PlinthCodeBlock
+    label="Recovery codes"
+    download="recovery-codes.txt"
+    @downloaded="track"
+>{{ codes }}</PlinthCodeBlock>
+```
+
+```tsx tab="React"
+<PlinthCodeBlock label="Recovery codes" download="recovery-codes.txt" onDownloaded={track}>
+    {codes}
+</PlinthCodeBlock>
+```
+
+With tabs, it saves the code of the checked tab, under the same file name.
+
 ## A label with markup
 
 The label may hold a little markup, such as a badge: the `label` slot in Blade and Vue, a node in
@@ -94,7 +129,8 @@ React.
 | `.plinth-code-block-tab`       | `<label>`                      | with tabs            | One tab                                                      |
 | `.plinth-code-block-tab-input` | `<input type="radio">`         | with tabs            | The radio, covering its tab; `checked` on the one that shows |
 | `.plinth-code-block-copy`      | `<button>` (the button)        | unless `copy` is off | Copies the code that shows; printed `hidden`                 |
-| `.plinth-code-block-status`    | `<span role="status">`         | unless `copy` is off | Says _Copied_ to a screen reader; not shown                  |
+| `.plinth-code-block-status`    | `<span role="status">`         | after each button    | Says _Copied_ or _Downloaded_ to a screen reader; not shown  |
+| `.plinth-code-block-download`  | `<button>` (the button)        | with `download`      | Saves the code that shows as a file; printed `hidden`        |
 | `.plinth-code-block-code`      | `<pre dir="ltr" tabindex="0">` | yes, one per tab     | The code, in a `<code>`                                      |
 
 | Attribute or state | On               | Values                                           | Default       |
@@ -103,20 +139,24 @@ React.
 | `checked`          | one tab's input  | the tab that shows                               | the first tab |
 | `aria-label`       | the radio group  | the tabs' name                                   | _Language_    |
 | `hidden`           | the copy button  | removed by the layer when the clipboard is there | printed       |
+| `hidden`           | the download     | removed by the layer once it runs                | printed       |
 
 ## Props
 
-| Prop        | Blade                                                | Vue                                | React                 | Default    |
-| ----------- | ---------------------------------------------------- | ---------------------------------- | --------------------- | ---------- |
-| the code    | the slot                                             | the default slot, or `html`        | `children`, or `html` | none       |
-| label       | `label`, or `<x-slot:label>`                         | `label`, or the `label` slot       | `label` (a node)      | none       |
-| tabs        | `tabs`: `[['label' => …, 'code' => …, 'html' => …]]` | `tabs`: `{ label, code, html? }[]` | `tabs`                | none       |
-| selected    | `selected`                                           | `selected`                         | `selected`            | first tab  |
-| tabsLabel   | `tabs-label`                                         | `tabs-label`                       | `tabsLabel`           | _Language_ |
-| copy        | `:copy="false"`                                      | `:copy="false"`                    | `copy={false}`        | `true`     |
-| copyLabel   | `copy-label`                                         | `copy-label`                       | `copyLabel`           | _Copy_     |
-| copiedLabel | `copied-label`                                       | `copied-label`                     | `copiedLabel`         | _Copied_   |
-| id          | `id`                                                 | `id`                               | `id`                  | none       |
+| Prop            | Blade                                                | Vue                                | React                 | Default      |
+| --------------- | ---------------------------------------------------- | ---------------------------------- | --------------------- | ------------ |
+| the code        | the slot                                             | the default slot, or `html`        | `children`, or `html` | none         |
+| label           | `label`, or `<x-slot:label>`                         | `label`, or the `label` slot       | `label` (a node)      | none         |
+| tabs            | `tabs`: `[['label' => …, 'code' => …, 'html' => …]]` | `tabs`: `{ label, code, html? }[]` | `tabs`                | none         |
+| selected        | `selected`                                           | `selected`                         | `selected`            | first tab    |
+| tabsLabel       | `tabs-label`                                         | `tabs-label`                       | `tabsLabel`           | _Language_   |
+| copy            | `:copy="false"`                                      | `:copy="false"`                    | `copy={false}`        | `true`       |
+| copyLabel       | `copy-label`                                         | `copy-label`                       | `copyLabel`           | _Copy_       |
+| copiedLabel     | `copied-label`                                       | `copied-label`                     | `copiedLabel`         | _Copied_     |
+| download        | `download="codes.txt"`                               | `download`                         | `download`            | none         |
+| downloadLabel   | `download-label`                                     | `download-label`                   | `downloadLabel`       | _Download_   |
+| downloadedLabel | `downloaded-label`                                   | `downloaded-label`                 | `downloadedLabel`     | _Downloaded_ |
+| id              | `id`                                                 | `id`                               | `id`                  | none         |
 
 In Blade the slot is printed as it is given: `{{ $code }}` escapes plain code, and
 `{!! $highlighted !!}` prints a highlighter's markup. In Vue and React the code is text, and
@@ -128,9 +168,9 @@ variable in Blade, a bound value in Vue and React): code written straight into a
 JSX loses its line breaks, and in Blade the template's indentation ends up in the block.
 
 The app's attributes (`class`, `id`, `wire:*`, `x-*`, `data-*`, `aria-*`) reach the root `<div>`.
-Blade shows and wires the copy button with Alpine, which Livewire and Filament already load; Vue
-and React show it once mounted. Vue emits **`copied`** with the text, and React calls
-**`onCopied`**.
+Blade shows and wires the copy and download buttons with Alpine, which Livewire and Filament
+already load; Vue and React show them once mounted. Vue emits **`copied`** and **`downloaded`**
+with the text, and React calls **`onCopied`** and **`onDownloaded`**.
 
 ```blade tab="Blade"
 <x-plinth::code-block label=".env">{{ $env }}</x-plinth::code-block>
@@ -160,6 +200,9 @@ import { PlinthCodeBlock } from '@ptbdynamic/plinth/react';
 - The copy button is a real `<button>` with the button's 40px touch target. It is printed
   `hidden`, so it never shows where it can't work. After copying it says _Copied_ for two seconds,
   and the status, a polite live region, says the same to a screen reader.
+- The download button is a real `<button>` too, printed `hidden` until the layer runs. After
+  saving it says _Downloaded_ for two seconds, and its own status says the same to a screen
+  reader.
 - The code reads left to right (`dir="ltr"`) on a right-to-left page too.
 - In forced colours, the checked tab takes the system highlight.
 

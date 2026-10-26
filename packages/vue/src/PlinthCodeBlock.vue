@@ -2,7 +2,13 @@
 // Markup contract: packages/css/src/components/code-block.css
 import { computed, onBeforeUnmount, onMounted, ref, useId, useSlots } from 'vue';
 import PlinthButton from './PlinthButton.vue';
-import { checkedTab, codeBlockTabs, codeBlockText, type CodeBlockTab } from './code-block';
+import {
+  checkedTab,
+  codeBlockTabs,
+  codeBlockText,
+  downloadText,
+  type CodeBlockTab,
+} from './code-block';
 import { hasContent } from './slots';
 
 const props = withDefaults(
@@ -24,6 +30,11 @@ const props = withDefaults(
     copyLabel?: string;
     /** What the button and the status say for two seconds after copying. */
     copiedLabel?: string;
+    /** The file name the download button saves the code as (a .txt); no button without one. */
+    download?: string;
+    downloadLabel?: string;
+    /** What the download button and its status say for two seconds after saving. */
+    downloadedLabel?: string;
   }>(),
   {
     id: undefined,
@@ -35,12 +46,17 @@ const props = withDefaults(
     copy: true,
     copyLabel: 'Copy',
     copiedLabel: 'Copied',
+    download: undefined,
+    downloadLabel: 'Download',
+    downloadedLabel: 'Downloaded',
   },
 );
 
 const emit = defineEmits<{
   /** The code was copied to the clipboard. */
   copied: [text: string];
+  /** The code was saved as a file. */
+  downloaded: [text: string];
 }>();
 
 const slots = useSlots();
@@ -50,16 +66,24 @@ const name = computed(() => `${rootId.value ?? `plinth-code-block-${generatedId}
 const shownTabs = computed(() => codeBlockTabs(props.tabs));
 // Only the first tab to show is the app's: after that the radios keep the reader's choice.
 const checked = checkedTab(codeBlockTabs(props.tabs), props.selected);
+const filename = computed(() => props.download?.trim() || undefined);
 
-// The clipboard is only there in the browser, so the button shows once mounted.
+// The clipboard and downloads are only there in the browser, so the buttons show once mounted.
+const mounted = ref(false);
 const canCopy = ref(false);
 const copied = ref(false);
+const downloaded = ref(false);
 let timer: ReturnType<typeof setTimeout> | undefined;
+let downloadTimer: ReturnType<typeof setTimeout> | undefined;
 
 onMounted(() => {
+  mounted.value = true;
   canCopy.value = Boolean(navigator.clipboard);
 });
-onBeforeUnmount(() => clearTimeout(timer));
+onBeforeUnmount(() => {
+  clearTimeout(timer);
+  clearTimeout(downloadTimer);
+});
 
 async function copyCode(event: MouseEvent) {
   const text = codeBlockText(event.currentTarget as Element);
@@ -72,6 +96,15 @@ async function copyCode(event: MouseEvent) {
   clearTimeout(timer);
   timer = setTimeout(() => (copied.value = false), 2000);
   emit('copied', text);
+}
+
+function downloadCode(event: MouseEvent) {
+  const text = codeBlockText(event.currentTarget as Element);
+  downloadText(filename.value!, text);
+  downloaded.value = true;
+  clearTimeout(downloadTimer);
+  downloadTimer = setTimeout(() => (downloaded.value = false), 2000);
+  emit('downloaded', text);
 }
 </script>
 
@@ -108,6 +141,19 @@ async function copyCode(event: MouseEvent) {
           >{{ copied ? copiedLabel : copyLabel }}</PlinthButton
         >
         <span class="plinth-code-block-status" role="status">{{ copied ? copiedLabel : '' }}</span>
+      </template>
+      <template v-if="filename">
+        <PlinthButton
+          class="plinth-code-block-download"
+          variant="ghost"
+          size="sm"
+          :hidden="!mounted"
+          @click="downloadCode"
+          >{{ downloaded ? downloadedLabel : downloadLabel }}</PlinthButton
+        >
+        <span class="plinth-code-block-status" role="status">{{
+          downloaded ? downloadedLabel : ''
+        }}</span>
       </template>
     </div>
     <template v-if="shownTabs.length">

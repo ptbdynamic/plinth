@@ -6,9 +6,9 @@ import '@ptbdynamic/plinth-css/src/components/button.css';
 import '@ptbdynamic/plinth-css/src/components/code-block.css';
 
 /**
- * What the Blade (Alpine), Vue and React layers add: the copy button shows, and copies the code
- * that shows. A demonstration for the stories; the plain HTML works without it, and no Plinth
- * script ships (ADR 2).
+ * What the Blade (Alpine), Vue and React layers add: the copy and download buttons show, and copy
+ * or save the code that shows. A demonstration for the stories; the plain HTML works without it,
+ * and no Plinth script ships (ADR 2).
  */
 /** The code of the checked tab's <pre>, or of the only one. */
 const codeBlockText = (button: Element) => {
@@ -21,23 +21,40 @@ const codeBlockText = (button: Element) => {
   return block.querySelectorAll('.plinth-code-block-code')[index]?.textContent ?? '';
 };
 
-const withCopy: Decorator = (story, { args }) => {
+/** Says `done` on the button and in its status for two seconds. */
+const say = (button: HTMLButtonElement, done: string) => {
+  const label = button.querySelector('.plinth-button-label')!;
+  const status = button.nextElementSibling!;
+  const idle = label.textContent;
+  label.textContent = done;
+  status.textContent = done;
+  setTimeout(() => {
+    label.textContent = idle;
+    status.textContent = '';
+  }, 2000);
+};
+
+const withActions: Decorator = (story, { args }) => {
   const wrapper = document.createElement('div');
   wrapper.innerHTML = story() as string;
   wrapper.querySelectorAll<HTMLButtonElement>('.plinth-code-block-copy').forEach((button) => {
     button.hidden = false;
     button.addEventListener('click', () => {
-      void navigator.clipboard?.writeText(codeBlockText(button)).then(() => {
-        const label = button.querySelector('.plinth-button-label')!;
-        const status = button.nextElementSibling!;
-        const copyLabel = label.textContent;
-        label.textContent = args.copiedLabel as string;
-        status.textContent = args.copiedLabel as string;
-        setTimeout(() => {
-          label.textContent = copyLabel;
-          status.textContent = '';
-        }, 2000);
-      });
+      void navigator.clipboard
+        ?.writeText(codeBlockText(button))
+        .then(() => say(button, args.copiedLabel as string));
+    });
+  });
+  wrapper.querySelectorAll<HTMLButtonElement>('.plinth-code-block-download').forEach((button) => {
+    button.hidden = false;
+    button.addEventListener('click', () => {
+      const url = URL.createObjectURL(new Blob([codeBlockText(button)], { type: 'text/plain' }));
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = (args.download as string).trim();
+      link.click();
+      setTimeout(() => URL.revokeObjectURL(url));
+      say(button, args.downloadedLabel as string);
     });
   });
   return wrapper;
@@ -89,7 +106,7 @@ const highlighted = [
 const meta = {
   title: 'Components/Code Block',
   render: (args) => codeBlock(args),
-  decorators: [withCopy],
+  decorators: [withActions],
   args: {
     label: 'resources/css/brand.css',
     code: brand,
@@ -97,6 +114,8 @@ const meta = {
     copy: true,
     copyLabel: 'Copy',
     copiedLabel: 'Copied',
+    downloadLabel: 'Download',
+    downloadedLabel: 'Downloaded',
   },
   argTypes: {
     id: { control: 'text' },
@@ -110,12 +129,15 @@ const meta = {
     copy: { control: 'boolean' },
     copyLabel: { control: 'text' },
     copiedLabel: { control: 'text' },
+    download: { control: 'text' },
+    downloadLabel: { control: 'text' },
+    downloadedLabel: { control: 'text' },
   },
   parameters: {
     docs: {
       description: {
         component:
-          'A block of code with an optional file name or label, a copy button and optional language tabs (Blade, Vue, React, HTML). Use it for install commands, configuration, API keys and examples. The code keeps its lines and scrolls sideways inside its own box on a phone. Highlighting is the project’s: pass the highlighter’s markup and the block styles what it is given. The copy button needs the Blade (Alpine), Vue or React layer; the plain HTML shows the code without it.',
+          'A block of code with an optional file name or label, a copy button, an optional download button and optional language tabs (Blade, Vue, React, HTML). Use it for install commands, configuration, API keys, recovery codes and examples. The code keeps its lines and scrolls sideways inside its own box on a phone. Highlighting is the project’s: pass the highlighter’s markup and the block styles what it is given. The copy and download buttons need the Blade (Alpine), Vue or React layer; the plain HTML shows the code without them.',
       },
     },
   },
@@ -160,6 +182,42 @@ export const LongLabel: Story = {
   args: {
     label: 'resources/views/components/invoices/partials/summary-with-totals.blade.php',
     code: '<x-plinth::badge tone="success">Paid</x-plinth::badge>',
+  },
+};
+
+const recoveryCodes = [
+  'k7q2-9xmf',
+  'p4wd-h3ra',
+  'z8nc-2tle',
+  'b6yv-m5ks',
+  'r3gj-x9pu',
+  'f2hn-7cwq',
+  'u9tb-4dze',
+  'e5ma-k8yr',
+].join('\n');
+
+/** A download next to Copy: the code is saved as a text file, here recovery codes. */
+export const WithDownload: Story = {
+  args: { label: 'Recovery codes', code: recoveryCodes, download: 'recovery-codes.txt' },
+};
+
+/** Download only: with copy off, the download button takes the copy button's place. */
+export const DownloadWithoutCopy: Story = {
+  args: {
+    label: 'Recovery codes',
+    code: recoveryCodes,
+    copy: false,
+    download: 'recovery-codes.txt',
+  },
+};
+
+/** With tabs, the download saves the code of the checked tab. */
+export const DownloadWithTabs: Story = {
+  args: {
+    id: 'new-invoice-download',
+    label: undefined,
+    tabs: layerTabs,
+    download: 'new-invoice.txt',
   },
 };
 

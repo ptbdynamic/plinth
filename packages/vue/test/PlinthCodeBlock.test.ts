@@ -2,7 +2,7 @@ import { flushPromises, mount } from '@vue/test-utils';
 import { h, nextTick, ref } from 'vue';
 import { renderToString } from 'vue/server-renderer';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { checkedTab, codeBlockText } from '../src/code-block.ts';
+import { checkedTab, codeBlockText, downloadText } from '../src/code-block.ts';
 import { PlinthCodeBlock } from '../src/index.ts';
 
 const tabs = [
@@ -242,6 +242,90 @@ describe('PlinthCodeBlock', () => {
 
     expect(wrapper.emitted('copied')).toBeUndefined();
     expect(wrapper.get('.plinth-button-label').text()).toBe('Copy');
+  });
+
+  it('prints a download button after the copy button, hidden until mounted', async () => {
+    const html = await renderToString(
+      h(PlinthCodeBlock, { download: ' codes.txt ' }, { default: () => 'a1b2' }),
+    );
+
+    expect(flat(html)).toBe(
+      '<div class="plinth-code-block"><div class="plinth-code-block-header">' +
+        copyButton(true) +
+        '<button type="button" class="plinth-button plinth-code-block-download" data-variant="ghost" data-size="sm" hidden><span class="plinth-button-label">Download</span></button>' +
+        '<span class="plinth-code-block-status" role="status"></span>' +
+        '</div>' +
+        '<pre class="plinth-code-block-code" dir="ltr" tabindex="0"><code>a1b2</code></pre>' +
+        '</div>',
+    );
+  });
+
+  it('shows the download button once mounted, and leaves it out without a file name', async () => {
+    const shown = mount(PlinthCodeBlock, {
+      props: { download: 'codes.txt' },
+      slots: { default: 'x' },
+    });
+    const blank = mount(PlinthCodeBlock, { props: { download: ' ' }, slots: { default: 'x' } });
+    await flushPromises();
+
+    expect(shown.get('.plinth-code-block-download').attributes('hidden')).toBeUndefined();
+    expect(blank.find('.plinth-code-block-download').exists()).toBe(false);
+  });
+
+  it('saves the code that shows, says so for two seconds, and emits downloaded', async () => {
+    vi.useFakeTimers();
+    const createObjectURL = vi.fn<(blob: Blob) => string>(() => 'blob:codes');
+    const revokeObjectURL = vi.fn<(url: string) => void>();
+    const click = vi.spyOn(HTMLAnchorElement.prototype, 'click').mockImplementation(function (
+      this: HTMLAnchorElement,
+    ) {
+      expect(this.href).toBe('blob:codes');
+      expect(this.download).toBe('codes.txt');
+    });
+    Object.assign(URL, { createObjectURL, revokeObjectURL });
+    const wrapper = mount(PlinthCodeBlock, {
+      props: {
+        tabs,
+        copy: false,
+        download: 'codes.txt',
+        downloadLabel: 'Descarregar',
+        downloadedLabel: 'Descarregado',
+      },
+      attachTo: document.body,
+    });
+    await wrapper.findAll('input')[1]!.setValue(true);
+    await wrapper.get('.plinth-code-block-download').trigger('click');
+    const blob = createObjectURL.mock.calls[0]![0];
+
+    expect(blob.type).toBe('text/plain');
+    expect(await blob.text()).toBe('<PlinthBadge />');
+    expect(click).toHaveBeenCalledOnce();
+    expect(wrapper.emitted('downloaded')).toEqual([['<PlinthBadge />']]);
+    expect(wrapper.get('.plinth-button-label').text()).toBe('Descarregado');
+    expect(wrapper.get('[role="status"]').text()).toBe('Descarregado');
+
+    await wrapper.get('.plinth-code-block-download').trigger('click');
+    vi.advanceTimersByTime(2000);
+    await flushPromises();
+
+    expect(revokeObjectURL).toHaveBeenCalledWith('blob:codes');
+    expect(wrapper.get('.plinth-button-label').text()).toBe('Descarregar');
+    expect(wrapper.get('[role="status"]').text()).toBe('');
+    wrapper.unmount();
+    click.mockRestore();
+  });
+
+  it('saves text as a file through a temporary link', () => {
+    vi.useFakeTimers();
+    const revokeObjectURL = vi.fn<(url: string) => void>();
+    Object.assign(URL, { createObjectURL: () => 'blob:x', revokeObjectURL });
+    const click = vi.spyOn(HTMLAnchorElement.prototype, 'click').mockImplementation(() => {});
+    downloadText('x.txt', 'x');
+    vi.runAllTimers();
+
+    expect(click).toHaveBeenCalledOnce();
+    expect(revokeObjectURL).toHaveBeenCalledWith('blob:x');
+    click.mockRestore();
   });
 
   it('finds the code of the only <pre>, or nothing outside a code block', () => {

@@ -2,7 +2,7 @@ import { act, fireEvent, render } from '@testing-library/react';
 import { createRef } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { checkedTab, codeBlockText } from '../src/code-block.ts';
+import { checkedTab, codeBlockText, downloadText } from '../src/code-block.ts';
 import { PlinthCodeBlock } from '../src/index.ts';
 
 const tabs = [
@@ -218,6 +218,100 @@ describe('PlinthCodeBlock', () => {
 
     expect(onCopied).not.toHaveBeenCalled();
     expect(container.querySelector('.plinth-button-label')!.textContent).toBe('Copy');
+  });
+
+  it('prints a download button after the copy button, hidden until mounted', () => {
+    expect(
+      renderToStaticMarkup(<PlinthCodeBlock download=" codes.txt ">a1b2</PlinthCodeBlock>),
+    ).toBe(
+      '<div class="plinth-code-block"><div class="plinth-code-block-header">' +
+        copyButton +
+        '<button type="button" data-variant="ghost" data-size="sm" hidden="" class="plinth-button plinth-code-block-download"><span class="plinth-button-label">Download</span></button>' +
+        '<span class="plinth-code-block-status" role="status"></span>' +
+        '</div>' +
+        '<pre class="plinth-code-block-code" dir="ltr" tabindex="0"><code>a1b2</code></pre>' +
+        '</div>',
+    );
+  });
+
+  it('shows the download button once mounted, and leaves it out without a file name', () => {
+    const shown = render(<PlinthCodeBlock download="codes.txt">x</PlinthCodeBlock>);
+    const blank = render(<PlinthCodeBlock download=" ">x</PlinthCodeBlock>);
+
+    expect(
+      shown.container.querySelector('.plinth-code-block-download')!.hasAttribute('hidden'),
+    ).toBe(false);
+    expect(blank.container.querySelector('.plinth-code-block-download')).toBeNull();
+  });
+
+  it('saves the code that shows, says so for two seconds, and calls onDownloaded', async () => {
+    vi.useFakeTimers();
+    const createObjectURL = vi.fn<(blob: Blob) => string>(() => 'blob:codes');
+    const revokeObjectURL = vi.fn<(url: string) => void>();
+    const click = vi.spyOn(HTMLAnchorElement.prototype, 'click').mockImplementation(function (
+      this: HTMLAnchorElement,
+    ) {
+      expect(this.href).toBe('blob:codes');
+      expect(this.download).toBe('codes.txt');
+    });
+    Object.assign(URL, { createObjectURL, revokeObjectURL });
+    const onDownloaded = vi.fn();
+    const { container, unmount } = render(
+      <PlinthCodeBlock
+        tabs={tabs}
+        copy={false}
+        download="codes.txt"
+        downloadLabel="Descarregar"
+        downloadedLabel="Descarregado"
+        onDownloaded={onDownloaded}
+      />,
+    );
+    const button = container.querySelector('.plinth-code-block-download')!;
+    const label = () => button.querySelector('.plinth-button-label')!.textContent;
+    const status = () => container.querySelector('[role="status"]')!.textContent;
+
+    fireEvent.click(container.querySelectorAll('input')[1]!);
+    fireEvent.click(button);
+    const blob = createObjectURL.mock.calls[0]![0];
+
+    expect(blob.type).toBe('text/plain');
+    expect(await blob.text()).toBe('<PlinthBadge />');
+    expect(click).toHaveBeenCalledOnce();
+    expect(onDownloaded).toHaveBeenCalledWith('<PlinthBadge />');
+    expect(label()).toBe('Descarregado');
+    expect(status()).toBe('Descarregado');
+
+    fireEvent.click(button);
+    act(() => vi.advanceTimersByTime(2000));
+
+    expect(revokeObjectURL).toHaveBeenCalledWith('blob:codes');
+    expect(label()).toBe('Descarregar');
+    expect(status()).toBe('');
+    unmount();
+    click.mockRestore();
+  });
+
+  it('saves without an onDownloaded', () => {
+    Object.assign(URL, { createObjectURL: () => 'blob:x', revokeObjectURL: () => {} });
+    const click = vi.spyOn(HTMLAnchorElement.prototype, 'click').mockImplementation(() => {});
+    const { container } = render(<PlinthCodeBlock download="x.txt">npm ci</PlinthCodeBlock>);
+    fireEvent.click(container.querySelector('.plinth-code-block-download')!);
+
+    expect(click).toHaveBeenCalledOnce();
+    click.mockRestore();
+  });
+
+  it('saves text as a file through a temporary link', () => {
+    vi.useFakeTimers();
+    const revokeObjectURL = vi.fn<(url: string) => void>();
+    Object.assign(URL, { createObjectURL: () => 'blob:x', revokeObjectURL });
+    const click = vi.spyOn(HTMLAnchorElement.prototype, 'click').mockImplementation(() => {});
+    downloadText('x.txt', 'x');
+    vi.runAllTimers();
+
+    expect(click).toHaveBeenCalledOnce();
+    expect(revokeObjectURL).toHaveBeenCalledWith('blob:x');
+    click.mockRestore();
   });
 
   it('finds the code of the only <pre>, or nothing outside a code block', () => {

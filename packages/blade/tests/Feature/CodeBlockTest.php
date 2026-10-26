@@ -169,6 +169,57 @@ it('shows and wires the copy button with Alpine', function () {
         ->toContain('navigator.clipboard.writeText');
 });
 
+it('prints a download button after the copy button, with its own status', function () use ($copy) {
+    $html = Blade::render('<x-plinth::code-block label="Recovery codes" download=" recovery-codes.txt ">a1b2</x-plinth::code-block>');
+
+    expect(withoutAlpine($html))->toBe(
+        '<div class="plinth-code-block">'
+        .'<div class="plinth-code-block-header">'
+        .'<span class="plinth-code-block-label">Recovery codes</span>'
+        .$copy
+        .'<button class="plinth-button plinth-code-block-download" type="button" data-variant="ghost" data-size="sm" hidden="">'
+        .'<span class="plinth-button-label">Download</span></button>'
+        .'<span class="plinth-code-block-status" role="status"></span>'
+        .'</div>'
+        .'<pre class="plinth-code-block-code" dir="ltr" tabindex="0"><code>a1b2</code></pre>'
+        .'</div>'
+    );
+});
+
+it('leaves out the download button without a file name', function () {
+    expect(Blade::render('<x-plinth::code-block download=" ">x</x-plinth::code-block>'))
+        ->not->toContain('plinth-code-block-download');
+});
+
+it('prints the download button alone when copy is off', function () {
+    $html = Blade::render('<x-plinth::code-block :copy="false" download="codes.txt">x</x-plinth::code-block>');
+
+    expect($html)
+        ->not->toContain('plinth-code-block-copy')
+        ->toContain('plinth-code-block-download')
+        ->and(substr_count($html, 'role="status"'))->toBe(1);
+});
+
+it('takes the download button\'s words and file name', function () {
+    $html = Blade::render('<x-plinth::code-block download="códigos.txt" download-label="Descarregar" downloaded-label="Descarregado">x</x-plinth::code-block>');
+
+    expect($html)
+        ->toContain('<span class="plinth-button-label">Descarregar</span>')
+        ->toContain('downloadLabel: &#039;Descarregar&#039;, downloadedLabel: &#039;Descarregado&#039;')
+        ->toContain('filename: &#039;códigos.txt&#039;');
+});
+
+it('shows and wires the download button with Alpine', function () {
+    $html = Blade::render('<x-plinth::code-block download="codes.txt">x</x-plinth::code-block>');
+
+    expect($html)
+        ->toContain('x-init="$el.hidden = false"')
+        ->toContain('x-on:click="download"')
+        ->toContain('download() {')
+        ->toContain('new Blob(')
+        ->toContain('URL.revokeObjectURL(url)');
+});
+
 it('escapes the label, the tabs, the code and the id', function () {
     $html = Blade::render('<x-plinth::code-block :id="$id" :label="$label" :tabs="$tabs" :tabs-label="$label" />', [
         'id' => '"><b>x</b>',

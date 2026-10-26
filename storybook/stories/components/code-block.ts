@@ -31,6 +31,10 @@ export interface CodeBlockArgs {
   copy: boolean;
   copyLabel: string;
   copiedLabel: string;
+  /** The file name the download button saves the code as; no button without one. */
+  download?: string;
+  downloadLabel: string;
+  downloadedLabel: string;
 }
 
 const pre = (content: string) =>
@@ -49,6 +53,8 @@ export function codeBlock(
     tabsLabel,
     copy,
     copyLabel,
+    download,
+    downloadLabel,
   }: CodeBlockArgs,
   attributes: Attributes = {},
 ): string {
@@ -71,18 +77,14 @@ export function codeBlock(
         '</div>',
       ].join('')
     : '';
-  const copyButton = copy
-    ? button(
-        {
-          label: copyLabel,
-          variant: 'ghost',
-          size: 'sm',
-          disabled: false,
-          busy: false,
-        },
-        { class: 'plinth-code-block-copy', hidden: '' },
-      ) + '<span class="plinth-code-block-status" role="status"></span>'
-    : '';
+  // Each action is a ghost button, printed hidden for the layer to show, and its own status.
+  const action = (label: string, part: string) =>
+    button(
+      { label, variant: 'ghost', size: 'sm', disabled: false, busy: false },
+      { class: `plinth-code-block-${part}`, hidden: '' },
+    ) + '<span class="plinth-code-block-status" role="status"></span>';
+  const copyButton = copy ? action(copyLabel, 'copy') : '';
+  const downloadButton = download?.trim() ? action(downloadLabel, 'download') : '';
   const panels = tabs.length
     ? tabs.map((tab) => pre(tab.html ?? escape(tab.code))).join('')
     : pre(html ?? escape(code));
@@ -92,6 +94,7 @@ export function codeBlock(
     labelContent ? `<span class="plinth-code-block-label">${labelContent}</span>` : '',
     tabGroup,
     copyButton,
+    downloadButton,
     '</div>',
     panels,
     '</div>',

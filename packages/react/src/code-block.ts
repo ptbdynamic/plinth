@@ -29,3 +29,16 @@ export function codeBlockText(button: Element): string {
   );
   return block?.querySelectorAll('.plinth-code-block-code')[index]?.textContent ?? '';
 }
+
+/**
+ * Saves text as a text/plain file named `filename`, through a Blob and a temporary link: nothing
+ * leaves the browser. Vue's layer and Blade's Alpine do the same.
+ */
+export function downloadText(filename: string, text: string): void {
+  const url = URL.createObjectURL(new Blob([text], { type: 'text/plain' }));
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = filename;
+  link.click();
+  setTimeout(() => URL.revokeObjectURL(url));
+}
