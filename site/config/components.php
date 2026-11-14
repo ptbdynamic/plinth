@@ -96,6 +96,24 @@ return [
             ],
         ],
 
+        'select' => [
+            'name' => 'Select',
+            'group' => 'Forms',
+            'description' => 'A native dropdown to choose one option, with its label, a placeholder, a description and an error.',
+            'playground' => [
+                'template' => '<x-plinth::select label="Role" placeholder="Choose a role" description="What the person may change."{attributes}><option value="admin">Admin</option><option value="editor">Editor</option><option value="viewer">Viewer</option></x-plinth::select>',
+                'options' => [
+                    'size' => ['values' => ['sm', 'md'], 'default' => 'md'],
+                    'error' => [
+                        'values' => ['none', 'shown'],
+                        'default' => 'none',
+                        'print' => ['shown' => 'error="Choose a role for the new member."'],
+                    ],
+                ],
+                'states' => ['hide-label', 'disabled', 'required'],
+            ],
+        ],
+
         'one-time-code' => [
             'name' => 'One-time code',
             'group' => 'Forms',
