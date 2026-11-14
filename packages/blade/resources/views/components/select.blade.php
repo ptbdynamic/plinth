@@ -9,6 +9,7 @@
     'error' => null,
     'disabled' => false,
     'required' => false,
+    'icon' => null,
 ])
 @php
     if (blank($label)) {
@@ -22,6 +23,7 @@
         $hasDescription ? $id.'-description' : null,
         $hasError ? $id.'-error' : null,
     ]));
+    $hasIcon = $icon instanceof \Illuminate\View\ComponentSlot && $icon->hasActualContent();
     // The project's class goes on the root; every other attribute on the select, where it wins.
     $root = array_filter([
         'class' => 'plinth-select',
@@ -40,6 +42,9 @@
 <div {{ $attributes->only('class')->merge($root) }}>
     <label class="plinth-select-label" for="{{ $id }}">{{ $label }}</label>
     <div class="plinth-select-control">
+        @if ($hasIcon)
+            <span class="plinth-icon" data-size="sm" aria-hidden="true">{{ $icon }}</span>
+        @endif
         <select {{ $attributes->except('class')->merge($control) }}>
             @if (filled(trim((string) $placeholder)))
                 <option value="" disabled selected>{{ $placeholder }}</option>

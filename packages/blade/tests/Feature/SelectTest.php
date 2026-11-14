@@ -52,6 +52,15 @@ it('prints a disabled, selected first option for the placeholder', function () {
     expect(Blade::render('<x-plinth::select id="a" label="A" placeholder=" " />'))->not->toContain('<option');
 });
 
+it('prints the leading icon, and leaves out an empty one', function () {
+    $html = Blade::render('<x-plinth::select id="a" label="A"><x-slot:icon><svg></svg></x-slot:icon><option>X</option></x-plinth::select>');
+
+    expect(squish($html))->toContain('<div class="plinth-select-control"><span class="plinth-icon" data-size="sm" aria-hidden="true"><svg></svg></span><select');
+
+    $empty = Blade::render('<x-plinth::select id="a" label="A"><x-slot:icon> </x-slot:icon><option>X</option></x-plinth::select>');
+    expect($empty)->not->toContain('plinth-icon');
+});
+
 it('prints option groups as they are given', function () {
     $html = Blade::render('<x-plinth::select id="a" label="A"><optgroup label="G"><option value="x" selected>X</option></optgroup></x-plinth::select>');
 

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 // Markup contract: packages/css/src/components/select.css
-import { computed, useAttrs, useId } from 'vue';
+import { computed, useAttrs, useId, useSlots } from 'vue';
+import { hasContent } from './slots';
 import { selectSize, type SelectSize } from './select';
 import { fieldDescribedBy } from './text-field';
 
@@ -44,6 +45,7 @@ if (!props.label?.trim()) {
 }
 
 const attrs = useAttrs();
+const slots = useSlots();
 const generatedId = useId();
 const selectId = computed(() => props.id?.trim() || `plinth-select-${generatedId}`);
 const dataSize = computed(() => selectSize(props.size));
@@ -76,6 +78,9 @@ function onChange(event: Event) {
   >
     <label class="plinth-select-label" :for="selectId">{{ label }}</label>
     <div class="plinth-select-control">
+      <span v-if="hasContent(slots.icon?.())" class="plinth-icon" data-size="sm" aria-hidden="true"
+        ><slot name="icon"
+      /></span>
       <select
         :id="selectId"
         class="plinth-select-input"

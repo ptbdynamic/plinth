@@ -79,6 +79,23 @@ describe('PlinthSelect', () => {
     expect(selectWith({ placeholder: ' ' }).find('option[value=""]').exists()).toBe(false);
   });
 
+  it('prints the leading icon, and leaves out an empty one', () => {
+    const icon = (slot: unknown) =>
+      mount(PlinthSelect, {
+        props: { id: 'role', label: 'Role' },
+        slots: { default: options, icon: slot as string },
+      });
+
+    expect(icon('<svg></svg>').find('.plinth-select-control > .plinth-icon').html()).toBe(
+      '<span class="plinth-icon" data-size="sm" aria-hidden="true"><svg></svg></span>',
+    );
+    expect(
+      icon(() => '')
+        .find('.plinth-icon')
+        .exists(),
+    ).toBe(false);
+  });
+
   it('leaves out a blank description and error', () => {
     const select = selectWith({ description: ' ', error: '' }).find('select');
 

@@ -5394,6 +5394,7 @@
  * <div class="plinth-select" data-size="md">
  *   <label class="plinth-select-label" for="role">Role</label>
  *   <div class="plinth-select-control">
+ *     <span class="plinth-icon" data-size="sm" aria-hidden="true"><svg>…</svg></span>
  *     <select class="plinth-select-input" id="role" required
  *       aria-describedby="role-description role-error" aria-invalid="true">
  *       <option value="" disabled selected>Choose a role</option>
@@ -5422,6 +5423,7 @@
  * Attributes go to the select, not the root (name, required, autocomplete, wire:model, x-model,
  * data-*, aria-*), so the app talks to the select; only a project's class is added to the root's.
  *
+ * - the leading icon is optional, 16px and decorative (aria-hidden); the label names the field.
  * - data-label="hidden" on the root hides the label visually; screen readers still read it. Use
  *   it only where the select's purpose is plain without it.
  *
@@ -5540,6 +5542,20 @@
     cursor: not-allowed;
   }
 
+  /* The leading icon sits over the select's start, which keeps room for it. */
+  .plinth-select-control > .plinth-icon {
+    position: absolute;
+    inset-inline-start: var(--plinth-space-3);
+    color: var(--plinth-color-text-subtle);
+    pointer-events: none;
+  }
+
+  .plinth-select-control:has(> .plinth-icon) > .plinth-select-input {
+    padding-inline-start: calc(
+      var(--plinth-space-3) + var(--plinth-size-icon-sm) + var(--plinth-space-2)
+    );
+  }
+
   /* The placeholder shows while it is chosen, muted: it is real text, so it keeps AA contrast. */
   .plinth-select-input:has(option[value='']:checked) {
     color: var(--plinth-color-text-muted);
@@ -5578,6 +5594,150 @@
   @media (min-width: 768px) {
     .plinth-select-input {
       font-size: var(--plinth-select-text);
+    }
+  }
+
+  /*
+   * Where the browser lets a select be styled (appearance: base-select), its list is drawn like
+   * the menu: the raised surface with a hairline edge, the container radius and elevation 2,
+   * rows inset with the control radius, a tint on hover and on the highlighted row, and a check
+   * on the chosen one. It is still the native select: the browser opens it, places it at the
+   * select, keeps it on screen, and gives it its keyboard and its role. Elsewhere the browser
+   * draws its own list.
+   */
+  @supports (appearance: base-select) {
+    .plinth-select-input,
+    .plinth-select-input::picker(select) {
+      appearance: base-select;
+    }
+
+    /* A styled select lays out its text as a block; centre it in the field's height. */
+    .plinth-select-input {
+      display: flex;
+      align-items: center;
+    }
+
+    /* The control draws the chevron, so the browser's own is hidden. */
+    .plinth-select-input::picker-icon {
+      display: none;
+    }
+
+    .plinth-select-input::picker(select) {
+      box-sizing: border-box;
+      min-inline-size: anchor-size(inline);
+      max-inline-size: calc(100vi - 2 * var(--plinth-space-2));
+      max-block-size: calc(100dvb - 2 * var(--plinth-space-2));
+      padding: var(--plinth-space-1);
+      margin-block: var(--plinth-space-1);
+      overflow: hidden auto;
+      overscroll-behavior: contain;
+      font-family: var(--plinth-font-family-body);
+      font-size: var(--plinth-font-size-field);
+      line-height: var(--plinth-font-leading-tight);
+      color: var(--plinth-color-text);
+      background-color: var(--plinth-color-surface-raised);
+      border: var(--plinth-border-width-thin) solid var(--plinth-color-border);
+      border-radius: var(--plinth-radius-container);
+      box-shadow: var(--plinth-elevation-2);
+      opacity: 0;
+      transition:
+        opacity var(--plinth-duration-fast) var(--plinth-easing-exit),
+        overlay var(--plinth-duration-fast) allow-discrete,
+        display var(--plinth-duration-fast) allow-discrete;
+    }
+
+    .plinth-select-input:open::picker(select) {
+      opacity: 1;
+      transition-timing-function: var(--plinth-easing-enter);
+    }
+
+    @starting-style {
+      .plinth-select-input:open::picker(select) {
+        opacity: 0;
+      }
+    }
+
+    .plinth-select-input option {
+      box-sizing: border-box;
+      gap: var(--plinth-space-2);
+      min-block-size: var(--plinth-touch-target);
+      padding-block: var(--plinth-space-1);
+      padding-inline: var(--plinth-space-2);
+      font-size: inherit;
+      font-weight: var(--plinth-font-weight-regular);
+      color: var(--plinth-color-text);
+      overflow-wrap: anywhere;
+      cursor: pointer;
+      background-color: transparent;
+      border-radius: var(--plinth-radius-control);
+      transition: background-color var(--plinth-duration-fast) var(--plinth-easing-standard);
+    }
+
+    /* The check sits at the row's end, as the menu keeps the start for the label. */
+    .plinth-select-input option::checkmark {
+      order: 1;
+      margin-inline-start: auto;
+      color: var(--plinth-color-text-muted);
+    }
+
+    /* The group's name, like the menu's heading; its options keep the row look. */
+
+    /* The browser pads the group's name by half its text size, which with this padding lines it
+       up with the options' text. */
+    .plinth-select-input optgroup {
+      padding-block: var(--plinth-space-2) 0;
+      padding-inline: var(--plinth-space-0-5);
+      font-size: var(--plinth-font-size-xs);
+      font-weight: var(--plinth-font-weight-medium);
+      color: var(--plinth-color-text-subtle);
+      background-color: transparent;
+    }
+
+    .plinth-select-input optgroup option {
+      margin-inline: calc(-1 * var(--plinth-space-0-5));
+      font-size: var(--plinth-font-size-field);
+    }
+
+    .plinth-select-input option:focus-visible {
+      outline: var(--plinth-focus-ring-width) solid var(--plinth-color-focus-ring);
+      outline-offset: var(--plinth-focus-ring-offset-inset);
+    }
+
+    .plinth-select-input option:checked {
+      font-weight: var(--plinth-font-weight-medium);
+    }
+
+    .plinth-select-input option:disabled {
+      cursor: not-allowed;
+    }
+
+    /* The placeholder isn't a choice: it reads as a muted prompt, not a disabled row. */
+    .plinth-select-input option[value='']:disabled {
+      font-weight: var(--plinth-font-weight-regular);
+      color: var(--plinth-color-text-muted);
+    }
+
+    @media (hover: hover) {
+      .plinth-select-input option:enabled:hover {
+        background-color: var(--plinth-color-surface-hover);
+      }
+    }
+
+    .plinth-select-input option:enabled:focus {
+      background-color: var(--plinth-color-surface-hover);
+    }
+
+    @media (min-width: 768px) {
+      .plinth-select-input::picker(select),
+      .plinth-select-input optgroup option {
+        font-size: var(--plinth-select-text);
+      }
+    }
+
+    @media (min-width: 768px) and (pointer: fine) {
+      .plinth-select-input option {
+        min-block-size: var(--plinth-control-md);
+      }
     }
   }
 

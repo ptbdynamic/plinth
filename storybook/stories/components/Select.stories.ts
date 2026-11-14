@@ -1,6 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/html-vite';
 import { select, selectSizes, type SelectArgs } from './select.ts';
+import { sampleIcons } from './icons.ts';
 import '@ptbdynamic/plinth-css/src/components/select.css';
+import '@ptbdynamic/plinth-css/src/components/icon.css';
 
 const roles = [
   '<option value="admin">Admin</option>',
@@ -29,6 +31,7 @@ const meta = {
     error: { control: 'text' },
     disabled: { control: 'boolean' },
     required: { control: 'boolean' },
+    icon: { control: 'text' },
   },
   parameters: {
     docs: {
@@ -56,6 +59,18 @@ export const WithError: Story = {
     placeholder: 'Choose a role',
     required: true,
     error: 'Choose a role for the new member.',
+  },
+};
+export const WithIcon: Story = {
+  args: {
+    id: 'language',
+    label: 'Language',
+    icon: sampleIcons.globe,
+    options: [
+      '<option value="en">English</option>',
+      '<option value="pt">Português</option>',
+      '<option value="fr">Français</option>',
+    ].join(''),
   },
 };
 export const Disabled: Story = { args: { disabled: true } };

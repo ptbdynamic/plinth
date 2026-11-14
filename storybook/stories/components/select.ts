@@ -22,6 +22,8 @@ export interface SelectArgs {
   error?: string;
   disabled: boolean;
   required: boolean;
+  /** The project's own SVG for the leading icon (trusted, not escaped). */
+  icon?: string;
 }
 
 /**
@@ -40,6 +42,7 @@ export function select(
     error,
     disabled,
     required,
+    icon,
   }: SelectArgs,
   attributes: Attributes = {},
 ): string {
@@ -57,6 +60,7 @@ export function select(
     `<div class="${classes}" data-size="${size}"${hideLabel ? ' data-label="hidden"' : ''}>`,
     `<label class="plinth-select-label" for="${escape(id)}">${escape(label)}</label>`,
     '<div class="plinth-select-control">',
+    icon ? `<span class="plinth-icon" data-size="sm" aria-hidden="true">${icon}</span>` : '',
     `<select${extra} id="${escape(id)}" class="plinth-select-input"${state}>`,
     placeholder?.trim() ? `<option value="" disabled selected>${escape(placeholder)}</option>` : '',
     options,

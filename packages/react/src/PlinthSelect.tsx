@@ -1,6 +1,6 @@
 // Markup contract: packages/css/src/components/select.css
-import { useId, type ComponentProps } from 'react';
-import { classNames } from './markup';
+import { useId, type ComponentProps, type ReactNode } from 'react';
+import { classNames, hasContent } from './markup';
 import { selectSize, type SelectSize } from './select';
 import { fieldDescribedBy } from './text-field';
 
@@ -16,6 +16,8 @@ interface SelectOptions {
   description?: string;
   /** What is wrong with the value; it marks the field invalid. */
   error?: string;
+  /** The leading icon (Vue's `icon` slot). */
+  icon?: ReactNode;
 }
 
 /**
@@ -32,6 +34,7 @@ export function PlinthSelect({
   placeholder,
   description,
   error,
+  icon,
   className,
   children,
   ...rest
@@ -59,6 +62,11 @@ export function PlinthSelect({
         {label}
       </label>
       <div className="plinth-select-control">
+        {hasContent(icon) ? (
+          <span className="plinth-icon" data-size="sm" aria-hidden="true">
+            {icon}
+          </span>
+        ) : null}
         <select
           id={selectId}
           className="plinth-select-input"

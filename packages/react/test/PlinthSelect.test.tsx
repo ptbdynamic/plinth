@@ -85,6 +85,13 @@ describe('PlinthSelect', () => {
     expect(container.querySelector('select')!.value).toBe('a');
   });
 
+  it('prints the leading icon, and leaves out an empty one', () => {
+    expect(select({ icon: <svg /> })).toContain(
+      '<div class="plinth-select-control"><span class="plinth-icon" data-size="sm" aria-hidden="true"><svg></svg></span><select',
+    );
+    expect(select({ icon: false })).not.toContain('plinth-icon');
+  });
+
   it('leaves out a blank description and error', () => {
     const html = select({ description: ' ', error: '' });
 

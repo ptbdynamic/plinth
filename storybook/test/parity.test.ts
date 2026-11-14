@@ -3097,6 +3097,7 @@ function selectCase(story: string, args: SelectArgs, attributes: Attributes = {}
     ...(args.description !== undefined ? { description: args.description } : {}),
     ...(args.error !== undefined ? { error: args.error } : {}),
   };
+  const named: Record<string, string> = args.icon ? { icon: args.icon } : {};
   return {
     story,
     markup,
@@ -3106,8 +3107,9 @@ function selectCase(story: string, args: SelectArgs, attributes: Attributes = {}
       props: { ...props, ...attributes },
       slot: args.options,
       html: true,
+      named,
     },
-    blade: { component: 'select', props, attributes, slot: args.options },
+    blade: { component: 'select', props, attributes, slot: args.options, named },
   };
 }
 
@@ -3785,6 +3787,7 @@ describe('parity with the stories', () => {
       'Select/WithPlaceholder',
       'Select/WithDescription',
       'Select/WithError',
+      'Select/WithIcon',
       'Select/Disabled',
       'Select/Small',
       'Select/HiddenLabel',
