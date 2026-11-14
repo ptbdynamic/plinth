@@ -53,6 +53,21 @@ prompt (_Choose a role_), not a label.
 </x-plinth::select>
 ```
 
+## With an icon
+
+A leading icon helps the eye find the select in a busy form: a person for an owner, a
+funnel for a filter. It is 16px, decorative and hidden from screen readers, so the label still names the
+select. Give it in the `icon` slot.
+
+```blade example
+<x-plinth::select id="docs-icon" label="Owner">
+    <x-slot:icon><x-site.glyph name="user" /></x-slot:icon>
+    <option value="ana">Ana Lopes</option>
+    <option value="sam">Sam Reed</option>
+    <option value="noor">Noor Haddad</option>
+</x-plinth::select>
+```
+
 ## Groups
 
 Use `<optgroup label="…">` to split a long list into named sections. Screen readers read the
@@ -131,6 +146,7 @@ Blade, Vue and React print exactly this markup, and the parity tests hold them t
 | `.plinth-select`             | `<div>`                 | yes      | The root. Takes `data-size`, `data-label` and the project's class |
 | `.plinth-select-label`       | `<label>`               | yes      | The label, with `for` pointing at the select                      |
 | `.plinth-select-control`     | `<div>`                 | yes      | Holds the select and draws the chevron at its inline end          |
+| `.plinth-icon`               | `<span>`                | no       | The leading icon, `data-size="sm"` and `aria-hidden="true"`       |
 | `.plinth-select-input`       | `<select>`              | yes      | The select. Takes the `id` and every attribute but the class      |
 | `<option value="" disabled>` | `<option>`              | no       | The placeholder, first, `selected` while nothing is chosen        |
 | your options                 | `<option>`/`<optgroup>` | yes      | The choices, as the default slot                                  |
@@ -150,6 +166,12 @@ A missing or unknown `data-size` looks like md, and Blade, Vue and React print `
 don't know. The chevron is drawn by CSS from tokens (no extra element); it takes no clicks, so the
 whole select opens.
 
+**The open list.** Where the browser lets a select be styled (`appearance: base-select`, in
+Chromium-based browsers), the list looks like the [menu](menu.md): the raised surface, a hairline
+edge, the container radius and a shadow, rows with a tint on hover and a check on the chosen one,
+and group names like the menu's headings. It is still the browser's list, placed and opened by the
+browser with its own keyboard. Other browsers draw their own list, in the field's colours.
+
 ## Props
 
 The same names in every layer. Blade writes a camelCase prop in kebab-case (`hide-label`), as Vue
@@ -168,6 +190,7 @@ can; React takes the Vue props, with the options as `children`.
 | required    | `required`                                       | `required`             | `required`                                | off             |
 | value       | `selected` on the option, or `wire:model="role"` | `v-model="role"`       | `value` and `onChange`, or `defaultValue` | none            |
 | options     | the slot                                         | the default slot       | `children`                                | none            |
+| icon        | `<x-slot:icon>`                                  | `#icon` slot           | `icon={<svg … />}`                        | none            |
 
 **The attributes go to the select, not the root.** In Blade, `wire:model`, `x-model`, `name`,
 `autocomplete`, `data-*` and `aria-*` land on the `<select>`; only `class` goes on the root, added
