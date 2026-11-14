@@ -17,6 +17,7 @@ import * as vueButton from '../../vue/src/button.ts';
 import * as vueIcon from '../../vue/src/icon.ts';
 import * as vueSize from '../../vue/src/size.ts';
 import * as vueTones from '../../vue/src/tones.ts';
+import * as vueSelect from '../../vue/src/select.ts';
 import * as vueTextField from '../../vue/src/text-field.ts';
 import * as vueTimeline from '../../vue/src/timeline.ts';
 import * as vueOneTimeCode from '../../vue/src/one-time-code.ts';
@@ -81,6 +82,7 @@ import {
   splitViewPanes,
   sizes,
   textFieldSize,
+  selectSizes,
   textFieldSizes,
   timelineHeadingLevel,
   timelineKind,
@@ -95,6 +97,7 @@ describe('the shared lists', () => {
     expect(sizes).toEqual(vueSize.sizes);
     expect(controlSizes).toEqual(vueSize.controlSizes);
     expect(textFieldSizes).toEqual(vueTextField.textFieldSizes);
+    expect(selectSizes).toEqual(vueSelect.selectSizes);
     expect(iconSizes).toEqual(vueIcon.iconSizes);
     expect(iconNames).toEqual(vueIcon.iconNames);
     expect(iconGlyphs).toEqual(vueIcon.iconGlyphs);

@@ -39,6 +39,7 @@ export { PlinthPill, type PlinthPillProps } from './PlinthPill';
 export { PlinthPillRow, type PlinthPillRowProps } from './PlinthPillRow';
 export { PlinthSectionMenu, type PlinthSectionMenuProps } from './PlinthSectionMenu';
 export { PlinthSectionMenuItem, type PlinthSectionMenuItemProps } from './PlinthSectionMenuItem';
+export { PlinthSelect, type PlinthSelectProps } from './PlinthSelect';
 export { PlinthSheet, type PlinthSheetProps } from './PlinthSheet';
 export { PlinthSplitView, type PlinthSplitViewProps } from './PlinthSplitView';
 export { PlinthStat, type PlinthStatProps } from './PlinthStat';
@@ -125,6 +126,7 @@ export {
 export { swipeToClose, useSwipeToClose } from './swipe';
 export { toolbarKeys } from './toolbar';
 export { fieldControl, type FieldControl } from './field';
+export { selectSize, selectSizes, type SelectSize } from './select';
 export { fieldDescribedBy, textFieldSize, textFieldSizes, type TextFieldSize } from './text-field';
 export { splitViewPane, splitViewPanes, type SplitViewPane } from './split-view';
 export { sheetCloseIcon, sheetSide, sheetSidePhone, sheetSides, type SheetSide } from './sheet';

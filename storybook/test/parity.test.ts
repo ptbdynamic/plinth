@@ -45,6 +45,7 @@ import {
   PlinthOneTimeCode,
   PlinthSwitch,
   PlinthTextarea,
+  PlinthSelect,
   PlinthTextField,
   PlinthTimeline,
   PlinthTimelineEvent,
@@ -102,6 +103,7 @@ import {
   PlinthField as ReactField,
   PlinthOneTimeCode as ReactOneTimeCode,
   PlinthTextarea as ReactTextarea,
+  PlinthSelect as ReactSelect,
   PlinthTextField as ReactTextField,
   PlinthTimeline as ReactTimeline,
   PlinthTimelineEvent as ReactTimelineEvent,
@@ -234,6 +236,8 @@ import * as checkboxStories from '../stories/components/Checkbox.stories.ts';
 import { checkbox, type CheckboxArgs } from '../stories/components/checkbox.ts';
 import * as switchStories from '../stories/components/Switch.stories.ts';
 import { switchControl, type SwitchArgs } from '../stories/components/switch.ts';
+import * as selectStories from '../stories/components/Select.stories.ts';
+import { select, type SelectArgs } from '../stories/components/select.ts';
 import * as textFieldStories from '../stories/components/TextField.stories.ts';
 import { textField, type TextFieldArgs } from '../stories/components/text-field.ts';
 import * as timelineStories from '../stories/components/Timeline.stories.ts';
@@ -350,6 +354,7 @@ const reactComponents = new Map<Component, unknown>([
   [PlinthOneTimeCode, ReactOneTimeCode],
   [PlinthTextarea, ReactTextarea],
   [PlinthTextField, ReactTextField],
+  [PlinthSelect, ReactSelect],
   [PlinthCheckbox, ReactCheckbox],
   [PlinthSwitch, ReactSwitch],
   [PlinthTimeline, ReactTimeline],
@@ -553,6 +558,16 @@ const textFieldDefaults: TextFieldArgs = {
   size: 'md',
   disabled: false,
   readonly: false,
+};
+
+const selectDefaults: SelectArgs = {
+  id: 'role',
+  label: 'Role',
+  hideLabel: false,
+  size: 'md',
+  options: '<option value="admin">Admin</option><option value="viewer">Viewer</option>',
+  disabled: false,
+  required: false,
 };
 
 const checkboxDefaults: CheckboxArgs = {
@@ -1692,6 +1707,41 @@ const cases: ParityCase[] = [
     ...textFieldDefaults,
     label: 'Name <b>',
     value: '"quoted" & <tag>',
+    description: 'A & B',
+    error: 'Not <this>',
+  }),
+  ...storyArgs<SelectArgs>(selectStories).map(([story, args]) =>
+    selectCase(`Select/${story}`, args),
+  ),
+  selectCase('Select/with extra attributes', selectDefaults, {
+    class: 'mb-4',
+    name: 'role',
+    autocomplete: 'off',
+    'data-testid': 'role',
+    'aria-describedby': 'role-help',
+  }),
+  selectCase(
+    'Select/with a clashing attribute',
+    { ...selectDefaults, description: 'What the person may change.' },
+    { 'aria-describedby': 'my-help' },
+  ),
+  selectCase('Select/unknown size and blank messages', {
+    ...selectDefaults,
+    size: 'lg' as SelectArgs['size'],
+    placeholder: ' ',
+    description: ' ',
+    error: '',
+  }),
+  selectCase('Select/with a description and an error', {
+    ...selectDefaults,
+    placeholder: 'Choose a role',
+    description: 'What the person may change.',
+    error: 'Choose a role.',
+  }),
+  selectCase('Select/escaped text', {
+    ...selectDefaults,
+    label: 'Role <b>',
+    placeholder: '"Pick" & <one>',
     description: 'A & B',
     error: 'Not <this>',
   }),
@@ -3033,6 +3083,36 @@ function textFieldCase(
   };
 }
 
+function selectCase(story: string, args: SelectArgs, attributes: Attributes = {}): ParityCase {
+  // The story prints an unknown size as it is; the layers print the default.
+  const markup = select({ ...args, size: args.size === 'sm' ? 'sm' : 'md' }, attributes);
+  const props = {
+    id: args.id,
+    label: args.label,
+    hideLabel: args.hideLabel,
+    size: args.size,
+    disabled: args.disabled,
+    required: args.required,
+    ...(args.placeholder !== undefined ? { placeholder: args.placeholder } : {}),
+    ...(args.description !== undefined ? { description: args.description } : {}),
+    ...(args.error !== undefined ? { error: args.error } : {}),
+  };
+  const named: Record<string, string> = args.icon ? { icon: args.icon } : {};
+  return {
+    story,
+    markup,
+    // The options are the default slot, as markup.
+    vue: {
+      component: PlinthSelect,
+      props: { ...props, ...attributes },
+      slot: args.options,
+      html: true,
+      named,
+    },
+    blade: { component: 'select', props, attributes, slot: args.options, named },
+  };
+}
+
 function oneTimeCodeCase(
   story: string,
   args: OneTimeCodeArgs,
@@ -3703,6 +3783,20 @@ describe('parity with the stories', () => {
       'Text field/unknown size and blank messages',
       'Text field/with a description and an error',
       'Text field/escaped text',
+      'Select/Default',
+      'Select/WithPlaceholder',
+      'Select/WithDescription',
+      'Select/WithError',
+      'Select/WithIcon',
+      'Select/Disabled',
+      'Select/Small',
+      'Select/HiddenLabel',
+      'Select/WithGroups',
+      'Select/with extra attributes',
+      'Select/with a clashing attribute',
+      'Select/unknown size and blank messages',
+      'Select/with a description and an error',
+      'Select/escaped text',
       'Checkbox/Default',
       'Checkbox/Checked',
       'Checkbox/Indeterminate',

@@ -40,6 +40,7 @@ import PlinthPill from './PlinthPill.vue';
 import PlinthPillRow from './PlinthPillRow.vue';
 import PlinthSectionMenu from './PlinthSectionMenu.vue';
 import PlinthSectionMenuItem from './PlinthSectionMenuItem.vue';
+import PlinthSelect from './PlinthSelect.vue';
 import PlinthSheet from './PlinthSheet.vue';
 import PlinthSplitView from './PlinthSplitView.vue';
 import PlinthStat from './PlinthStat.vue';
@@ -97,6 +98,7 @@ export {
   PlinthPillRow,
   PlinthSectionMenu,
   PlinthSectionMenuItem,
+  PlinthSelect,
   PlinthSheet,
   PlinthSplitView,
   PlinthStat,
@@ -179,6 +181,7 @@ export { pageHeaderLevel, pageHeaderLevels, type PageHeaderLevel } from './page-
 export { splitViewPane, splitViewPanes, type SplitViewPane } from './split-view';
 export { sheetCloseIcon, sheetSide, sheetSidePhone, sheetSides, type SheetSide } from './sheet';
 export { fieldControl, type FieldControl } from './field';
+export { selectSize, selectSizes, type SelectSize } from './select';
 export { fieldDescribedBy, textFieldSize, textFieldSizes, type TextFieldSize } from './text-field';
 export { swipeToClose, useSwipeToClose } from './swipe';
 export { statChevron } from './stat';
@@ -230,6 +233,7 @@ export const Plinth: Plugin = {
     app.component('PlinthPillRow', PlinthPillRow);
     app.component('PlinthSectionMenu', PlinthSectionMenu);
     app.component('PlinthSectionMenuItem', PlinthSectionMenuItem);
+    app.component('PlinthSelect', PlinthSelect);
     app.component('PlinthSheet', PlinthSheet);
     app.component('PlinthSplitView', PlinthSplitView);
     app.component('PlinthStat', PlinthStat);
