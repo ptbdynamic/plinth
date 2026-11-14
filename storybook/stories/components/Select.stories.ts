@@ -37,7 +37,7 @@ const meta = {
     docs: {
       description: {
         component:
-          "A native dropdown for choosing one option from a list, with its label and an optional description and error. The label is required (it can be hidden visually); the options are the app's own <option> and <optgroup> elements in the slot, and every attribute but the class (name, required, wire:model) goes to the select. A placeholder adds a first, disabled option that shows while nothing is chosen. It looks like the text field, with a chevron at its end; on a phone the text is 16px so iOS does not zoom in, and on a touch screen the field is 40px tall.",
+          "A native dropdown for choosing one option from a list, with its label and an optional description and error. The label is required (it can be hidden visually); the options are the app's own <option> and <optgroup> elements in the slot, and every attribute but the class (name, required, wire:model) goes to the select. A placeholder adds a first, disabled option that shows while nothing is chosen. It looks like the text field, with a chevron at its end; on a phone the text is 16px so iOS does not zoom in, and on a touch screen the field is 40px tall. A project that sets its own aria-describedby replaces Plinth's, so it lists the error's id (<id>-error) too. The error is not a live region: after a submit, the app moves focus to the first invalid field.",
       },
     },
   },

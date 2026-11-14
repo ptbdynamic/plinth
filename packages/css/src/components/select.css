@@ -168,12 +168,8 @@
   }
 
   /* The placeholder shows while it is chosen, muted: it is real text, so it keeps AA contrast. */
-  .plinth-select-input:has(option[value='']:checked) {
+  .plinth-select-input:has(option[value='']:disabled:checked) {
     color: var(--plinth-color-text-muted);
-  }
-
-  .plinth-select-input option:not([value='']) {
-    color: var(--plinth-color-text);
   }
 
   .plinth-select-control:has(.plinth-select-input:disabled) {
@@ -222,10 +218,17 @@
       appearance: base-select;
     }
 
-    /* A styled select lays out its text as a block; centre it in the field's height. */
+    /*
+     * A styled select lays out its text as a block: centre it in the field's height, keep it on
+     * one line, and cut a long one at the content edge so it stops before the chevron (the
+     * browser's own text box takes no ellipsis).
+     */
     .plinth-select-input {
       display: flex;
       align-items: center;
+      overflow: clip;
+      overflow-clip-margin: content-box;
+      white-space: nowrap;
     }
 
     /* The control draws the chevron, so the browser's own is hidden. */
