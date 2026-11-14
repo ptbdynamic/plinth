@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.4.0 (2026-11-14)
+
+### New
+
+- Add the select: a native `<select>` with the text field's label, description and error, sizes
+  and looks, a chevron at its end and an optional leading icon. The options are the default slot; a
+  placeholder adds a first, disabled option that shows while nothing is chosen. Where the browser
+  supports `appearance: base-select`, the open list looks like the menu. Vue binds the value with
+  `v-model`, React takes `value` or `defaultValue`.
+
 ## 0.3.0 (2026-10-26)
 
 ### New components
