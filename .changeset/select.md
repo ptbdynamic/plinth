@@ -6,6 +6,7 @@
 ---
 
 Add the select: a native `<select>` with the text field's label, description and error, sizes
-and looks, and a chevron at its end. The options are the default slot; a placeholder adds a first,
-disabled option that shows while nothing is chosen. Vue binds the value with `v-model`, React
-takes `value` or `defaultValue`.
+and looks, a chevron at its end and an optional leading icon. The options are the default slot; a
+placeholder adds a first, disabled option that shows while nothing is chosen. Where the browser
+supports `appearance: base-select`, the open list looks like the menu. Vue binds the value with
+`v-model`, React takes `value` or `defaultValue`.
