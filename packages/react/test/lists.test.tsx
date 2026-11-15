@@ -88,6 +88,8 @@ import {
   sheetSides,
   splitViewPane,
   splitViewPanes,
+  splitViewSplit,
+  splitViewSplits,
   appNavVariant,
   appNavVariants,
   sizes,
@@ -129,6 +131,7 @@ describe('the shared lists', () => {
     expect(menuItemTones).toEqual(vueMenu.menuItemTones);
     expect(sheetSides).toEqual(vueSheet.sheetSides);
     expect(splitViewPanes).toEqual(vueSplitView.splitViewPanes);
+    expect(splitViewSplits).toEqual(vueSplitView.splitViewSplits);
     expect(appNavVariants).toEqual(vueAppNav.appNavVariants);
     expect(timelineKinds).toEqual(vueTimeline.timelineKinds);
     expect(oneTimeCodeLengths).toEqual(vueOneTimeCode.oneTimeCodeLengths);
@@ -187,6 +190,8 @@ describe('the shared lists', () => {
     expect(sheetSide('top')).toBe('top');
     expect(splitViewPane('side')).toBe('list');
     expect(splitViewPane('detail')).toBe('detail');
+    expect(splitViewSplit('xl')).toBe('md');
+    expect(splitViewSplit('lg')).toBe('lg');
     expect(appNavVariant('wide')).toBe(vueAppNav.appNavVariant('wide'));
     expect(appNavVariant('rail')).toBe('rail');
     expect(sheetSidePhone('left')).toBeUndefined();

@@ -1,7 +1,12 @@
 import type { Meta, StoryObj } from '@storybook/html-vite';
+import { appNav } from './app-nav.ts';
 import { appShell } from './app-shell.ts';
+import { sampleIcons } from './icons.ts';
 import {
   inboxHeader,
+  navItems,
+  sampleBar,
+  sampleFolderGroups,
   sampleFolders,
   sampleMenuSheet,
   sampleNoTicket,
@@ -9,7 +14,8 @@ import {
   sampleTicket,
   sampleTickets,
 } from './inbox.ts';
-import { splitView, splitViewPanes, type SplitViewArgs } from './split-view.ts';
+import { navList } from './nav-list.ts';
+import { splitView, splitViewPanes, splitViewSplits, type SplitViewArgs } from './split-view.ts';
 import '@ptbdynamic/plinth-css/src/components/icon.css';
 import '@ptbdynamic/plinth-css/src/components/button.css';
 import '@ptbdynamic/plinth-css/src/components/avatar.css';
@@ -26,11 +32,37 @@ import '@ptbdynamic/plinth-css/src/components/page-header.css';
 import '@ptbdynamic/plinth-css/src/components/split-view.css';
 import '@ptbdynamic/plinth-css/src/components/timeline.css';
 import '@ptbdynamic/plinth-css/src/components/nav-list.css';
+import '@ptbdynamic/plinth-css/src/components/app-nav.css';
+import '@ptbdynamic/plinth-css/src/components/app-bar.css';
 import '@ptbdynamic/plinth-css/src/components/app-shell.css';
 
 /** The page around it, in the app shell's main: the page header, whose buttons follow the state. */
 const page = (args: SplitViewArgs) =>
   appShell({
+    main: inboxHeader({ back: args.pane === 'detail' }) + splitView(args),
+  }) + sampleMenuSheet;
+
+/**
+ * The whole frame around it: the app nav as a rail, the Support section's folders in the section
+ * column (from 1280px, titled and named by its title), the app bar, and the page.
+ */
+const framed = (args: SplitViewArgs) =>
+  appShell({
+    nav: appNav({
+      label: 'Main',
+      brandName: 'Harbour',
+      brandHref: '#home',
+      variant: 'rail',
+      mark: sampleIcons.mark,
+      items: navItems,
+    }),
+    section: navList(
+      { groups: sampleFolderGroups },
+      { 'aria-labelledby': 'support-section-title' },
+    ),
+    sectionTitle: 'Support',
+    sectionId: 'support-section',
+    bar: sampleBar,
     main: inboxHeader({ back: args.pane === 'detail' }) + splitView(args),
   }) + sampleMenuSheet;
 
@@ -45,13 +77,16 @@ const meta = {
     detail: sampleTicket(),
     footer: sampleReply,
   },
-  argTypes: { pane: { control: 'inline-radio', options: splitViewPanes } },
+  argTypes: {
+    pane: { control: 'inline-radio', options: splitViewPanes },
+    split: { control: 'inline-radio', options: splitViewSplits },
+  },
   parameters: {
     layout: 'fullscreen',
     docs: {
       description: {
         component:
-          "Up to three panes inside a page: a secondary column (folders), a list and a detail. A phone shows one pane, the list or the detail, as the app sets `pane` from its URL; from 768px the list and the detail sit side by side, and from 1280px the secondary column too, unless `secondary-closed` (the page header's panel button, with `aria-expanded` and `aria-controls`). Each pane scrolls on its own, and the footer (a reply box) holds to the detail's bottom edge. Below 1280px, offer the secondary column's content another way.",
+          "Up to three panes inside a page: a secondary column (folders), a list and a detail. A phone shows one pane, the list or the detail, as the app sets `pane` from its URL; from 768px the list and the detail sit side by side (from 1280px with `split=\"lg\"`, one pane up to there for a detail that needs the room), and from 1280px the secondary column too, unless `secondary-closed` (the page header's panel button, with `aria-expanded` and `aria-controls`). Each pane scrolls on its own, and the footer (a reply box) holds to the detail's bottom edge. Below 1280px, offer the secondary column's content another way.",
       },
     },
   },
@@ -82,6 +117,24 @@ export const LongDetail: Story = { args: { pane: 'detail', detail: sampleTicket(
 
 /** A short list: the list pane's empty room stays its own. */
 export const ShortList: Story = { args: { list: sampleTickets(true, 2) } };
+
+/**
+ * `split="lg"`: one pane up to 1280px, here the list, as wide as the page and scrolling on its
+ * own from 768px; side by side from 1280px.
+ */
+export const SplitFromLg: Story = { args: { split: 'lg' } };
+
+/** `split="lg"` with a ticket open: the detail alone, with the back link, up to 1280px. */
+export const SplitFromLgDetail: Story = { args: { split: 'lg', pane: 'detail' } };
+
+/**
+ * `split="lg"` in the whole frame: beside the app nav's rail from 768px, one pane up to 1280px;
+ * from 1280px the section column holds the folders, and the list and the detail sit beside it.
+ */
+export const SplitFromLgInShell: Story = {
+  args: { split: 'lg', pane: 'detail', secondary: undefined },
+  render: framed,
+};
 
 /** In right-to-left text the secondary column is on the right, then the list, then the detail. */
 export const RightToLeft: Story = {

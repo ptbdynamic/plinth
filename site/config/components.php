@@ -501,7 +501,14 @@ return [
         'split-view' => [
             'name' => 'Split view',
             'group' => 'Layout',
-            'description' => 'A list beside its detail, and folders from 1280px; one pane on a phone.',
+            'description' => 'A list beside its detail, and folders from 1280px; one pane on a phone, or up to 1280px.',
+            'playground' => [
+                'template' => "<x-plinth::split-view style=\"block-size: 20rem; border: var(--plinth-border-width-thin) solid var(--plinth-color-border)\"{attributes}>\n    <x-slot:list>\n        <div style=\"padding: var(--plinth-space-3)\">\n            <x-plinth::list-card>\n                <li><x-plinth::list-row href=\"#\" current description=\"Alex Kim · 10 min\">Cannot export the March report</x-plinth::list-row></li>\n                <li><x-plinth::list-row href=\"#\" description=\"Jo Park · 1 h\">Invoice shows the wrong address</x-plinth::list-row></li>\n            </x-plinth::list-card>\n        </div>\n    </x-slot:list>\n    <article style=\"padding: var(--plinth-space-4)\">\n        <p><strong>Cannot export the March report</strong></p>\n        <p>When I export the March report the download stops with an error.</p>\n    </article>\n</x-plinth::split-view>",
+                'options' => [
+                    'pane' => ['values' => ['list', 'detail'], 'default' => 'list'],
+                    'split' => ['values' => ['md', 'lg'], 'default' => 'md'],
+                ],
+            ],
         ],
 
         'dialog' => [

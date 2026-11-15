@@ -199,7 +199,14 @@ export { breadcrumbsCollapse, breadcrumbsCollapses, type BreadcrumbsCollapse } f
 export { currentPage, pageCount, pageHref, pageItems, type PageItem } from './pagination';
 export { pageHeaderLevel, pageHeaderLevels, type PageHeaderLevel } from './page-header';
 export { appNavVariant, appNavVariants, type AppNavVariant } from './app-nav';
-export { splitViewPane, splitViewPanes, type SplitViewPane } from './split-view';
+export {
+  splitViewPane,
+  splitViewPanes,
+  splitViewSplit,
+  splitViewSplits,
+  type SplitViewPane,
+  type SplitViewSplit,
+} from './split-view';
 export {
   sheetCloseIcon,
   sheetDataSize,

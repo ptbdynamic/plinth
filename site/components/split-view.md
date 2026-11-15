@@ -2,7 +2,8 @@
 
 Up to three panes inside a page: a **secondary** column (folders, a [nav list](nav-list.md)), a **list** (the tickets) and a
 **detail** (the open ticket). A phone shows one pane, the one the app names; from 768px the list
-and the detail sit side by side, and from 1280px the secondary column too. Each pane scrolls on its
+and the detail sit side by side (or from 1280px, when the detail needs the room), and from 1280px
+the secondary column too. Each pane scrolls on its
 own, and the detail can hold a footer on its bottom edge, such as a reply box (docs/adr/0008).
 
 ## When not to use it
@@ -55,7 +56,7 @@ to see one pane at a time.
 Below 768px the split view shows one pane: **`pane="list"`** (the default) or **`pane="detail"`**,
 printed as `data-pane`. The app sets it from its URL, usually `detail` when the URL names an item,
 and the page header's leading action follows: the menu button on the list, a back link to the list
-on the detail. From 768px both panes show, whatever `pane` says.
+on the detail. From 768px both panes show, whatever `pane` says (from 1280px with `split="lg"`).
 
 ```blade tab="Blade"
 <x-plinth::split-view :pane="$ticket ? 'detail' : 'list'">…</x-plinth::split-view>
@@ -68,6 +69,38 @@ on the detail. From 768px both panes show, whatever `pane` says.
 ```tsx tab="React"
 <PlinthSplitView pane={ticketId ? 'detail' : 'list'}>…</PlinthSplitView>
 ```
+
+## When the panes split
+
+From 768px the list and the detail sit side by side. On a portrait tablet that leaves the detail
+about 450px, less beside the [app nav](app-nav.md)'s rail. When the detail needs the room (a
+client's details, a run's log), **`split="lg"`** (`data-split="lg"`) keeps one pane up to 1280px,
+the one `pane` names, as on a phone, and splits from 1280px. From 768px that one pane is as wide as
+the split view and scrolls on its own, as the panes do, so the page's scrolling changes once, at
+768px. The default, **`split="md"`**, prints nothing.
+
+The app keeps setting `pane` from its URL, so back goes from the detail to the list on a tablet as
+it does on a phone. The page header's back link is the app's, with either split: with
+`split="lg"`, hide it from 1280px, where the list shows beside the detail, with your own CSS (a
+`min-width: 1280px` media query, or a utility such as Tailwind's `xl:hidden`).
+
+```blade tab="Blade"
+<x-plinth::split-view split="lg" :pane="$client ? 'detail' : 'list'">…</x-plinth::split-view>
+```
+
+```vue tab="Vue"
+<PlinthSplitView split="lg" :pane="route.params.client ? 'detail' : 'list'">…</PlinthSplitView>
+```
+
+```tsx tab="React"
+<PlinthSplitView split="lg" pane={clientId ? 'detail' : 'list'}>
+    …
+</PlinthSplitView>
+```
+
+Plinth keeps two breakpoints, 768px and 1280px, so the split waits for 1280px rather than a
+landscape tablet's 1024px. The split follows the window's width, not the split view's, so in the
+playground above `split` changes nothing in a window 1280px or wider; narrow it to see one pane.
 
 ## The secondary column
 
@@ -114,11 +147,12 @@ panes' end edges; sides are logical, so in right-to-left text the list is on the
 | `plinth-split-view-detail`    | `<div>` | the detail, or an empty state when nothing is open        |
 | `plinth-split-view-footer`    | `<div>` | optional, the detail's last part: held to its bottom edge |
 
-| Attribute or state        | On       | Values                                                                  | Default     |
-| ------------------------- | -------- | ----------------------------------------------------------------------- | ----------- |
-| `data-pane`               | the root | `list`, `detail`: the one pane a phone shows                            | `list`      |
-| `data-secondary="closed"` | the root | collapses the secondary column                                          | none (open) |
-| width                     | the root | one pane below 768px, list and detail from 768px, all three from 1280px | by width    |
+| Attribute or state        | On       | Values                                                                  | Default      |
+| ------------------------- | -------- | ----------------------------------------------------------------------- | ------------ |
+| `data-pane`               | the root | `list`, `detail`: the one pane a phone shows                            | `list`       |
+| `data-secondary="closed"` | the root | collapses the secondary column                                          | none (open)  |
+| `data-split="lg"`         | the root | one pane up to 1280px, list and detail from 1280px                      | none (768px) |
+| width                     | the root | one pane below 768px, list and detail from 768px, all three from 1280px | by width     |
 
 The panes are `<div>`s: what goes in them brings its own semantics (a `<nav>` of folders, a list
 of links, an `<article>`).
@@ -126,18 +160,21 @@ of links, an `<article>`).
 ## Props
 
 The same names in every layer; React takes the Vue props, with slots as `children` and node props.
-An unknown `pane` falls back to `list`. The app's attributes land on the root.
+An unknown `pane` falls back to `list`, an unknown `split` to `md`. The app's attributes land on
+the root.
 
 | Prop             | Blade                | Vue                | React             | Default |
 | ---------------- | -------------------- | ------------------ | ----------------- | ------- |
 | pane             | `pane="detail"`      | `pane="detail"`    | `pane="detail"`   | `list`  |
+| split            | `split="lg"`         | `split="lg"`       | `split="lg"`      | `md`    |
 | secondary closed | `secondary-closed`   | `secondary-closed` | `secondaryClosed` | off     |
 | secondary        | `<x-slot:secondary>` | `#secondary` slot  | `secondary={…}`   | none    |
 | list             | `<x-slot:list>`      | `#list` slot       | `list={…}`        | none    |
 | detail           | the slot             | the default slot   | `children`        | none    |
 | footer           | `<x-slot:footer>`    | `#footer` slot     | `footer={…}`      | none    |
 
-In Blade the pane can also be the enum, `BDynamic\Plinth\Enums\SplitViewPane`.
+In Blade the pane and the split can also be the enums, `BDynamic\Plinth\Enums\SplitViewPane` and
+`BDynamic\Plinth\Enums\SplitViewSplit`.
 
 ```blade tab="Blade"
 <x-plinth::split-view :pane="$ticket ? 'detail' : 'list'" :secondary-closed="! $foldersOpen">
@@ -177,7 +214,8 @@ import { PlinthSplitView } from '@ptbdynamic/plinth/react';
 
 ## Accessibility
 
-- A pane that isn't shown is `display: none`, so it is out of the reading and tab order too.
+- A pane that isn't shown is `display: none`, so it is out of the reading and tab order too, at
+  every width it is hidden (below 1280px with `split="lg"`).
 - The panel button says whether the column is open with `aria-expanded`, and which it is with
   `aria-controls`.
 - From 768px each pane is a scrolling region: keep something focusable in it (a list of links, a

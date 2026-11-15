@@ -103,3 +103,9 @@ adds.
   `data-section="closed"` on the shell collapses the column, for a button with `aria-expanded` and
   `aria-controls`. As with the split view's secondary column, below 1280px the column isn't shown,
   the app hides that button, and the page offers the same links as a section menu.
+- Amended 2026-11-15 ([#179](https://github.com/ptbdynamic/plinth/issues/179)): the split view
+  takes `data-split="lg"`, which puts the list and the detail side by side only from 1280px, for a
+  detail that needs the room on a portrait tablet. Up to 1280px it shows the one pane `data-pane`
+  names, as on a phone, so section 3's "from 768px both show" holds only without it. From 768px that
+  pane still scrolls on its own, as section 2 says, so scrolling changes once. It reuses the 1280px
+  breakpoint rather than adding one at 1024px, so Plinth keeps two.
