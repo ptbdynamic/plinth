@@ -283,8 +283,9 @@ const priorityColumns = [
 const priorityRow = (order: Order, extra: Partial<DataTableRowArgs> = {}): DataTableRowArgs => {
   const row = orderRow(order, extra);
   row.cells.splice(2, 0, cell('Email', order.email, { hideOnPhone: true, priority: '3' }));
-  row.cells[3]!.priority = '2';
-  row.cells[5]!.priority = '2';
+  for (const field of row.cells) {
+    if (field.label === 'Date' || field.label === 'Total') field.priority = '2';
+  }
   return row;
 };
 

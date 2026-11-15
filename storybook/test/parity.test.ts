@@ -1766,6 +1766,14 @@ const cases: ParityCase[] = [
     ...dataTableCellDefaults,
     priority: 'low' as DataTableCellArgs['priority'],
   }),
+  dataTableCellCase('Data table cell/blank priority', {
+    ...dataTableCellDefaults,
+    priority: ' ' as DataTableCellArgs['priority'],
+  }),
+  dataTableCellCase('Data table cell/number priority', {
+    ...dataTableCellDefaults,
+    priority: 3 as unknown as DataTableCellArgs['priority'],
+  }),
   dataTableCellCase(
     'Data table cell/priority with a clashing attribute',
     { ...dataTableCellDefaults, priority: '2' },
@@ -4036,6 +4044,8 @@ describe('parity with the stories', () => {
       'Data table cell/HiddenOnPhone',
       'Data table cell/Priority',
       'Data table cell/unknown priority',
+      'Data table cell/blank priority',
+      'Data table cell/number priority',
       'Data table cell/priority with a clashing attribute',
       'Data table cell/blank label',
       'Data table cell/unknown kind',
