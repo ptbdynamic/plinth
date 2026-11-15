@@ -178,6 +178,13 @@
       "$description": "The least width of the app bar's search button beside the breadcrumbs (160px); past it, the trail's labels are cut short."
     }
   },
+  "app-shell": {
+    "section-width": {
+      "$type": "dimension",
+      "$value": "{size.sidebar}",
+      "$description": "The app shell's section column, beside the app nav from 1280px (240px)."
+    }
+  },
   "split-view": {
     "secondary-width": {
       "$type": "dimension",
