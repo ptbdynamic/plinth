@@ -19,15 +19,15 @@ const spend = {
 describe('PlinthMeter', () => {
   it('prints the meter markup contract', () => {
     expect(renderToStaticMarkup(<PlinthMeter {...spend} />)).toBe(
-      '<div data-tone="warning" class="plinth-meter"><span class="plinth-meter-label" id="spend-label">Spend this month</span><span class="plinth-meter-value" aria-hidden="true">€120 of €150</span>' +
-        '<meter class="plinth-meter-bar" id="spend" min="0" max="150" low="105" high="135" optimum="0" value="120" aria-labelledby="spend-label" aria-describedby="spend-description" aria-valuetext="€120 of €150">€120 of €150</meter>' +
+      '<div data-tone="warning" class="plinth-meter"><label class="plinth-meter-label" for="spend">Spend this month</label><span class="plinth-meter-value" aria-hidden="true">€120 of €150</span>' +
+        '<meter class="plinth-meter-bar" id="spend" min="0" max="150" low="105" high="135" optimum="0" value="120" aria-describedby="spend-description" aria-valuetext="€120 of €150">€120 of €150</meter>' +
         `<span class="plinth-meter-description" id="spend-description"><span class="plinth-icon plinth-meter-tone" data-size="sm" aria-hidden="true">${calloutIcons.warning}</span>Runs pause at €150.</span></div>`,
     );
   });
 
   it('prints only the label and the bar by default', () => {
     expect(renderToStaticMarkup(<PlinthMeter id="quota" label="Quota" />)).toBe(
-      '<div data-tone="neutral" class="plinth-meter"><span class="plinth-meter-label" id="quota-label">Quota</span><meter class="plinth-meter-bar" id="quota" min="0" max="100" value="0" aria-labelledby="quota-label">0</meter></div>',
+      '<div data-tone="neutral" class="plinth-meter"><label class="plinth-meter-label" for="quota">Quota</label><meter class="plinth-meter-bar" id="quota" min="0" max="100" value="0">0</meter></div>',
     );
   });
 
@@ -36,7 +36,7 @@ describe('PlinthMeter', () => {
     const meter = container.querySelector('meter')!;
 
     expect(meter.id).toMatch(/^plinth-meter-/);
-    expect(meter.getAttribute('aria-labelledby')).toBe(`${meter.id}-label`);
+    expect(container.querySelector('label')!.htmlFor).toBe(meter.id);
   });
 
   it('needs a label', () => {
@@ -108,7 +108,10 @@ describe('meterTone', () => {
     [{ value: 70, low: 70, high: 90, optimum: 0 }, 'neutral'],
     [{ value: 80, low: 70, high: 90, optimum: 0 }, 'warning'],
     [{ value: 95, low: 70, high: 90, optimum: 0 }, 'danger'],
-    [{ value: 120 }, 'danger'],
+    [{ value: 120 }, 'neutral'],
+    [{ value: 100, low: 70, optimum: 0 }, 'warning'],
+    [{ value: 120, low: 70, optimum: 0 }, 'danger'],
+    [{ value: 120, low: 30, high: 90, optimum: 100 }, 'neutral'],
     [{ value: 95, low: 30, high: 90, optimum: 100 }, 'neutral'],
     [{ value: 50, low: 30, high: 90, optimum: 100 }, 'warning'],
     [{ value: 10, low: 30, high: 90, optimum: 100 }, 'danger'],
@@ -129,6 +132,7 @@ describe('meterTone', () => {
       optimum: undefined,
     });
     expect(meterNumber(null)).toBeUndefined();
+    expect(meterNumber('0x10')).toBeUndefined();
     expect(meterNumber(Infinity)).toBeUndefined();
     // @ts-expect-error a boolean, as a project might pass at runtime
     expect(meterNumber(true)).toBeUndefined();

@@ -40,7 +40,7 @@ export function meter(args: MeterArgs, attributes: Attributes = {}): string {
     value === undefined ? '' : ` ${name}="${escape(String(value))}"`;
   return [
     `<div class="${classes}"${extra} data-tone="${tone}">`,
-    `<span class="plinth-meter-label" id="${escape(id)}-label">${escape(label)}</span>`,
+    `<label class="plinth-meter-label" for="${escape(id)}">${escape(label)}</label>`,
     valueText
       ? `<span class="plinth-meter-value" aria-hidden="true">${escape(valueText)}</span>`
       : '',
@@ -48,7 +48,7 @@ export function meter(args: MeterArgs, attributes: Attributes = {}): string {
       optional('low', range.low) +
       optional('high', range.high) +
       optional('optimum', range.optimum) +
-      ` value="${range.value}" aria-labelledby="${escape(id)}-label"` +
+      ` value="${range.value}"` +
       optional('aria-describedby', description ? `${id}-description` : undefined) +
       optional('aria-valuetext', valueText) +
       `>${escape(valueText ?? String(range.value))}</meter>`,

@@ -21,8 +21,8 @@ describe('PlinthMeter', () => {
     const wrapper = mount(PlinthMeter, { props: spend });
 
     expect(squish(wrapper.html())).toBe(
-      '<div class="plinth-meter" data-tone="warning"><span id="spend-label" class="plinth-meter-label">Spend this month</span><span class="plinth-meter-value" aria-hidden="true">€120 of €150</span>' +
-        '<meter id="spend" class="plinth-meter-bar" min="0" max="150" low="105" high="135" optimum="0" aria-labelledby="spend-label" aria-describedby="spend-description" aria-valuetext="€120 of €150" value="120">€120 of €150</meter>' +
+      '<div class="plinth-meter" data-tone="warning"><label class="plinth-meter-label" for="spend">Spend this month</label><span class="plinth-meter-value" aria-hidden="true">€120 of €150</span>' +
+        '<meter id="spend" class="plinth-meter-bar" min="0" max="150" low="105" high="135" optimum="0" aria-describedby="spend-description" aria-valuetext="€120 of €150" value="120">€120 of €150</meter>' +
         `<span id="spend-description" class="plinth-meter-description"><span class="plinth-icon plinth-meter-tone" data-size="sm" aria-hidden="true">${calloutIcons.warning}</span>Runs pause at €150.</span></div>`,
     );
   });
@@ -31,7 +31,7 @@ describe('PlinthMeter', () => {
     const wrapper = mount(PlinthMeter, { props: { id: 'quota', label: 'Quota' } });
 
     expect(squish(wrapper.html())).toBe(
-      '<div class="plinth-meter" data-tone="neutral"><span id="quota-label" class="plinth-meter-label">Quota</span><meter id="quota" class="plinth-meter-bar" min="0" max="100" aria-labelledby="quota-label" value="0">0</meter></div>',
+      '<div class="plinth-meter" data-tone="neutral"><label class="plinth-meter-label" for="quota">Quota</label><meter id="quota" class="plinth-meter-bar" min="0" max="100" value="0">0</meter></div>',
     );
   });
 
@@ -40,7 +40,7 @@ describe('PlinthMeter', () => {
     const id = wrapper.get('meter').attributes('id');
 
     expect(id).toMatch(/^plinth-meter-/);
-    expect(wrapper.get('meter').attributes('aria-labelledby')).toBe(`${id}-label`);
+    expect(wrapper.get('label').attributes('for')).toBe(id);
   });
 
   it('needs a label', () => {
@@ -108,7 +108,10 @@ describe('meterTone', () => {
     [{ value: 70, low: 70, high: 90, optimum: 0 }, 'neutral'],
     [{ value: 80, low: 70, high: 90, optimum: 0 }, 'warning'],
     [{ value: 95, low: 70, high: 90, optimum: 0 }, 'danger'],
-    [{ value: 120 }, 'danger'],
+    [{ value: 120 }, 'neutral'],
+    [{ value: 100, low: 70, optimum: 0 }, 'warning'],
+    [{ value: 120, low: 70, optimum: 0 }, 'danger'],
+    [{ value: 120, low: 30, high: 90, optimum: 100 }, 'neutral'],
     [{ value: 95, low: 30, high: 90, optimum: 100 }, 'neutral'],
     [{ value: 50, low: 30, high: 90, optimum: 100 }, 'warning'],
     [{ value: 10, low: 30, high: 90, optimum: 100 }, 'danger'],
@@ -129,6 +132,7 @@ describe('meterTone', () => {
       optimum: undefined,
     });
     expect(meterNumber(null)).toBeUndefined();
+    expect(meterNumber('0x10')).toBeUndefined();
     expect(meterNumber(Infinity)).toBeUndefined();
     // @ts-expect-error a boolean, as a project might pass at runtime
     expect(meterNumber(true)).toBeUndefined();

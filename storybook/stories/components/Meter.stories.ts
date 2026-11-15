@@ -64,7 +64,7 @@ export const OverTheLimit: Story = {
     description: 'Over the cap by €12. Runs are paused.',
   },
 };
-/** A higher value is better: optimum above high. */
+/** A higher value is better: optimum above high, so past high is neutral. Success comes only from the app. */
 export const HigherIsBetter: Story = {
   args: {
     id: 'uptime',
@@ -76,7 +76,6 @@ export const HigherIsBetter: Story = {
     optimum: 50,
     valueText: '46 of 50',
     description: 'Above the target of 45.',
-    tone: 'success',
   },
 };
 /** The app chooses the tone, whatever the numbers say. */
@@ -131,7 +130,7 @@ export const LongText: Story = {
     low: 1000,
     high: 1400,
     optimum: 0,
-    valueText: '1,284 of 1,500 documents',
+    valueText: '1,284 of 1,500 documents waiting for a signature',
     description: 'Most of them were uploaded before the end of the previous quarter.',
   },
 };

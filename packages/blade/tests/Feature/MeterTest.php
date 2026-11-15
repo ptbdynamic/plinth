@@ -8,19 +8,19 @@ it('prints the meter markup contract', function () {
     $html = squish(Blade::render('<x-plinth::meter id="spend" label="Spend this month" :value="120" :max="150" :low="105" :high="135" :optimum="0" value-text="€120 of €150" description="Runs pause at €150." />'));
 
     expect($html)
-        ->toStartWith('<div class="plinth-meter" data-tone="warning"><span class="plinth-meter-label" id="spend-label">Spend this month</span><span class="plinth-meter-value" aria-hidden="true">€120 of €150</span><meter class="plinth-meter-bar" id="spend" min="0" max="150" low="105" high="135" optimum="0" value="120" aria-labelledby="spend-label" aria-describedby="spend-description" aria-valuetext="€120 of €150">€120 of €150</meter><span class="plinth-meter-description" id="spend-description"><span class="plinth-icon plinth-meter-tone" data-size="sm" aria-hidden="true"><svg')
+        ->toStartWith('<div class="plinth-meter" data-tone="warning"><label class="plinth-meter-label" for="spend">Spend this month</label><span class="plinth-meter-value" aria-hidden="true">€120 of €150</span><meter class="plinth-meter-bar" id="spend" min="0" max="150" low="105" high="135" optimum="0" value="120" aria-describedby="spend-description" aria-valuetext="€120 of €150">€120 of €150</meter><span class="plinth-meter-description" id="spend-description"><span class="plinth-icon plinth-meter-tone" data-size="sm" aria-hidden="true"><svg')
         ->toEndWith('</svg></span>Runs pause at €150.</span></div>');
 });
 
 it('prints only the label and the bar by default, with min 0, max 100 and the value at the minimum', function () {
     expect(squish(Blade::render('<x-plinth::meter id="quota" label="Quota" />')))
-        ->toBe('<div class="plinth-meter" data-tone="neutral"><span class="plinth-meter-label" id="quota-label">Quota</span><meter class="plinth-meter-bar" id="quota" min="0" max="100" value="0" aria-labelledby="quota-label">0</meter></div>');
+        ->toBe('<div class="plinth-meter" data-tone="neutral"><label class="plinth-meter-label" for="quota">Quota</label><meter class="plinth-meter-bar" id="quota" min="0" max="100" value="0">0</meter></div>');
 });
 
 it('makes up an id without one', function () {
     $html = Blade::render('<x-plinth::meter label="Quota" :value="5" />');
 
-    expect($html)->toMatch('/<meter class="plinth-meter-bar" id="(plinth-meter-[a-z0-9]{8})"[^>]* aria-labelledby="\1-label"/');
+    expect($html)->toMatch('/<label class="plinth-meter-label" for="(plinth-meter-[a-z0-9]{8})">Quota<\/label>\s*<meter class="plinth-meter-bar" id="\1"/');
 });
 
 it('needs a label', function () {
@@ -55,7 +55,7 @@ it('decides the tone from the numbers for an unknown tone', function () {
 
 it('reads numbers given as strings and ignores what is not a number', function () {
     expect(squish(Blade::render('<x-plinth::meter id="q" label="Quota" value=" 2.50 " min="1" max="x" low="" high="4" optimum="abc" />')))
-        ->toContain('<meter class="plinth-meter-bar" id="q" min="1" max="100" high="4" value="2.5" aria-labelledby="q-label">2.5</meter>');
+        ->toContain('<meter class="plinth-meter-bar" id="q" min="1" max="100" high="4" value="2.5">2.5</meter>');
 });
 
 it('escapes the text', function () {
@@ -89,7 +89,10 @@ it('decides the tone as the browser decides the region', function (array $number
     'lower is better, at low' => [['value' => 70, 'low' => 70, 'high' => 90, 'optimum' => 0], Tone::Neutral],
     'lower is better, past low' => [['value' => 80, 'low' => 70, 'high' => 90, 'optimum' => 0], Tone::Warning],
     'lower is better, past high' => [['value' => 95, 'low' => 70, 'high' => 90, 'optimum' => 0], Tone::Danger],
-    'past max' => [['value' => 120], Tone::Danger],
+    'past max, no thresholds' => [['value' => 120], Tone::Neutral],
+    'a cap at max' => [['value' => 100, 'low' => 70, 'optimum' => 0], Tone::Warning],
+    'a cap past max' => [['value' => 120, 'low' => 70, 'optimum' => 0], Tone::Danger],
+    'higher is better, past max' => [['value' => 120, 'low' => 30, 'high' => 90, 'optimum' => 100], Tone::Neutral],
     'higher is better, past high' => [['value' => 95, 'low' => 30, 'high' => 90, 'optimum' => 100], Tone::Neutral],
     'higher is better, between' => [['value' => 50, 'low' => 30, 'high' => 90, 'optimum' => 100], Tone::Warning],
     'higher is better, under low' => [['value' => 10, 'low' => 30, 'high' => 90, 'optimum' => 100], Tone::Danger],
@@ -103,6 +106,7 @@ it('treats only numbers and numeric strings as numbers', function () {
         ->and(Meter::number(1.5))->toBe(1.5)
         ->and(Meter::number(' 3 '))->toBe(3)
         ->and(Meter::number(''))->toBeNull()
+        ->and(Meter::number('0x10'))->toBeNull()
         ->and(Meter::number(true))->toBeNull()
         ->and(Meter::number(INF))->toBeNull()
         ->and(Meter::number([1]))->toBeNull();

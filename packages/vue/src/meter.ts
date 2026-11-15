@@ -10,9 +10,11 @@ export interface MeterNumbers {
   optimum?: number | string | null;
 }
 
-/** A finite number, or undefined for anything else (a blank string included). */
+/** A finite number, or undefined for anything else (a blank or non-decimal string included). */
 export function meterNumber(value: number | string | null | undefined): number | undefined {
-  if (typeof value === 'string' && value.trim() === '') return undefined;
+  if (typeof value === 'string' && !/^\s*[-+]?(\d+\.?\d*|\.\d+)(e[-+]?\d+)?\s*$/i.test(value)) {
+    return undefined;
+  }
   if (typeof value !== 'number' && typeof value !== 'string') return undefined;
   const number = Number(value);
   return Number.isFinite(number) ? number : undefined;
@@ -40,13 +42,13 @@ export function meterRange(numbers: MeterNumbers): {
 
 /**
  * The tone of a meter: the one the app chose, or else the browser's region for its numbers
- * (optimum: neutral, suboptimal: warning, even less good: danger), and danger past the maximum.
+ * (optimum: neutral, suboptimal: warning, even less good: danger), and danger past the maximum of a
+ * cap (an optimum below low).
  */
 export function meterTone(numbers: MeterNumbers, chosen?: string | null): Tone {
   if (tones.includes(chosen as Tone)) return chosen as Tone;
   const { value, min, max: given, low, high, optimum } = meterRange(numbers);
   const max = Math.max(given, min);
-  if (value > max) return 'danger';
   const clamp = (number: number, lower: number) => Math.min(Math.max(number, lower), max);
   const current = clamp(value, min);
   const lowest = low === undefined ? min : clamp(low, min);
@@ -54,7 +56,7 @@ export function meterTone(numbers: MeterNumbers, chosen?: string | null): Tone {
   const best = optimum === undefined ? (min + max) / 2 : clamp(optimum, min);
   if (best < lowest) {
     if (current <= lowest) return 'neutral';
-    return current <= highest ? 'warning' : 'danger';
+    return current <= highest && value <= max ? 'warning' : 'danger';
   }
   if (best > highest) {
     if (current >= highest) return 'neutral';

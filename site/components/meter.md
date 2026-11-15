@@ -30,8 +30,8 @@ reading of it, usually a percentage.
 
 Give **low**, **high** and **optimum**, as on a native `<meter>`, and the numbers choose the tone
 as the browser chooses the meter's region. For a cap, the optimum is 0: up to `low` the meter is
-neutral, past it warning, past `high` danger. A value past `max` fills the bar in danger; say by
-how much in the words.
+neutral, past it warning, past `high` danger. Past `max` the bar is full and a cap's meter is
+danger, even without `high`; say by how much in the words.
 
 ```blade example
 <x-plinth::meter label="Spend this month" :value="38" :max="150" :low="105" :high="135" :optimum="0" value-text="€38 of €150" description="Runs pause at €150." />
@@ -43,14 +43,14 @@ how much in the words.
 Where a higher value is better, put the optimum above `high`: past `high` is neutral, between
 `low` and `high` warning, under `low` danger. With the optimum between `low` and `high`, a value
 inside them is neutral and one outside warning. Without `low`, `high` or `optimum` every value is
-neutral.
+neutral. The numbers never give success: that tone comes only from the `tone` prop.
 
-| Region         | Tone        | Example               |
-| -------------- | ----------- | --------------------- |
-| optimum        | **neutral** | _€38 of €150_         |
-| suboptimal     | **warning** | _€120 of €150_        |
-| even less good | **danger**  | _€142 of €150_        |
-| past `max`     | **danger**  | _Over the cap by €12_ |
+| Region             | Tone        | Example               |
+| ------------------ | ----------- | --------------------- |
+| optimum            | **neutral** | _€38 of €150_         |
+| suboptimal         | **warning** | _€120 of €150_        |
+| even less good     | **danger**  | _€142 of €150_        |
+| past a cap's `max` | **danger**  | _Over the cap by €12_ |
 
 ## A tone of your own
 
@@ -89,7 +89,7 @@ Blade, Vue and React print exactly this markup, and the parity tests hold them t
 | Part                        | Element            | Required | What it is                                                              |
 | --------------------------- | ------------------ | -------- | ----------------------------------------------------------------------- |
 | `.plinth-meter`             | `<div>`            | yes      | The root. Takes `data-tone` and forwarded attributes                    |
-| `.plinth-meter-label`       | `<span>`           | yes      | What is measured, the meter's name; its id is the meter's with `-label` |
+| `.plinth-meter-label`       | `<label>`          | yes      | What is measured, the meter's name, with `for` pointing at the meter    |
 | `.plinth-meter-value`       | `<span>`           | no       | The value text, hidden from screen readers: the bar reads it out        |
 | `.plinth-meter-bar`         | `<meter>`          | yes      | The bar. Takes the `id`, the numbers, and the value text as its content |
 | `.plinth-meter-description` | `<span>`           | no       | The line under the bar; its id is the meter's with `-description`       |
@@ -101,10 +101,12 @@ Blade, Vue and React print exactly this markup, and the parity tests hold them t
 | `min`, `max`             | `.plinth-meter-bar` | numbers                                      | `0`, `100`       |
 | `low`, `high`, `optimum` | `.plinth-meter-bar` | numbers, printed only when given             | none             |
 | `value`                  | `.plinth-meter-bar` | a number; past `max` the bar is full         | `min`            |
-| `aria-labelledby`        | `.plinth-meter-bar` | the label's id                               | always           |
 | `aria-describedby`       | `.plinth-meter-bar` | the description's id                         | none             |
 | `aria-valuetext`         | `.plinth-meter-bar` | the value text                               | none             |
 | `aria-hidden`            | the value, the icon | always `true`: they repeat what the bar says | none             |
+
+The bar's thickness, track and fills are the component tokens `--plinth-meter-height`,
+`--plinth-meter-track` and `--plinth-meter-<tone>-fill`, for a project to tune.
 
 A missing `data-tone` looks neutral. Blade, Vue and React print the tone you give, or, for no tone
 or one they don't know, the one the numbers decide. Set the tone with the `tone` prop, never a
@@ -172,13 +174,14 @@ import { PlinthMeter } from '@ptbdynamic/plinth/react';
 ## Accessibility
 
 - **A native `<meter>`,** so screen readers announce a meter with its name, the label (through
-  `aria-labelledby`), and its value: the value text through `aria-valuetext`, or the browser's
+  its `<label for>`), and its value: the value text through `aria-valuetext`, or the browser's
   own reading without it. The visible value text is hidden from them so it isn't read twice.
 - **The description** is read after the value, through `aria-describedby`.
 - **Colour is never the only cue.** The words say what the tone means (_Runs pause at €150_,
   _Over the cap by €12_); the bar's colour and the description's icon only reinforce them, and
-  the icon is hidden from screen readers. The description's text meets WCAG AA in every tone,
-  light and dark.
+  the icon is hidden from screen readers, so a meter with a tone other than neutral needs a
+  description (or value text) that says what the tone means. The description's text meets WCAG
+  AA in every tone, and the bar's fill 3:1 against its track, light and dark.
 - **A value that changes while the page is open** is not announced by itself. If the change
   matters, the app says so in a container with `role="status"` that stays on the page.
 - **Forced colours:** the bar keeps an outline and its fill is the system's highlight colour.

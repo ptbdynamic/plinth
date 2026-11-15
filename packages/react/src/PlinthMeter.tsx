@@ -64,9 +64,9 @@ export function PlinthMeter({
   // added to Plinth's.
   return (
     <div data-tone={dataTone} {...rest} className={classNames('plinth-meter', className)}>
-      <span className="plinth-meter-label" id={`${meterId}-label`}>
+      <label className="plinth-meter-label" htmlFor={meterId}>
         {label}
-      </span>
+      </label>
       {text ? (
         <span className="plinth-meter-value" aria-hidden="true">
           {text}
@@ -81,7 +81,6 @@ export function PlinthMeter({
         high={range.high}
         optimum={range.optimum}
         value={range.value}
-        aria-labelledby={`${meterId}-label`}
         aria-describedby={note ? `${meterId}-description` : undefined}
         aria-valuetext={text}
       >

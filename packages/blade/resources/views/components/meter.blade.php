@@ -31,7 +31,6 @@
         'high' => $range['high'],
         'optimum' => $range['optimum'],
         'value' => $range['value'],
-        'aria-labelledby' => $id.'-label',
         'aria-describedby' => $description === null ? null : $id.'-description',
         'aria-valuetext' => $valueText,
     ])->reject(fn ($attribute) => $attribute === null)
@@ -39,7 +38,7 @@
         ->implode('');
 @endphp
 <div {{ $attributes->merge(['class' => 'plinth-meter', 'data-tone' => $tone->value]) }}>
-    <span class="plinth-meter-label" id="{{ $id }}-label">{{ $label }}</span>
+    <label class="plinth-meter-label" for="{{ $id }}">{{ $label }}</label>
     @if ($valueText !== null)
         <span class="plinth-meter-value" aria-hidden="true">{{ $valueText }}</span>
     @endif

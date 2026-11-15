@@ -58,7 +58,7 @@ const note = computed(() => (props.description?.trim() ? props.description : und
 
 <template>
   <div class="plinth-meter" :data-tone="dataTone">
-    <span :id="`${meterId}-label`" class="plinth-meter-label">{{ label }}</span>
+    <label class="plinth-meter-label" :for="meterId">{{ label }}</label>
     <span v-if="text" class="plinth-meter-value" aria-hidden="true">{{ text }}</span>
     <meter
       :id="meterId"
@@ -69,7 +69,6 @@ const note = computed(() => (props.description?.trim() ? props.description : und
       :high="range.high"
       :optimum="range.optimum"
       :value="range.value"
-      :aria-labelledby="`${meterId}-label`"
       :aria-describedby="note ? `${meterId}-description` : undefined"
       :aria-valuetext="text"
     >

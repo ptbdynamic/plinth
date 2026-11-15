@@ -42,7 +42,8 @@ final class Meter
 
     /**
      * The tone of a meter: the one the app chose, or else the browser's region for its numbers
-     * (optimum: neutral, suboptimal: warning, even less good: danger), and danger past the maximum.
+     * (optimum: neutral, suboptimal: warning, even less good: danger), and danger past the maximum of a
+     * cap (an optimum below low).
      *
      * @param  array{value: int|float, min: int|float, max: int|float, low: int|float|null, high: int|float|null, optimum: int|float|null}  $range
      */
@@ -56,9 +57,6 @@ final class Meter
         }
         $min = $range['min'];
         $max = max($range['max'], $min);
-        if ($range['value'] > $max) {
-            return Tone::Danger;
-        }
         $clamp = fn (int|float $number, int|float $lower): int|float => min(max($number, $lower), $max);
         $current = $clamp($range['value'], $min);
         $lowest = $range['low'] === null ? $min : $clamp($range['low'], $min);
@@ -69,7 +67,7 @@ final class Meter
                 return Tone::Neutral;
             }
 
-            return $current <= $highest ? Tone::Warning : Tone::Danger;
+            return $current <= $highest && $range['value'] <= $max ? Tone::Warning : Tone::Danger;
         }
         if ($best > $highest) {
             if ($current >= $highest) {
