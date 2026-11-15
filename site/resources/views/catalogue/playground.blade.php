@@ -5,7 +5,7 @@
 --}}
 <section id="playground" class="site-playground" aria-labelledby="playground-title" x-data="playground">
     <h2 id="playground-title" class="site-visually-hidden">Playground</h2>
-    <div class="site-demo-stage site-playground-stage">
+    <div class="site-demo-stage site-playground-stage"@if (filled($playground->layout)) data-layout="{{ $playground->layout }}"@endif>
         {{ $preview }}
     </div>
     <div class="site-playground-controls">

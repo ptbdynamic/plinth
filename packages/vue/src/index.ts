@@ -31,6 +31,7 @@ import PlinthMenuGroup from './PlinthMenuGroup.vue';
 import PlinthMenuItem from './PlinthMenuItem.vue';
 import PlinthMenuSeparator from './PlinthMenuSeparator.vue';
 import PlinthMenuSheet from './PlinthMenuSheet.vue';
+import PlinthMeter from './PlinthMeter.vue';
 import PlinthNavList from './PlinthNavList.vue';
 import PlinthNavListGroup from './PlinthNavListGroup.vue';
 import PlinthNavListItem from './PlinthNavListItem.vue';
@@ -90,6 +91,7 @@ export {
   PlinthMenuItem,
   PlinthMenuSeparator,
   PlinthMenuSheet,
+  PlinthMeter,
   PlinthNavList,
   PlinthNavListGroup,
   PlinthNavListItem,
@@ -178,6 +180,7 @@ export {
   pasteOneTimeCode,
   type OneTimeCodeLength,
 } from './one-time-code';
+export { meterNumber, meterRange, meterTone, type MeterNumbers } from './meter';
 export { menuIdKey, menuItemTone, menuItemTones, type MenuItemTone } from './menu';
 export { pageHeaderLevel, pageHeaderLevels, type PageHeaderLevel } from './page-header';
 export { splitViewPane, splitViewPanes, type SplitViewPane } from './split-view';
@@ -236,6 +239,7 @@ export const Plinth: Plugin = {
     app.component('PlinthMenuItem', PlinthMenuItem);
     app.component('PlinthMenuSeparator', PlinthMenuSeparator);
     app.component('PlinthMenuSheet', PlinthMenuSheet);
+    app.component('PlinthMeter', PlinthMeter);
     app.component('PlinthNavList', PlinthNavList);
     app.component('PlinthNavListGroup', PlinthNavListGroup);
     app.component('PlinthNavListItem', PlinthNavListItem);

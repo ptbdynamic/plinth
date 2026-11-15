@@ -33,6 +33,13 @@
       "$description": "The list header's height (44px), a list row's, so the bar and the rows under it line up."
     }
   },
+  "meter": {
+    "height": {
+      "$type": "dimension",
+      "$value": "{space.2}",
+      "$description": "The thickness of the meter's bar (8px)."
+    }
+  },
   "pill": {
     "height": {
       "$type": "dimension",

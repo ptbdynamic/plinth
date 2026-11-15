@@ -63,6 +63,16 @@ it('shows the playground as the query string asks, in every layer', function () 
         ->assertSeeInOrder(['Blade', 'Vue', 'React', 'HTML']);
 });
 
+it('lays the playground out as its component asks', function () {
+    $this->get('/components/meter?level=over')
+        ->assertOk()
+        ->assertSee('<div class="site-demo-stage site-playground-stage" data-layout="stack">', false)
+        ->assertSee('data-tone="danger"', false);
+    $this->get('/components/button')
+        ->assertOk()
+        ->assertSee('<div class="site-demo-stage site-playground-stage">', false);
+});
+
 it('has no playground for a component without choices', function () {
     $this->get('/components/page-header')
         ->assertOk()

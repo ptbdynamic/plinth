@@ -63,5 +63,32 @@
       "$value": "color-mix(in srgb, {color.warning} 24%, transparent)",
       "$description": "A translucent warning hairline around an internal note's body."
     }
+  },
+  "meter": {
+    "track": {
+      "$type": "color",
+      "$value": "color-mix(in srgb, {color.text} 10%, transparent)",
+      "$description": "The meter's track, the part of the bar the value hasn't filled: the text colour, faint and translucent."
+    },
+    "neutral-fill": {
+      "$type": "color",
+      "$value": "{color.text-muted}",
+      "$description": "The bar's fill in the neutral tone, 3:1 against the track."
+    },
+    "success-fill": {
+      "$type": "color",
+      "$value": "{color.success-text}",
+      "$description": "The bar's fill in the success tone, 3:1 against the track."
+    },
+    "warning-fill": {
+      "$type": "color",
+      "$value": "{color.warning-text}",
+      "$description": "The bar's fill in the warning tone, 3:1 against the track."
+    },
+    "danger-fill": {
+      "$type": "color",
+      "$value": "{color.danger}",
+      "$description": "The bar's fill in the danger tone, 3:1 against the track."
+    }
   }
 }

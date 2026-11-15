@@ -15,7 +15,7 @@ final readonly class Catalogue
 {
     /**
      * @param  list<string>  $groups
-     * @param  array<string, array{name: string, group: string, description: string, css?: string, playground?: array{template: string, options?: array<string, Option>, states?: list<string>}}>  $components
+     * @param  array<string, array{name: string, group: string, description: string, css?: string, playground?: array{template: string, options?: array<string, Option>, states?: list<string>, layout?: string}}>  $components
      */
     public function __construct(
         #[Config('components.groups')] private array $groups,
@@ -57,7 +57,7 @@ final readonly class Catalogue
         return (int) $this->all()->search(fn (Component $item): bool => $item->slug === $component->slug);
     }
 
-    /** @param  array{name: string, group: string, description: string, css?: string, playground?: array{template: string, options?: array<string, Option>, states?: list<string>}}  $component */
+    /** @param  array{name: string, group: string, description: string, css?: string, playground?: array{template: string, options?: array<string, Option>, states?: list<string>, layout?: string}}  $component */
     private function component(string $slug, array $component): Component
     {
         $studly = Str::studly($slug);
@@ -78,6 +78,7 @@ final readonly class Catalogue
                 $playground['template'],
                 $playground['options'] ?? [],
                 $playground['states'] ?? [],
+                $playground['layout'] ?? null,
             ),
         );
     }

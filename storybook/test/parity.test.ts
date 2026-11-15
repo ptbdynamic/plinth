@@ -42,6 +42,7 @@ import {
   PlinthSectionMenuItem,
   PlinthSheet,
   PlinthSplitView,
+  PlinthMeter,
   PlinthStat,
   PlinthOneTimeCode,
   PlinthSwitch,
@@ -99,6 +100,7 @@ import {
   PlinthSectionMenuItem as ReactSectionMenuItem,
   PlinthSheet as ReactSheet,
   PlinthSplitView as ReactSplitView,
+  PlinthMeter as ReactMeter,
   PlinthStat as ReactStat,
   PlinthSwitch as ReactSwitch,
   PlinthCheckbox as ReactCheckbox,
@@ -229,6 +231,8 @@ import { drawer, type DrawerArgs } from '../stories/components/drawer.ts';
 import * as sheetStories from '../stories/components/Sheet.stories.ts';
 import { sheet, type SheetArgs } from '../stories/components/sheet.ts';
 import * as statStories from '../stories/components/Stat.stories.ts';
+import * as meterStories from '../stories/components/Meter.stories.ts';
+import { meter, type MeterArgs } from '../stories/components/meter.ts';
 import { stat, type StatArgs } from '../stories/components/stat.ts';
 import * as fieldStories from '../stories/components/Field.stories.ts';
 import { field, type FieldArgs } from '../stories/components/field.ts';
@@ -325,6 +329,7 @@ const reactComponents = new Map<Component, unknown>([
   [PlinthAvatar, ReactAvatar],
   [PlinthBadge, ReactBadge],
   [PlinthStat, ReactStat],
+  [PlinthMeter, ReactMeter],
   [PlinthButton, ReactButton],
   [PlinthCallout, ReactCallout],
   [PlinthCodeBlock, ReactCodeBlock],
@@ -415,6 +420,19 @@ const statDefaults: StatArgs = {
   value: '12',
   tone: 'neutral',
   emptyLabel: 'Not available',
+};
+
+const meterDefaults: MeterArgs = {
+  id: 'spend',
+  label: 'Spend this month',
+  value: 120,
+  min: 0,
+  max: 150,
+  low: 105,
+  high: 135,
+  optimum: 0,
+  valueText: '€120 of €150',
+  description: 'Runs pause at €150.',
 };
 
 const pageHeaderDefaults: PageHeaderArgs = { heading: 'Inbox', level: 'h1', top: false };
@@ -684,6 +702,38 @@ const cases: ParityCase[] = [
     emptyLabel: 'Not available',
   }),
   statCase('Stat/escaped empty label', { ...statDefaults, value: '', emptyLabel: '<b>None</b>' }),
+  ...storyArgs<MeterArgs>(meterStories).map(([story, args]) => meterCase(`Meter/${story}`, args)),
+  meterCase('Meter/with extra attributes', meterDefaults, {
+    class: 'ms-2',
+    title: 'Spend',
+    'data-testid': 'spend',
+    'aria-busy': 'false',
+  }),
+  meterCase('Meter/with a clashing attribute', meterDefaults, { 'data-tone': 'success' }),
+  meterCase('Meter/unknown tone and blank text', {
+    ...meterDefaults,
+    valueText: ' ',
+    description: ' ',
+    tone: 'loud' as MeterArgs['tone'],
+  }),
+  meterCase('Meter/decimals and a range that starts above zero', {
+    ...meterDefaults,
+    value: 2.5,
+    min: 1,
+    max: 4.5,
+    low: 2,
+    high: 4,
+    optimum: 1.5,
+    valueText: '2.5 of 4.5',
+  }),
+  meterCase('Meter/escaped text', {
+    ...meterDefaults,
+    id: 'a"b',
+    label: '<b>"Spend"</b>',
+    valueText: "Ana's & Rui's",
+    description: '<i>Pause</i>',
+    tone: 'danger',
+  }),
   ...storyArgs<IconArgs>(iconStories).map(([story, args]) => iconCase(`Icon/${story}`, args)),
   iconCase(
     'Icon/with extra attributes',
@@ -3334,6 +3384,30 @@ function calloutCase(story: string, args: CalloutArgs, attributes: Attributes = 
   };
 }
 
+function meterCase(story: string, args: MeterArgs, attributes: Attributes = {}): ParityCase {
+  const props = Object.fromEntries(
+    Object.entries({
+      id: args.id,
+      label: args.label,
+      value: args.value,
+      min: args.min,
+      max: args.max,
+      low: args.low,
+      high: args.high,
+      optimum: args.optimum,
+      valueText: args.valueText,
+      description: args.description,
+      tone: args.tone,
+    }).filter(([, value]) => value !== undefined),
+  );
+  return {
+    story,
+    markup: meter(args, attributes),
+    vue: { component: PlinthMeter, props: { ...props, ...attributes }, slot: '' },
+    blade: { component: 'meter', props, attributes, slot: '' },
+  };
+}
+
 function statCase(story: string, args: StatArgs, attributes: Attributes = {}): ParityCase {
   const props = {
     label: args.label,
@@ -3395,6 +3469,20 @@ describe('parity with the stories', () => {
       'Stat/unknown tone and blank text',
       'Stat/escaped text',
       'Stat/escaped empty label',
+      'Meter/Default',
+      'Meter/NearTheLimit',
+      'Meter/AtTheLimit',
+      'Meter/OverTheLimit',
+      'Meter/HigherIsBetter',
+      'Meter/ChosenTone',
+      'Meter/WithoutThresholds',
+      'Meter/LabelOnly',
+      'Meter/LongText',
+      'Meter/with extra attributes',
+      'Meter/with a clashing attribute',
+      'Meter/unknown tone and blank text',
+      'Meter/decimals and a range that starts above zero',
+      'Meter/escaped text',
       'Icon/Default',
       'Icon/Small',
       'Icon/Large',

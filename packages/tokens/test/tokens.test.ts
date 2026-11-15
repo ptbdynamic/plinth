@@ -92,6 +92,9 @@ describe('tiers', () => {
       'data-table.row-height',
       'list-row.height',
       'list-header.height',
+      'meter.height',
+      'meter.track',
+      ...['neutral', 'success', 'warning', 'danger'].map((tone) => `meter.${tone}-fill`),
       'pill.height',
       'dialog.width',
       'sheet.side-width',
@@ -363,6 +366,24 @@ describe('callout contrast', () => {
     it.each(cases)('the focus ring stands out in the %s callout on %s (3:1)', (tone, bg) => {
       const tint = over(value(`callout.${tone}-surface`), value(`color.${bg}`));
       expect(contrast(value('color.focus-ring'), tint)).toBeGreaterThanOrEqual(3);
+    });
+  });
+});
+
+describe('meter contrast', () => {
+  const tones = ['neutral', 'success', 'warning', 'danger'] as const;
+  const backgrounds = ['surface', 'surface-raised', 'surface-sunken'] as const;
+
+  describe.each(['light', 'dark'] as const)('%s', (mode) => {
+    const value = (path: string) => {
+      const t = token(path);
+      return mode === 'light' ? t.value : t.dark!;
+    };
+    const cases = tones.flatMap((tone) => backgrounds.map((bg) => [tone, bg] as const));
+
+    it.each(cases)('the %s fill meets 3:1 against the track on %s', (tone, bg) => {
+      const track = over(value('meter.track'), value(`color.${bg}`));
+      expect(contrast(value(`meter.${tone}-fill`), track)).toBeGreaterThanOrEqual(3);
     });
   });
 });
