@@ -294,6 +294,11 @@
     --plinth-elevation-1: 0 1px 2px 0 #0000001a;
     --plinth-elevation-2: 0 4px 12px 0 #00000026;
     --plinth-elevation-3: 0 12px 32px 0 #00000026;
+    --plinth-meter-track: color-mix(in srgb, var(--plinth-color-text) 10%, transparent);
+    --plinth-meter-neutral-fill: var(--plinth-color-text-muted);
+    --plinth-meter-success-fill: var(--plinth-color-success-text);
+    --plinth-meter-warning-fill: var(--plinth-color-warning-text);
+    --plinth-meter-danger-fill: var(--plinth-color-danger);
     --plinth-callout-neutral-surface: var(--plinth-color-surface-sunken);
     --plinth-callout-neutral-border: var(--plinth-color-border);
     --plinth-callout-info-surface: color-mix(in srgb, var(--plinth-color-info) 6%, transparent);
@@ -355,6 +360,11 @@
     --plinth-elevation-1: 0 1px 2px 0 #0000004d;
     --plinth-elevation-2: 0 4px 12px 0 #00000080;
     --plinth-elevation-3: 0 12px 32px 0 #00000099;
+    --plinth-meter-track: color-mix(in srgb, var(--plinth-color-text) 20%, transparent);
+    --plinth-meter-neutral-fill: var(--plinth-color-text-muted);
+    --plinth-meter-success-fill: var(--plinth-color-success);
+    --plinth-meter-warning-fill: var(--plinth-color-warning);
+    --plinth-meter-danger-fill: var(--plinth-color-danger);
     --plinth-callout-neutral-surface: var(--plinth-color-surface-sunken);
     --plinth-callout-neutral-border: var(--plinth-color-border);
     --plinth-callout-info-surface: color-mix(in srgb, var(--plinth-color-info) 8%, transparent);
@@ -416,6 +426,11 @@
       --plinth-elevation-1: 0 1px 2px 0 #0000004d;
       --plinth-elevation-2: 0 4px 12px 0 #00000080;
       --plinth-elevation-3: 0 12px 32px 0 #00000099;
+      --plinth-meter-track: color-mix(in srgb, var(--plinth-color-text) 20%, transparent);
+      --plinth-meter-neutral-fill: var(--plinth-color-text-muted);
+      --plinth-meter-success-fill: var(--plinth-color-success);
+      --plinth-meter-warning-fill: var(--plinth-color-warning);
+      --plinth-meter-danger-fill: var(--plinth-color-danger);
       --plinth-callout-neutral-surface: var(--plinth-color-surface-sunken);
       --plinth-callout-neutral-border: var(--plinth-color-border);
       --plinth-callout-info-surface: color-mix(in srgb, var(--plinth-color-info) 8%, transparent);
@@ -4126,11 +4141,11 @@
  * a tone that changes as the value nears or passes the limit.
  *
  * <div class="plinth-meter" data-tone="warning">
- *   <span class="plinth-meter-label" id="spend-label">Spend this month</span>
+ *   <label class="plinth-meter-label" for="spend">Spend this month</label>
  *   <span class="plinth-meter-value" aria-hidden="true">€120 of €150</span>
  *   <meter class="plinth-meter-bar" id="spend" min="0" max="150" low="105" high="135"
- *     optimum="0" value="120" aria-labelledby="spend-label" aria-describedby="spend-description"
- *     aria-valuetext="€120 of €150">€120 of €150</meter>
+ *     optimum="0" value="120" aria-describedby="spend-description" aria-valuetext="€120 of €150">
+ *     €120 of €150</meter>
  *   <span class="plinth-meter-description" id="spend-description">
  *     <span class="plinth-icon plinth-meter-tone" data-size="sm" aria-hidden="true"><svg>…</svg></span>
  *     Runs pause at €150.
@@ -4138,7 +4153,7 @@
  * </div>
  *
  * The bar is a native <meter> (role meter) with min (0 by default), max (100 by default), and
- * low, high and optimum when the app gives them. It is named by the label (aria-labelledby) and
+ * low, high and optimum when the app gives them. It is named by its <label for>, as a meter is labelable, and
  * described by the line under it (aria-describedby). It is not a progress bar: a task under way
  * uses <progress>.
  *
@@ -4150,26 +4165,29 @@
  *
  * Tones (data-tone): neutral, success, warning, danger. The app chooses one, or the numbers decide
  * it as the browser decides the meter's region: the optimum region is neutral, the suboptimal one
- * warning, the even-less-good one danger, and a value past max is danger (the bar full). Without
- * low, high or optimum every value is neutral. The tone colours the bar and puts the callout's icon
+ * warning, the even-less-good one danger, and, where the optimum is below low (a cap), a value past
+ * max is danger (the bar full). Without
+ * low, high or optimum every value is neutral; success only ever comes from the app. The tone colours the bar and puts the callout's icon
  * for it before the line under the bar, a different shape for each tone; the neutral line has no
  * icon. The words carry the meaning ("Runs pause at €150", "Over the cap by €12"): the colour and
- * the icon only reinforce them. Set the tone through the component (Blade, Vue, React), not a
+ * the icon only reinforce them, so a meter with a tone other than neutral needs a description or
+ * value text that says what the tone means. Set the tone through the component (Blade, Vue, React), not a
  * data-tone of the project's: the icon follows the tone, so a data-tone that overrides it changes
  * the colour only.
  *
  * The meter has no surface or width of its own: it fills the column it sits in, inside a stat
  * tile, a list row or a page. The label and the value share the first line, and wrap when long.
- * The bar's thickness is the component token --plinth-meter-height. In forced colours the bar keeps
+ * The bar's thickness, track and fills are the component tokens --plinth-meter-height,
+ * --plinth-meter-track and --plinth-meter-<tone>-fill (each fill 3:1 against the track). In forced colours the bar keeps
  * an outline and its fill is the system's highlight colour.
  */
 
 @layer plinth {
   .plinth-meter {
-    --plinth-meter-fill: var(--plinth-color-text-muted);
+    --plinth-meter-fill: var(--plinth-meter-neutral-fill);
 
     display: grid;
-    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-columns: minmax(0, 1fr) fit-content(50%);
     gap: var(--plinth-space-1) var(--plinth-space-3);
     align-items: baseline;
     min-inline-size: 0;
@@ -4181,15 +4199,15 @@
   }
 
   .plinth-meter[data-tone='success'] {
-    --plinth-meter-fill: var(--plinth-color-success);
+    --plinth-meter-fill: var(--plinth-meter-success-fill);
   }
 
   .plinth-meter[data-tone='warning'] {
-    --plinth-meter-fill: var(--plinth-color-warning);
+    --plinth-meter-fill: var(--plinth-meter-warning-fill);
   }
 
   .plinth-meter[data-tone='danger'] {
-    --plinth-meter-fill: var(--plinth-color-danger);
+    --plinth-meter-fill: var(--plinth-meter-danger-fill);
   }
 
   .plinth-meter-label {
@@ -4215,7 +4233,7 @@
     margin-block-start: var(--plinth-space-1);
     overflow: hidden;
     appearance: none;
-    background: var(--plinth-color-border-strong);
+    background: var(--plinth-meter-track);
     border: 0;
     border-radius: var(--plinth-radius-pill);
   }
@@ -4226,7 +4244,7 @@
 
   .plinth-meter-bar::-webkit-meter-bar {
     block-size: var(--plinth-meter-height);
-    background: var(--plinth-color-border-strong);
+    background: var(--plinth-meter-track);
     border: 0;
     border-radius: var(--plinth-radius-pill);
   }
