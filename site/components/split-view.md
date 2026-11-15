@@ -56,7 +56,7 @@ to see one pane at a time.
 Below 768px the split view shows one pane: **`pane="list"`** (the default) or **`pane="detail"`**,
 printed as `data-pane`. The app sets it from its URL, usually `detail` when the URL names an item,
 and the page header's leading action follows: the menu button on the list, a back link to the list
-on the detail. From 768px both panes show, whatever `pane` says.
+on the detail. From 768px both panes show, whatever `pane` says (from 1280px with `split="lg"`).
 
 ```blade tab="Blade"
 <x-plinth::split-view :pane="$ticket ? 'detail' : 'list'">…</x-plinth::split-view>
