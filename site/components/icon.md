@@ -92,12 +92,16 @@ In a sprite, put the stroke attributes on each `<symbol>` (or on the `<svg>` tha
 
 Where they go:
 
-- **App nav**: each item's `icon` slot takes an icon at the default `md` (20px), in the list and
-  in the rail. Every item needs one; use a built-in glyph where one fits (`home`, `dashboard`,
-  `settings`, `bell`, `help`) and the project's own for the rest.
+- **App nav**: each item's `icon` slot takes an `<x-plinth::icon>` at the default `md` (20px), in
+  the list and in the rail; the item doesn't size a bare SVG. Every item needs one; use a built-in
+  glyph where one fits (`home`, `dashboard`, `settings`, `bell`, `help`) and the project's own,
+  in the icon's slot, for the rest.
 - **Icon button**: a built-in glyph by `icon`, or the project's SVG straight in the slot; the
   button wraps it in an icon and sizes it (16px in a `sm` button, 20px otherwise).
-- **Button, list row, nav list**: a leading icon at `sm` or `md`, as each component's page shows.
+- **Button**: the project's SVG straight in the `icon` slot, like the icon button; the button
+  wraps and sizes it (16px in a `sm` button, 20px otherwise). Don't put an icon inside it.
+- **List row, nav list**: an `<x-plinth::icon>` at `sm` or `md` in the `icon` slot, as each
+  component's page shows.
 
 Give a project icon `mirror` when it points a direction (an arrow, send, a reply); the built-in
 `refresh`, `play` and `pause` don't flip, since a clockwise arrow and media controls read the same
