@@ -1,0 +1,127 @@
+/*
+ * Page intro: the page's heading in the content, larger than the page header's and with no bar
+ * around it, with an optional line of description and the page's primary action on the end side
+ * (Users, "Manage who can sign in", Invite user). It opens a list or settings page in the flow of
+ * the content, and scrolls with it.
+ *
+ * <div class="plinth-page-intro">
+ *   <div class="plinth-page-intro-text">
+ *     <h1 class="plinth-page-intro-heading">Users</h1>
+ *     <p class="plinth-page-intro-description" id="users-description">
+ *       Manage who can sign in and what they can do.
+ *     </p>
+ *   </div>
+ *   <div class="plinth-page-intro-actions">a primary button</div>
+ * </div>
+ *
+ * The root is a <div>, the first thing in the page's content (in the app shell, the first child of
+ * its main). The heading is required: an <h1> by default, or <h2> to <h6> (level) when the page
+ * sits beside another page's <h1>; the level doesn't change the look. The description is optional
+ * plain text; give it an id (descriptionId) when the app points at it with aria-describedby. The
+ * actions are optional, printed only when they have content: the page's primary button, or a
+ * button or two. Each action carries its own name.
+ *
+ * Variant (the app sets it, the page intro doesn't guess):
+ * - data-wide-only: the page intro shows from 768px only, and is display: none on a phone. Pair it
+ *   with a page header with data-narrow-only, which is display: none from 768px: the phone keeps
+ *   the page header as the screen's top bar (its menu or back button, the heading, the actions),
+ *   and from 768px, beside the app nav and under the app bar, the page opens with the intro. The
+ *   one that is not shown is out of the accessibility tree, so a page has one <h1> at every width,
+ *   and its actions are in the tab order once.
+ *
+ * <header class="plinth-page-header" data-top data-narrow-only>…<h1>Users</h1>…</header>
+ * <div class="plinth-page-intro" data-wide-only>…<h1>Users</h1>…</div>
+ *
+ * Without it the page intro shows at every width, for a page with no page header.
+ *
+ * Layout: the root has the page's inline padding (16px on a phone, 24px from 768px, more where a
+ * phone held sideways has a notch), so the heading lines up with the page header's and the
+ * content's. On a phone the actions sit under the text, at the start; from 768px they sit on the
+ * end edge, beside it, while the text keeps at least --plinth-page-intro-text-min-width (240px),
+ * and move under it when the row is narrower. A long heading or description wraps.
+ *
+ * The page intro has no states of its own; what the actions do is the app's.
+ */
+
+@layer plinth {
+  .plinth-page-intro {
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    gap: var(--plinth-space-4);
+    align-items: flex-start;
+    padding-block: var(--plinth-space-6) var(--plinth-space-4);
+    padding-inline: max(var(--plinth-space-4), env(safe-area-inset-left))
+      max(var(--plinth-space-4), env(safe-area-inset-right));
+    font-family: var(--plinth-font-family-body);
+    color: var(--plinth-color-text);
+  }
+
+  .plinth-page-intro:dir(rtl) {
+    padding-inline: max(var(--plinth-space-4), env(safe-area-inset-right))
+      max(var(--plinth-space-4), env(safe-area-inset-left));
+  }
+
+  .plinth-page-intro[data-wide-only] {
+    display: none;
+  }
+
+  .plinth-page-intro-text {
+    display: flex;
+    flex-direction: column;
+    gap: var(--plinth-space-1);
+    min-inline-size: 0;
+  }
+
+  .plinth-page-intro-heading {
+    margin: 0;
+    font-size: var(--plinth-font-size-2xl);
+    font-weight: var(--plinth-font-weight-semibold);
+    line-height: var(--plinth-font-leading-tight);
+    letter-spacing: var(--plinth-font-tracking-tight);
+    overflow-wrap: anywhere;
+  }
+
+  .plinth-page-intro-description {
+    margin: 0;
+    font-size: var(--plinth-font-size-md);
+    line-height: var(--plinth-font-leading-normal);
+    color: var(--plinth-color-text-muted);
+    overflow-wrap: anywhere;
+  }
+
+  .plinth-page-intro-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--plinth-space-2);
+    align-items: center;
+  }
+
+  @media (min-width: 768px) {
+    .plinth-page-intro[data-wide-only] {
+      display: flex;
+    }
+
+    .plinth-page-intro {
+      flex-flow: row wrap;
+      gap: var(--plinth-space-4);
+      align-items: center;
+      padding-block: var(--plinth-space-8) var(--plinth-space-6);
+      padding-inline: max(var(--plinth-space-6), env(safe-area-inset-left))
+        max(var(--plinth-space-6), env(safe-area-inset-right));
+    }
+
+    .plinth-page-intro:dir(rtl) {
+      padding-inline: max(var(--plinth-space-6), env(safe-area-inset-right))
+        max(var(--plinth-space-6), env(safe-area-inset-left));
+    }
+
+    .plinth-page-intro-text {
+      flex: 1 1 var(--plinth-page-intro-text-min-width);
+    }
+
+    .plinth-page-intro-actions {
+      flex: 0 1 auto;
+    }
+  }
+}

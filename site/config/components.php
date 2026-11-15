@@ -366,6 +366,16 @@ return [
             'description' => 'The bar at the top of a page: a leading action, the heading and a few actions.',
         ],
 
+        'page-intro' => [
+            'name' => 'Page intro',
+            'group' => 'Navigation',
+            'description' => 'The page\'s heading in the content on wide screens: a large heading, a line of description and the primary action.',
+            'playground' => [
+                'template' => "<x-plinth::page-intro heading=\"Users\" level=\"h3\" description=\"Manage who can sign in and what they can do.\"{attributes}>\n    <x-slot:actions>\n        <x-plinth::button>Invite user</x-plinth::button>\n    </x-slot:actions>\n</x-plinth::page-intro>",
+                'states' => ['wide-only'],
+            ],
+        ],
+
         'pill-row' => [
             'name' => 'Pill row',
             'group' => 'Navigation',

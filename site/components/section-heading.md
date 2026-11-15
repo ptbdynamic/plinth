@@ -7,7 +7,7 @@ with one stack evenly down the page.
 
 ## When not to use it
 
-- For the page's own heading: use the [page header](page-header.md).
+- For the page's own heading: use the [page header](page-header.md), or the [page intro](page-intro.md) in the content on wide screens.
 - For the bar on top of a list, with a count and selection: use the [list header](list-header.md).
 - For a heading over a card of settings rows: use the [list card](list-card.md)'s own `heading`.
 

@@ -52,6 +52,13 @@ it('marks the screen\'s top bar with data-top', function () {
         ->not->toContain('data-top');
 });
 
+it('shows on a phone only with narrow-only', function () {
+    expect(Blade::render('<x-plinth::page-header heading="Users" narrow-only />'))
+        ->toContain('<header class="plinth-page-header" data-narrow-only="">')
+        ->and(Blade::render('<x-plinth::page-header heading="Users" :narrow-only="false" />'))
+        ->not->toContain('data-narrow-only');
+});
+
 it('needs a heading', function () {
     foreach (['<x-plinth::page-header />', '<x-plinth::page-header heading=" " />'] as $template) {
         expect(fn () => Blade::render($template))->toThrow(Exception::class, 'needs a heading');

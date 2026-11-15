@@ -40,6 +40,7 @@ import PlinthNavListGroup from './PlinthNavListGroup.vue';
 import PlinthNavListItem from './PlinthNavListItem.vue';
 import PlinthOneTimeCode from './PlinthOneTimeCode.vue';
 import PlinthPageHeader from './PlinthPageHeader.vue';
+import PlinthPageIntro from './PlinthPageIntro.vue';
 import PlinthPill from './PlinthPill.vue';
 import PlinthPillRow from './PlinthPillRow.vue';
 import PlinthSectionHeading from './PlinthSectionHeading.vue';
@@ -103,6 +104,7 @@ export {
   PlinthNavListItem,
   PlinthOneTimeCode,
   PlinthPageHeader,
+  PlinthPageIntro,
   PlinthPill,
   PlinthPillRow,
   PlinthSectionHeading,
@@ -255,6 +257,7 @@ export const Plinth: Plugin = {
     app.component('PlinthNavListItem', PlinthNavListItem);
     app.component('PlinthOneTimeCode', PlinthOneTimeCode);
     app.component('PlinthPageHeader', PlinthPageHeader);
+    app.component('PlinthPageIntro', PlinthPageIntro);
     app.component('PlinthPill', PlinthPill);
     app.component('PlinthPillRow', PlinthPillRow);
     app.component('PlinthSectionHeading', PlinthSectionHeading);

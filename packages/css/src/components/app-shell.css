@@ -94,7 +94,7 @@
     }
 
     /* A focused element or an anchor's target stops below a page header, not under it. */
-    .plinth-app-shell-main:has(> .plinth-page-header) {
+    .plinth-app-shell-main:has(> .plinth-page-header:not([data-narrow-only])) {
       scroll-padding-block-start: var(--plinth-page-header-height);
     }
 

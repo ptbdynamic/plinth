@@ -57,6 +57,15 @@ describe('PlinthPageHeader', () => {
     expect(renderToStaticMarkup(<PlinthPageHeader heading="Inbox" />)).not.toContain('data-top');
   });
 
+  it('shows on a phone only with narrowOnly', () => {
+    expect(renderToStaticMarkup(<PlinthPageHeader heading="Users" narrowOnly />)).toContain(
+      '<header class="plinth-page-header" data-narrow-only="">',
+    );
+    expect(renderToStaticMarkup(<PlinthPageHeader heading="Users" />)).not.toContain(
+      'data-narrow-only',
+    );
+  });
+
   it('escapes the heading', () => {
     expect(renderToStaticMarkup(<PlinthPageHeader heading="<b>A</b>" />)).toContain(
       '<h1 class="plinth-page-header-heading">&lt;b&gt;A&lt;/b&gt;</h1>',

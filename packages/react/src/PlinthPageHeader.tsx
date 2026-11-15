@@ -10,6 +10,8 @@ interface PageHeaderOptions {
   level?: PageHeaderLevel;
   /** The screen's top bar: it adds the top safe-area inset (data-top). */
   top?: boolean;
+  /** Shown on a phone only, for a page that opens with a page intro from 768px (data-narrow-only). */
+  narrowOnly?: boolean;
   /** The leading action, usually a menu button or a back link (Vue's `leading` slot). */
   leading?: ReactNode;
   /** The trailing actions: icon buttons or a primary button (Vue's `actions` slot). */
@@ -23,6 +25,7 @@ export function PlinthPageHeader({
   heading,
   level,
   top = false,
+  narrowOnly = false,
   leading,
   actions,
   className,
@@ -38,6 +41,7 @@ export function PlinthPageHeader({
     <header
       className={classNames('plinth-page-header', className)}
       data-top={top ? '' : undefined}
+      data-narrow-only={narrowOnly ? '' : undefined}
       {...rest}
     >
       {hasContent(leading) ? <div className="plinth-page-header-leading">{leading}</div> : null}

@@ -60,7 +60,7 @@ const meta = {
     docs: {
       description: {
         component:
-          "The bar at the top of a page: a leading action, the page's heading and a few actions. On a phone it is the screen's top bar (set `top` there, for the notch); in an app shell it heads the page under the app bar, with `--plinth-page-header-offset` set to the bar's height. Use `level` to make the heading an `h2` beside another page's `h1`. Every icon button needs its own label. Content scrolls under it, so the app sets `scroll-padding-block-start` on its scrolling element (the offset plus `--plinth-page-header-height`, plus `env(safe-area-inset-top)` with `top`).",
+          "The bar at the top of a page: a leading action, the page's heading and a few actions. On a phone it is the screen's top bar (set `top` there, for the notch); in an app shell it heads the page under the app bar, with `--plinth-page-header-offset` set to the bar's height. Use `level` to make the heading an `h2` beside another page's `h1`. Set `narrowOnly` when the page opens with a page intro from 768px: the page header then shows on a phone only. Every icon button needs its own label. Content scrolls under it, so the app sets `scroll-padding-block-start` on its scrolling element (the offset plus `--plinth-page-header-height`, plus `env(safe-area-inset-top)` with `top`).",
       },
     },
   },
@@ -68,6 +68,7 @@ const meta = {
     heading: { control: 'text' },
     level: { control: 'select', options: pageHeaderLevels },
     top: { control: 'boolean' },
+    narrowOnly: { control: 'boolean' },
     leading: { control: false },
     actions: { control: false },
   },
@@ -116,6 +117,10 @@ export const LevelTwo: Story = {
 
 /** The screen's top bar (`top`): it adds the top safe-area inset, for the notch. */
 export const TopBar: Story = { args: { top: true } };
+
+/** Shown on a phone only (`narrowOnly`): from 768px it is not shown, and the page opens with a page
+ * intro instead (see the page intro's `WithAPageHeader` story). Narrow the viewport to see it. */
+export const NarrowOnly: Story = { args: { top: true, narrowOnly: true } };
 
 const row = (title: string): ListRowArgs => ({
   title,
