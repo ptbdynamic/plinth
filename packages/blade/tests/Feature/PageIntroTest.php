@@ -76,7 +76,7 @@ it('escapes the heading, the description and its id', function () {
 
 it('keeps extra classes and attributes on the root', function () {
     $html = Blade::render(
-        '<x-plinth::page-intro heading="Users" class="mb-4" id="intro" wire:key="intro" x-ref="intro" data-testid="intro" aria-label="Users" />'
+        '<x-plinth::page-intro heading="Users" class="mb-4" id="intro" wire:key="intro" x-ref="intro" data-testid="intro" aria-describedby="users-note" />'
     );
 
     expect($html)
@@ -85,7 +85,7 @@ it('keeps extra classes and attributes on the root', function () {
         ->toContain('wire:key="intro"')
         ->toContain('x-ref="intro"')
         ->toContain('data-testid="intro"')
-        ->toContain('aria-label="Users"');
+        ->toContain('aria-describedby="users-note"');
 });
 
 it('lets the project\'s data-wide-only win over its own', function () {

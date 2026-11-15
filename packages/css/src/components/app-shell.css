@@ -34,8 +34,9 @@
  *   on its own (the screen doesn't), and it is a flex column, so a split view in it fills the
  *   height left under the page header. A page header in it sticks to the main's top: leave
  *   --plinth-page-header-offset at 0; the main keeps a focused element clear of it
- *   (scroll-padding). Give it data-top for the phone; under the bar the shell
- *   drops the safe area it adds, since the bar is then the top of the screen.
+ *   (scroll-padding), except a page header with data-narrow-only, which isn't shown there.
+ *   Give it data-top for the phone; under the bar the shell drops the safe area it adds, since
+ *   the bar is then the top of the screen.
  *
  * Sides are logical: in right-to-left text the nav is on the right. The shell has no states; the
  * app's layout state lives on its parts (aria-current on the nav's items, data-pane on a split
@@ -93,7 +94,8 @@
       overscroll-behavior-block: contain;
     }
 
-    /* A focused element or an anchor's target stops below a page header, not under it. */
+    /* A focused element or an anchor's target stops below a page header, not under it. A
+       narrow-only page header isn't shown from 768px, so it needs no room. */
     .plinth-app-shell-main:has(> .plinth-page-header:not([data-narrow-only])) {
       scroll-padding-block-start: var(--plinth-page-header-height);
     }

@@ -7,9 +7,7 @@
  * <div class="plinth-page-intro">
  *   <div class="plinth-page-intro-text">
  *     <h1 class="plinth-page-intro-heading">Users</h1>
- *     <p class="plinth-page-intro-description" id="users-description">
- *       Manage who can sign in and what they can do.
- *     </p>
+ *     <p class="plinth-page-intro-description">Manage who can sign in and what they can do.</p>
  *   </div>
  *   <div class="plinth-page-intro-actions">a primary button</div>
  * </div>
@@ -104,7 +102,6 @@
 
     .plinth-page-intro {
       flex-flow: row wrap;
-      gap: var(--plinth-space-4);
       align-items: center;
       padding-block: var(--plinth-space-8) var(--plinth-space-6);
       padding-inline: max(var(--plinth-space-6), env(safe-area-inset-left))

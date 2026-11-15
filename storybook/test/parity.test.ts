@@ -1703,7 +1703,13 @@ const cases: ParityCase[] = [
       description: 'Who can sign in.',
       actions: '<button type="button">Invite</button>',
     },
-    { class: 'mb-4', id: 'intro', title: 'Users', 'data-testid': 'intro', 'aria-label': 'Users' },
+    {
+      class: 'mb-4',
+      id: 'intro',
+      title: 'Users',
+      'data-testid': 'intro',
+      'aria-describedby': 'users-note',
+    },
   ),
   pageIntroCase(
     'Page intro/with a clashing attribute',
