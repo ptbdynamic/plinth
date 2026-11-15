@@ -59,7 +59,7 @@ it('reads numbers given as strings and ignores what is not a number', function (
 });
 
 it('escapes the text', function () {
-    $html = Blade::render('<x-plinth::meter id="a&quot;b" label="<b>Spend</b>" :value="5" value-text="<i>5</i>" description="<u>Note</u>" />');
+    $html = Blade::render('<x-plinth::meter :id="$id" label="<b>Spend</b>" :value="5" value-text="<i>5</i>" description="<u>Note</u>" />', ['id' => 'a"b']);
 
     expect($html)
         ->toContain('&lt;b&gt;Spend&lt;/b&gt;')
