@@ -163,7 +163,7 @@ describe('PlinthListRow', () => {
       '<label class="plinth-list-row"><span class="plinth-list-row-content">' +
         '<span class="plinth-list-row-title" id="paused-title">Pause runs</span>' +
         '<span class="plinth-list-row-description" id="paused-description">Stop new runs</span></span>' +
-        '<span class="plinth-list-row-trailing"><input id="paused" type="checkbox" role="switch" class="plinth-switch-input" aria-labelledby="paused-title" aria-describedby="paused-description" name="paused" value="1"></span></label>',
+        '<span class="plinth-list-row-trailing"><input id="paused" type="checkbox" role="switch" class="plinth-switch-input" aria-labelledby="paused-title" aria-describedby="paused-description" name="paused" checked="" value="1"></span></label>',
     );
     expect((wrapper.get('input').element as HTMLInputElement).checked).toBe(true);
 

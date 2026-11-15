@@ -211,4 +211,72 @@ describe('PlinthListRow', () => {
     expect(button.getAttribute('name')).toBe('action');
     expect(button.getAttribute('value')).toBe('archive');
   });
+
+  it('is a label with a switch in a setting row, named by its title', () => {
+    const changes: boolean[] = [];
+    const { container } = render(
+      <PlinthListRow
+        toggle
+        switchId="paused"
+        name="paused"
+        value="1"
+        checked
+        description="Stop new runs"
+        href="/runs"
+        chevron
+        onCheckedChange={(on) => changes.push(on)}
+      >
+        Pause runs
+      </PlinthListRow>,
+    );
+    const row = container.firstElementChild!;
+    const input = container.querySelector('input')!;
+
+    expect(row.tagName).toBe('LABEL');
+    expect(row.hasAttribute('href')).toBe(false);
+    expect(row.querySelector('.plinth-list-row-chevron')).toBeNull();
+    expect(row.querySelector('.plinth-list-row-title')!.id).toBe('paused-title');
+    expect(row.querySelector('.plinth-list-row-description')!.id).toBe('paused-description');
+    expect(input.getAttribute('role')).toBe('switch');
+    expect(input.className).toBe('plinth-switch-input');
+    expect(input.id).toBe('paused');
+    expect(input.getAttribute('aria-labelledby')).toBe('paused-title');
+    expect(input.getAttribute('aria-describedby')).toBe('paused-description');
+    expect(input.name).toBe('paused');
+    expect(input.value).toBe('1');
+    expect(input.checked).toBe(true);
+    fireEvent.click(input);
+    expect(changes).toEqual([false]);
+  });
+
+  it("disables a setting row's switch, generates its id and toggles natively", () => {
+    const { container } = render(<PlinthListRow toggle>Pause runs</PlinthListRow>);
+    const input = container.querySelector('input')!;
+
+    expect(input.id).toMatch(/^plinth-list-row-switch-/);
+    expect(input.getAttribute('aria-labelledby')).toBe(`${input.id}-title`);
+    expect(input.hasAttribute('aria-describedby')).toBe(false);
+    expect(input.hasAttribute('name')).toBe(false);
+    fireEvent.click(input);
+    expect(input.checked).toBe(true);
+
+    const disabled = render(
+      <PlinthListRow toggle disabled>
+        Pause runs
+      </PlinthListRow>,
+    );
+    expect(disabled.container.querySelector('input')!.disabled).toBe(true);
+  });
+
+  it('lets a selectable row win over a setting row', () => {
+    const row = root(
+      <PlinthListRow selectable toggle switchId="paused">
+        Ticket
+      </PlinthListRow>,
+    );
+
+    expect(row.querySelector('.plinth-list-row-checkbox')).not.toBeNull();
+    expect(row.querySelector('[role="switch"]')).toBeNull();
+    expect(row.querySelector('.plinth-list-row-title')!.hasAttribute('id')).toBe(false);
+  });
 });

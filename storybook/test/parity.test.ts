@@ -954,6 +954,32 @@ const cases: ParityCase[] = [
     { ...listRowDefaults, button: true, name: 'action', value: 'archive' },
     { type: 'submit' },
   ),
+  listRowCase(
+    'List row/setting with extra attributes',
+    {
+      ...listRowDefaults,
+      description: 'Stop new runs',
+      toggle: true,
+      switchId: 'paused',
+      name: 'paused',
+      value: '"><b>x</b>',
+      checked: true,
+    },
+    { class: 'ms-2', id: 'paused-row', 'data-testid': 'paused', 'wire:key': 'paused' },
+  ),
+  listRowCase(
+    'List row/setting with a clashing attribute',
+    { ...listRowDefaults, toggle: true, switchId: 'paused', current: true },
+    { 'aria-current': 'step' },
+  ),
+  listRowCase('List row/setting that is disabled, with a link and a chevron', {
+    ...listRowDefaults,
+    toggle: true,
+    switchId: 'paused',
+    href: '#runs',
+    chevron: true,
+    disabled: true,
+  }),
   listRowCase('List row/selectable with a blank name and value', {
     ...listRowDefaults,
     selectable: true,
@@ -2417,6 +2443,8 @@ function listRowCase(story: string, args: ListRowArgs, attributes: Attributes = 
     disabled: args.disabled,
     ...(args.selectable ? { selectable: true } : {}),
     ...(args.selected ? { selected: true } : {}),
+    ...(args.toggle ? { toggle: true, switchId: args.switchId ?? 'plinth-list-row-switch' } : {}),
+    ...(args.checked ? { checked: true } : {}),
     ...(args.name ? { name: args.name } : {}),
     ...(args.value ? { value: args.value } : {}),
   };
