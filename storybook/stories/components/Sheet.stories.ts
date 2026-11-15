@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/html-vite';
-import { sheetSides, swipeToClose } from '@ptbdynamic/plinth-vue';
+import { sheetSides, sheetSizes, swipeToClose } from '@ptbdynamic/plinth-vue';
 import { badge } from './badge.ts';
 import { button } from './button.ts';
 import { icon } from './icon.ts';
@@ -7,11 +7,13 @@ import { sampleIcons } from './icons.ts';
 import { listCard } from './list-card.ts';
 import type { ListRowArgs } from './list-row.ts';
 import { sheet, type SheetArgs } from './sheet.ts';
+import { textField } from './text-field.ts';
 import '@ptbdynamic/plinth-css/src/components/icon.css';
 import '@ptbdynamic/plinth-css/src/components/button.css';
 import '@ptbdynamic/plinth-css/src/components/badge.css';
 import '@ptbdynamic/plinth-css/src/components/list-row.css';
 import '@ptbdynamic/plinth-css/src/components/list-card.css';
+import '@ptbdynamic/plinth-css/src/components/text-field.css';
 import '@ptbdynamic/plinth-css/src/components/modal.css';
 import '@ptbdynamic/plinth-css/src/components/sheet.css';
 
@@ -76,6 +78,7 @@ const meta = {
       options: ['none', ...sheetSides],
       mapping: { none: undefined },
     },
+    size: { control: 'inline-radio', options: [...sheetSizes] },
     body: { control: false },
     footer: { control: false },
   },
@@ -85,7 +88,7 @@ const meta = {
     docs: {
       description: {
         component:
-          'A modal panel on a native dialog, on the edge you pick with `side` (end, start, top or bottom) at every width; `side-phone` picks another edge below 768px. For a modal centred on the screen, use the dialog.',
+          'A modal panel on a native dialog, on the edge you pick with `side` (end, start, top or bottom) at every width; `side-phone` picks another edge below 768px, and `size` (md, lg or xl) how wide a start or end sheet is. For a modal centred on the screen, use the dialog.',
       },
     },
   },
@@ -170,6 +173,88 @@ export const BottomTopOnPhone: Story = {
     sidePhone: 'top',
     footer: footer('filters-bottom-top'),
   },
+};
+
+/** A form in two columns where there is room, one on a phone; the grid is the page's layout. */
+const clientForm = (id: string) =>
+  `<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr)); gap: var(--plinth-space-4);">${[
+    ['name', 'Name', 'Harbour Freight'],
+    ['email', 'Billing email', 'billing@example.com'],
+    ['phone', 'Phone', '+351 210 000 000'],
+    ['vat', 'VAT number', 'PT 500 000 000'],
+    ['city', 'City', 'Lisbon'],
+    ['country', 'Country', 'Portugal'],
+  ]
+    .map(([field, label, value]) =>
+      textField({
+        id: `${id}-${field}`,
+        label: label!,
+        hideLabel: false,
+        type: field === 'email' ? 'email' : 'text',
+        size: 'md',
+        value,
+        disabled: false,
+        readonly: false,
+      }),
+    )
+    .join('')}</div>`;
+
+const formFooter = (id: string) =>
+  action('Cancel', 'secondary', { commandfor: id, command: 'close' }) + action('Save', 'primary');
+
+/** `size="lg"`: 560px wide, at most the screen less the gap. */
+export const Large: Story = {
+  args: {
+    id: 'client-large',
+    title: 'Edit client',
+    size: 'lg',
+    body: clientForm('client-large'),
+    footer: formFooter('client-large'),
+  },
+};
+
+/**
+ * `size="xl"`: 720px wide for a form in two columns, at most the screen less the gap, so the
+ * backdrop shows on the open side. On a phone it is the screen less the gap, one column.
+ */
+export const Wide: Story = {
+  args: {
+    id: 'client-wide',
+    title: 'Edit client',
+    description: 'Changes apply to every project of this client.',
+    size: 'xl',
+    body: clientForm('client-wide'),
+    footer: formFooter('client-wide'),
+  },
+};
+
+/** Wide on the start edge. */
+export const WideStart: Story = {
+  args: {
+    id: 'client-wide-start',
+    title: 'Edit client',
+    side: 'start',
+    size: 'xl',
+    body: clientForm('client-wide-start'),
+    footer: formFooter('client-wide-start'),
+  },
+};
+
+/** Wide from 768px up, a bottom sheet on a phone: the bottom sheet ignores the size. */
+export const WideBottomOnPhone: Story = {
+  args: {
+    id: 'client-wide-bottom',
+    title: 'Edit client',
+    sidePhone: 'bottom',
+    size: 'xl',
+    body: clientForm('client-wide-bottom'),
+    footer: formFooter('client-wide-bottom'),
+  },
+};
+
+/** A top sheet is the screen's width and ignores the size. */
+export const WideTop: Story = {
+  args: { id: 'filters-top-wide', side: 'top', size: 'xl', footer: footer('filters-top-wide') },
 };
 
 export const WithDescription: Story = {

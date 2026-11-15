@@ -1,13 +1,15 @@
 # Sheet
 
 A modal panel on the edge of the screen: filters, side information, navigation, a list of
-options. You pick the edge with `side`, and it stays there at every width; `side-phone` picks
-another edge for a phone, such as a side panel on a desktop that is a bottom sheet on a phone.
+options, a form that keeps the page in view. You pick the edge with `side`, and it stays there at
+every width; `side-phone` picks another edge for a phone, such as a side panel on a desktop that
+is a bottom sheet on a phone; `size` makes a side panel wider, for a form.
 
 ## When not to use it
 
-- For a form, details, settings or a confirmation centred on the screen: use the
-  [dialog](dialog.md), which shares the sheet's base.
+- For a short form, details, settings or a confirmation centred on the screen: use the
+  [dialog](dialog.md), which shares the sheet's base. A longer form that keeps the page in view
+  fits a [wide sheet](#size).
 - For a message the page can show in place: use a [callout](callout.md).
 - For the app's menu: use the [menu sheet](menu-sheet.md), which is a sheet already.
 - For a long or many-step task: give it its own page.
@@ -51,8 +53,8 @@ opens the sheet. Set the close button's name with **`close-label`** in the page'
 
 | Value           | The sheet                                                                                  |
 | --------------- | ------------------------------------------------------------------------------------------ |
-| `end` (default) | a full-height panel on the end edge, `--plinth-sheet-side-width` wide                      |
-| `start`         | a full-height panel on the start edge, `--plinth-sheet-side-width` wide                    |
+| `end` (default) | a full-height panel on the end edge, as wide as its [size](#size)                          |
+| `start`         | a full-height panel on the start edge, as wide as its [size](#size)                        |
 | `top`           | the screen's width on the top edge, as tall as its content, short of the bottom            |
 | `bottom`        | the screen's width on the bottom edge, as tall as its content, clearing the home indicator |
 
@@ -68,6 +70,42 @@ as `data-side` on the root.
         <li><x-plinth::list-row description="ana@example.com">Email</x-plinth::list-row></li>
         <li><x-plinth::list-row description="Editor">Role</x-plinth::list-row></li>
     </x-plinth::list-card>
+</x-plinth::sheet>
+```
+
+## Size
+
+**`size`** sets how wide a side panel (`start` or `end`) is, from the shared size scale.
+
+| Value          | Width  | Token                          | For                                               |
+| -------------- | ------ | ------------------------------ | ------------------------------------------------- |
+| `md` (default) | 400 px | `--plinth-sheet-side-width`    | filters, side information, navigation             |
+| `lg`           | 560 px | `--plinth-sheet-side-width-lg` | a longer form in one column, details with a table |
+| `xl`           | 720 px | `--plinth-sheet-side-width-xl` | a form in two columns on a tablet or a desktop    |
+
+Each is at most the screen's width less a gap, so on a 768 px tablet an `xl` sheet takes all but
+that gap: the backdrop is still there to tap, and the page reads as behind. A top or bottom sheet
+is the screen's width and ignores the size, so `side="end" side-phone="bottom" size="xl"` is a wide
+panel on a tablet or a desktop and a bottom sheet on a phone. Every layer prints `data-size` on the
+root for `lg` and `xl`, and leaves it out for `md`; an unknown value is `md`. A project changes the
+widths through the tokens.
+
+The sheet lays out none of its content: the two columns below are the page's own grid, and drop
+to one where there isn't room.
+
+```blade example
+<x-plinth::button variant="secondary" commandfor="example-client" command="show-modal">Edit client</x-plinth::button>
+<x-plinth::sheet id="example-client" title="Edit client" description="Changes apply to every project of this client." side-phone="bottom" size="xl">
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr)); gap: var(--plinth-space-4)">
+        <x-plinth::text-field id="example-client-name" label="Name" value="Harbour Freight" />
+        <x-plinth::text-field id="example-client-email" label="Billing email" type="email" value="billing@example.com" />
+        <x-plinth::text-field id="example-client-vat" label="VAT number" value="PT 500 000 000" />
+        <x-plinth::text-field id="example-client-city" label="City" value="Lisbon" />
+    </div>
+    <x-slot:footer>
+        <x-plinth::button variant="secondary" commandfor="example-client" command="close">Cancel</x-plinth::button>
+        <x-plinth::button>Save</x-plinth::button>
+    </x-slot:footer>
 </x-plinth::sheet>
 ```
 
@@ -209,6 +247,7 @@ footer as a prop that takes a node.
 | closeLabel  | `close-label="Close"`                         | `close-label="Close"` | `closeLabel="Close"` | `Close`   |
 | side        | `side="start"` (or a `SheetSide` case)        | `side="start"`        | `side="start"`       | `end`     |
 | sidePhone   | `side-phone="bottom"` (or a `SheetSide` case) | `side-phone="bottom"` | `sidePhone="bottom"` | none      |
+| size        | `size="xl"` (or a `Size` case: md, lg, xl)    | `size="xl"`           | `size="xl"`          | `md`      |
 | body        | the slot                                      | the default slot      | `children`           | none      |
 | footer      | `<x-slot:footer>`                             | `#footer` slot        | `footer` (a node)    | none      |
 

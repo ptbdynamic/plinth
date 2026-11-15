@@ -1,4 +1,10 @@
-import { sheetSide, sheetSidePhone, type SheetSide } from '@ptbdynamic/plinth-vue';
+import {
+  sheetDataSize,
+  sheetSide,
+  sheetSidePhone,
+  type SheetSide,
+  type SheetSize,
+} from '@ptbdynamic/plinth-vue';
 import { iconButton } from './icon-button.ts';
 import { escape, rootAttributes, type Attributes } from './markup.ts';
 
@@ -15,6 +21,8 @@ export interface SheetArgs {
   side: SheetSide;
   /** The edge below 768px, when it is another one. */
   sidePhone?: SheetSide;
+  /** The width of a start or end sheet: md (400 px, default), lg (560 px) or xl (720 px). */
+  size?: SheetSize;
   /** The body's content (trusted markup, not escaped). */
   body: string;
   /** The footer's content, usually its actions (trusted markup). */
@@ -23,7 +31,7 @@ export interface SheetArgs {
 
 /** The sheet's markup contract. Blade and Vue must print exactly this (see parity.test.ts). */
 export function sheet(
-  { id, title, description, closeLabel, side, sidePhone, body, footer }: SheetArgs,
+  { id, title, description, closeLabel, side, sidePhone, size, body, footer }: SheetArgs,
   attributes: Attributes = {},
 ): string {
   // closedby="any" is the default; a project's own closedby (closerequest) replaces it.
@@ -31,6 +39,7 @@ export function sheet(
   const { classes, extra } = rootAttributes('plinth-sheet', others);
   const hasDescription = Boolean(description?.trim());
   const phone = sheetSidePhone(sidePhone);
+  const dataSize = sheetDataSize(size);
   const close = iconButton(
     {
       label: closeLabel,
@@ -46,6 +55,7 @@ export function sheet(
     `<dialog class="${classes}"${extra} id="${escape(id)}"`,
     ` data-side="${sheetSide(side)}"`,
     phone ? ` data-side-phone="${phone}"` : '',
+    dataSize ? ` data-size="${dataSize}"` : '',
     ` closedby="${escape(closedby)}" aria-labelledby="${escape(id)}-title"`,
     hasDescription ? ` aria-describedby="${escape(id)}-description"` : '',
     '>',

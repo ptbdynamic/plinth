@@ -1,7 +1,14 @@
 import { mount } from '@vue/test-utils';
 import { Comment, createStaticVNode, Fragment, h } from 'vue';
 import { describe, expect, it, vi } from 'vitest';
-import { PlinthSheet, sheetCloseIcon, sheetSide, sheetSidePhone } from '../src/index.ts';
+import {
+  PlinthSheet,
+  sheetCloseIcon,
+  sheetDataSize,
+  sheetSide,
+  sheetSidePhone,
+  sheetSize,
+} from '../src/index.ts';
 
 const close =
   '<button type="button" class="plinth-button plinth-icon-button plinth-sheet-close" data-variant="ghost" data-size="md" aria-label="Close" commandfor="filters" command="close">' +
@@ -68,6 +75,18 @@ describe('PlinthSheet', () => {
     expect(sidePhone('left')).toBeUndefined();
     expect(sidePhone()).toBeUndefined();
     expect(sheetSidePhone(undefined)).toBeUndefined();
+  });
+
+  it('takes a size, and prints it only for lg and xl', () => {
+    const size = (value?: string) => sheetWith({ size: value }).attributes('data-size');
+
+    expect(size('lg')).toBe('lg');
+    expect(size('xl')).toBe('xl');
+    expect(size('md')).toBeUndefined();
+    expect(size('huge')).toBeUndefined();
+    expect(size()).toBeUndefined();
+    expect(sheetSize('sm')).toBe('md');
+    expect(sheetDataSize(undefined)).toBeUndefined();
   });
 
   it('has the grab handle where its side on a phone is the bottom', () => {

@@ -269,6 +269,14 @@
       "$value": "{ref.size.400}",
       "$description": "The width of a side panel on a wider screen (400 px)."
     },
+    "panel-lg": {
+      "$value": "{ref.size.560}",
+      "$description": "The width of a large side panel on a wider screen (560 px)."
+    },
+    "panel-xl": {
+      "$value": "{ref.size.720}",
+      "$description": "The width of a wide side panel, for a form with room to breathe (720 px)."
+    },
     "peek": {
       "$value": "{ref.size.160}",
       "$description": "How much of a drawer shows at its peek snap point (160 px)."

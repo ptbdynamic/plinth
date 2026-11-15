@@ -65,6 +65,16 @@ enum Size: string
         return [self::Small, self::Medium, self::Large, self::ExtraLarge];
     }
 
+    /**
+     * The sheet sizes, the width of a start or end sheet (400, 560 and 720 px).
+     *
+     * @return list<self>
+     */
+    public static function sheets(): array
+    {
+        return [self::Medium, self::Large, self::ExtraLarge];
+    }
+
     /** The size of the icons inside a control of this size. */
     public function iconSize(): self
     {

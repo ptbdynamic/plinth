@@ -51,7 +51,17 @@
     "side-width": {
       "$type": "dimension",
       "$value": "{size.panel}",
-      "$description": "The width of a sheet on the start or end side, at most the screen's width less a gap."
+      "$description": "The width of a sheet on the start or end side (size md, the default), at most the screen's width less a gap."
+    },
+    "side-width-lg": {
+      "$type": "dimension",
+      "$value": "{size.panel-lg}",
+      "$description": "The width of a large sheet (size lg) on the start or end side, at most the screen's width less a gap."
+    },
+    "side-width-xl": {
+      "$type": "dimension",
+      "$value": "{size.panel-xl}",
+      "$description": "The width of a wide sheet (size xl), for a form in two columns, on the start or end side, at most the screen's width less a gap."
     }
   },
   "drawer": {

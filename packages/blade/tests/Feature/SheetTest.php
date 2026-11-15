@@ -1,6 +1,7 @@
 <?php
 
 use BDynamic\Plinth\Enums\SheetSide;
+use BDynamic\Plinth\Enums\Size;
 use Illuminate\Support\Facades\Blade;
 
 $close = '<button class="plinth-button plinth-icon-button plinth-sheet-close" type="button"'
@@ -71,6 +72,19 @@ it('takes a side on a phone, and leaves it out when it is missing or unknown', f
         ->and($sidePhone(null))->not->toContain('data-side-phone')
         ->and(Blade::render('<x-plinth::sheet id="filters" title="Filters">Body</x-plinth::sheet>'))
         ->not->toContain('data-side-phone');
+});
+
+it('takes a size, and prints it only for lg and xl', function () {
+    $size = fn (mixed $value) => Blade::render(
+        '<x-plinth::sheet id="filters" title="Filters" :size="$value">Body</x-plinth::sheet>',
+        ['value' => $value],
+    );
+
+    expect($size('xl'))->toContain('data-side="end" data-size="xl" closedby="any"')
+        ->and($size(Size::Large))->toContain('data-size="lg"')
+        ->and($size('md'))->toContain('data-side="end" closedby="any"')
+        ->and($size('huge'))->toContain('data-side="end" closedby="any"')
+        ->and($size(null))->toContain('data-side="end" closedby="any"');
 });
 
 it('has the grab handle and the swipe where its side on a phone is the bottom', function () {

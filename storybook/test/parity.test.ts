@@ -1333,6 +1333,15 @@ const cases: ParityCase[] = [
     side: 'left' as SheetArgs['side'],
     sidePhone: 'right' as SheetArgs['sidePhone'],
   }),
+  sheetCase('Sheet/size md', { ...sheetDefaults, size: 'md' }),
+  sheetCase('Sheet/unknown size', { ...sheetDefaults, size: 'huge' as SheetArgs['size'] }),
+  sheetCase(
+    'Sheet/wide, with a clashing data-size',
+    { ...sheetDefaults, size: 'xl' },
+    {
+      'data-size': 'lg',
+    },
+  ),
   ...storyArgs<DrawerArgs>(drawerStories).map(([story, args]) =>
     drawerCase(`Drawer/${story}`, args),
   ),
@@ -2921,6 +2930,7 @@ function sheetCase(
     closeLabel: args.closeLabel,
     side: args.side,
     ...(args.sidePhone ? { sidePhone: args.sidePhone } : {}),
+    ...(args.size ? { size: args.size } : {}),
   };
   const named: Record<string, string> = args.footer ? { footer: args.footer } : {};
   return {

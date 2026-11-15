@@ -2,7 +2,7 @@
 // Markup contract: packages/css/src/components/sheet.css
 import { computed, ref, useId, useSlots } from 'vue';
 import PlinthIconButton from './PlinthIconButton.vue';
-import { sheetSide, sheetSidePhone, type SheetSide } from './sheet';
+import { sheetDataSize, sheetSide, sheetSidePhone, type SheetSide, type SheetSize } from './sheet';
 import { hasContent } from './slots';
 import { useSwipeToClose } from './swipe';
 
@@ -20,6 +20,8 @@ const props = withDefaults(
     side?: SheetSide;
     /** The edge below 768px, when it is another one. */
     sidePhone?: SheetSide;
+    /** The width of a start or end sheet: md (400 px), lg (560 px) or xl (720 px, for a form). */
+    size?: SheetSize;
   }>(),
   {
     id: undefined,
@@ -27,6 +29,7 @@ const props = withDefaults(
     closeLabel: 'Close',
     side: 'end',
     sidePhone: undefined,
+    size: 'md',
   },
 );
 
@@ -44,6 +47,7 @@ const generatedId = useId();
 const sheetId = computed(() => props.id?.trim() || `plinth-sheet-${generatedId}`);
 const dataSide = computed(() => sheetSide(props.side));
 const dataSidePhone = computed(() => sheetSidePhone(props.sidePhone));
+const dataSize = computed(() => sheetDataSize(props.size));
 const hasDescription = computed(() => Boolean(props.description?.trim()));
 
 const dialog = ref<HTMLDialogElement>();
@@ -66,6 +70,7 @@ defineExpose({
     class="plinth-sheet"
     :data-side="dataSide"
     :data-side-phone="dataSidePhone"
+    :data-size="dataSize"
     closedby="any"
     :aria-labelledby="`${sheetId}-title`"
     :aria-describedby="hasDescription ? `${sheetId}-description` : undefined"
