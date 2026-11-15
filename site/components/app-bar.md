@@ -25,8 +25,8 @@ search. Below 768px the example shows nothing, as on a phone.
 <x-plinth::app-bar>
     <x-plinth::app-bar-search shortcut="⌘K" />
     <x-slot:actions>
-        <x-plinth::icon-button label="Notifications"><x-site.glyph name="bell" /></x-plinth::icon-button>
-        <x-plinth::icon-button label="Help"><x-site.glyph name="help" /></x-plinth::icon-button>
+        <x-plinth::icon-button label="Notifications" icon="bell" />
+        <x-plinth::icon-button label="Help" icon="help" />
     </x-slot:actions>
     <x-slot:account>
         <x-plinth::icon-button label="Account"><x-site.glyph name="user" /></x-plinth::icon-button>

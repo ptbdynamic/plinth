@@ -35,6 +35,14 @@ round stroke, so they line up with each other and with Plinth's sizes. Use one b
 <x-plinth::icon name="system" />
 <x-plinth::icon name="info" />
 <x-plinth::icon name="warning" />
+<x-plinth::icon name="home" />
+<x-plinth::icon name="dashboard" />
+<x-plinth::icon name="settings" />
+<x-plinth::icon name="bell" />
+<x-plinth::icon name="help" />
+<x-plinth::icon name="refresh" />
+<x-plinth::icon name="play" />
+<x-plinth::icon name="pause" />
 ```
 
 | Name                                                          | For                                             |
@@ -47,10 +55,57 @@ round stroke, so they line up with each other and with Plinth's sizes. Use one b
 | `sign-out`                                                    | signing out                                     |
 | `sun`, `moon`, `system`                                       | the light, dark and system theme                |
 | `info`, `warning`                                             | a note, a caution                               |
+| `home`, `dashboard`                                           | the app's start page, an overview               |
+| `settings`, `bell`, `help`                                    | settings, notifications, help                   |
+| `refresh`, `play`, `pause`                                    | reloading, starting and pausing something       |
 
 The set is small on purpose: it is not an icon library. Brand and domain icons (a product's logo,
-an invoice, a calendar) stay in the app and go in the slot. A name Plinth doesn't know shows the
-slot instead, and with a name the slot is ignored. In Blade, `name` also takes a `Glyph` case.
+an invoice, a calendar) stay in the app and go in the slot; see [project icons](#project-icons). A
+name Plinth doesn't know shows the slot instead, and with a name the slot is ignored. In Blade,
+`name` also takes a `Glyph` case.
+
+## Project icons
+
+A project's own icons sit next to Plinth's glyphs in the same rows, so draw them, or pick a set,
+to the same rules: a **24 × 24** `viewBox`, an outline with a **2-unit stroke**, **round caps and
+joins**, no fill, and `currentColor` for the stroke. [Lucide](https://lucide.dev) is drawn to these
+rules and matches the built-in glyphs; a set with a thinner stroke or square caps looks lighter or
+harder next to them. Keep a set's own stroke width: Plinth scales the whole SVG, so the stroke
+shrinks with it at 16px and 20px, as the glyphs' does.
+
+Pass the SVG in the slot, inline or from a sprite with `<use>`. Leave out `width` and `height`:
+the icon sizes the SVG.
+
+```blade
+<x-plinth::icon>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+        stroke-linecap="round" stroke-linejoin="round"><path d="…"></path></svg>
+</x-plinth::icon>
+
+<x-plinth::icon>
+    <svg viewBox="0 0 24 24"><use href="/icons.svg#building"></use></svg>
+</x-plinth::icon>
+```
+
+In a sprite, put the stroke attributes on each `<symbol>` (or on the `<svg>` that uses it): a
+`<use>` inherits them from its own `<svg>`, not from the sprite file's root.
+
+Where they go:
+
+- **App nav**: each item's `icon` slot takes an `<x-plinth::icon>` at the default `md` (20px), in
+  the list and in the rail; the item doesn't size a bare SVG. Every item needs one; use a built-in
+  glyph where one fits (`home`, `dashboard`, `settings`, `bell`, `help`) and the project's own,
+  in the icon's slot, for the rest.
+- **Icon button**: a built-in glyph by `icon`, or the project's SVG straight in the slot; the
+  button wraps it in an icon and sizes it (16px in a `sm` button, 20px otherwise).
+- **Button**: the project's SVG straight in the `icon` slot, like the icon button; the button
+  wraps and sizes it (16px in a `sm` button, 20px otherwise). Don't put an icon inside it.
+- **List row, nav list**: an `<x-plinth::icon>` at `sm` or `md` in the `icon` slot, as each
+  component's page shows.
+
+Give a project icon `mirror` when it points a direction (an arrow, send, a reply); the built-in
+`refresh`, `play` and `pause` don't flip, since a clockwise arrow and media controls read the same
+in right-to-left text.
 
 ## Sizes
 

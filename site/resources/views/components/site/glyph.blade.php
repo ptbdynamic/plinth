@@ -78,7 +78,7 @@
             <path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"></path>
             @break
         @case('bell')
-            <path d="M6 16V11a6 6 0 1 1 12 0v5l2 2H4z"></path><path d="M10 21h4"></path>
+            <path d="M6 10a6 6 0 0 1 12 0c0 5 2 7 2 7H4s2-2 2-7"></path><path d="M10 20a2 2 0 0 0 4 0"></path>
             @break
         @case('download')
             <path d="M12 3v12M7 10l5 5 5-5M5 21h14"></path>
@@ -91,9 +91,6 @@
             @break
         @case('sliders')
             <path d="M4 7h10M18 7h2M4 17h4M12 17h8"></path><circle cx="16" cy="7" r="2"></circle><circle cx="10" cy="17" r="2"></circle>
-            @break
-        @case('help')
-            <circle cx="12" cy="12" r="9"></circle><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.7.3-1 .9-1 1.7M12 17v.01"></path>
             @break
         @case('panel')
             <rect x="3" y="4" width="18" height="16" rx="2"></rect><path d="M9 4v16"></path>
