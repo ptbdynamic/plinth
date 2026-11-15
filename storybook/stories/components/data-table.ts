@@ -46,6 +46,8 @@ export interface DataTableArgs {
   rows: DataTableRowArgs[];
   /** The text of the empty state, shown when there are no rows. */
   empty?: string;
+  /** A card of its own from 768px up: a frame that scrolls a wide table, and a header band. */
+  framed?: boolean;
 }
 
 /** The sort button, the label of a sortable column. */
@@ -140,7 +142,17 @@ export const dataTableBody = ({ columns, rows, empty }: DataTableArgs) =>
     ? rows.map(dataTableRowFor).join('')
     : dataTableEmpty(empty, columns.length);
 
+/** The frame around a framed table; it takes no attributes (the table is the root). */
+export const dataTableFrame = (table: string) =>
+  `<div class="plinth-data-table-frame">${table}</div>`;
+
 /** The data table's markup contract. Blade and Vue must print exactly this (see parity.test.ts). */
 export function dataTable(args: DataTableArgs, attributes: Attributes = {}): string {
-  return dataTableShell(args.caption, dataTableHead(args.columns), dataTableBody(args), attributes);
+  const table = dataTableShell(
+    args.caption,
+    dataTableHead(args.columns),
+    dataTableBody(args),
+    attributes,
+  );
+  return args.framed ? dataTableFrame(table) : table;
 }

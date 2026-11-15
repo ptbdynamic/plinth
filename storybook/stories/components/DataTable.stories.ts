@@ -110,12 +110,13 @@ const meta = {
   argTypes: {
     caption: { control: 'text' },
     empty: { control: 'text' },
+    framed: { control: 'boolean' },
   },
   parameters: {
     docs: {
       description: {
         component:
-          'Records as cards on a phone and a table from 768px, from one markup, with no script.',
+          'Records as cards on a phone and a table from 768px, from one markup, with no script. Framed, it is a card of its own from 768px up, with a header band, and scrolls a wide table inside its frame.',
       },
     },
   },
@@ -157,26 +158,25 @@ export const SortedAscending: Story = {
  * Rows that can be selected: aria-selected on every row, true on the selected one. The app's
  * Select button carries the state for assistive technology (aria-pressed).
  */
-export const Selected: Story = {
-  args: {
-    rows: orders.map((order, index) => {
-      const selected = index === 1;
-      const row = orderRow(order, { selected });
-      const select = button(
-        {
-          label: `Select ${order.number}`,
-          variant: 'ghost',
-          size: 'sm',
-          disabled: false,
-          busy: false,
-        },
-        { 'aria-pressed': String(selected) },
-      );
-      row.cells[row.cells.length - 1]!.content = select + view(order.number);
-      return row;
-    }),
-  },
-};
+const selectableRows = (): DataTableRowArgs[] =>
+  orders.map((order, index) => {
+    const selected = index === 1;
+    const row = orderRow(order, { selected });
+    const select = button(
+      {
+        label: `Select ${order.number}`,
+        variant: 'ghost',
+        size: 'sm',
+        disabled: false,
+        busy: false,
+      },
+      { 'aria-pressed': String(selected) },
+    );
+    row.cells[row.cells.length - 1]!.content = select + view(order.number);
+    return row;
+  });
+
+export const Selected: Story = { args: { rows: selectableRows() } };
 
 /** The email is a less important column: on a phone the card leaves it out. */
 export const HiddenOnPhone: Story = {
@@ -207,6 +207,50 @@ export const LongText: Story = {
         status: 'Waiting for the bank transfer',
       }),
     ],
+  },
+};
+
+/**
+ * Framed, for a table that stands as a card of its own: from 768px up a raised frame with a header
+ * band of small uppercase labels, wider padding at the edges, and the actions at the end of the
+ * row. On a phone the frame steps aside, since the rows are already cards.
+ */
+export const Framed: Story = { args: { framed: true, columns: Sorted.args.columns } };
+
+export const FramedSelected: Story = { args: { framed: true, rows: selectableRows() } };
+
+export const FramedEmpty: Story = { args: { framed: true, rows: [], empty: 'No orders yet.' } };
+
+/** More columns than fit: from 768px up the table scrolls inside its frame. */
+export const FramedWide: Story = {
+  args: {
+    framed: true,
+    caption: undefined,
+    columns: [
+      ...columns.slice(0, 2),
+      column('Email', { hideOnPhone: true }),
+      column('Billing email', { hideOnPhone: true }),
+      ...columns.slice(2, 4),
+      column('Reference', { hideOnPhone: true }),
+      ...columns.slice(4),
+    ],
+    rows: orders.map((order) => {
+      const row = orderRow(order);
+      row.cells.splice(
+        2,
+        0,
+        cell('Email', order.email, { hideOnPhone: true }),
+        cell('Billing email', `accounts-payable.${order.email}`, { hideOnPhone: true }),
+      );
+      row.cells.splice(
+        6,
+        0,
+        cell('Reference', `PO-2026-${order.number.slice(1)}-WAREHOUSE-NORTH`, {
+          hideOnPhone: true,
+        }),
+      );
+      return row;
+    }),
   },
 };
 

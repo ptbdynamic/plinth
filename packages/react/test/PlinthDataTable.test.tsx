@@ -100,6 +100,18 @@ describe('PlinthDataTable', () => {
     expect(table.getAttribute('aria-label')).toBe('Orders');
     expect(ref.current).toBe(table);
   });
+
+  it('puts a framed table in its frame, with the props and the ref on the table', () => {
+    const ref = createRef<HTMLTableElement>();
+    const frame = root(<PlinthDataTable framed ref={ref} className="mt-4" id="orders" />);
+
+    expect(frame.outerHTML).toBe(
+      '<div class="plinth-data-table-frame"><table role="table" id="orders" class="plinth-data-table mt-4">' +
+        '<thead class="plinth-data-table-head" role="rowgroup"><tr class="plinth-data-table-head-row" role="row"></tr></thead>' +
+        '<tbody class="plinth-data-table-body" role="rowgroup"></tbody></table></div>',
+    );
+    expect(ref.current).toBe(frame.firstElementChild);
+  });
 });
 
 describe('PlinthDataTableColumn', () => {

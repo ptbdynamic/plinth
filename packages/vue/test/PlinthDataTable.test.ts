@@ -46,6 +46,25 @@ describe('PlinthDataTable', () => {
     expect(wrapper.classes()).toEqual(['plinth-data-table', 'mt-4']);
     expect(wrapper.attributes('aria-label')).toBe('Orders');
   });
+
+  it('lets a clashing attribute win', () => {
+    const wrapper = mount(PlinthDataTable, { attrs: { role: 'grid' } });
+    expect(wrapper.attributes('role')).toBe('grid');
+  });
+
+  it('puts a framed table in its frame, with the attributes on the table', () => {
+    const wrapper = mount(PlinthDataTable, {
+      props: { framed: true },
+      attrs: { class: 'mt-4', id: 'orders' },
+      slots: { head: '<th>Order</th>', default: '<tr><td>#1042</td></tr>' },
+    });
+
+    expect(squish(wrapper.html())).toBe(
+      '<div class="plinth-data-table-frame"><table class="plinth-data-table mt-4" role="table" id="orders">' +
+        '<thead class="plinth-data-table-head" role="rowgroup"><tr class="plinth-data-table-head-row" role="row"><th>Order</th></tr></thead>' +
+        '<tbody class="plinth-data-table-body" role="rowgroup"><tr><td>#1042</td></tr></tbody></table></div>',
+    );
+  });
 });
 
 describe('PlinthDataTableColumn', () => {
