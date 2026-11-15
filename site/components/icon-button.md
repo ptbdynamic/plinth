@@ -31,8 +31,9 @@ require the prop. A blank `label` falls back to an `aria-label` attribute in eve
 
 Pass one of the [icon](icon.md)'s built-in glyphs by name as `icon` (menu, close, back, the
 chevrons, check, plus, search, more, external, sign-out, sun, moon, system, info, warning, home,
-dashboard, settings, bell, help, refresh, play, pause), or the project's own SVG in the slot. A glyph that points a direction (back, the side chevrons, sign-out)
-flips in right-to-left text on its own; a name Plinth doesn't know shows the slot instead.
+dashboard, settings, bell, help, refresh, play, pause), or the project's own SVG in the slot. A
+glyph that points a direction (back, the side chevrons, sign-out) flips in right-to-left text on
+its own; a name Plinth doesn't know shows the slot instead.
 
 ```blade example
 <x-plinth::icon-button label="Open menu" icon="menu" />

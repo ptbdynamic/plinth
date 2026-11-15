@@ -20,10 +20,11 @@
  * </span>
  * The glyphs: menu, close, back, chevron-left, chevron-right, chevron-up, chevron-down, check,
  * plus, search, more, external, sign-out, sun, moon, system, info, warning, home, dashboard,
- * settings, bell, help, refresh, play, pause. They are drawn on a 24 × 24 grid with a 2-unit round stroke; the paths are in iconGlyphs (Vue and React) and the
- * Glyph enum (Blade). An unknown name shows the slot. back, the side chevrons and sign-out point
- * a direction and get data-mirror without `mirror`. Not a general icon library: brand and domain
- * icons stay in the app, in the slot.
+ * settings, bell, help, refresh, play, pause. They are drawn on a 24 × 24 grid with a 2-unit
+ * round stroke; the paths are in iconGlyphs (Vue and React) and the Glyph enum (Blade). An
+ * unknown name shows the slot. back, the side chevrons and sign-out point a direction and get
+ * data-mirror without `mirror`; refresh, play and pause don't flip. Not a general icon library:
+ * brand and domain icons stay in the app, in the slot.
  *
  * Sizes (data-size): sm 16px, md 20px (default, also when the attribute is missing or unknown),
  * lg 24px. data-mirror flips the icon in right-to-left text, for icons that point a direction.
