@@ -6,7 +6,7 @@
     :title="$entry->name"
     :lead="$document->lead"
     :nav="$nav"
-    :crumbs="[['label' => 'Components', 'url' => route('components.index')], ['label' => $entry->group, 'url' => null]]"
+    :crumbs="[['label' => 'Components', 'url' => route('components.index')], ['label' => $entry->group, 'url' => route('components.index', ['group' => Str::slug($entry->group)])]]"
     section="Components"
     menu="Components"
     wide
