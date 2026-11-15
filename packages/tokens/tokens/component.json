@@ -173,5 +173,37 @@
       "$value": "{size.icon.md}",
       "$description": "The height of a switch's track (20px); the thumb sits inside it, a little smaller."
     }
+  },
+  "nav-list": {
+    "group-gap": {
+      "$type": "dimension",
+      "$value": "{space.6}",
+      "$description": "The space between a nav list's groups (24px), so each heading starts a block of its own."
+    },
+    "heading-font-family": {
+      "$type": "fontFamily",
+      "$value": "{font.family.body}",
+      "$description": "A group heading's face; a brand may pick a condensed label face."
+    },
+    "heading-font-size": {
+      "$type": "dimension",
+      "$value": "{font.size.xs}",
+      "$description": "A group heading's size (12px), a step under the items'."
+    },
+    "heading-font-weight": {
+      "$type": "fontWeight",
+      "$value": "{font.weight.medium}",
+      "$description": "A group heading's weight."
+    },
+    "heading-tracking": {
+      "$type": "dimension",
+      "$value": "{font.tracking.wide}",
+      "$description": "A group heading's letter spacing, opened up for its uppercase letters."
+    },
+    "heading-color": {
+      "$type": "color",
+      "$value": "{color.text-subtle}",
+      "$description": "A group heading's colour, a step quieter than the items'."
+    }
   }
 }

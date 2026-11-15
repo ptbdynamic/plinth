@@ -1,12 +1,14 @@
 // Markup contract: packages/css/src/components/nav-list.css
-import type { ComponentProps } from 'react';
-import { classNames } from './markup';
+import type { ComponentProps, ReactNode } from 'react';
+import { classNames, hasContent } from './markup';
 
 interface NavListItemOptions {
   /** A number after the label, such as how many items the view holds. */
   count?: string | number | null;
   /** The view being shown: aria-current="page". */
   current?: boolean;
+  /** A decorative icon before the label (Vue's `icon` slot). */
+  icon?: ReactNode;
 }
 
 /** A link to one of the page's views, the label as `children`. */
@@ -17,6 +19,7 @@ export function PlinthNavListItem({
   href,
   count,
   current = false,
+  icon,
   className,
   children,
   ...rest
@@ -33,6 +36,11 @@ export function PlinthNavListItem({
       {...rest}
       className={classNames('plinth-nav-list-item', className)}
     >
+      {hasContent(icon) ? (
+        <span className="plinth-nav-list-icon" aria-hidden="true">
+          {icon}
+        </span>
+      ) : null}
       <span className="plinth-nav-list-label">{children}</span>
       {hasCount ? <span className="plinth-nav-list-count">{count}</span> : null}
     </a>

@@ -2,7 +2,12 @@ import { mount } from '@vue/test-utils';
 import { describe, expect, it } from 'vitest';
 import { PlinthNavList, PlinthNavListGroup, PlinthNavListItem } from '../src/index.ts';
 
-const squish = (html: string) => html.replace(/>\s+</g, '><').trim();
+// Vue leaves a comment where a v-if prints nothing; the contract has none.
+const squish = (html: string) =>
+  html
+    .replace(/<!--v-if-->/g, '')
+    .replace(/>\s+</g, '><')
+    .trim();
 
 describe('PlinthNavList', () => {
   it('prints a named nav with its groups', () => {
@@ -49,7 +54,7 @@ describe('PlinthNavListGroup', () => {
 
   it('leaves out a missing or blank heading', () => {
     expect(squish(mount(PlinthNavListGroup).html())).toBe(
-      '<div class="plinth-nav-list-group"><!--v-if--></div>',
+      '<div class="plinth-nav-list-group"></div>',
     );
     expect(
       mount(PlinthNavListGroup, { props: { heading: ' ' } })
@@ -99,6 +104,21 @@ describe('PlinthNavListItem', () => {
     expect(squish(wrapper.html())).toBe(
       '<a class="plinth-nav-list-item" href="/open"><span class="plinth-nav-list-label">Open</span><span class="plinth-nav-list-count">12</span></a>',
     );
+  });
+
+  it('prints a decorative icon before the label, and leaves out a blank one', () => {
+    const wrapper = mount(PlinthNavListItem, {
+      props: { href: '/profile' },
+      slots: { icon: '<svg></svg>', default: 'Profile' },
+    });
+    expect(squish(wrapper.html())).toBe(
+      '<a class="plinth-nav-list-item" href="/profile"><span class="plinth-nav-list-icon" aria-hidden="true"><svg></svg></span><span class="plinth-nav-list-label">Profile</span></a>',
+    );
+    expect(
+      mount(PlinthNavListItem, { props: { href: '/profile' }, slots: { icon: () => ' ' } })
+        .find('.plinth-nav-list-icon')
+        .exists(),
+    ).toBe(false);
   });
 
   it('marks the current view', () => {

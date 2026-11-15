@@ -103,6 +103,25 @@ describe('PlinthNavListItem', () => {
     );
   });
 
+  it('prints a decorative icon before the label, and leaves out a blank one', () => {
+    expect(
+      renderToStaticMarkup(
+        <PlinthNavListItem href="/profile" icon={<svg />}>
+          Profile
+        </PlinthNavListItem>,
+      ),
+    ).toBe(
+      '<a href="/profile" class="plinth-nav-list-item"><span class="plinth-nav-list-icon" aria-hidden="true"><svg></svg></span><span class="plinth-nav-list-label">Profile</span></a>',
+    );
+    expect(
+      renderToStaticMarkup(
+        <PlinthNavListItem href="/profile" icon={false}>
+          Profile
+        </PlinthNavListItem>,
+      ),
+    ).not.toContain('plinth-nav-list-icon');
+  });
+
   it('marks the current view', () => {
     expect(
       renderToStaticMarkup(

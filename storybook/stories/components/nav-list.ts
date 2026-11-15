@@ -5,6 +5,8 @@ export interface NavListItemArgs {
   label: string;
   /** The view's address. */
   href: string;
+  /** A decorative icon before the label (trusted markup, not escaped). */
+  icon?: string;
   /** A number after the label, such as how many items the view holds. */
   count?: string | number | null;
   /** The view being shown: aria-current="page". */
@@ -31,7 +33,7 @@ const hasCount = (count: NavListItemArgs['count']): count is string | number =>
 
 /** An item's markup contract. Blade, Vue and React must print exactly this (see parity.test.ts). */
 export function navListItem(
-  { label, href, count, current }: NavListItemArgs,
+  { label, href, icon, count, current }: NavListItemArgs,
   attributes: Attributes = {},
 ): string {
   const { classes, extra } = rootAttributes('plinth-nav-list-item', attributes);
@@ -42,6 +44,7 @@ export function navListItem(
     href.trim() ? ` href="${escape(href)}"` : '',
     current ? ' aria-current="page"' : '',
     '>',
+    icon?.trim() ? `<span class="plinth-nav-list-icon" aria-hidden="true">${icon}</span>` : '',
     `<span class="plinth-nav-list-label">${escape(label)}</span>`,
     hasCount(count) ? `<span class="plinth-nav-list-count">${escape(String(count))}</span>` : '',
     '</a>',

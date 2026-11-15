@@ -170,7 +170,7 @@
     },
     "tracking": {
       "$type": "dimension",
-      "$description": "Letter spacing: tight for headings, tighter for large display type.",
+      "$description": "Letter spacing: tight for headings, tighter for large display type, wide for small uppercase labels.",
       "normal": {
         "$value": "{ref.font.tracking.0}"
       },
@@ -182,6 +182,9 @@
       },
       "tighter": {
         "$value": "{ref.font.tracking.neg-4}"
+      },
+      "wide": {
+        "$value": "{ref.font.tracking.4}"
       }
     }
   },

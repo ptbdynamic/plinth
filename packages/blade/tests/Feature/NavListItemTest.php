@@ -7,6 +7,13 @@ it('prints a link with its label and count', function () {
         ->toBe('<a class="plinth-nav-list-item" href="/open"><span class="plinth-nav-list-label">Open</span><span class="plinth-nav-list-count">12</span></a>');
 });
 
+it('prints a decorative icon before the label, and leaves out a blank one', function () {
+    expect(squish(Blade::render('<x-plinth::nav-list-item href="/profile"><x-slot:icon><svg></svg></x-slot:icon> Profile</x-plinth::nav-list-item>')))
+        ->toBe('<a class="plinth-nav-list-item" href="/profile"><span class="plinth-nav-list-icon" aria-hidden="true"><svg></svg></span><span class="plinth-nav-list-label">Profile</span></a>');
+    expect(squish(Blade::render('<x-plinth::nav-list-item href="/profile"><x-slot:icon> </x-slot:icon> Profile</x-plinth::nav-list-item>')))
+        ->toBe('<a class="plinth-nav-list-item" href="/profile"><span class="plinth-nav-list-label">Profile</span></a>');
+});
+
 it('marks the current view', function () {
     expect(squish(Blade::render('<x-plinth::nav-list-item href="/open" current>Open</x-plinth::nav-list-item>')))
         ->toBe('<a class="plinth-nav-list-item" href="/open" aria-current="page"><span class="plinth-nav-list-label">Open</span></a>');
