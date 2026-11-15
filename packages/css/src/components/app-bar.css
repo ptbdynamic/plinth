@@ -5,6 +5,7 @@
  *
  * <header class="plinth-app-bar">
  *   <div class="plinth-app-bar-start">
+ *     <nav class="plinth-breadcrumbs" aria-label="Breadcrumb">…</nav>
  *     <button type="button" class="plinth-app-bar-search" commandfor="search"
  *       command="show-modal" aria-keyshortcuts="Control+K Meta+K">
  *       <span class="plinth-icon" data-size="sm" data-icon="search" aria-hidden="true"><svg>…</svg></span>

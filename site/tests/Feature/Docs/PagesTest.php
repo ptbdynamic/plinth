@@ -25,6 +25,7 @@ it('lays a guide out with its breadcrumb, lead, contents, previous and next, and
         ->assertSeeInOrder(['Docs', 'Theming', 'Branding your project', 'Plinth ships a neutral, dark-first default.'])
         ->assertSee('<nav class="plinth-breadcrumbs site-docs-breadcrumb" aria-label="Breadcrumb">', false)
         ->assertSee('<a class="plinth-breadcrumbs-link" href="'.route('docs').'">', false)
+        ->assertSee('<a class="plinth-breadcrumbs-link" aria-current="page"><span class="plinth-breadcrumbs-label">Branding your project</span>', false)
         ->assertSee('On this page')
         ->assertSee('href="#override-the-semantic-tokens"', false)
         ->assertSeeInOrder(['Previous', 'Tailwind v4', 'Next', 'Dark mode'])

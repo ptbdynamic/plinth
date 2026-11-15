@@ -72,6 +72,17 @@ export const WithMore: Story = {
   },
 };
 
+/** A step with no page of its own: no link, in the muted colour, and not the current page. */
+export const StepWithoutPage: Story = {
+  args: {
+    entries: [
+      item('Docs', '#docs'),
+      item('Theming'),
+      item('Branding your project', undefined, true),
+    ],
+  },
+};
+
 /** On a phone, only the parent shows, as a back link; from 768px the full trail. */
 export const CollapseToParent: Story = { args: { collapse: 'parent' } };
 
@@ -89,12 +100,12 @@ export const LongLabels: Story = {
   },
 };
 
-/** In right-to-left text the trail runs from the right, and the separators mirror. */
+/** In right-to-left text the trail runs from the right; the slash stays as it is. */
 export const RightToLeft: Story = {
   render: (args) => `<div dir="rtl">${breadcrumbs(args)}</div>`,
 };
 
-/** In right-to-left text, the back link's chevron mirrors too. */
+/** In right-to-left text, the back link's chevron mirrors. */
 export const RightToLeftParent: Story = {
   render: (args) => `<div dir="rtl">${breadcrumbs({ ...args, collapse: 'parent' })}</div>`,
 };

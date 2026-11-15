@@ -55,10 +55,12 @@
  * Variants on the root:
  * - data-collapse="parent" (collapse in Blade, Vue and React; default none): on a phone, only
  *   the parent of the current page shows, as a back link with a chevron before it. From 768px the
- *   full trail shows again. The page's title then says where it is.
+ *   full trail shows again. The page's title then says where it is. The parent must be a linked
+ *   item, not the more button.
  *
  * Separators are drawn by each item's ::before, a slash with no text for assistive technology,
- * never in the text content; in right-to-left text they mirror, and so does the back chevron.
+ * never in the text content. A slash doesn't point a direction, so it stays as it is in
+ * right-to-left text (Unicode doesn't mirror it either); the back chevron, which does, mirrors.
  *
  * Size: links and the more button are --plinth-touch-target (40px) tall, and a label never gets
  * narrower than that either. Labels truncate rather than wrap, so the trail stays one line.
@@ -101,10 +103,6 @@
     padding-inline: var(--plinth-space-1);
     color: var(--plinth-color-text-subtle);
     content: '/' / '';
-  }
-
-  .plinth-breadcrumbs-item:dir(rtl)::before {
-    scale: -1 1;
   }
 
   .plinth-breadcrumbs-link {

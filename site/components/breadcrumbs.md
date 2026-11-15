@@ -51,7 +51,7 @@ the button opens with `popovertarget`.
 
 With **`collapse="parent"`**, a phone shows only the current page's parent, as a back link with a
 chevron before it. From 768px the full trail shows again. The page's title says where it is, so
-the current page isn't repeated. The example shows it below 768px.
+the current page isn't repeated. The parent must be a linked item, not the more button. The example shows it below 768px.
 
 ```blade example
 <x-plinth::breadcrumbs collapse="parent">
@@ -146,8 +146,8 @@ import { PlinthBreadcrumbs, PlinthBreadcrumbsItem } from '@ptbdynamic/plinth/rea
 - The trail is a `<nav>` named "Breadcrumb" around an ordered list, so a screen reader announces
   it as navigation and a list of so many items. Give it another `label` in another language.
 - The current page says so with `aria-current="page"`, and is not a link.
-- The separators and the back chevron are drawn in CSS and never read; in right-to-left text they
-  mirror.
+- The separators and the back chevron are drawn in CSS and never read. In right-to-left text the
+  chevron mirrors; the slash, which points no direction, stays as it is.
 - Every link and the more button keep a 40px touch target and show the focus ring.
 - The more button needs a name (`label`, "More pages" by default). Its menu is a [menu](menu.md):
   the browser opens and closes it, closes it on Escape and returns focus to the button.

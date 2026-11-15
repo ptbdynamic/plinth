@@ -51,8 +51,11 @@
             <div class="site-docs-top">
                 <x-plinth::breadcrumbs class="site-docs-breadcrumb">
                     @foreach ($crumbs as $crumb)
-                        <x-plinth::breadcrumbs-item :href="$crumb['url']">{{ $crumb['label'] }}</x-plinth::breadcrumbs-item>
+                        @if (filled($crumb['label']))
+                            <x-plinth::breadcrumbs-item :href="$crumb['url']">{{ $crumb['label'] }}</x-plinth::breadcrumbs-item>
+                        @endif
                     @endforeach
+                    <x-plinth::breadcrumbs-item current>{{ $title }}</x-plinth::breadcrumbs-item>
                 </x-plinth::breadcrumbs>
                 <x-plinth::button class="site-docs-menu-button" variant="secondary" size="sm" commandfor="docs-menu" command="show-modal">
                     <x-slot:icon><x-site.glyph name="lines" /></x-slot:icon>

@@ -3899,6 +3899,7 @@ describe('parity with the stories', () => {
       'Split view/unknown pane and blank slots',
       'Breadcrumbs/Default',
       'Breadcrumbs/WithMore',
+      'Breadcrumbs/StepWithoutPage',
       'Breadcrumbs/CollapseToParent',
       'Breadcrumbs/CurrentOnly',
       'Breadcrumbs/LongLabels',
