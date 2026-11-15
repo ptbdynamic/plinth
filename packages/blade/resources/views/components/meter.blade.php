@@ -21,26 +21,29 @@
     $tone = \BDynamic\Plinth\Support\Meter::tone($range, $tone);
     $valueText = filled($valueText) ? $valueText : null;
     $description = filled($description) ? $description : null;
-    $bar = array_filter([
+    // Written out with e(), as an attribute bag escapes only the quotes.
+    $bar = collect([
         'class' => 'plinth-meter-bar',
         'id' => $id,
-        'min' => (string) $range['min'],
-        'max' => (string) $range['max'],
-        'low' => $range['low'] === null ? null : (string) $range['low'],
-        'high' => $range['high'] === null ? null : (string) $range['high'],
-        'optimum' => $range['optimum'] === null ? null : (string) $range['optimum'],
-        'value' => (string) $range['value'],
+        'min' => $range['min'],
+        'max' => $range['max'],
+        'low' => $range['low'],
+        'high' => $range['high'],
+        'optimum' => $range['optimum'],
+        'value' => $range['value'],
         'aria-labelledby' => $id.'-label',
         'aria-describedby' => $description === null ? null : $id.'-description',
         'aria-valuetext' => $valueText,
-    ], fn ($attribute) => $attribute !== null);
+    ])->reject(fn ($attribute) => $attribute === null)
+        ->map(fn ($attribute, $name) => ' '.$name.'="'.e((string) $attribute).'"')
+        ->implode('');
 @endphp
 <div {{ $attributes->merge(['class' => 'plinth-meter', 'data-tone' => $tone->value]) }}>
     <span class="plinth-meter-label" id="{{ $id }}-label">{{ $label }}</span>
     @if ($valueText !== null)
         <span class="plinth-meter-value" aria-hidden="true">{{ $valueText }}</span>
     @endif
-    <meter {{ new \Illuminate\View\ComponentAttributeBag($bar) }}>{{ $valueText ?? $range['value'] }}</meter>
+    <meter{!! $bar !!}>{{ $valueText ?? $range['value'] }}</meter>
     @if ($description !== null)
         <span class="plinth-meter-description" id="{{ $id }}-description">@if ($tone !== \BDynamic\Plinth\Enums\Tone::Neutral)<span class="plinth-icon plinth-meter-tone" data-size="sm" aria-hidden="true">{!! \BDynamic\Plinth\Enums\CalloutTone::from($tone->value)->icon() !!}</span>@endif{{ $description }}</span>
     @endif

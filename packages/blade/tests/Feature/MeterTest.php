@@ -65,6 +65,7 @@ it('escapes the text', function () {
         ->toContain('&lt;b&gt;Spend&lt;/b&gt;')
         ->toContain('&lt;i&gt;5&lt;/i&gt;')
         ->toContain('&lt;u&gt;Note&lt;/u&gt;')
+        ->toContain('<meter class="plinth-meter-bar" id="a&quot;b"')
         ->not->toContain('<b>');
 });
 
