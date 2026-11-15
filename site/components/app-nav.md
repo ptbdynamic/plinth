@@ -21,7 +21,7 @@ the page being shown (or of the part of the app it belongs to), which prints
 `aria-current="page"`. The current item takes the selection tint, a 2px accent edge on its start
 side and a heavier label.
 
-At 1280px and wider, the example below is the sidebar; from 768px to 1279px, the rail, where the
+At 1280px and wider, the example below is the sidebar (unless the nav has `variant="rail"`, below); from 768px to 1279px, the rail, where the
 labels are hidden but still name each link. Below 768px it shows nothing: the app nav is not
 shown on a phone.
 
@@ -262,13 +262,13 @@ as a rail. Its items are 40px tall and, in the rail, 40px wide: never less than 
 | `plinth-app-nav-count`  | `<span>`        | the optional count: on the end edge, or a pill on the icon in the rail |
 | `plinth-app-nav-footer` | `<div>`         | optional, on the bottom edge                                           |
 
-| Attribute or state    | On         | Values                                                   | Default  |
-| --------------------- | ---------- | -------------------------------------------------------- | -------- |
-| `aria-label`          | the root   | the nav's name                                           | none     |
-| `aria-current="page"` | an item    | the item of the page being shown, set by the app         | none     |
-| `aria-hidden="true"`  | mark, icon | decorative: the name and the label name the links        | set      |
-| `data-variant`        | the root   | `rail`: the rail from 1280px too; missing is the sidebar | missing  |
-| width                 | the root   | hidden below 768px, rail from 768px, sidebar from 1280px | by width |
+| Attribute or state    | On         | Values                                                                                | Default  |
+| --------------------- | ---------- | ------------------------------------------------------------------------------------- | -------- |
+| `aria-label`          | the root   | the nav's name                                                                        | none     |
+| `aria-current="page"` | an item    | the item of the page being shown, set by the app                                      | none     |
+| `aria-hidden="true"`  | mark, icon | decorative: the name and the label name the links                                     | set      |
+| `data-variant`        | the root   | `rail`: the rail from 1280px too; missing is the sidebar                              | missing  |
+| width                 | the root   | hidden below 768px, rail from 768px, sidebar from 1280px unless `data-variant="rail"` | by width |
 
 ## Props
 
@@ -336,7 +336,7 @@ import { PlinthAppNav, PlinthAppNavItem, PlinthIcon } from '@ptbdynamic/plinth/r
 - The app nav is a named `<nav>` landmark, and the current item says so (`aria-current="page"`).
 - In the rail the labels and the app's name are visually hidden, not removed: each link keeps its
   accessible name, and a count is read after the label (_Support 12_).
-- With `variant="rail"` the labels are hidden at every width and the rail shows none on hover, so
+- With `variant="rail"` the labels are hidden at every width from 768px and the rail shows none on hover, so
   each icon has to be clear on its own.
 - The current item has a 2px accent edge and a heavier label as well as its tint, so colour is not
   its only cue; in forced colours it takes the system highlight.

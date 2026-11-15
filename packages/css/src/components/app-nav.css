@@ -50,11 +50,11 @@
  * By width:
  * - phone (below 768px): display: none. The app opens the menu sheet from the page header's menu
  *   button, its nav holding the same items as list rows, rendered from the same list.
- * - rail (768px to 1279px): --plinth-app-nav-rail-width (56px) wide, the mark alone and each item
- *   a 40px square holding its icon (at least the 40px touch target). The name and the labels are
+ * - rail (768px to 1279px, or from 768px up with data-variant="rail"): --plinth-app-nav-rail-width
+ *   (56px) wide, the mark alone and each item a 40px square holding its icon (at least the 40px touch target). The name and the labels are
  *   visually hidden but stay the brand's and the links' accessible names; a count shows as a
  *   small number on the icon's top end corner.
- * - sidebar (from 1280px): --plinth-app-nav-width (240px) wide, the mark beside the name, and
+ * - sidebar (from 1280px, unless data-variant="rail"): --plinth-app-nav-width (240px) wide, the mark beside the name, and
  *   each item a 40px row: the icon, the label and the count on the end edge.
  *
  * Variant, set by the app: data-variant="rail" (variant in Blade, Vue and React) keeps the rail
@@ -323,21 +323,25 @@
       background-color: HighlightText;
     }
 
+    /* The rail's pill keeps its own Canvas box, in the current item's Highlight row too. */
     .plinth-app-nav-count {
       color: CanvasText;
       background-color: Canvas;
       border: var(--plinth-border-width-thin) solid CanvasText;
     }
-
-    .plinth-app-nav-item[aria-current='page'] .plinth-app-nav-count {
-      color: HighlightText;
-    }
   }
 
-  /* In the sidebar the count is plain text again; the rail keeps its pill. */
+  /* In the sidebar the count is plain text again, HighlightText in the current row. */
   @media (min-width: 1280px) and (forced-colors: active) {
     :where(.plinth-app-nav:not([data-variant='rail'])) .plinth-app-nav-count {
+      background-color: transparent;
       border: 0;
+    }
+
+    :where(.plinth-app-nav:not([data-variant='rail']))
+      .plinth-app-nav-item[aria-current='page']
+      .plinth-app-nav-count {
+      color: HighlightText;
     }
   }
 }
