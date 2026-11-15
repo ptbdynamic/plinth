@@ -215,7 +215,7 @@ export const LongText: Story = {
  * band of small uppercase labels, wider padding at the edges, and the actions at the end of the
  * row. On a phone the frame steps aside, since the rows are already cards.
  */
-export const Framed: Story = { args: { framed: true, columns: Sorted.args.columns } };
+export const Framed: Story = { args: { framed: true, ...Sorted.args } };
 
 export const FramedSelected: Story = { args: { framed: true, rows: selectableRows() } };
 
