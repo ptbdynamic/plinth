@@ -22,7 +22,7 @@ describe('PlinthMeter', () => {
 
     expect(squish(wrapper.html())).toBe(
       '<div class="plinth-meter" data-tone="warning"><span id="spend-label" class="plinth-meter-label">Spend this month</span><span class="plinth-meter-value" aria-hidden="true">€120 of €150</span>' +
-        '<meter id="spend" class="plinth-meter-bar" min="0" max="150" low="105" high="135" optimum="0" value="120" aria-labelledby="spend-label" aria-describedby="spend-description" aria-valuetext="€120 of €150">€120 of €150</meter>' +
+        '<meter id="spend" class="plinth-meter-bar" min="0" max="150" low="105" high="135" optimum="0" aria-labelledby="spend-label" aria-describedby="spend-description" aria-valuetext="€120 of €150" value="120">€120 of €150</meter>' +
         `<span id="spend-description" class="plinth-meter-description"><span class="plinth-icon plinth-meter-tone" data-size="sm" aria-hidden="true">${calloutIcons.warning}</span>Runs pause at €150.</span></div>`,
     );
   });
@@ -31,7 +31,7 @@ describe('PlinthMeter', () => {
     const wrapper = mount(PlinthMeter, { props: { id: 'quota', label: 'Quota' } });
 
     expect(squish(wrapper.html())).toBe(
-      '<div class="plinth-meter" data-tone="neutral"><span id="quota-label" class="plinth-meter-label">Quota</span><meter id="quota" class="plinth-meter-bar" min="0" max="100" value="0" aria-labelledby="quota-label">0</meter></div>',
+      '<div class="plinth-meter" data-tone="neutral"><span id="quota-label" class="plinth-meter-label">Quota</span><meter id="quota" class="plinth-meter-bar" min="0" max="100" aria-labelledby="quota-label" value="0">0</meter></div>',
     );
   });
 
@@ -63,7 +63,7 @@ describe('PlinthMeter', () => {
       props: { id: 'q', label: 'Quota', value: 5, description: 'Resets monthly.' },
     });
 
-    expect(wrapper.get('.plinth-meter-description').html()).toBe(
+    expect(squish(wrapper.get('.plinth-meter-description').html())).toBe(
       '<span id="q-description" class="plinth-meter-description">Resets monthly.</span>',
     );
   });
