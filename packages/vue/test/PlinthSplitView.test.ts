@@ -1,6 +1,6 @@
 import { mount } from '@vue/test-utils';
 import { describe, expect, it } from 'vitest';
-import { PlinthSplitView, type SplitViewPane } from '../src/index.ts';
+import { PlinthSplitView, type SplitViewPane, type SplitViewSplit } from '../src/index.ts';
 
 const squish = (html: string) => html.replace(/>\s+</g, '><').trim();
 
@@ -39,6 +39,26 @@ describe('PlinthSplitView', () => {
     const wrapper = mount(PlinthSplitView, { props: { pane: 'side' as SplitViewPane } });
 
     expect(wrapper.attributes('data-pane')).toBe('list');
+  });
+
+  it('splits from 1280px with the lg split, and prints nothing for md', () => {
+    expect(mount(PlinthSplitView, { props: { split: 'lg' } }).attributes('data-split')).toBe('lg');
+    expect(
+      mount(PlinthSplitView, { props: { split: 'md' } }).attributes('data-split'),
+    ).toBeUndefined();
+    expect(mount(PlinthSplitView).attributes('data-split')).toBeUndefined();
+    expect(
+      mount(PlinthSplitView, { props: { split: 'xl' as SplitViewSplit } }).attributes('data-split'),
+    ).toBeUndefined();
+  });
+
+  it('lets the project set its own data-split', () => {
+    const wrapper = mount(PlinthSplitView, {
+      props: { split: 'lg' },
+      attrs: { 'data-split': 'md' },
+    });
+
+    expect(wrapper.attributes('data-split')).toBe('md');
   });
 
   it('lets attributes fall through to its root, and the project wins a clash', () => {

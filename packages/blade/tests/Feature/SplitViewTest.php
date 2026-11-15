@@ -1,6 +1,7 @@
 <?php
 
 use BDynamic\Plinth\Enums\SplitViewPane;
+use BDynamic\Plinth\Enums\SplitViewSplit;
 use Illuminate\Support\Facades\Blade;
 
 it('prints the secondary, the list and the detail with its footer', function () {
@@ -46,6 +47,24 @@ it('takes the pane as the enum, and falls back to the list for an unknown one', 
     expect($pane(SplitViewPane::Detail))->toContain('data-pane="detail"')
         ->and($pane('side'))->toContain('data-pane="list"')
         ->and($pane(null))->toContain('data-pane="list"');
+});
+
+it('splits from 1280px with the lg split, and prints nothing for md', function () {
+    expect(squish(Blade::render('<x-plinth::split-view split="lg">x</x-plinth::split-view>')))
+        ->toBe('<div class="plinth-split-view" data-pane="list" data-split="lg"><div class="plinth-split-view-list"></div><div class="plinth-split-view-detail"> x </div></div>')
+        ->and(Blade::render('<x-plinth::split-view :split="$split">x</x-plinth::split-view>', ['split' => SplitViewSplit::Lg]))
+        ->toContain('data-split="lg"');
+
+    foreach (['md', 'xl', null, SplitViewSplit::Md] as $split) {
+        expect(Blade::render('<x-plinth::split-view :split="$split">x</x-plinth::split-view>', ['split' => $split]))
+            ->not->toContain('data-split');
+    }
+});
+
+it('lets the project set its own data-split', function () {
+    expect(Blade::render('<x-plinth::split-view split="lg" data-split="md">x</x-plinth::split-view>'))
+        ->toContain('data-split="md"')
+        ->not->toContain('data-split="lg"');
 });
 
 it('passes extra attributes to its root, and the project wins a clash', function () {

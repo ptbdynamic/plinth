@@ -1,11 +1,18 @@
 // Markup contract: packages/css/src/components/split-view.css
 import type { ComponentProps, ReactNode } from 'react';
 import { classNames, hasContent } from './markup';
-import { splitViewPane, type SplitViewPane } from './split-view';
+import {
+  splitViewPane,
+  splitViewSplit,
+  type SplitViewPane,
+  type SplitViewSplit,
+} from './split-view';
 
 interface SplitViewOptions {
   /** The one pane a phone shows: the list (the default) or the detail. */
   pane?: SplitViewPane;
+  /** Where the list and the detail sit side by side: md (from 768px, the default) or lg (from 1280px). */
+  split?: SplitViewSplit;
   /** Collapses the secondary column: data-secondary="closed". */
   secondaryClosed?: boolean;
   /** The secondary column, such as folders; from 1280px (Vue's `secondary` slot). */
@@ -22,6 +29,7 @@ export type PlinthSplitViewProps = SplitViewOptions &
 
 export function PlinthSplitView({
   pane,
+  split,
   secondaryClosed = false,
   secondary,
   list,
@@ -36,6 +44,7 @@ export function PlinthSplitView({
     <div
       data-pane={splitViewPane(pane)}
       data-secondary={secondaryClosed ? 'closed' : undefined}
+      data-split={splitViewSplit(split) === 'lg' ? 'lg' : undefined}
       {...rest}
       className={classNames('plinth-split-view', className)}
     >

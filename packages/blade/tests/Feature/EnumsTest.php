@@ -20,6 +20,7 @@ use BDynamic\Plinth\Enums\PageHeaderLevel;
 use BDynamic\Plinth\Enums\SheetSide;
 use BDynamic\Plinth\Enums\Size;
 use BDynamic\Plinth\Enums\SplitViewPane;
+use BDynamic\Plinth\Enums\SplitViewSplit;
 use BDynamic\Plinth\Enums\TimelineKind;
 use BDynamic\Plinth\Enums\Tone;
 use Illuminate\Support\Facades\Blade;
@@ -49,6 +50,7 @@ it('defaults each choice the way the components do', function () {
         ->and(ConfirmDialogTone::default())->toBe(ConfirmDialogTone::Neutral)
         ->and(MenuItemTone::default())->toBe(MenuItemTone::Neutral)
         ->and(SplitViewPane::default())->toBe(SplitViewPane::List)
+        ->and(SplitViewSplit::default())->toBe(SplitViewSplit::Md)
         ->and(AppNavVariant::default())->toBe(AppNavVariant::Sidebar)
         ->and(TimelineKind::default())->toBe(TimelineKind::Team)
         ->and(BreadcrumbsCollapse::default())->toBe(BreadcrumbsCollapse::None);
@@ -144,6 +146,9 @@ it('matches the lists the Vue layer and the stories use', function () {
         expect($vue('menu.ts'))->toContain("'{$value}'");
     }
     foreach (SplitViewPane::values() as $value) {
+        expect($vue('split-view.ts'))->toContain("'{$value}'");
+    }
+    foreach (SplitViewSplit::values() as $value) {
         expect($vue('split-view.ts'))->toContain("'{$value}'");
     }
     foreach (AppNavVariant::values() as $value) {

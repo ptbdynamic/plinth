@@ -1401,8 +1401,20 @@ const cases: ParityCase[] = [
     { pane: 'list', secondaryClosed: true, list: '<p>List</p>', detail: '<p>Detail</p>' },
     { 'data-pane': 'detail', 'data-secondary': 'open' },
   ),
+  splitViewCase(
+    'Split view/with a clashing split',
+    {
+      pane: 'list',
+      split: 'lg',
+      secondaryClosed: false,
+      list: '<p>List</p>',
+      detail: '<p>Detail</p>',
+    },
+    { 'data-split': 'md' },
+  ),
   splitViewCase('Split view/unknown pane and blank slots', {
     pane: 'side' as SplitViewArgs['pane'],
+    split: 'xl' as SplitViewArgs['split'],
     secondaryClosed: false,
     secondary: ' ',
     list: '<p>List</p>',
@@ -3170,7 +3182,11 @@ function splitViewCase(
   args: SplitViewArgs,
   attributes: Attributes = {},
 ): ParityCase {
-  const props = { pane: args.pane, secondaryClosed: args.secondaryClosed };
+  const props = {
+    pane: args.pane,
+    ...(args.split !== undefined ? { split: args.split } : {}),
+    secondaryClosed: args.secondaryClosed,
+  };
   const named = {
     ...(args.secondary !== undefined ? { secondary: args.secondary } : {}),
     list: args.list,
@@ -4191,8 +4207,11 @@ describe('parity with the stories', () => {
       'Split view/NothingOpen',
       'Split view/LongDetail',
       'Split view/ShortList',
+      'Split view/SplitFromLg',
+      'Split view/SplitFromLgDetail',
       'Split view/with extra attributes',
       'Split view/with a clashing attribute',
+      'Split view/with a clashing split',
       'Split view/unknown pane and blank slots',
       'Breadcrumbs/Default',
       'Breadcrumbs/WithMore',

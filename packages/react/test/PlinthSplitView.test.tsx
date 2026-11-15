@@ -2,7 +2,7 @@ import { render } from '@testing-library/react';
 import { createRef } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
-import { PlinthSplitView, type SplitViewPane } from '../src/index.ts';
+import { PlinthSplitView, type SplitViewPane, type SplitViewSplit } from '../src/index.ts';
 
 describe('PlinthSplitView', () => {
   it('prints the secondary, the list and the detail with its footer', () => {
@@ -42,6 +42,23 @@ describe('PlinthSplitView', () => {
   it('falls back to the list for an unknown pane', () => {
     expect(renderToStaticMarkup(<PlinthSplitView pane={'side' as SplitViewPane} />)).toContain(
       'data-pane="list"',
+    );
+  });
+
+  it('splits from 1280px with the lg split, and prints nothing for md', () => {
+    expect(renderToStaticMarkup(<PlinthSplitView split="lg" />)).toBe(
+      '<div data-pane="list" data-split="lg" class="plinth-split-view"><div class="plinth-split-view-list"></div><div class="plinth-split-view-detail"></div></div>',
+    );
+    expect(renderToStaticMarkup(<PlinthSplitView split="md" />)).not.toContain('data-split');
+    expect(renderToStaticMarkup(<PlinthSplitView />)).not.toContain('data-split');
+    expect(renderToStaticMarkup(<PlinthSplitView split={'xl' as SplitViewSplit} />)).not.toContain(
+      'data-split',
+    );
+  });
+
+  it('lets the project set its own data-split', () => {
+    expect(renderToStaticMarkup(<PlinthSplitView split="lg" data-split="md" />)).toContain(
+      'data-split="md"',
     );
   });
 

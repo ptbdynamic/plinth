@@ -1,11 +1,20 @@
-import { splitViewPane, splitViewPanes, type SplitViewPane } from '@ptbdynamic/plinth-vue';
+import {
+  splitViewPane,
+  splitViewPanes,
+  splitViewSplit,
+  splitViewSplits,
+  type SplitViewPane,
+  type SplitViewSplit,
+} from '@ptbdynamic/plinth-vue';
 import { rootAttributes, type Attributes } from './markup.ts';
 
-export { splitViewPanes, type SplitViewPane };
+export { splitViewPanes, splitViewSplits, type SplitViewPane, type SplitViewSplit };
 
 export interface SplitViewArgs {
   /** The one pane a phone shows: the list (the default) or the detail. */
   pane: SplitViewPane;
+  /** Where the list and the detail sit side by side: md (from 768px) or lg (from 1280px). */
+  split?: SplitViewSplit;
   /** Collapses the secondary column: data-secondary="closed". */
   secondaryClosed: boolean;
   /** The secondary column (trusted markup), such as folders; from 1280px. */
@@ -20,13 +29,14 @@ export interface SplitViewArgs {
 
 /** The split view's markup contract. Blade, Vue and React must print exactly this (see parity.test.ts). */
 export function splitView(
-  { pane, secondaryClosed, secondary, list, detail, footer }: SplitViewArgs,
+  { pane, split, secondaryClosed, secondary, list, detail, footer }: SplitViewArgs,
   attributes: Attributes = {},
 ): string {
   const { classes, extra } = rootAttributes('plinth-split-view', attributes);
   return [
     `<div class="${classes}"${extra} data-pane="${splitViewPane(pane)}"`,
     secondaryClosed ? ' data-secondary="closed"' : '',
+    splitViewSplit(split) === 'lg' ? ' data-split="lg"' : '',
     '>',
     secondary?.trim() ? `<div class="plinth-split-view-secondary">${secondary}</div>` : '',
     `<div class="plinth-split-view-list">${list}</div>`,
