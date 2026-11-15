@@ -26,6 +26,12 @@ final readonly class Navigation
         return $this->links()->first(fn (Link $link): bool => $link->slug === $slug);
     }
 
+    /** The first page of a section, which the breadcrumb links the section to. */
+    public function first(string $section): ?Link
+    {
+        return $this->links()->first(fn (Link $link): bool => $link->section === $section);
+    }
+
     public function previous(string $slug): ?Link
     {
         $index = $this->links()->search(fn (Link $link): bool => $link->slug === $slug);

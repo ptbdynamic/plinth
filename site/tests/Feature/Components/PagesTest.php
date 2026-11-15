@@ -93,3 +93,12 @@ it('lists the components on the home page', function () {
     $this->get('/')->assertSee($count.' components today')->assertSee('href="/components"', false);
     expect(app(Catalogue::class)->all()->first())->toBeInstanceOf(Component::class);
 });
+
+it('trails a component page back to its group, which a phone shows as the back link', function () {
+    $this->get('/components/breadcrumbs')
+        ->assertOk()
+        ->assertSee('<nav class="plinth-breadcrumbs site-docs-breadcrumb" aria-label="Breadcrumb" data-collapse="parent">', false)
+        ->assertSee('<a class="plinth-breadcrumbs-link" href="'.route('components.index').'"><span class="plinth-breadcrumbs-label">Components</span>', false)
+        ->assertSee('<a class="plinth-breadcrumbs-link" href="'.route('components.index', ['group' => 'navigation']).'"><span class="plinth-breadcrumbs-label">Navigation</span>', false)
+        ->assertSee('<a class="plinth-breadcrumbs-link" aria-current="page"><span class="plinth-breadcrumbs-label">Breadcrumbs</span>', false);
+});

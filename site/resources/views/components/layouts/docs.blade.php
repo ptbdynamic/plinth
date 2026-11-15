@@ -21,12 +21,19 @@
     'edit' => null,
 ])
 @php
-    $nav ??= app(\App\Docs\Navigation::class)->sections()->map(fn ($links) => $links->map(fn ($item) => [
+    $navigation = app(\App\Docs\Navigation::class);
+    $nav ??= $navigation->sections()->map(fn ($links) => $links->map(fn ($item) => [
         'label' => $item->label,
         'url' => $item->url(),
         'current' => $item->slug === $link?->slug,
     ]));
-    $crumbs ??= [['label' => 'Docs', 'url' => route('docs')], ['label' => $link?->section, 'url' => null]];
+    // A section links to its first page, and the docs to the first page of all. A crumb that would
+    // link to the page itself is left out, so a phone's back link (collapse="parent") always leads up.
+    $crumbs ??= [
+        ['label' => 'Docs', 'url' => $navigation->sections()->flatten(1)->first()?->url()],
+        ['label' => $link?->section, 'url' => $link === null ? null : $navigation->first($link->section)?->url()],
+    ];
+    $crumbs = array_filter($crumbs, fn ($crumb) => filled($crumb['label']) && $crumb['url'] !== $link?->url());
     $section ??= $link?->section === 'Foundations' ? 'Foundations' : 'Docs';
     $description = filled($lead) ? Str::of(strip_tags($lead))->squish()->limit(160)->toString() : null;
 @endphp
@@ -49,11 +56,9 @@
 
         <article class="site-docs-article">
             <div class="site-docs-top">
-                <x-plinth::breadcrumbs class="site-docs-breadcrumb">
+                <x-plinth::breadcrumbs class="site-docs-breadcrumb" collapse="parent">
                     @foreach ($crumbs as $crumb)
-                        @if (filled($crumb['label']))
-                            <x-plinth::breadcrumbs-item :href="$crumb['url']">{{ $crumb['label'] }}</x-plinth::breadcrumbs-item>
-                        @endif
+                        <x-plinth::breadcrumbs-item :href="$crumb['url']">{{ $crumb['label'] }}</x-plinth::breadcrumbs-item>
                     @endforeach
                     <x-plinth::breadcrumbs-item current>{{ $title }}</x-plinth::breadcrumbs-item>
                 </x-plinth::breadcrumbs>

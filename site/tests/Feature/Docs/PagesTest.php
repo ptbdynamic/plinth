@@ -22,15 +22,28 @@ it('shows every page in the sidebar with the docs layout', function () {
 it('lays a guide out with its breadcrumb, lead, contents, previous and next, and edit link', function () {
     $this->get('/docs/branding')
         ->assertSee('<title>Branding your project · Plinth</title>', false)
-        ->assertSeeInOrder(['Docs', 'Theming', 'Branding your project', 'Plinth ships a neutral, dark-first default.'])
-        ->assertSee('<nav class="plinth-breadcrumbs site-docs-breadcrumb" aria-label="Breadcrumb">', false)
-        ->assertSee('<a class="plinth-breadcrumbs-link" href="'.route('docs').'">', false)
+        ->assertSeeInOrder(['Docs', 'Branding your project', 'Plinth ships a neutral, dark-first default.'])
+        ->assertSee('<nav class="plinth-breadcrumbs site-docs-breadcrumb" aria-label="Breadcrumb" data-collapse="parent">', false)
+        ->assertSee('<a class="plinth-breadcrumbs-link" href="'.route('docs.show', 'introduction').'"><span class="plinth-breadcrumbs-label">Docs</span>', false)
         ->assertSee('<a class="plinth-breadcrumbs-link" aria-current="page"><span class="plinth-breadcrumbs-label">Branding your project</span>', false)
         ->assertSee('On this page')
         ->assertSee('href="#override-the-semantic-tokens"', false)
         ->assertSeeInOrder(['Previous', 'Tailwind v4', 'Next', 'Dark mode'])
         ->assertSee('href="https://github.com/ptbdynamic/plinth/edit/main/site/docs/branding.md"', false)
         ->assertSee('<a class="site-header-link" href="/docs/introduction"  aria-current="page" >Docs</a>', false);
+});
+
+it('links a page\'s section to the section\'s first page, and leaves out a crumb to the page itself', function () {
+    $this->get('/docs/dark-mode')
+        ->assertSee('<a class="plinth-breadcrumbs-link" href="'.route('docs.show', 'branding').'"><span class="plinth-breadcrumbs-label">Theming</span>', false);
+
+    $this->get('/docs/branding')
+        ->assertDontSee('href="'.route('docs.show', 'branding').'"><span class="plinth-breadcrumbs-label">', false);
+
+    $this->get('/docs/introduction')
+        ->assertDontSee('<span class="plinth-breadcrumbs-label">Docs</span>', false)
+        ->assertDontSee('<span class="plinth-breadcrumbs-label">Getting started</span>', false)
+        ->assertSee('<a class="plinth-breadcrumbs-link" aria-current="page"><span class="plinth-breadcrumbs-label">Introduction</span>', false);
 });
 
 it('marks Foundations in the header on the foundations pages', function () {
