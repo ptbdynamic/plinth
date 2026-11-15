@@ -33,6 +33,18 @@
       "$description": "The list header's height (44px), a list row's, so the bar and the rows under it line up."
     }
   },
+  "section-heading": {
+    "space-before": {
+      "$type": "dimension",
+      "$value": "{space.10}",
+      "$description": "The space above a section heading that follows other content, so the page's sections stack evenly (40px)."
+    },
+    "space-after": {
+      "$type": "dimension",
+      "$value": "{space.4}",
+      "$description": "The space between a section heading and its section's content (16px)."
+    }
+  },
   "pill": {
     "height": {
       "$type": "dimension",

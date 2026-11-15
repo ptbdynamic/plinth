@@ -28,6 +28,7 @@ import {
   PlinthIconButton,
   PlinthListCard,
   PlinthListHeader,
+  PlinthSectionHeading,
   PlinthListRow,
   PlinthMenu,
   PlinthMenuGroup,
@@ -91,6 +92,7 @@ describe('the Plinth plugin', () => {
     expect(app.component('PlinthIconButton')).toBe(PlinthIconButton);
     expect(app.component('PlinthListCard')).toBe(PlinthListCard);
     expect(app.component('PlinthListHeader')).toBe(PlinthListHeader);
+    expect(app.component('PlinthSectionHeading')).toBe(PlinthSectionHeading);
     expect(app.component('PlinthListRow')).toBe(PlinthListRow);
     expect(app.component('PlinthMenu')).toBe(PlinthMenu);
     expect(app.component('PlinthMenuGroup')).toBe(PlinthMenuGroup);

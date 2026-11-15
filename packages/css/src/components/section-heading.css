@@ -1,0 +1,101 @@
+/*
+ * Section heading: the heading of a part of a page that is not a list (Connections, Budget,
+ * Danger zone), with an optional line of description and the section's actions, above its
+ * content (a form, a table, stats).
+ *
+ * <section aria-labelledby="budget-heading">
+ *   <div class="plinth-section-heading">
+ *     <div class="plinth-section-heading-text">
+ *       <h2 class="plinth-section-heading-title" id="budget-heading">Budget</h2>
+ *       <p class="plinth-section-heading-description">Runs pause when the spend reaches the cap.</p>
+ *     </div>
+ *     <div class="plinth-section-heading-actions">a button</div>
+ *   </div>
+ *   …the section's content…
+ * </section>
+ *
+ * The title is required, an <h2> unless the heading level says otherwise (h2 to h6), so a
+ * screen reader can jump between the page's sections. Its id is optional: give it one when the
+ * app wraps the section in a <section aria-labelledby> to make it a region. The description and
+ * the actions are optional; each action carries its own name.
+ *
+ * Variant: data-divider on the root draws a hairline (color.divider) under the heading, for a
+ * settings page's look. Without it there is no line.
+ *
+ * Layout: on a phone the actions sit under the text, at the start; from 768px they sit on the
+ * end edge, beside it. A long title or description wraps.
+ *
+ * Spacing: --plinth-section-heading-space-after (16px) separates the heading from its content.
+ * --plinth-section-heading-space-before (40px) goes above a heading that follows other content,
+ * or that opens a section following another, so sections stack evenly; the first one on the page
+ * adds no space above itself.
+ */
+
+@layer plinth {
+  .plinth-section-heading {
+    display: flex;
+    flex-direction: column;
+    gap: var(--plinth-space-3);
+    align-items: flex-start;
+    margin-block: 0 var(--plinth-section-heading-space-after);
+    font-family: var(--plinth-font-family-body);
+    color: var(--plinth-color-text);
+  }
+
+  .plinth-section-heading:not(:first-child),
+  :where(* + *) > .plinth-section-heading:first-child {
+    margin-block-start: var(--plinth-section-heading-space-before);
+  }
+
+  .plinth-section-heading[data-divider] {
+    padding-block-end: var(--plinth-space-4);
+    border-block-end: var(--plinth-border-width-thin) solid var(--plinth-color-divider);
+  }
+
+  .plinth-section-heading-text {
+    display: flex;
+    flex-direction: column;
+    gap: var(--plinth-space-1);
+    min-inline-size: 0;
+  }
+
+  .plinth-section-heading-title {
+    margin: 0;
+    font-size: var(--plinth-font-size-lg);
+    font-weight: var(--plinth-font-weight-semibold);
+    line-height: var(--plinth-font-leading-tight);
+    overflow-wrap: anywhere;
+  }
+
+  .plinth-section-heading-description {
+    margin: 0;
+    font-size: var(--plinth-font-size-sm);
+    line-height: var(--plinth-font-leading-normal);
+    color: var(--plinth-color-text-muted);
+    overflow-wrap: anywhere;
+  }
+
+  .plinth-section-heading-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--plinth-space-2);
+    align-items: center;
+  }
+
+  @media (min-width: 768px) {
+    .plinth-section-heading {
+      flex-direction: row;
+      gap: var(--plinth-space-4);
+      align-items: center;
+    }
+
+    .plinth-section-heading-text {
+      flex: 1 1 auto;
+    }
+
+    .plinth-section-heading-actions {
+      flex: none;
+      justify-content: flex-end;
+    }
+  }
+}

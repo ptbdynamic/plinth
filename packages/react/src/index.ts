@@ -24,6 +24,7 @@ export { PlinthIcon, type PlinthIconProps } from './PlinthIcon';
 export { PlinthIconButton, type PlinthIconButtonProps } from './PlinthIconButton';
 export { PlinthListCard, type PlinthListCardProps } from './PlinthListCard';
 export { PlinthListHeader, type PlinthListHeaderProps } from './PlinthListHeader';
+export { PlinthSectionHeading, type PlinthSectionHeadingProps } from './PlinthSectionHeading';
 export { PlinthListRow, type PlinthListRowProps } from './PlinthListRow';
 export { PlinthMenu, type PlinthMenuProps } from './PlinthMenu';
 export { PlinthMenuGroup, type PlinthMenuGroupProps } from './PlinthMenuGroup';

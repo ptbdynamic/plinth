@@ -306,6 +306,16 @@ return [
             'description' => 'The bar on top of a list: its heading and count, its actions, and how many are selected.',
         ],
 
+        'section-heading' => [
+            'name' => 'Section heading',
+            'group' => 'Content',
+            'description' => 'The heading of a page section: a title, a line of description and its actions.',
+            'playground' => [
+                'template' => "<x-plinth::section-heading heading=\"Connections\" description=\"The services this workspace sends data to.\"{attributes}>\n    <x-slot:actions>\n        <x-plinth::button variant=\"secondary\">Add connection</x-plinth::button>\n    </x-slot:actions>\n</x-plinth::section-heading>",
+                'states' => ['divider'],
+            ],
+        ],
+
         'toolbar' => [
             'name' => 'Toolbar',
             'group' => 'Navigation',
