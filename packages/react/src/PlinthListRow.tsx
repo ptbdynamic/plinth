@@ -1,5 +1,12 @@
 // Markup contract: packages/css/src/components/list-row.css
-import type { ChangeEvent, ComponentProps, ElementType, ReactNode, Ref } from 'react';
+import {
+  useId,
+  type ChangeEvent,
+  type ComponentProps,
+  type ElementType,
+  type ReactNode,
+  type Ref,
+} from 'react';
 import { classNames, hasContent } from './markup';
 import { PlinthIcon } from './PlinthIcon';
 
@@ -12,18 +19,26 @@ interface ListRowOptions {
   button?: boolean;
   /** The row for the page being shown: aria-current="page", on a link or static row. */
   current?: boolean;
-  /** Disables a link or button row, or a selectable row's checkbox. */
+  /** Disables a link or button row, or a selectable or setting row's control. */
   disabled?: boolean;
   /** While the app is selecting: a <label> row with a checkbox in the leading slot. */
   selectable?: boolean;
   /** A selectable row that is selected: its checkbox is checked. */
   selected?: boolean;
-  /** The checkbox's name, for a form; on another row, the root's (a submit button's). */
+  /** A setting row: a <label> with a switch in the trailing slot, named by the row's title. */
+  toggle?: boolean;
+  /** A setting row whose switch is on. */
+  checked?: boolean;
+  /** The switch's id, which its title's and description's ids start with; one is generated. */
+  switchId?: string;
+  /** The checkbox's or switch's name, for a form; on another row, the root's. */
   name?: string;
-  /** The checkbox's value, for a form; on another row, the root's. */
+  /** The checkbox's or switch's value, for a form; on another row, the root's. */
   value?: string;
   /** A selectable row's checkbox changed: whether it is now checked (Vue's `update:selected`). */
   onSelectedChange?: (selected: boolean) => void;
+  /** A setting row's switch changed: whether it is now on (Vue's `update:checked`). */
+  onCheckedChange?: (checked: boolean) => void;
   /** Before the title: an icon or an avatar (Vue's `leading` slot). */
   leading?: ReactNode;
   /** After the title: a value, a badge or a switch (Vue's `trailing` slot). */
@@ -31,7 +46,7 @@ interface ListRowOptions {
 }
 
 /**
- * A `<label>` with `selectable`, a link with an `href`, a `<button>` with `button`, otherwise a
+ * A `<label>` with `selectable` or `toggle`, a link with an `href`, a `<button>` with `button`, otherwise a
  * static `<div>`. Without an `href` the root may be any of the others, so its `ref` is an
  * HTMLElement.
  */
@@ -52,20 +67,29 @@ export function PlinthListRow({
   disabled = false,
   selectable = false,
   selected = false,
+  toggle = false,
+  checked = false,
+  switchId,
   name,
   value,
   onSelectedChange,
+  onCheckedChange,
   leading,
   trailing,
   className,
   children,
   ...rest
 }: PlinthListRowProps) {
-  const tag = selectable ? 'label' : href ? 'a' : button ? 'button' : 'div';
+  const generatedId = useId();
+  // A selectable row wins over a setting row, and both over a link or a button.
+  const setting = !selectable && toggle;
+  const control = selectable || setting;
+  const tag = control ? 'label' : href ? 'a' : button ? 'button' : 'div';
   const Tag = tag as ElementType;
   const hasTrailing = hasContent(trailing);
-  // A selectable row opens nothing, so it has no chevron.
-  const mark = chevron && !selectable;
+  // A selectable or setting row opens nothing, so it has no chevron.
+  const mark = chevron && !control;
+  const inputId = switchId?.trim() || `plinth-list-row-switch-${generatedId}`;
 
   // The project's own attributes come after Plinth's and win, as in Blade and Vue; its class is
   // added to Plinth's.
@@ -77,8 +101,8 @@ export function PlinthListRow({
       disabled={tag === 'button' && disabled ? true : undefined}
       role={tag === 'a' && disabled ? 'link' : undefined}
       aria-disabled={tag === 'a' && disabled ? 'true' : undefined}
-      name={!selectable && name?.trim() ? name : undefined}
-      value={!selectable && value?.trim() ? value : undefined}
+      name={!control && name?.trim() ? name : undefined}
+      value={!control && value?.trim() ? value : undefined}
       {...rest}
       className={classNames('plinth-list-row', className)}
     >
@@ -106,13 +130,43 @@ export function PlinthListRow({
         <span className="plinth-list-row-leading">{leading}</span>
       ) : null}
       <span className="plinth-list-row-content">
-        <span className="plinth-list-row-title">{children}</span>
-        {description ? <span className="plinth-list-row-description">{description}</span> : null}
+        <span className="plinth-list-row-title" id={setting ? `${inputId}-title` : undefined}>
+          {children}
+        </span>
+        {description ? (
+          <span
+            className="plinth-list-row-description"
+            id={setting ? `${inputId}-description` : undefined}
+          >
+            {description}
+          </span>
+        ) : null}
       </span>
-      {hasTrailing || mark ? (
+      {hasTrailing || mark || setting ? (
         <span className="plinth-list-row-trailing">
           {hasTrailing ? trailing : null}
-          {mark ? (
+          {setting ? (
+            // Named by the title alone and described by the description. With onCheckedChange
+            // the switch shows `checked`; without it, it starts there and toggles natively.
+            <input
+              type="checkbox"
+              role="switch"
+              className="plinth-switch-input"
+              id={inputId}
+              aria-labelledby={`${inputId}-title`}
+              aria-describedby={description ? `${inputId}-description` : undefined}
+              name={name?.trim() ? name : undefined}
+              value={value?.trim() ? value : undefined}
+              {...(onCheckedChange
+                ? {
+                    checked,
+                    onChange: (event: ChangeEvent<HTMLInputElement>) =>
+                      onCheckedChange(event.currentTarget.checked),
+                  }
+                : { defaultChecked: checked })}
+              disabled={disabled}
+            />
+          ) : mark ? (
             <PlinthIcon className="plinth-list-row-chevron" name="chevron-right" size="sm" />
           ) : null}
         </span>

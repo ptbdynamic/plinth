@@ -61,9 +61,9 @@ it **decorative**, so screen readers don't read the name twice. The trailing slo
 </x-plinth::list-card>
 ```
 
-A link or a button can't hold another control, so a row with a switch or an icon button in its
-trailing slot is a static row. Give that control its own accessible name, one that says which row
-it belongs to (_More actions for Rui Costa_).
+A link or a button can't hold another control, so a row with an icon button in its trailing slot
+is a static row. Give that control its own accessible name, one that says which row it belongs to
+(_More actions for Rui Costa_). A switch goes in a [setting row](#setting).
 
 ```blade example layout="stack"
 <x-plinth::list-card>
@@ -125,6 +125,32 @@ too, so it would fire twice). Vue emits `update:selected`, so `v-model:selected`
 `onSelectedChange` with the new value; without it, React's checkbox starts at `selected` and
 toggles natively, as Blade's and Vue's do.
 
+## Setting
+
+A settings screen is a list of rows that each turn something on or off: set **`toggle`** and the
+row becomes a `<label>` with a [switch](switch.md) in its trailing slot. The row's title names the
+switch and its description describes it, so it reads as _Pause syncing, switch, off_ and then the
+description, and a tap anywhere on the row flips it. The switch prints no label of its own. The
+app owns whether it is on: set **`checked`** and listen to the switch's `change`, which bubbles
+to the row (`wire:change`, `x-on:change`). **`name`** and **`value`** are the switch's, so a form
+sends it when it is on. The title's and description's ids start with the switch's id,
+**`switch-id`**; one is generated when you leave it out. A disabled row disables its switch and
+fades all but its description, which can say why. Like a selectable row, a setting row opens
+nothing (no `href`, no chevron) and holds no other control; it may keep an icon in its leading
+slot. A page that uses it loads the switch's CSS too, which the full stylesheet does.
+
+```blade example layout="stack"
+<x-plinth::list-card>
+    <li><x-plinth::list-row toggle switch-id="paused" name="paused" value="1" description="Stop new syncs until you resume">Pause syncing</x-plinth::list-row></li>
+    <li><x-plinth::list-row toggle checked switch-id="reports" name="reports" value="1" description="A summary every Monday">Email reports</x-plinth::list-row></li>
+    <li><x-plinth::list-row toggle checked disabled switch-id="two-factor" description="Only an owner can turn it off">Two-factor sign-in</x-plinth::list-row></li>
+</x-plinth::list-card>
+```
+
+Extra attributes go to the row's root, not the switch, so bind it with `checked` and its change,
+not with a model: in Livewire, `:checked="$paused"` and `wire:change="togglePaused"`; Vue emits `update:checked`, so `v-model:checked` works; React calls `onCheckedChange` with
+the new value; without it, React's switch starts at `checked` and toggles natively.
+
 ## In a list
 
 Put rows next to each other, or each as the direct child of its own `<li>` in a `<ul>`, and a
@@ -157,15 +183,19 @@ slots as props that take a node.
 | disabled    | `disabled`                          | `disabled`                        | `disabled`                        | off     |
 | selectable  | `selectable`, makes it a label      | `selectable`                      | `selectable`                      | off     |
 | selected    | `selected` or `:selected="$on"`     | `v-model:selected="on"`           | `selected={on}`                   | off     |
-| name        | `name="tickets[]"`, the checkbox's  | `name="tickets[]"`                | `name="tickets[]"`                | none    |
-| value       | `value="12"`, the checkbox's        | `value="12"`                      | `value="12"`                      | none    |
+| toggle      | `toggle`, a label with a switch     | `toggle`                          | `toggle`                          | off     |
+| checked     | `checked` or `:checked="$on"`       | `v-model:checked="on"`            | `checked={on}`                    | off     |
+| switchId    | `switch-id="paused"`                | `switch-id="paused"`              | `switchId="paused"`               | made up |
+| name        | `name="tickets[]"`, the control's   | `name="tickets[]"`                | `name="tickets[]"`                | none    |
+| value       | `value="12"`, the control's         | `value="12"`                      | `value="12"`                      | none    |
 | leading     | `<x-slot:leading>`                  | `#leading` slot                   | `leading` (a node)                | none    |
 | trailing    | `<x-slot:trailing>`                 | `#trailing` slot                  | `trailing` (a node)               | none    |
 | title       | the slot                            | the default slot                  | `children`                        | none    |
 
 Extra attributes and listeners (`wire:click`, `@click`, `onClick`) reach the root: the `<a>`, the
-`<button>`, the `<div>` or, while selecting, the `<label>`. Vue emits `update:selected` with the
-checkbox's new value; React calls `onSelectedChange(selected)`.
+`<button>`, the `<div>` or, while selecting or in a setting row, the `<label>`. Vue emits
+`update:selected` with the checkbox's new value and `update:checked` with the switch's; React calls
+`onSelectedChange(selected)` and `onCheckedChange(checked)`.
 
 ```blade tab="Blade"
 <x-plinth::list-row :href="route('settings.language')" chevron wire:navigate>
@@ -178,6 +208,10 @@ checkbox's new value; React calls `onSelectedChange(selected)`.
 <x-plinth::list-row :selectable="$selecting" :selected="in_array($ticket->id, $selected)" wire:change="toggle({{ $ticket->id }})">
     {{ $ticket->subject }}
 </x-plinth::list-row>
+
+<x-plinth::list-row toggle :checked="$paused" switch-id="paused" description="Stop new syncs until you resume" wire:change="togglePaused">
+    Pause syncing
+</x-plinth::list-row>
 ```
 
 ```vue tab="Vue"
@@ -189,6 +223,10 @@ checkbox's new value; React calls `onSelectedChange(selected)`.
 
 <PlinthListRow :selectable="selecting" v-model:selected="selected[ticket.id]">
   {{ ticket.subject }}
+</PlinthListRow>
+
+<PlinthListRow toggle v-model:checked="paused" description="Stop new syncs until you resume">
+  Pause syncing
 </PlinthListRow>
 ```
 
@@ -210,17 +248,29 @@ import { PlinthListRow } from '@ptbdynamic/plinth/react';
 >
     {ticket.subject}
 </PlinthListRow>;
+
+<PlinthListRow
+    toggle
+    checked={paused}
+    onCheckedChange={setPaused}
+    description="Stop new syncs until you resume"
+>
+    Pause syncing
+</PlinthListRow>;
 ```
 
 ## Accessibility
 
 - The root is the native element for what the row does: a `<div>`, an `<a>` or a
   `<button type="button">`; while selecting, a `<label>` around a native checkbox, which the row's
-  text names and the keyboard reaches with Tab and toggles with Space.
+  text names and the keyboard reaches with Tab and toggles with Space; in a setting row, a
+  `<label>` around a native checkbox with `role="switch"`, named by the title alone
+  (`aria-labelledby`) and described by the description (`aria-describedby`), announced as on or
+  off and flipped with Space.
 - The current row prints `aria-current="page"`; a disabled link row has no `href`, `role="link"`
   and `aria-disabled="true"`.
 - The focus ring is drawn inside the row, so a scrolling sheet or a card doesn't cut it off; while
-  selecting it is on the checkbox, which takes the focus.
+  selecting it is on the checkbox, and in a setting row on the switch, which take the focus.
 - The minimum height is `--plinth-list-row-height` (44px), above the 40px touch target.
 - A decorative avatar is hidden from screen readers, so a person's name isn't read twice.
 - Checked with axe in light and dark at 390, 768 and 1440px on every pull request.

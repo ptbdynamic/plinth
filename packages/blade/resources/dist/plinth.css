@@ -3618,9 +3618,10 @@
  * - a static row is a <div>;
  * - a row that navigates is <a class="plinth-list-row" href="…">;
  * - a row that acts is <button type="button" class="plinth-list-row">.
- * - a row the app is selecting is <label class="plinth-list-row"> (selectable below).
- * A link or button row holds no other control: a switch or an icon button in the trailing slot
- * needs a static row, and its own accessible name.
+ * - a row the app is selecting is <label class="plinth-list-row"> (selectable below);
+ * - a setting row, whose text names a switch, is <label class="plinth-list-row"> (below).
+ * A link or button row holds no other control: an icon button in the trailing slot needs a static
+ * row, and its own accessible name; a switch goes in a setting row.
  *
  * Selectable: while the app is selecting rows (a list header with is-selecting, list-header.css),
  * each row becomes a <label> with a checkbox in the leading slot, in place of its icon or avatar:
@@ -3643,12 +3644,42 @@
  * row keeps aria-current and its tint, but a screen reader folds a label into its checkbox, so
  * while selecting the current row is a visual cue only.
  *
+ * Setting: a row whose title and description are a switch's, such as "Pause syncing — Stop new syncs
+ * until you resume", is a <label> with the switch's input (switch.css) in the trailing slot:
+ *
+ * <label class="plinth-list-row">
+ *   <span class="plinth-list-row-content">
+ *     <span class="plinth-list-row-title" id="paused-title">Pause syncing</span>
+ *     <span class="plinth-list-row-description" id="paused-description">Stop new syncs until
+ *       you resume</span>
+ *   </span>
+ *   <span class="plinth-list-row-trailing">
+ *     <input type="checkbox" role="switch" class="plinth-switch-input" id="paused"
+ *       aria-labelledby="paused-title" aria-describedby="paused-description" name="paused"
+ *       value="1" checked>
+ *   </span>
+ * </label>
+ *
+ * The whole row toggles the switch, and the switch prints no label of its own. Its name is the
+ * title alone and the description describes it (aria-labelledby and aria-describedby, whose ids
+ * are the input's id with -title and -description), so it is read as "Pause syncing, switch, off"
+ * and then the description, not as the label's whole text. The app owns whether it is on: it
+ * prints `checked` and listens to the input's change, which bubbles to the row; on is the thumb
+ * at the end and the accent track, so the row takes no tint. name and value are the input's, so
+ * a form sends it when it is on. The leading slot may hold an icon; like a selectable row, a
+ * setting row holds no other control and opens nothing (no href, no chevron). The page loads
+ * switch.css too, for the track. The focus ring is on the input, as on a switch. Extra
+ * attributes go to the root, so the app binds the switch with `checked` and its change, not with
+ * a model on the row. A screen reader folds the label into its switch, so `current` on a setting
+ * row is a visual cue only. Without an id, each layer generates one.
+ *
  * States:
  * - current: aria-current="page" on a link row (or a static row) for the page being shown, set
  *   by the app; the selection tint (accent-subtle, accent-text) and a heavier title. A button
  *   row never prints it: a button is not a page.
  * - disabled: `disabled` on a <button>; on a link, no href, role="link" and aria-disabled="true";
- *   on a selectable row, `disabled` on its checkbox.
+ *   on a selectable row, `disabled` on its checkbox; on a setting row, `disabled` on its switch,
+ *   which fades the row but its description, which may say why.
  * - hover only where the device can hover; the focus ring on :focus-visible, drawn inside the
  *   row (focus-ring.offset-inset).
  *
@@ -3700,6 +3731,9 @@
     button.plinth-list-row:enabled:not([aria-current='page']):hover,
     label.plinth-list-row:has(.plinth-list-row-checkbox:enabled:not(:checked)):not(
         [aria-current='page']
+      ):hover,
+    label.plinth-list-row:has(> .plinth-list-row-trailing > .plinth-switch-input:enabled):not(
+        [aria-current='page']
       ):hover {
       background-color: var(--plinth-color-surface-hover);
     }
@@ -3708,6 +3742,9 @@
   a.plinth-list-row[href]:not([aria-current='page']):active,
   button.plinth-list-row:enabled:not([aria-current='page']):active,
   label.plinth-list-row:has(.plinth-list-row-checkbox:enabled:not(:checked)):not(
+      [aria-current='page']
+    ):active,
+  label.plinth-list-row:has(> .plinth-list-row-trailing > .plinth-switch-input:enabled):not(
       [aria-current='page']
     ):active {
     background-color: var(--plinth-color-surface-sunken);
@@ -3733,6 +3770,16 @@
 
   .plinth-list-row:has(.plinth-list-row-checkbox:checked) {
     background-color: var(--plinth-color-accent-subtle);
+  }
+
+  /* A setting row: the row's text fades with its switch; the description may say why. */
+  .plinth-list-row:has(> .plinth-list-row-trailing > .plinth-switch-input:disabled) {
+    cursor: not-allowed;
+  }
+
+  .plinth-list-row:has(> .plinth-list-row-trailing > .plinth-switch-input:disabled)
+    :is(.plinth-list-row-leading, .plinth-list-row-title, .plinth-list-row-trailing) {
+    opacity: var(--plinth-opacity-disabled);
   }
 
   .plinth-list-row-leading {
@@ -3788,6 +3835,12 @@
     overflow-wrap: anywhere;
   }
 
+  /* The switch sits in the middle of the row, not where its own label's first line would be. */
+  .plinth-list-row-trailing > .plinth-switch-input {
+    flex: none;
+    margin: 0;
+  }
+
   .plinth-list-row-chevron {
     color: var(--plinth-color-text-subtle);
   }
@@ -3811,6 +3864,10 @@
     .plinth-list-row:has(.plinth-list-row-checkbox:checked) {
       outline: var(--plinth-border-width-thin) solid CanvasText;
       outline-offset: calc(-1 * var(--plinth-border-width-thin));
+    }
+
+    .plinth-list-row:has(> .plinth-list-row-trailing > .plinth-switch-input:disabled) {
+      color: GrayText;
     }
   }
 }

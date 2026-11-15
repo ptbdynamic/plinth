@@ -10,6 +10,7 @@ import '@ptbdynamic/plinth-css/src/components/avatar.css';
 import '@ptbdynamic/plinth-css/src/components/badge.css';
 import '@ptbdynamic/plinth-css/src/components/button.css';
 import '@ptbdynamic/plinth-css/src/components/list-row.css';
+import '@ptbdynamic/plinth-css/src/components/switch.css';
 
 const leadingIcon = (svg: string) => icon({ size: 'md', mirror: false, svg });
 const person = avatar({ name: 'Ana Lima', size: 'md', decorative: true });
@@ -33,6 +34,8 @@ const meta = {
     disabled: false,
     selectable: false,
     selected: false,
+    toggle: false,
+    checked: false,
   },
   argTypes: {
     description: { control: 'text' },
@@ -41,12 +44,13 @@ const meta = {
     trailing: { control: 'text' },
     name: { control: 'text' },
     value: { control: 'text' },
+    switchId: { control: 'text' },
   },
   parameters: {
     docs: {
       description: {
         component:
-          "One row of a list: a title, a description, and a leading and a trailing slot. A link, a button or plain. While the app is selecting rows, `selectable` makes it a `<label>` with a checkbox in the leading slot, named by the row's text; selecting never navigates, and the app owns which rows are `selected` (it listens to the checkbox's `change`).",
+          "One row of a list: a title, a description, and a leading and a trailing slot. A link, a button or plain. While the app is selecting rows, `selectable` makes it a `<label>` with a checkbox in the leading slot, named by the row's text; selecting never navigates, and the app owns which rows are `selected` (it listens to the checkbox's `change`). A setting row, `toggle`, is a `<label>` with a switch in the trailing slot, named by the title and described by the description; the whole row flips it, and the app owns whether it is `checked`.",
       },
     },
   },
@@ -153,6 +157,53 @@ export const SelectableList: Story = {
       .join('')}</ul>`,
 };
 
+/** A setting row: the row's text names the switch, and a tap anywhere on the row flips it. */
+export const Setting: Story = {
+  args: {
+    title: 'Pause syncing',
+    description: 'Stop new syncs until you resume',
+    toggle: true,
+    switchId: 'paused',
+    name: 'paused',
+    value: '1',
+  },
+};
+export const SettingOn: Story = { args: { ...Setting.args, checked: true } };
+export const SettingDisabled: Story = {
+  args: {
+    ...Setting.args,
+    description: 'Only an owner can pause syncing',
+    checked: true,
+    disabled: true,
+  },
+};
+export const SettingWithIcon: Story = {
+  args: {
+    ...Setting.args,
+    leading: leadingIcon(sampleIcons.bell),
+    title: 'Notifications',
+    description: undefined,
+    switchId: 'notify',
+  },
+};
+
+const switches = [
+  ['Pause syncing', 'Stop new syncs until you resume', 'paused', false],
+  ['Email reports', 'A summary every Monday', 'reports', true],
+  ['Two-factor sign-in', undefined, 'two-factor', true],
+] as const;
+
+/** Setting rows in a list, as on a settings screen or in a menu sheet. */
+export const SettingList: Story = {
+  render: () =>
+    `<ul role="list" style="margin: 0; padding: 0; list-style: none;">${switches
+      .map(
+        ([title, description, id, checked]) =>
+          `<li>${listRow({ ...meta.args, title, description, toggle: true, switchId: id, name: id, value: '1', checked })}</li>`,
+      )
+      .join('')}</ul>`,
+};
+
 const settings = [
   listRow({
     ...meta.args,
@@ -192,5 +243,6 @@ export const InScrollingSheet: Story = {
 
 /** The same rows in right-to-left text: the slots swap sides and the chevrons point left. */
 export const RightToLeft: Story = {
-  render: () => `<div dir="rtl">${settings.join('')}</div>`,
+  render: () =>
+    `<div dir="rtl">${settings.join('')}${listRow({ ...meta.args, title: 'Pause syncing', toggle: true, switchId: 'rtl-off' })}${listRow({ ...meta.args, title: 'Email reports', toggle: true, switchId: 'rtl-on', checked: true })}</div>`,
 };
