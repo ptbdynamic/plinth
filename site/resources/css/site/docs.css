@@ -48,16 +48,12 @@
 
     .site-docs-nav-list,
     .site-docs-toc-list {
-        padding: 0;
-        margin: 0;
-        list-style: none;
-    }
-
-    .site-docs-nav-list,
-    .site-docs-toc-list {
         display: flex;
         flex-direction: column;
         gap: var(--plinth-space-0-5);
+        padding: 0;
+        margin: 0;
+        list-style: none;
     }
 
     .site-docs-nav-link,
