@@ -24,6 +24,8 @@ import * as vueTimeline from '../../vue/src/timeline.ts';
 import * as vueOneTimeCode from '../../vue/src/one-time-code.ts';
 import * as vueMeter from '../../vue/src/meter.ts';
 import * as reactMeter from '../src/meter.ts';
+import * as vuePagination from '../../vue/src/pagination.ts';
+import * as reactPagination from '../src/pagination.ts';
 import { buttonVariant } from '../src/button.ts';
 import { iconName } from '../src/icon.ts';
 import { swipeToClose } from '../src/swipe.ts';
@@ -134,6 +136,10 @@ describe('the shared lists', () => {
     // The meter's numbers and tone are written once per layer; the React copy is the Vue one.
     for (const name of ['meterNumber', 'meterRange', 'meterTone'] as const) {
       expect(reactMeter[name].toString()).toBe(vueMeter[name].toString());
+    }
+    // The page numbers are written once per layer; the React copy is the Vue one.
+    for (const name of ['pageCount', 'currentPage', 'pageHref', 'pageItems'] as const) {
+      expect(reactPagination[name].toString()).toBe(vuePagination[name].toString());
     }
     expect(sheetCloseIcon).toBe(vueSheet.sheetCloseIcon);
     expect(dialogSidePhones).toEqual(vueDialog.dialogSidePhones);

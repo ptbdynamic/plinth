@@ -44,6 +44,7 @@ import {
   PlinthOneTimeCode,
   PlinthPageHeader,
   PlinthPageIntro,
+  PlinthPagination,
   PlinthPill,
   PlinthPillRow,
   PlinthSectionHeading,
@@ -113,6 +114,7 @@ describe('the Plinth plugin', () => {
     expect(app.component('PlinthOneTimeCode')).toBe(PlinthOneTimeCode);
     expect(app.component('PlinthPageHeader')).toBe(PlinthPageHeader);
     expect(app.component('PlinthPageIntro')).toBe(PlinthPageIntro);
+    expect(app.component('PlinthPagination')).toBe(PlinthPagination);
     expect(app.component('PlinthPill')).toBe(PlinthPill);
     expect(app.component('PlinthPillRow')).toBe(PlinthPillRow);
     expect(app.component('PlinthSectionHeading')).toBe(PlinthSectionHeading);

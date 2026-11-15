@@ -264,6 +264,27 @@ return [
             ],
         ],
 
+        'pagination' => [
+            'name' => 'Pagination',
+            'group' => 'Content',
+            'description' => 'The footer of a long list or table: a summary, the page size, and previous, next and the page numbers.',
+            'playground' => [
+                'template' => "<x-plinth::pagination :pages=\"12\" href=\"?page={page}\"{attributes}>\n    <b>300</b> results\n</x-plinth::pagination>",
+                'layout' => 'stack',
+                'options' => [
+                    'page' => [
+                        'values' => ['first', 'middle', 'last'],
+                        'default' => 'middle',
+                        'print' => [
+                            'first' => ':page="1"',
+                            'middle' => ':page="6"',
+                            'last' => ':page="12"',
+                        ],
+                    ],
+                ],
+            ],
+        ],
+
         'empty-state' => [
             'name' => 'Empty state',
             'group' => 'Content',
