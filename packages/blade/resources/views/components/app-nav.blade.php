@@ -3,14 +3,18 @@
     'label' => null,
     'brandName' => null,
     'brandHref' => null,
+    'variant' => 'sidebar',
 ])
 @php
     $hasMark = isset($mark) && $mark->hasActualContent();
     $brandName = filled($brandName) ? $brandName : null;
     $brandTag = filled($brandHref) ? 'a' : 'div';
+    // The default, the sidebar, prints no attribute.
+    $variant = \BDynamic\Plinth\Enums\AppNavVariant::resolve($variant);
 @endphp
 <nav {{ $attributes->merge(array_filter([
     'class' => 'plinth-app-nav',
+    'data-variant' => $variant === \BDynamic\Plinth\Enums\AppNavVariant::Rail ? $variant->value : null,
     'aria-label' => filled($label) ? $label : null,
 ], fn ($value) => $value !== null)) }}>
     @if ($brandName !== null || $hasMark)

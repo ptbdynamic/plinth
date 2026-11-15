@@ -60,6 +60,30 @@ describe('PlinthAppNav', () => {
     expect(wrapper.find('.plinth-app-nav-name').html()).toContain('&lt;b&gt;x&lt;/b&gt;');
   });
 
+  it('keeps the rail with the rail variant, and prints nothing for the sidebar', () => {
+    expect(mount(PlinthAppNav, { props: { variant: 'rail' } }).attributes('data-variant')).toBe(
+      'rail',
+    );
+    expect(
+      mount(PlinthAppNav, { props: { variant: 'sidebar' } }).attributes('data-variant'),
+    ).toBeUndefined();
+    expect(mount(PlinthAppNav).attributes('data-variant')).toBeUndefined();
+    expect(
+      mount(PlinthAppNav, {
+        props: { variant: 'wide' as unknown as 'rail' },
+      }).attributes('data-variant'),
+    ).toBeUndefined();
+  });
+
+  it('lets the project set its own data-variant', () => {
+    const wrapper = mount(PlinthAppNav, {
+      props: { variant: 'rail' },
+      attrs: { 'data-variant': 'sidebar' },
+    });
+
+    expect(wrapper.attributes('data-variant')).toBe('sidebar');
+  });
+
   it('passes extra attributes to its root, and the project wins a clash', () => {
     const wrapper = mount(PlinthAppNav, {
       props: { label: 'Main' },

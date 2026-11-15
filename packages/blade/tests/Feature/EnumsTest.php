@@ -1,5 +1,6 @@
 <?php
 
+use BDynamic\Plinth\Enums\AppNavVariant;
 use BDynamic\Plinth\Enums\BreadcrumbsCollapse;
 use BDynamic\Plinth\Enums\ButtonVariant;
 use BDynamic\Plinth\Enums\CalloutRole;
@@ -48,6 +49,7 @@ it('defaults each choice the way the components do', function () {
         ->and(ConfirmDialogTone::default())->toBe(ConfirmDialogTone::Neutral)
         ->and(MenuItemTone::default())->toBe(MenuItemTone::Neutral)
         ->and(SplitViewPane::default())->toBe(SplitViewPane::List)
+        ->and(AppNavVariant::default())->toBe(AppNavVariant::Sidebar)
         ->and(TimelineKind::default())->toBe(TimelineKind::Team)
         ->and(BreadcrumbsCollapse::default())->toBe(BreadcrumbsCollapse::None);
 });
@@ -143,6 +145,9 @@ it('matches the lists the Vue layer and the stories use', function () {
     }
     foreach (SplitViewPane::values() as $value) {
         expect($vue('split-view.ts'))->toContain("'{$value}'");
+    }
+    foreach (AppNavVariant::values() as $value) {
+        expect($vue('app-nav.ts'))->toContain("'{$value}'");
     }
     foreach (TimelineKind::values() as $value) {
         expect($vue('timeline.ts'))->toContain("'{$value}'");

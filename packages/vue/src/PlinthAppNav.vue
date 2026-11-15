@@ -1,6 +1,7 @@
 <script setup lang="ts">
 // Markup contract: packages/css/src/components/app-nav.css
 import { computed, useSlots } from 'vue';
+import { appNavVariant, type AppNavVariant } from './app-nav';
 import { hasContent } from './slots';
 
 const props = withDefaults(
@@ -11,18 +12,25 @@ const props = withDefaults(
     brandName?: string;
     /** Makes the brand a link, to the app's home. */
     brandHref?: string;
+    /** `rail` keeps the rail from 1280px; the default, `sidebar`, prints no attribute. */
+    variant?: AppNavVariant;
   }>(),
-  { label: undefined, brandName: undefined, brandHref: undefined },
+  { label: undefined, brandName: undefined, brandHref: undefined, variant: 'sidebar' },
 );
 
 const slots = useSlots();
 // Blank text counts as missing, as Blade's filled() decides.
 const brandName = computed(() => (props.brandName?.trim() ? props.brandName : undefined));
 const brandTag = computed(() => (props.brandHref?.trim() ? 'a' : 'div'));
+const dataVariant = computed(() => (appNavVariant(props.variant) === 'rail' ? 'rail' : undefined));
 </script>
 
 <template>
-  <nav class="plinth-app-nav" :aria-label="label?.trim() ? label : undefined">
+  <nav
+    class="plinth-app-nav"
+    :data-variant="dataVariant"
+    :aria-label="label?.trim() ? label : undefined"
+  >
     <component
       :is="brandTag"
       v-if="brandName || hasContent(slots.mark?.())"

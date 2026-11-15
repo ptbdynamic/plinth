@@ -1208,6 +1208,21 @@ const cases: ParityCase[] = [
     { label: 'Main', items: [appNavItemDefaults] },
     { 'aria-label': 'Primary' },
   ),
+  appNavCase('App nav/sidebar variant', {
+    label: 'Main',
+    variant: 'sidebar',
+    items: [appNavItemDefaults],
+  }),
+  appNavCase('App nav/unknown variant', {
+    label: 'Main',
+    variant: 'wide' as AppNavArgs['variant'],
+    items: [appNavItemDefaults],
+  }),
+  appNavCase(
+    'App nav/with a clashing data-variant',
+    { label: 'Main', variant: 'rail', items: [appNavItemDefaults] },
+    { 'data-variant': 'sidebar' },
+  ),
   appNavCase('App nav/blank text', {
     label: ' ',
     brandName: ' ',
@@ -2997,6 +3012,7 @@ function appNavCase(story: string, args: AppNavArgs, attributes: Attributes = {}
     ...(args.label !== undefined ? { label: args.label } : {}),
     ...(args.brandName !== undefined ? { brandName: args.brandName } : {}),
     ...(args.brandHref !== undefined ? { brandHref: args.brandHref } : {}),
+    ...(args.variant !== undefined ? { variant: args.variant } : {}),
   };
   const named = {
     ...(args.mark ? { mark: args.mark } : {}),
@@ -4073,8 +4089,12 @@ describe('parity with the stories', () => {
       'App nav/MarkOnly',
       'App nav/WithoutBrand',
       'App nav/ManyItems',
+      'App nav/RailAtEveryWidth',
       'App nav/with extra attributes',
       'App nav/with a clashing attribute',
+      'App nav/sidebar variant',
+      'App nav/unknown variant',
+      'App nav/with a clashing data-variant',
       'App nav/blank text',
       'App nav/escaped text',
       'App nav item/Default',

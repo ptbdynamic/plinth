@@ -12,6 +12,7 @@ import * as vueBreadcrumbs from '../../vue/src/breadcrumbs.ts';
 import * as vueListRow from '../../vue/src/list-row.ts';
 import * as vueMenu from '../../vue/src/menu.ts';
 import * as vueSheet from '../../vue/src/sheet.ts';
+import * as vueAppNav from '../../vue/src/app-nav.ts';
 import * as vueSplitView from '../../vue/src/split-view.ts';
 import * as vueStat from '../../vue/src/stat.ts';
 import * as vueButton from '../../vue/src/button.ts';
@@ -87,6 +88,8 @@ import {
   sheetSides,
   splitViewPane,
   splitViewPanes,
+  appNavVariant,
+  appNavVariants,
   sizes,
   textFieldSize,
   selectSizes,
@@ -126,6 +129,7 @@ describe('the shared lists', () => {
     expect(menuItemTones).toEqual(vueMenu.menuItemTones);
     expect(sheetSides).toEqual(vueSheet.sheetSides);
     expect(splitViewPanes).toEqual(vueSplitView.splitViewPanes);
+    expect(appNavVariants).toEqual(vueAppNav.appNavVariants);
     expect(timelineKinds).toEqual(vueTimeline.timelineKinds);
     expect(oneTimeCodeLengths).toEqual(vueOneTimeCode.oneTimeCodeLengths);
     // The paste is written once per layer; the React copy is the Vue one.
@@ -183,6 +187,8 @@ describe('the shared lists', () => {
     expect(sheetSide('top')).toBe('top');
     expect(splitViewPane('side')).toBe('list');
     expect(splitViewPane('detail')).toBe('detail');
+    expect(appNavVariant('wide')).toBe(vueAppNav.appNavVariant('wide'));
+    expect(appNavVariant('rail')).toBe('rail');
     expect(sheetSidePhone('left')).toBeUndefined();
     expect(sheetSidePhone('bottom')).toBe('bottom');
     expect(dialogSidePhone('top')).toBe('center');
