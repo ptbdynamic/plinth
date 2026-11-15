@@ -1660,6 +1660,23 @@ const cases: ParityCase[] = [
     rows: [],
     framed: false,
   }),
+  dataTableCase(
+    'Data table/contained with extra attributes',
+    { caption: undefined, columns: [dataTableColumnDefaults], rows: [], contained: true },
+    { class: 'mt-4', id: 'orders', 'data-testid': 'orders', 'aria-label': 'Orders' },
+  ),
+  dataTableCase(
+    'Data table/contained with a clashing attribute',
+    { caption: undefined, columns: [dataTableColumnDefaults], rows: [], contained: true },
+    { role: 'grid' },
+  ),
+  dataTableCase('Data table/framed and contained', {
+    caption: undefined,
+    columns: [dataTableColumnDefaults],
+    rows: [],
+    framed: true,
+    contained: true,
+  }),
   dataTableCase('Data table/blank caption', {
     caption: '  ',
     columns: [dataTableColumnDefaults],
@@ -1671,6 +1688,20 @@ const cases: ParityCase[] = [
     ...dataTableColumnDefaults,
     hideOnPhone: true,
   }),
+  dataTableColumnCase('Data table column/Priority', { ...dataTableColumnDefaults, priority: '3' }),
+  dataTableColumnCase('Data table column/unknown priority', {
+    ...dataTableColumnDefaults,
+    priority: '4' as DataTableColumnArgs['priority'],
+  }),
+  dataTableColumnCase('Data table column/blank priority', {
+    ...dataTableColumnDefaults,
+    priority: ' ' as DataTableColumnArgs['priority'],
+  }),
+  dataTableColumnCase(
+    'Data table column/priority with a clashing attribute',
+    { ...dataTableColumnDefaults, priority: '2' },
+    { 'data-priority': '3' },
+  ),
   dataTableColumnCase('Data table column/Sortable', { ...dataTableColumnDefaults, sort: 'none' }),
   dataTableColumnCase('Data table column/Ascending', {
     ...dataTableColumnDefaults,
@@ -1730,6 +1761,16 @@ const cases: ParityCase[] = [
     ...dataTableCellDefaults,
     hideOnPhone: true,
   }),
+  dataTableCellCase('Data table cell/Priority', { ...dataTableCellDefaults, priority: '2' }),
+  dataTableCellCase('Data table cell/unknown priority', {
+    ...dataTableCellDefaults,
+    priority: 'low' as DataTableCellArgs['priority'],
+  }),
+  dataTableCellCase(
+    'Data table cell/priority with a clashing attribute',
+    { ...dataTableCellDefaults, priority: '2' },
+    { 'data-priority': '3' },
+  ),
   dataTableCellCase('Data table cell/blank label', { ...dataTableCellDefaults, label: ' ' }),
   dataTableCellCase('Data table cell/unknown kind', {
     ...dataTableCellDefaults,
@@ -3082,6 +3123,7 @@ function dataTableCase(
   const props = {
     ...(args.caption !== undefined ? { caption: args.caption } : {}),
     ...(args.framed !== undefined ? { framed: args.framed } : {}),
+    ...(args.contained !== undefined ? { contained: args.contained } : {}),
   };
   const named = { head: dataTableHead(args.columns) };
   const slot = dataTableBody(args);
@@ -3108,6 +3150,7 @@ function dataTableColumnCase(
     ...(args.sort !== undefined ? { sort: args.sort } : {}),
     numeric: args.numeric,
     hideOnPhone: args.hideOnPhone,
+    ...(args.priority !== undefined ? { priority: args.priority } : {}),
   };
   const slot = args.sort === undefined ? args.label : dataTableSortButton(args.label);
   return {
@@ -3157,6 +3200,7 @@ function dataTableCellCase(
     kind: args.kind,
     numeric: args.numeric,
     hideOnPhone: args.hideOnPhone,
+    ...(args.priority !== undefined ? { priority: args.priority } : {}),
   };
   return {
     story,
@@ -3952,15 +3996,25 @@ describe('parity with the stories', () => {
       'Data table/FramedSelected',
       'Data table/FramedEmpty',
       'Data table/FramedWide',
+      'Data table/Priority',
+      'Data table/FramedPriority',
+      'Data table/FramedPriorityWithoutActions',
       'Data table/with extra attributes',
       'Data table/with a clashing attribute',
       'Data table/framed with extra attributes',
       'Data table/framed with a clashing attribute',
       'Data table/not framed',
+      'Data table/contained with extra attributes',
+      'Data table/contained with a clashing attribute',
+      'Data table/framed and contained',
       'Data table/blank caption',
       'Data table column/Default',
       'Data table column/Numeric',
       'Data table column/HiddenOnPhone',
+      'Data table column/Priority',
+      'Data table column/unknown priority',
+      'Data table column/blank priority',
+      'Data table column/priority with a clashing attribute',
       'Data table column/Sortable',
       'Data table column/Ascending',
       'Data table column/Descending',
@@ -3980,6 +4034,9 @@ describe('parity with the stories', () => {
       'Data table cell/Actions',
       'Data table cell/Numeric',
       'Data table cell/HiddenOnPhone',
+      'Data table cell/Priority',
+      'Data table cell/unknown priority',
+      'Data table cell/priority with a clashing attribute',
       'Data table cell/blank label',
       'Data table cell/unknown kind',
       'Data table cell/with extra attributes',

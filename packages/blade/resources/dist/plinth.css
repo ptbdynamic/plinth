@@ -2458,6 +2458,27 @@
  * takes no attributes. A frame that scrolls is reached with Tab through the table's own controls
  * (sort buttons, actions); a wide read-only table, with none, can't be scrolled by keyboard in
  * every browser, so keep such a table narrow enough for its frame.
+ *
+ * Column priority: a table can be narrow on a wide screen (in a split view's pane, beside a
+ * section column, on a tablet with a rail), so its less important columns give way to the
+ * table's own width, not the screen's. The frame is a size container from 768px up, and so is
+ * plinth-data-table-container, a wrapper for a table without a frame:
+ *
+ *   <div class="plinth-data-table-container">
+ *     <table class="plinth-data-table" role="table">
+ *       …<th class="plinth-data-table-column" role="columnheader" scope="col" data-priority="3">…
+ *       …<td class="plinth-data-table-cell" role="cell" data-kind="field" data-priority="3">…
+ *
+ * - data-priority on a column header and on every cell of the column: 3 shows from 960px of
+ *   container, 2 from 640px, 1 always (as a column without one). Hidden columns are display:
+ *   none, header and cells alike, so every cell keeps its header; nothing moves focus.
+ * - It works in the table layout, from 768px up; a phone's card shows every field but those
+ *   with data-phone="hidden". Without a container (a bare table) every column shows.
+ * - Leave the title column and the actions column without a priority. The first and last
+ *   columns left take the frame's edge padding, and the first the selected row's edge.
+ * - What a hidden column holds must be reachable elsewhere, on the row's own page, say.
+ * - As a container, the wrapper takes its width from its parent, never from the table: don't
+ *   put it (or the frame) in a row that sizes it to fit. The wrapper takes no attributes.
  */
 
 @layer plinth {
@@ -2939,6 +2960,112 @@
       > .plinth-data-table-head-row
       > .plinth-data-table-column:last-child {
       text-align: end;
+    }
+  }
+
+  /*
+   * Column priority, from 768px: the frame and plinth-data-table-container are size containers,
+   * and a column with data-priority gives way as the container narrows, whatever the screen's
+   * width. 960px and 640px are the table's own values, not breakpoint tokens: a container query
+   * can't read a custom property.
+   */
+  @media (min-width: 768px) {
+    .plinth-data-table-frame,
+    .plinth-data-table-container {
+      container: plinth-data-table / inline-size;
+    }
+  }
+
+  @container plinth-data-table (width < 960px) {
+    .plinth-data-table .plinth-data-table-column[data-priority='3'],
+    .plinth-data-table .plinth-data-table-cell[data-priority='3'] {
+      display: none;
+    }
+
+    /* The first and last columns left take the frame's edges and the selected row's edge. */
+    .plinth-data-table-frame
+      > .plinth-data-table
+      > .plinth-data-table-head
+      > .plinth-data-table-head-row
+      > .plinth-data-table-column:nth-child(1 of :not([data-priority='3'])),
+    .plinth-data-table-frame
+      > .plinth-data-table
+      > .plinth-data-table-body
+      > .plinth-data-table-row
+      > .plinth-data-table-cell:nth-child(1 of :not([data-priority='3'])) {
+      padding-inline-start: var(--plinth-data-table-frame-edge);
+    }
+
+    .plinth-data-table-frame
+      > .plinth-data-table
+      > .plinth-data-table-head
+      > .plinth-data-table-head-row
+      > .plinth-data-table-column:nth-last-child(1 of :not([data-priority='3'])),
+    .plinth-data-table-frame
+      > .plinth-data-table
+      > .plinth-data-table-body
+      > .plinth-data-table-row
+      > .plinth-data-table-cell:nth-last-child(1 of :not([data-priority='3'])) {
+      padding-inline-end: var(--plinth-data-table-frame-edge);
+    }
+
+    .plinth-data-table-row[aria-selected='true']
+      > .plinth-data-table-cell:nth-child(1 of :not([data-priority='3']))::before {
+      position: absolute;
+      inset-block: 0;
+      inset-inline-start: 0;
+      inline-size: var(--plinth-border-width-thick);
+      content: '';
+      background-color: var(--plinth-color-accent);
+    }
+  }
+
+  @container plinth-data-table (width < 640px) {
+    .plinth-data-table .plinth-data-table-column[data-priority='2'],
+    .plinth-data-table .plinth-data-table-cell[data-priority='2'] {
+      display: none;
+    }
+
+    .plinth-data-table-frame
+      > .plinth-data-table
+      > .plinth-data-table-head
+      > .plinth-data-table-head-row
+      > .plinth-data-table-column:nth-child(1 of :not([data-priority='2'], [data-priority='3'])),
+    .plinth-data-table-frame
+      > .plinth-data-table
+      > .plinth-data-table-body
+      > .plinth-data-table-row
+      > .plinth-data-table-cell:nth-child(1 of :not([data-priority='2'], [data-priority='3'])) {
+      padding-inline-start: var(--plinth-data-table-frame-edge);
+    }
+
+    .plinth-data-table-frame
+      > .plinth-data-table
+      > .plinth-data-table-head
+      > .plinth-data-table-head-row
+      > .plinth-data-table-column:nth-last-child(
+        1 of :not([data-priority='2'], [data-priority='3'])
+      ),
+    .plinth-data-table-frame
+      > .plinth-data-table
+      > .plinth-data-table-body
+      > .plinth-data-table-row
+      > .plinth-data-table-cell:nth-last-child(
+        1 of :not([data-priority='2'], [data-priority='3'])
+      ) {
+      padding-inline-end: var(--plinth-data-table-frame-edge);
+    }
+
+    .plinth-data-table-row[aria-selected='true']
+      > .plinth-data-table-cell:nth-child(
+        1 of :not([data-priority='2'], [data-priority='3'])
+      )::before {
+      position: absolute;
+      inset-block: 0;
+      inset-inline-start: 0;
+      inline-size: var(--plinth-border-width-thick);
+      content: '';
+      background-color: var(--plinth-color-accent);
     }
   }
 

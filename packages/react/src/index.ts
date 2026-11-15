@@ -86,10 +86,13 @@ export {
 export {
   dataTableCellKind,
   dataTableCellKinds,
+  dataTablePriorities,
+  dataTablePriority,
   dataTableSort,
   dataTableSortIcon,
   dataTableSorts,
   type DataTableCellKind,
+  type DataTablePriority,
   type DataTableSort,
 } from './data-table';
 export { dialogCloseIcon, dialogSidePhone, dialogSidePhones, type DialogSidePhone } from './dialog';

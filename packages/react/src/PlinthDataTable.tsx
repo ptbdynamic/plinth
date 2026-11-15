@@ -9,6 +9,11 @@ interface DataTableOptions {
   head?: ReactNode;
   /** A card of its own from 768px up: a frame that scrolls a wide table, and a header band. */
   framed?: boolean;
+  /**
+   * In a size container (plinth-data-table-container), so columns with a priority give way to
+   * the table's own width. A framed table is in one already.
+   */
+  contained?: boolean;
 }
 
 /** A table that becomes a card per row on a phone: `children` are its rows. */
@@ -19,6 +24,7 @@ export function PlinthDataTable({
   caption,
   head,
   framed = false,
+  contained = false,
   className,
   children,
   ...rest
@@ -36,6 +42,7 @@ export function PlinthDataTable({
       </tbody>
     </table>
   );
-  // The frame takes no props: the table is the root, framed or not.
-  return framed ? <div className="plinth-data-table-frame">{table}</div> : table;
+  // The frame and the container take no props: the table is the root, framed or not.
+  if (framed) return <div className="plinth-data-table-frame">{table}</div>;
+  return contained ? <div className="plinth-data-table-container">{table}</div> : table;
 }

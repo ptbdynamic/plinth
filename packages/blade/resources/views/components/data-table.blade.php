@@ -2,9 +2,12 @@
 @props([
     'caption' => null,
     'framed' => false,
+    'contained' => false,
 ])
 @if ($framed)
 <div class="plinth-data-table-frame">
+@elseif ($contained)
+<div class="plinth-data-table-container">
 @endif
 <table {{ $attributes->merge(['class' => 'plinth-data-table', 'role' => 'table']) }}>
     @if (filled($caption))
@@ -15,6 +18,6 @@
     </thead>
     <tbody class="plinth-data-table-body" role="rowgroup">{{ $slot }}</tbody>
 </table>
-@if ($framed)
+@if ($framed || $contained)
 </div>
 @endif
