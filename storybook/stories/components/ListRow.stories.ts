@@ -160,8 +160,8 @@ export const SelectableList: Story = {
 /** A setting row: the row's text names the switch, and a tap anywhere on the row flips it. */
 export const Setting: Story = {
   args: {
-    title: 'Pause runs',
-    description: 'Stop new runs for this client',
+    title: 'Pause syncing',
+    description: 'Stop new syncs until you resume',
     toggle: true,
     switchId: 'paused',
     name: 'paused',
@@ -172,7 +172,7 @@ export const SettingOn: Story = { args: { ...Setting.args, checked: true } };
 export const SettingDisabled: Story = {
   args: {
     ...Setting.args,
-    description: 'Only an owner can pause runs',
+    description: 'Only an owner can pause syncing',
     checked: true,
     disabled: true,
   },
@@ -188,7 +188,7 @@ export const SettingWithIcon: Story = {
 };
 
 const switches = [
-  ['Pause runs', 'Stop new runs for this client', 'paused', false],
+  ['Pause syncing', 'Stop new syncs until you resume', 'paused', false],
   ['Email reports', 'A summary every Monday', 'reports', true],
   ['Two-factor sign-in', undefined, 'two-factor', true],
 ] as const;
@@ -243,5 +243,6 @@ export const InScrollingSheet: Story = {
 
 /** The same rows in right-to-left text: the slots swap sides and the chevrons point left. */
 export const RightToLeft: Story = {
-  render: () => `<div dir="rtl">${settings.join('')}</div>`,
+  render: () =>
+    `<div dir="rtl">${settings.join('')}${listRow({ ...meta.args, title: 'Pause syncing', toggle: true, switchId: 'rtl-off' })}${listRow({ ...meta.args, title: 'Email reports', toggle: true, switchId: 'rtl-on', checked: true })}</div>`,
 };

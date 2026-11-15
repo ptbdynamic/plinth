@@ -129,7 +129,7 @@ toggles natively, as Blade's and Vue's do.
 
 A settings screen is a list of rows that each turn something on or off: set **`toggle`** and the
 row becomes a `<label>` with a [switch](switch.md) in its trailing slot. The row's title names the
-switch and its description describes it, so it reads as _Pause runs, switch, off_ and then the
+switch and its description describes it, so it reads as _Pause syncing, switch, off_ and then the
 description, and a tap anywhere on the row flips it. The switch prints no label of its own. The
 app owns whether it is on: set **`checked`** and listen to the switch's `change`, which bubbles
 to the row (`wire:change`, `x-on:change`). **`name`** and **`value`** are the switch's, so a form
@@ -141,14 +141,14 @@ slot. A page that uses it loads the switch's CSS too, which the full stylesheet 
 
 ```blade example layout="stack"
 <x-plinth::list-card>
-    <li><x-plinth::list-row toggle switch-id="paused" name="paused" value="1" description="Stop new runs for this client">Pause runs</x-plinth::list-row></li>
+    <li><x-plinth::list-row toggle switch-id="paused" name="paused" value="1" description="Stop new syncs until you resume">Pause syncing</x-plinth::list-row></li>
     <li><x-plinth::list-row toggle checked switch-id="reports" name="reports" value="1" description="A summary every Monday">Email reports</x-plinth::list-row></li>
     <li><x-plinth::list-row toggle checked disabled switch-id="two-factor" description="Only an owner can turn it off">Two-factor sign-in</x-plinth::list-row></li>
 </x-plinth::list-card>
 ```
 
-In Livewire, listen with `wire:change="togglePaused"` or bind the switch with `wire:model` on a
-form; Vue emits `update:checked`, so `v-model:checked` works; React calls `onCheckedChange` with
+Extra attributes go to the row's root, not the switch, so bind it with `checked` and its change,
+not with a model: in Livewire, `:checked="$paused"` and `wire:change="togglePaused"`; Vue emits `update:checked`, so `v-model:checked` works; React calls `onCheckedChange` with
 the new value; without it, React's switch starts at `checked` and toggles natively.
 
 ## In a list
@@ -209,8 +209,8 @@ Extra attributes and listeners (`wire:click`, `@click`, `onClick`) reach the roo
     {{ $ticket->subject }}
 </x-plinth::list-row>
 
-<x-plinth::list-row toggle :checked="$paused" switch-id="paused" description="Stop new runs for this client" wire:change="togglePaused">
-    Pause runs
+<x-plinth::list-row toggle :checked="$paused" switch-id="paused" description="Stop new syncs until you resume" wire:change="togglePaused">
+    Pause syncing
 </x-plinth::list-row>
 ```
 
@@ -225,8 +225,8 @@ Extra attributes and listeners (`wire:click`, `@click`, `onClick`) reach the roo
   {{ ticket.subject }}
 </PlinthListRow>
 
-<PlinthListRow toggle v-model:checked="paused" description="Stop new runs for this client">
-  Pause runs
+<PlinthListRow toggle v-model:checked="paused" description="Stop new syncs until you resume">
+  Pause syncing
 </PlinthListRow>
 ```
 
@@ -253,9 +253,9 @@ import { PlinthListRow } from '@ptbdynamic/plinth/react';
     toggle
     checked={paused}
     onCheckedChange={setPaused}
-    description="Stop new runs for this client"
+    description="Stop new syncs until you resume"
 >
-    Pause runs
+    Pause syncing
 </PlinthListRow>;
 ```
 

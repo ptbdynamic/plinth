@@ -91,7 +91,7 @@ export function listRow(
   ].join('');
   // A setting row's switch is named by the title alone and described by the description, so the
   // label's whole text isn't read as its name.
-  const id = escape(switchId);
+  const id = escape(switchId.trim() || 'plinth-list-row-switch');
   const toggleSwitch = [
     `<input type="checkbox" role="switch" class="plinth-switch-input" id="${id}"`,
     ` aria-labelledby="${id}-title"`,

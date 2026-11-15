@@ -48,14 +48,14 @@
  * row keeps aria-current and its tint, but a screen reader folds a label into its checkbox, so
  * while selecting the current row is a visual cue only.
  *
- * Setting: a row whose title and description are a switch's, such as "Pause runs — Stop new runs
- * for this client", is a <label> with the switch's input (switch.css) in the trailing slot:
+ * Setting: a row whose title and description are a switch's, such as "Pause syncing — Stop new syncs
+ * until you resume", is a <label> with the switch's input (switch.css) in the trailing slot:
  *
  * <label class="plinth-list-row">
  *   <span class="plinth-list-row-content">
- *     <span class="plinth-list-row-title" id="paused-title">Pause runs</span>
- *     <span class="plinth-list-row-description" id="paused-description">Stop new runs for this
- *       client</span>
+ *     <span class="plinth-list-row-title" id="paused-title">Pause syncing</span>
+ *     <span class="plinth-list-row-description" id="paused-description">Stop new syncs until
+ *       you resume</span>
  *   </span>
  *   <span class="plinth-list-row-trailing">
  *     <input type="checkbox" role="switch" class="plinth-switch-input" id="paused"
@@ -66,13 +66,16 @@
  *
  * The whole row toggles the switch, and the switch prints no label of its own. Its name is the
  * title alone and the description describes it (aria-labelledby and aria-describedby, whose ids
- * are the input's id with -title and -description), so it is read as "Pause runs, switch, off"
+ * are the input's id with -title and -description), so it is read as "Pause syncing, switch, off"
  * and then the description, not as the label's whole text. The app owns whether it is on: it
  * prints `checked` and listens to the input's change, which bubbles to the row; on is the thumb
  * at the end and the accent track, so the row takes no tint. name and value are the input's, so
  * a form sends it when it is on. The leading slot may hold an icon; like a selectable row, a
  * setting row holds no other control and opens nothing (no href, no chevron). The page loads
- * switch.css too, for the track. The focus ring is on the input, as on a switch.
+ * switch.css too, for the track. The focus ring is on the input, as on a switch. Extra
+ * attributes go to the root, so the app binds the switch with `checked` and its change, not with
+ * a model on the row. A screen reader folds the label into its switch, so `current` on a setting
+ * row is a visual cue only. Without an id, each layer generates one.
  *
  * States:
  * - current: aria-current="page" on a link row (or a static row) for the page being shown, set
