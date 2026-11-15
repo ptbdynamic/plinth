@@ -95,6 +95,8 @@ describe('tiers', () => {
       'pill.height',
       'dialog.width',
       'sheet.side-width',
+      'sheet.side-width-lg',
+      'sheet.side-width-xl',
       'drawer.peek-height',
       'section-heading.space-before',
       'section-heading.space-after',
@@ -215,6 +217,12 @@ describe('tiers', () => {
       '2.5rem',
       '3.5rem',
     ]);
+  });
+
+  it('has sheet side widths of 400, 560 and 720 px', () => {
+    expect(
+      ['side-width', 'side-width-lg', 'side-width-xl'].map((w) => token(`sheet.${w}`).value),
+    ).toEqual(['25rem', '35rem', '45rem']);
   });
 
   it('has icon sizes of 16, 20 and 24 px', () => {

@@ -2,7 +2,7 @@
 import { useId, type ComponentProps, type ReactNode } from 'react';
 import { PlinthIconButton } from './PlinthIconButton';
 import { classNames, hasContent } from './markup';
-import { sheetSide, sheetSidePhone, type SheetSide } from './sheet';
+import { sheetDataSize, sheetSide, sheetSidePhone, type SheetSide, type SheetSize } from './sheet';
 import { useSwipeToClose } from './swipe';
 
 interface SheetOptions {
@@ -18,6 +18,8 @@ interface SheetOptions {
   side?: SheetSide;
   /** The edge below 768px, when it is another one. */
   sidePhone?: SheetSide;
+  /** The width of a start or end sheet: md (400 px), lg (560 px) or xl (720 px, for a form). */
+  size?: SheetSize;
   /** The actions under the body (Vue's `footer` slot). */
   footer?: ReactNode;
 }
@@ -36,6 +38,7 @@ export function PlinthSheet({
   closeLabel = 'Close',
   side,
   sidePhone,
+  size,
   footer,
   className,
   children,
@@ -61,6 +64,7 @@ export function PlinthSheet({
       id={sheetId}
       data-side={sheetSide(side)}
       data-side-phone={phone}
+      data-size={sheetDataSize(size)}
       closedby="any"
       aria-labelledby={`${sheetId}-title`}
       aria-describedby={hasDescription ? `${sheetId}-description` : undefined}

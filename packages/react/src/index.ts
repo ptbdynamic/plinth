@@ -130,7 +130,17 @@ export { fieldControl, type FieldControl } from './field';
 export { selectSize, selectSizes, type SelectSize } from './select';
 export { fieldDescribedBy, textFieldSize, textFieldSizes, type TextFieldSize } from './text-field';
 export { splitViewPane, splitViewPanes, type SplitViewPane } from './split-view';
-export { sheetCloseIcon, sheetSide, sheetSidePhone, sheetSides, type SheetSide } from './sheet';
+export {
+  sheetCloseIcon,
+  sheetDataSize,
+  sheetSide,
+  sheetSidePhone,
+  sheetSides,
+  sheetSize,
+  sheetSizes,
+  type SheetSide,
+  type SheetSize,
+} from './sheet';
 export { statChevron } from './stat';
 export { timelineHeadingLevel, timelineKind, timelineKinds, type TimelineKind } from './timeline';
 export { tones, type Tone } from './tones';

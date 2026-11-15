@@ -181,7 +181,17 @@ export {
 export { menuIdKey, menuItemTone, menuItemTones, type MenuItemTone } from './menu';
 export { pageHeaderLevel, pageHeaderLevels, type PageHeaderLevel } from './page-header';
 export { splitViewPane, splitViewPanes, type SplitViewPane } from './split-view';
-export { sheetCloseIcon, sheetSide, sheetSidePhone, sheetSides, type SheetSide } from './sheet';
+export {
+  sheetCloseIcon,
+  sheetDataSize,
+  sheetSide,
+  sheetSidePhone,
+  sheetSides,
+  sheetSize,
+  sheetSizes,
+  type SheetSide,
+  type SheetSize,
+} from './sheet';
 export { fieldControl, type FieldControl } from './field';
 export { selectSize, selectSizes, type SelectSize } from './select';
 export { fieldDescribedBy, textFieldSize, textFieldSizes, type TextFieldSize } from './text-field';

@@ -65,7 +65,9 @@ it('resolves a size among the ones a component supports', function () {
     expect(Size::resolve('lg', Size::controls()))->toBe(Size::Large)
         ->and(Size::resolve('xl', Size::controls()))->toBe(Size::Medium)
         ->and(Size::resolve(Size::ExtraLarge))->toBe(Size::ExtraLarge)
-        ->and(Size::resolve('huge', Size::controls(), Size::Small))->toBe(Size::Small);
+        ->and(Size::resolve('huge', Size::controls(), Size::Small))->toBe(Size::Small)
+        ->and(Size::resolve('xl', Size::sheets()))->toBe(Size::ExtraLarge)
+        ->and(Size::resolve('sm', Size::sheets()))->toBe(Size::Medium);
 });
 
 it('lets a view pass the enum instead of a string', function () {
@@ -100,6 +102,9 @@ it('matches the lists the Vue layer and the stories use', function () {
     }
     foreach (SheetSide::values() as $value) {
         expect($vue('sheet.ts'))->toContain("'{$value}'");
+    }
+    foreach (Size::sheets() as $size) {
+        expect($vue('sheet.ts'))->toContain("'{$size->value}'");
     }
     foreach (DialogSidePhone::values() as $value) {
         expect($vue('dialog.ts'))->toContain("'{$value}'");

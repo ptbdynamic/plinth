@@ -92,6 +92,8 @@
     --plinth-ref-size-320: 20rem;
     --plinth-ref-size-400: 25rem;
     --plinth-ref-size-480: 30rem;
+    --plinth-ref-size-560: 35rem;
+    --plinth-ref-size-720: 45rem;
     --plinth-ref-radius-0: 0;
     --plinth-ref-radius-2: 0.125rem;
     --plinth-ref-radius-4: 0.25rem;
@@ -203,6 +205,8 @@
     --plinth-size-avatar-xl: var(--plinth-ref-size-56);
     --plinth-size-dialog: var(--plinth-ref-size-480);
     --plinth-size-panel: var(--plinth-ref-size-400);
+    --plinth-size-panel-lg: var(--plinth-ref-size-560);
+    --plinth-size-panel-xl: var(--plinth-ref-size-720);
     --plinth-size-peek: var(--plinth-ref-size-160);
     --plinth-size-menu-min: var(--plinth-ref-size-192);
     --plinth-size-menu-max: var(--plinth-ref-size-320);
@@ -226,6 +230,8 @@
     --plinth-pill-height: var(--plinth-control-md);
     --plinth-dialog-width: var(--plinth-size-dialog);
     --plinth-sheet-side-width: var(--plinth-size-panel);
+    --plinth-sheet-side-width-lg: var(--plinth-size-panel-lg);
+    --plinth-sheet-side-width-xl: var(--plinth-size-panel-xl);
     --plinth-drawer-peek-height: var(--plinth-size-peek);
     --plinth-section-heading-space-before: var(--plinth-space-10);
     --plinth-section-heading-space-after: var(--plinth-space-4);
@@ -5925,10 +5931,12 @@
 /* sheet.css */
 /*
  * Sheet: a modal panel on the edge of the screen the developer picks, for filters, side
- * information or navigation. Optionally on another edge below 768px.
+ * information, navigation or a form (wider with data-size). Optionally on another edge below
+ * 768px.
  *
  * <dialog id="filters" class="plinth-sheet" data-side="end" data-side-phone="bottom"
- *   closedby="any" aria-labelledby="filters-title" aria-describedby="filters-description">
+ *   data-size="xl" closedby="any" aria-labelledby="filters-title"
+ *   aria-describedby="filters-description">
  *   <div class="plinth-sheet-panel">
  *     <div class="plinth-sheet-handle" aria-hidden="true"></div>
  *     <div class="plinth-sheet-header">
@@ -5963,11 +5971,19 @@
  * centred on the screen, use the dialog (dialog.css).
  *
  * Side (data-side), at every width: end (default, also when missing or unknown) and start are
- * full-height panels on the inline-end and inline-start edges, sheet.side-width wide and at
- * most the screen's width less a gap, so the page shows beside them; top and bottom are the
+ * full-height panels on the inline-end and inline-start edges, as wide as their size (below)
+ * and at most the screen's width less a gap, so the page shows beside them; top and bottom are the
  * screen's width on the top and bottom edges, as tall as their content up to the screen's height
  * less a gap that also clears the safe area at the other edge. The sides are logical: in
  * right-to-left text end is the left edge and start the right.
+ *
+ * Size (data-size, optional), for a start or end sheet: md (default, also when missing or
+ * unknown) is sheet.side-width (400px), for filters and side information; lg is
+ * sheet.side-width-lg (560px); xl is sheet.side-width-xl (720px), wide enough for a form in two
+ * columns on a tablet or a desktop. Each is at most the screen's width less the gap, so the
+ * backdrop is still there to tap and the page reads as behind. Top and bottom sheets, at whatever
+ * width that makes them so (data-side or data-side-phone), are the screen's width and ignore it.
+ * The layers print data-size only for lg and xl, and leave it out for md.
  *
  * Side on a phone (data-side-phone, optional): the side below 768px, one of the same four; from
  * 768px up data-side holds. data-side="end" data-side-phone="bottom" is a side panel on a tablet
@@ -6006,8 +6022,12 @@
    * data-side-phone. The phone's rules use :where() so the later ones win on order alone.
    */
   .plinth-sheet {
-    /* Translate isn't logical: -1 (under :dir(rtl), below) turns the slide around. */
+    /*
+     * Translate isn't logical: -1 (under :dir(rtl), below) turns the slide around. The width of a
+     * start or end sheet follows its size (data-size, below).
+     */
     --plinth-sheet-direction: 1;
+    --plinth-sheet-width: var(--plinth-sheet-side-width);
     --plinth-sheet-safe-area-inline-start: env(safe-area-inset-left);
     --plinth-sheet-safe-area-inline-end: env(safe-area-inset-right);
     --plinth-modal-offset: calc(100% * var(--plinth-sheet-direction)) 0;
@@ -6015,7 +6035,7 @@
 
     inset-block: 0;
     inset-inline: auto 0;
-    inline-size: min(100% - var(--plinth-space-12), var(--plinth-sheet-side-width));
+    inline-size: min(100% - var(--plinth-space-12), var(--plinth-sheet-width));
     block-size: auto;
     max-block-size: none;
     padding-block: env(safe-area-inset-top) 0;
@@ -6031,7 +6051,7 @@
 
     inset-block: 0;
     inset-inline: 0 auto;
-    inline-size: min(100% - var(--plinth-space-12), var(--plinth-sheet-side-width));
+    inline-size: min(100% - var(--plinth-space-12), var(--plinth-sheet-width));
     max-block-size: none;
     padding-block: env(safe-area-inset-top) 0;
     padding-inline: var(--plinth-sheet-safe-area-inline-start) 0;
@@ -6094,6 +6114,15 @@
     border-radius: 0;
   }
 
+  /* The larger sizes; top and bottom sheets are the screen's width, so they ignore it. */
+  .plinth-sheet[data-size='lg'] {
+    --plinth-sheet-width: var(--plinth-sheet-side-width-lg);
+  }
+
+  .plinth-sheet[data-size='xl'] {
+    --plinth-sheet-width: var(--plinth-sheet-side-width-xl);
+  }
+
   /* Right-to-left text turns the slide around and swaps the safe areas. */
   .plinth-sheet:dir(rtl) {
     --plinth-sheet-direction: -1;
@@ -6108,7 +6137,7 @@
 
       inset-block: 0;
       inset-inline: auto 0;
-      inline-size: min(100% - var(--plinth-space-12), var(--plinth-sheet-side-width));
+      inline-size: min(100% - var(--plinth-space-12), var(--plinth-sheet-width));
       max-block-size: none;
       padding-block: env(safe-area-inset-top) 0;
       padding-inline: 0 var(--plinth-sheet-safe-area-inline-end);

@@ -2,7 +2,13 @@ import { fireEvent, render } from '@testing-library/react';
 import { createRef, type ReactElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { PlinthSheet, sheetCloseIcon, type SheetSide } from '../src/index.ts';
+import {
+  PlinthSheet,
+  sheetCloseIcon,
+  sheetSize,
+  type SheetSide,
+  type SheetSize,
+} from '../src/index.ts';
 
 const close =
   '<button type="button" class="plinth-button plinth-icon-button plinth-sheet-close" data-variant="ghost" data-size="md" aria-label="Close" commandfor="filters" command="close">' +
@@ -93,6 +99,18 @@ describe('PlinthSheet', () => {
     expect(sidePhone('start')).toBe('start');
     expect(sidePhone('left')).toBeUndefined();
     expect(sidePhone()).toBeUndefined();
+  });
+
+  it('takes a size, and prints it only for lg and xl', () => {
+    const size = (value?: string) =>
+      root(<PlinthSheet title="Filters" size={value as SheetSize} />).dataset.size;
+
+    expect(size('lg')).toBe('lg');
+    expect(size('xl')).toBe('xl');
+    expect(size('md')).toBeUndefined();
+    expect(size('huge')).toBeUndefined();
+    expect(size()).toBeUndefined();
+    expect(sheetSize('sm')).toBe('md');
   });
 
   it("takes the close button's label", () => {

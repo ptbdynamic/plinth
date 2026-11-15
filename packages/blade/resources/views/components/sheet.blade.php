@@ -6,6 +6,7 @@
     'closeLabel' => 'Close',
     'side' => 'end',
     'sidePhone' => null,
+    'size' => 'md',
 ])
 @php
     if (blank($title)) {
@@ -15,6 +16,8 @@
     $hasDescription = filled($description);
     $side = \BDynamic\Plinth\Enums\SheetSide::resolve($side);
     $sidePhone = \BDynamic\Plinth\Enums\SheetSide::resolveOptional($sidePhone);
+    // md is the sheet without data-size; lg and xl print it.
+    $size = \BDynamic\Plinth\Enums\Size::resolve($size, \BDynamic\Plinth\Enums\Size::sheets());
     // A bottom sheet on a phone has the grab handle, and is dragged down to close (modal.css).
     $handle = ($sidePhone ?? $side) === \BDynamic\Plinth\Enums\SheetSide::Bottom;
     $root = array_filter([
@@ -22,6 +25,7 @@
         'class' => 'plinth-sheet',
         'data-side' => $side->value,
         'data-side-phone' => $sidePhone?->value,
+        'data-size' => $size === \BDynamic\Plinth\Enums\Size::Medium ? null : $size->value,
         'closedby' => 'any',
         'x-init' => $handle ? \BDynamic\Plinth\Support\SwipeToClose::ALPINE : null,
         'aria-labelledby' => $id.'-title',
