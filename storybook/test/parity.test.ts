@@ -37,6 +37,7 @@ import {
   PlinthNavListItem,
   PlinthPageHeader,
   PlinthPageIntro,
+  PlinthPagination,
   PlinthEmptyState,
   PlinthField,
   PlinthPill,
@@ -100,6 +101,7 @@ import {
   PlinthNavListItem as ReactNavListItem,
   PlinthPageHeader as ReactPageHeader,
   PlinthPageIntro as ReactPageIntro,
+  PlinthPagination as ReactPagination,
   PlinthEmptyState as ReactEmptyState,
   PlinthPill as ReactPill,
   PlinthPillRow as ReactPillRow,
@@ -211,6 +213,8 @@ import * as listCardStories from '../stories/components/ListCard.stories.ts';
 import { listCard, listCardRows, type ListCardArgs } from '../stories/components/list-card.ts';
 import * as listHeaderStories from '../stories/components/ListHeader.stories.ts';
 import { listHeader, type ListHeaderArgs } from '../stories/components/list-header.ts';
+import * as paginationStories from '../stories/components/Pagination.stories.ts';
+import { pagination, type PaginationArgs } from '../stories/components/pagination.ts';
 import * as listRowStories from '../stories/components/ListRow.stories.ts';
 import { listRow, type ListRowArgs } from '../stories/components/list-row.ts';
 import * as menuStories from '../stories/components/Menu.stories.ts';
@@ -369,6 +373,7 @@ const reactComponents = new Map<Component, unknown>([
   [PlinthIconButton, ReactIconButton],
   [PlinthListCard, ReactListCard],
   [PlinthListHeader, ReactListHeader],
+  [PlinthPagination, ReactPagination],
   [PlinthListRow, ReactListRow],
   [PlinthMenu, ReactMenu],
   [PlinthMenuGroup, ReactMenuGroup],
@@ -1054,6 +1059,51 @@ const cases: ParityCase[] = [
     heading: '<b>Open</b>',
     count: '<i>12</i>',
     selection: '<b>2</b> selected',
+  }),
+  ...storyArgs<PaginationArgs>(paginationStories).map(([story, args]) =>
+    paginationCase(`Pagination/${story}`, args),
+  ),
+  paginationCase(
+    'Pagination/with extra attributes',
+    { page: 2, pages: 5, href: '?page={page}', summary: 'Page 2' },
+    { class: 'mt-4', id: 'orders-pages', 'data-testid': 'pages', 'aria-describedby': 'orders' },
+  ),
+  paginationCase(
+    'Pagination/with a clashing attribute',
+    { page: 2, pages: 5, href: '?page={page}' },
+    { 'aria-label': 'Orders pages' },
+  ),
+  paginationCase('Pagination/its own labels', {
+    page: 3,
+    pages: 9,
+    label: 'Páginas',
+    previousLabel: 'Página anterior',
+    nextLabel: 'Página seguinte',
+  }),
+  paginationCase('Pagination/numbers out of range', { page: 12, pages: 0 }),
+  paginationCase('Pagination/numbers as text', {
+    page: ' 3 ' as unknown as number,
+    pages: '6' as unknown as number,
+    href: '/orders/{page}?from={page}',
+  }),
+  paginationCase('Pagination/numbers that are not whole', {
+    page: 'two' as unknown as number,
+    pages: 4.7,
+  }),
+  paginationCase('Pagination/blank href', { page: 1, pages: 2, href: '  ' }),
+  paginationCase('Pagination/blank summary and size', {
+    page: 1,
+    pages: 2,
+    summary: '  ',
+    size: ' ',
+  }),
+  paginationCase('Pagination/escaped text', {
+    page: 1,
+    pages: 2,
+    href: '?q="a"&b=<c>&page={page}',
+    label: '<b>Pages</b>',
+    previousLabel: '"Back"',
+    nextLabel: '<i>On</i>',
   }),
   ...storyArgs<SectionHeadingArgs>(sectionHeadingStories).map(([story, args]) =>
     sectionHeadingCase(`Section heading/${story}`, args),
@@ -2659,6 +2709,35 @@ function listHeaderCase(
   };
 }
 
+function paginationCase(
+  story: string,
+  args: PaginationArgs,
+  attributes: Attributes = {},
+): ParityCase {
+  const props = {
+    page: args.page,
+    pages: args.pages,
+    ...(args.href !== undefined ? { href: args.href } : {}),
+    ...(args.label !== undefined ? { label: args.label } : {}),
+    ...(args.previousLabel !== undefined ? { previousLabel: args.previousLabel } : {}),
+    ...(args.nextLabel !== undefined ? { nextLabel: args.nextLabel } : {}),
+  };
+  const named = args.size !== undefined ? { size: args.size } : undefined;
+  const slot = args.summary ?? '';
+  return {
+    story,
+    markup: pagination(args, attributes),
+    vue: {
+      component: PlinthPagination,
+      props: { ...props, ...attributes },
+      slot,
+      html: true,
+      named,
+    },
+    blade: { component: 'pagination', props, attributes, slot, named },
+  };
+}
+
 /** The card's own parity; its rows are each a list row's markup in an <li>, passed in as the slot. */
 function listCardCase(story: string, args: ListCardArgs, attributes: Attributes = {}): ParityCase {
   const props = {
@@ -3872,6 +3951,24 @@ describe('parity with the stories', () => {
       'List header/blank count and selection',
       'List header/unknown heading level',
       'List header/escaped text',
+      'Pagination/Default',
+      'Pagination/FirstPage',
+      'Pagination/LastPage',
+      'Pagination/ManyPages',
+      'Pagination/OnePage',
+      'Pagination/WithPageSize',
+      'Pagination/InPlace',
+      'Pagination/InPlaceFirstPage',
+      'Pagination/WithoutSummary',
+      'Pagination/with extra attributes',
+      'Pagination/with a clashing attribute',
+      'Pagination/its own labels',
+      'Pagination/numbers out of range',
+      'Pagination/numbers as text',
+      'Pagination/numbers that are not whole',
+      'Pagination/blank href',
+      'Pagination/blank summary and size',
+      'Pagination/escaped text',
       'Section heading/Default',
       'Section heading/HeadingOnly',
       'Section heading/WithoutActions',

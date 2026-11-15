@@ -40,6 +40,7 @@ export { PlinthNavListItem, type PlinthNavListItemProps } from './PlinthNavListI
 export { PlinthOneTimeCode, type PlinthOneTimeCodeProps } from './PlinthOneTimeCode';
 export { PlinthPageHeader, type PlinthPageHeaderProps } from './PlinthPageHeader';
 export { PlinthPageIntro, type PlinthPageIntroProps } from './PlinthPageIntro';
+export { PlinthPagination, type PlinthPaginationProps } from './PlinthPagination';
 export { PlinthPill, type PlinthPillProps } from './PlinthPill';
 export { PlinthPillRow, type PlinthPillRowProps } from './PlinthPillRow';
 export { PlinthSectionHeading, type PlinthSectionHeadingProps } from './PlinthSectionHeading';
@@ -120,6 +121,7 @@ export {
 export { meterNumber, meterRange, meterTone, type MeterNumbers } from './meter';
 export { MenuIdContext, menuItemTone, menuItemTones, type MenuItemTone } from './menu';
 export { breadcrumbsCollapse, breadcrumbsCollapses, type BreadcrumbsCollapse } from './breadcrumbs';
+export { currentPage, pageCount, pageHref, pageItems, type PageItem } from './pagination';
 export { pageHeaderLevel, pageHeaderLevels, type PageHeaderLevel } from './page-header';
 export {
   drawerCloseIcon,

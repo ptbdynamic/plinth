@@ -41,6 +41,7 @@ import PlinthNavListItem from './PlinthNavListItem.vue';
 import PlinthOneTimeCode from './PlinthOneTimeCode.vue';
 import PlinthPageHeader from './PlinthPageHeader.vue';
 import PlinthPageIntro from './PlinthPageIntro.vue';
+import PlinthPagination from './PlinthPagination.vue';
 import PlinthPill from './PlinthPill.vue';
 import PlinthPillRow from './PlinthPillRow.vue';
 import PlinthSectionHeading from './PlinthSectionHeading.vue';
@@ -105,6 +106,7 @@ export {
   PlinthOneTimeCode,
   PlinthPageHeader,
   PlinthPageIntro,
+  PlinthPagination,
   PlinthPill,
   PlinthPillRow,
   PlinthSectionHeading,
@@ -191,6 +193,7 @@ export {
 export { meterNumber, meterRange, meterTone, type MeterNumbers } from './meter';
 export { menuIdKey, menuItemTone, menuItemTones, type MenuItemTone } from './menu';
 export { breadcrumbsCollapse, breadcrumbsCollapses, type BreadcrumbsCollapse } from './breadcrumbs';
+export { currentPage, pageCount, pageHref, pageItems, type PageItem } from './pagination';
 export { pageHeaderLevel, pageHeaderLevels, type PageHeaderLevel } from './page-header';
 export { splitViewPane, splitViewPanes, type SplitViewPane } from './split-view';
 export {
@@ -258,6 +261,7 @@ export const Plinth: Plugin = {
     app.component('PlinthOneTimeCode', PlinthOneTimeCode);
     app.component('PlinthPageHeader', PlinthPageHeader);
     app.component('PlinthPageIntro', PlinthPageIntro);
+    app.component('PlinthPagination', PlinthPagination);
     app.component('PlinthPill', PlinthPill);
     app.component('PlinthPillRow', PlinthPillRow);
     app.component('PlinthSectionHeading', PlinthSectionHeading);

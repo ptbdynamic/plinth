@@ -1,0 +1,243 @@
+/*
+ * Pagination: the footer of a long list or table, with a summary of what is shown, an optional
+ * page-size choice, and previous, next and the page numbers.
+ *
+ * <nav class="plinth-pagination" aria-label="Pagination">
+ *   <p class="plinth-pagination-summary" role="status">Showing <b>26</b> to <b>50</b> of <b>120</b> results</p>
+ *   <div class="plinth-pagination-size">the app's page-size form</div>
+ *   <div class="plinth-pagination-pages">
+ *     <a class="plinth-button plinth-icon-button" href="?page=1" rel="prev" data-variant="secondary"
+ *       data-size="md" aria-label="Previous page">
+ *       <span class="plinth-icon" data-size="md" data-icon="chevron-left" data-mirror aria-hidden="true"><svg>…</svg></span>
+ *     </a>
+ *     <ol class="plinth-pagination-list">
+ *       <li><a class="plinth-pagination-page" href="?page=1">1</a></li>
+ *       <li><a class="plinth-pagination-page" href="?page=2" aria-current="page">2</a></li>
+ *       <li><a class="plinth-pagination-page" href="?page=3">3</a></li>
+ *       <li><span class="plinth-pagination-gap">…</span></li>
+ *       <li><a class="plinth-pagination-page" href="?page=5">5</a></li>
+ *     </ol>
+ *     <a class="plinth-button plinth-icon-button" href="?page=3" rel="next" …
+ *       aria-label="Next page">chevron-right</a>
+ *   </div>
+ * </nav>
+ *
+ * The nav is its own landmark, named by aria-label (Pagination), so it reads apart from the
+ * page's other navs. Previous and next are icon buttons (button.css) with their own labels
+ * (Previous page, Next page); their chevrons flip in right-to-left text.
+ *
+ * Links or buttons:
+ * - with an href pattern (?page={page}), every page is a link: server-rendered pages, no script.
+ *   Previous and next carry rel="prev" and rel="next".
+ * - without one, they are <button type="button">s, each with data-page="n", for paging in place:
+ *   the app listens for the click and changes the page (Vue emits update:page, React calls
+ *   onPageChange; in Blade, Alpine or Livewire read data-page). The page changes under the
+ *   user's focus, so previous and next stay focusable at the ends (aria-disabled, not disabled).
+ *
+ * The page numbers show the first and last pages, the current one and its neighbours; a gap of
+ * more than one page is a plinth-pagination-gap (…). The current page has aria-current="page".
+ * On a phone only the current page shows, between previous and next.
+ *
+ * The summary is optional and the app's own words, so it can count and translate them; <b>
+ * inside it sets the numbers apart. It is a polite live region (role="status"), so a screen
+ * reader hears it change when the page changes in place.
+ *
+ * The page size is optional: the app's form with a select (select.css) whose label sits beside
+ * its control here; give that select no description or error. Give the form a submit button for pages without script, or submit it on change.
+ *
+ * States:
+ * - the first or last page: previous or next disabled; on a link, no href, role="link" and
+ *   aria-disabled="true"; on a button, aria-disabled="true" without data-page, so it keeps focus
+ *   when the user reaches the end with it.
+ * - the current page: aria-current="page", the selection tint (accent-subtle) inside a 2px
+ *   accent edge, so colour is not its only cue; Highlight in forced colours.
+ * - hover only where the device can hover; the focus ring on :focus-visible.
+ *
+ * Layout: on a phone the summary and the pages share a line; with a page size, the summary has
+ * the first line and the size and the pages the second. From 768px up the summary, the page size and the pages sit in one row. Put
+ * it under a data table, inside the same bordered container when the table has one; the
+ * pagination sets no border or padding of its own.
+ */
+
+@layer plinth {
+  .plinth-pagination {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--plinth-space-3) var(--plinth-space-4);
+    align-items: center;
+    font-family: var(--plinth-font-family-body);
+    font-size: var(--plinth-font-size-sm);
+    line-height: var(--plinth-font-leading-normal);
+    color: var(--plinth-color-text-muted);
+  }
+
+  .plinth-pagination-summary {
+    flex: 1 1 0;
+    min-inline-size: 0;
+    margin: 0;
+    font-variant-numeric: tabular-nums;
+    overflow-wrap: anywhere;
+  }
+
+  .plinth-pagination-summary b {
+    font-weight: var(--plinth-font-weight-medium);
+    color: var(--plinth-color-text);
+  }
+
+  /* With a page size, on a phone the summary has the first line and the size and the pages share
+     the second, so the reading order stays the markup's. */
+  .plinth-pagination:has(> .plinth-pagination-size) > .plinth-pagination-summary {
+    flex-basis: 100%;
+  }
+
+  .plinth-pagination-size {
+    min-inline-size: 0;
+  }
+
+  /* The select's label beside its control, not above it (a select with only its label and
+     control; leave the description and the error out here). */
+  .plinth-pagination-size .plinth-select {
+    display: flex;
+    gap: var(--plinth-space-2);
+    align-items: center;
+  }
+
+  .plinth-pagination-pages {
+    display: flex;
+    flex: none;
+    gap: var(--plinth-space-1);
+    align-items: center;
+    margin-inline-start: auto;
+  }
+
+  .plinth-pagination-list {
+    display: flex;
+    gap: var(--plinth-space-1);
+    align-items: center;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+  }
+
+  .plinth-pagination-list > li {
+    display: flex;
+  }
+
+  /* On a phone only the current page shows, between previous and next. */
+  .plinth-pagination-list > li:not(:has([aria-current='page'])) {
+    display: none;
+  }
+
+  .plinth-pagination-page {
+    position: relative;
+    box-sizing: border-box;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-inline-size: var(--plinth-control-md);
+    min-block-size: var(--plinth-control-md);
+    padding-block: 0;
+    padding-inline: var(--plinth-space-2);
+    font-family: inherit;
+    font-size: var(--plinth-font-size-md);
+    font-weight: var(--plinth-font-weight-medium);
+    font-variant-numeric: tabular-nums;
+    line-height: var(--plinth-font-leading-tight);
+    color: var(--plinth-color-text);
+    text-decoration: none;
+    cursor: pointer;
+    background-color: transparent;
+    border: var(--plinth-border-width-thin) solid transparent;
+    border-radius: var(--plinth-radius-control);
+    transition:
+      background-color var(--plinth-duration-fast) var(--plinth-easing-standard),
+      border-color var(--plinth-duration-fast) var(--plinth-easing-standard);
+  }
+
+  /* On a touch screen every page keeps a 40px touch target through an invisible hit area. */
+  @media (pointer: coarse) {
+    .plinth-pagination-page::before {
+      position: absolute;
+      inset-block-start: 50%;
+      inset-inline: min(0%, 50% - var(--plinth-touch-target) / 2);
+      block-size: max(100%, var(--plinth-touch-target));
+      content: '';
+      translate: 0 -50%;
+    }
+
+    /* 32px pages 8px apart, so neighbouring 40px hit areas don't overlap. */
+    .plinth-pagination-pages,
+    .plinth-pagination-list {
+      gap: var(--plinth-space-2);
+    }
+  }
+
+  @media (hover: hover) {
+    .plinth-pagination-page:hover {
+      background-color: var(--plinth-color-surface-hover);
+    }
+  }
+
+  .plinth-pagination-page:active {
+    background-color: var(--plinth-color-surface-sunken);
+  }
+
+  /* The border and an inset ring make the 2px edge, so the number doesn't move. */
+  .plinth-pagination-page[aria-current='page'] {
+    color: var(--plinth-color-accent-text);
+    background-color: var(--plinth-color-accent-subtle);
+    border-color: var(--plinth-color-accent);
+    box-shadow: inset 0 0 0 calc(var(--plinth-border-width-thick) - var(--plinth-border-width-thin))
+      var(--plinth-color-accent);
+  }
+
+  @media (hover: hover) {
+    .plinth-pagination-page[aria-current='page']:hover {
+      background-color: var(--plinth-color-accent-subtle-hover);
+    }
+  }
+
+  .plinth-pagination-page[aria-current='page']:active {
+    background-color: var(--plinth-color-accent-subtle-active);
+  }
+
+  .plinth-pagination-page:focus-visible {
+    outline: var(--plinth-focus-ring-width) solid var(--plinth-color-focus-ring);
+    outline-offset: var(--plinth-focus-ring-offset);
+  }
+
+  /* A gap between the ring and the current page's accent edge, so the two read apart. */
+  .plinth-pagination-page[aria-current='page']:focus-visible {
+    outline-offset: var(--plinth-focus-ring-offset-filled);
+  }
+
+  .plinth-pagination-gap {
+    min-inline-size: var(--plinth-control-md);
+    font-size: var(--plinth-font-size-md);
+    color: var(--plinth-color-text-subtle);
+    text-align: center;
+  }
+
+  @media (min-width: 768px) {
+    .plinth-pagination {
+      flex-wrap: nowrap;
+    }
+
+    .plinth-pagination:has(> .plinth-pagination-size) > .plinth-pagination-summary {
+      flex-basis: 0;
+    }
+
+    .plinth-pagination-list > li:not(:has([aria-current='page'])) {
+      display: flex;
+    }
+  }
+
+  @media (forced-colors: active) {
+    .plinth-pagination-page[aria-current='page'],
+    .plinth-pagination-page[aria-current='page']:is(:hover, :active) {
+      color: HighlightText;
+      background-color: Highlight;
+      border-color: Highlight;
+    }
+  }
+}
