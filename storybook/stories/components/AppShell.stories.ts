@@ -155,16 +155,16 @@ const settings: Partial<AppShellArgs> = {
 
 const meta = {
   title: 'Components/App Shell',
-  // The menu sheet goes after the shell: a phone doesn't render the nav part. The rule hides the
-  // section stories' section menu while the section column shows.
-  render: (args) => settingsMenuRule + appShell(args) + sampleMenuSheet,
+  // The menu sheet goes after the shell: a phone doesn't render the nav part. With a section, the
+  // rule hides the page's section menu while the section column shows.
+  render: (args) => (args.section ? settingsMenuRule : '') + appShell(args) + sampleMenuSheet,
   args: { nav: sampleNav, bar: sampleBar, main: inbox },
   parameters: {
     layout: 'fullscreen',
     docs: {
       description: {
         component:
-          "The app's frame: the app nav full height on the start side, the app bar above the content, and the page in a `<main>` that scrolls on its own from 768px. On a phone the nav and the bar are hidden: the page header (with `top`) is the top bar, its menu button opens the menu sheet, and the document scrolls. Put the menu sheet in the main or after the shell, and leave the page header's offset at 0. A section with many pages (Settings) can add a section column beside the nav from 1280px: `section` holds its navigation (a nav list named by the column's title through `aria-labelledby`), `section-title` its title and `section-id` its id, and `section-closed` collapses it for the app's button (`aria-expanded`, `aria-controls`). Below 1280px the page offers the same links as a section menu.",
+          "The app's frame: the app nav full height on the start side, the app bar above the content, and the page in a `<main>` that scrolls on its own from 768px. On a phone the nav and the bar are hidden: the page header (with `top`) is the top bar, its menu button opens the menu sheet, and the document scrolls. Put the menu sheet in the main or after the shell, and leave the page header's offset at 0. A section with many pages (Settings) can add a section column beside the nav from 1280px: `section` holds its navigation (a nav list named by the column's title through `aria-labelledby`), `section-title` its title and `section-id` its id, and `section-closed` collapses it for the app's button (`aria-expanded`, `aria-controls`), which the app hides below 1280px, where the column isn't shown. Below 1280px the page offers the same links as a section menu.",
       },
     },
   },
@@ -216,4 +216,11 @@ export const SectionWithoutTitle: Story = {
 /** In right-to-left text the nav sits on the right, and the bar's search on its right too. */
 export const RightToLeft: Story = {
   render: (args) => `<div dir="rtl">${appShell(args)}</div>${sampleMenuSheet}`,
+};
+
+/** In right-to-left text the section column sits on the nav's left, its divider on its left edge. */
+export const SectionRightToLeft: Story = {
+  args: settings,
+  render: (args) =>
+    `${settingsMenuRule}<div dir="rtl">${appShell(args as AppShellArgs)}</div>${sampleMenuSheet}`,
 };

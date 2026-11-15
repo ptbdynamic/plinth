@@ -17,11 +17,13 @@ export interface AppShellArgs {
   main: string;
 }
 
-/** The section column: its header, when it has a title, then its body. */
-function sectionColumn(section: string, title?: string, id?: string): string {
+/** The section column: its header, when it has a title, then its body. A blank title or id
+ * counts as missing, as Blade's filled() decides. */
+function sectionColumn(section: string, title?: string, sectionId?: string): string {
+  const id = sectionId?.trim();
   return [
     `<div class="plinth-app-shell-section"${id ? ` id="${escape(id)}"` : ''}>`,
-    title
+    title?.trim()
       ? `<div class="plinth-app-shell-section-header"><p class="plinth-app-shell-section-title"${
           id ? ` id="${escape(id)}-title"` : ''
         }>${escape(title)}</p></div>`

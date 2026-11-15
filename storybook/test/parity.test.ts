@@ -1345,6 +1345,12 @@ const cases: ParityCase[] = [
     { 'data-section': 'open' },
   ),
   appShellCase('App shell/blank nav and bar', { nav: ' ', bar: ' ', main: '<p>Page</p>' }),
+  appShellCase('App shell/blank title and id', {
+    section: '<nav aria-label="Settings">Links</nav>',
+    sectionTitle: ' ',
+    sectionId: ' ',
+    main: '<p>Page</p>',
+  }),
   appShellCase('App shell/blank section', {
     section: ' ',
     sectionTitle: 'Settings',
@@ -4162,6 +4168,7 @@ describe('parity with the stories', () => {
       'App shell/with extra attributes',
       'App shell/with a clashing attribute',
       'App shell/blank nav and bar',
+      'App shell/blank title and id',
       'App shell/blank section',
       'App bar/Default',
       'App bar/SearchLabel',

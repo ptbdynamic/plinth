@@ -43,9 +43,9 @@ describe('PlinthAppShell', () => {
     expect(squish(wrapper.html())).toBe(
       '<div class="plinth-app-shell">' +
         '<div class="plinth-app-shell-nav"><nav>nav</nav></div>' +
-        '<div class="plinth-app-shell-section" id="settings">' +
+        '<div id="settings" class="plinth-app-shell-section">' +
         '<div class="plinth-app-shell-section-header">' +
-        '<p class="plinth-app-shell-section-title" id="settings-title">Settings &amp; more</p>' +
+        '<p id="settings-title" class="plinth-app-shell-section-title">Settings &amp; more</p>' +
         '</div>' +
         '<div class="plinth-app-shell-section-body"><nav aria-labelledby="settings-title">links</nav></div>' +
         '</div>' +

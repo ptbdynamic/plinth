@@ -1,9 +1,9 @@
 <script setup lang="ts">
 // Markup contract: packages/css/src/components/app-shell.css
-import { useSlots } from 'vue';
+import { computed, useSlots } from 'vue';
 import { hasContent } from './slots';
 
-withDefaults(
+const props = withDefaults(
   defineProps<{
     /** The section's title, on a row as tall as the app bar, at the top of its column. */
     sectionTitle?: string;
@@ -16,21 +16,17 @@ withDefaults(
 );
 
 const slots = useSlots();
+// A blank title or id counts as missing, as Blade's filled() decides.
+const title = computed(() => props.sectionTitle?.trim());
+const id = computed(() => props.sectionId?.trim() || undefined);
 </script>
 
 <template>
   <div class="plinth-app-shell" :data-section="sectionClosed ? 'closed' : undefined">
     <div v-if="hasContent(slots.nav?.())" class="plinth-app-shell-nav"><slot name="nav" /></div>
-    <div
-      v-if="hasContent(slots.section?.())"
-      :id="sectionId || undefined"
-      class="plinth-app-shell-section"
-    >
-      <div v-if="sectionTitle" class="plinth-app-shell-section-header">
-        <p
-          :id="sectionId ? `${sectionId}-title` : undefined"
-          class="plinth-app-shell-section-title"
-        >
+    <div v-if="hasContent(slots.section?.())" :id="id" class="plinth-app-shell-section">
+      <div v-if="title" class="plinth-app-shell-section-header">
+        <p :id="id ? `${id}-title` : undefined" class="plinth-app-shell-section-title">
           {{ sectionTitle }}
         </p>
       </div>

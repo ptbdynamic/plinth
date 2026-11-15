@@ -32,6 +32,8 @@ export function PlinthAppShell({
   children,
   ...rest
 }: PlinthAppShellProps) {
+  // A blank title or id counts as missing, as Blade's filled() decides.
+  const id = sectionId?.trim() || undefined;
   // The project's own attributes come after Plinth's and win, as in Blade and Vue; its class is
   // added to Plinth's.
   return (
@@ -42,13 +44,10 @@ export function PlinthAppShell({
     >
       {hasContent(nav) ? <div className="plinth-app-shell-nav">{nav}</div> : null}
       {hasContent(section) ? (
-        <div className="plinth-app-shell-section" id={sectionId || undefined}>
-          {sectionTitle ? (
+        <div className="plinth-app-shell-section" id={id}>
+          {sectionTitle?.trim() ? (
             <div className="plinth-app-shell-section-header">
-              <p
-                className="plinth-app-shell-section-title"
-                id={sectionId ? `${sectionId}-title` : undefined}
-              >
+              <p className="plinth-app-shell-section-title" id={id ? `${id}-title` : undefined}>
                 {sectionTitle}
               </p>
             </div>

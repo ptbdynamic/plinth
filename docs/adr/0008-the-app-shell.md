@@ -94,3 +94,12 @@ adds.
   issue if a project needs it.
 - On a tablet held sideways the app bar and the nav don't add the top safe area; only a standalone
   web app on a device with a status bar inset would need it.
+- Amended 2026-11-15 ([#175](https://github.com/ptbdynamic/plinth/issues/175)): the app shell
+  takes an optional section column, a full-height column of a section's own links (Settings:
+  Users, Roles…) between the app nav and the bar and main, from 1280px. It is part of the frame,
+  not of a page, so it stays put while the section's pages change. Its title sits on a row as tall
+  as the app bar (section 5) and names the column's `<nav>`; it is a `<p>`, not a heading, since
+  it comes before the page's `<h1>`. A third attribute joins the layout state:
+  `data-section="closed"` on the shell collapses the column, for a button with `aria-expanded` and
+  `aria-controls`. As with the split view's secondary column, below 1280px the column isn't shown,
+  the app hides that button, and the page offers the same links as a section menu.

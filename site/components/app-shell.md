@@ -66,7 +66,8 @@ links scroll on their own.
   a `label` instead.
 - **`section-closed`** collapses the column (`data-section="closed"`), for a button in the app
   bar or the page header with `aria-expanded` and `aria-controls` naming the column. The app owns
-  that state, from its URL or its own memory.
+  that state, from its URL or its own memory. Hide the button below 1280px, where the column
+  isn't shown, as for the split view's panel button.
 
 It sits beside the sidebar, or beside the rail: give the app nav `variant="rail"` and let the
 section column carry the labels.
@@ -232,7 +233,8 @@ import {
   a plain `<p>`, not a heading: it comes before the page's `<h1>`, and the landmark already names
   the section. The app sets `aria-current="page"` on the current link.
 - A collapsed section column isn't rendered, so it leaves the reading and tab order; the button
-  that collapses it says so with `aria-expanded`.
+  that collapses it says so with `aria-expanded`, and is hidden below 1280px, so it never points
+  at a column that can't show.
 - On a phone the nav's links are in the menu sheet, a modal dialog with its own focus trap and
   close button.
 

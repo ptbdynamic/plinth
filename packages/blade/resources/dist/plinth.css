@@ -1083,7 +1083,8 @@
  * State, set by the app (the shell doesn't remember or route): data-section="closed" on the root
  * (section-closed in Blade, sectionClosed in Vue and React) collapses the section column, for a
  * button in the app bar or the page header with aria-expanded and aria-controls naming the
- * column. Missing means open. A closed column isn't rendered (display: none), so it leaves the
+ * column. The app hides that button below 1280px, where the column isn't shown, as it does the
+ * split view's panel button. Missing means open. A closed column isn't rendered (display: none), so it leaves the
  * reading and tab order too; nothing animates, so there is no motion to reduce.
  *
  * Sides are logical: in right-to-left text the nav is on the right, and the section column on
@@ -1182,6 +1183,7 @@
       display: none;
     }
 
+    /* The title starts where a nav list's labels do: the body's padding plus an item's. */
     .plinth-app-shell-section-header {
       box-sizing: border-box;
       display: flex;
@@ -1189,7 +1191,7 @@
       align-items: center;
       min-block-size: var(--plinth-app-bar-height);
       padding-block: var(--plinth-space-2);
-      padding-inline: var(--plinth-space-4);
+      padding-inline: calc(var(--plinth-space-3) * 2);
       border-block-end: var(--plinth-border-width-thin) solid var(--plinth-color-divider);
     }
 
