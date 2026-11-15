@@ -3,6 +3,7 @@ import { h } from 'vue';
 import { describe, expect, it } from 'vitest';
 import {
   dataTableCellKind,
+  dataTablePriority,
   dataTableSort,
   dataTableSortIcon,
   PlinthDataTable,
@@ -71,6 +72,18 @@ describe('PlinthDataTable', () => {
         .exists(),
     ).toBe(false);
   });
+
+  it('puts a contained table in its container, and a framed one only in its frame', () => {
+    const wrapper = mount(PlinthDataTable, { props: { contained: true }, attrs: { id: 'orders' } });
+
+    expect(squish(wrapper.html())).toBe(
+      '<div class="plinth-data-table-container"><table class="plinth-data-table" role="table" id="orders">' +
+        '<thead class="plinth-data-table-head" role="rowgroup"><tr class="plinth-data-table-head-row" role="row"></tr></thead>' +
+        '<tbody class="plinth-data-table-body" role="rowgroup"></tbody></table></div>',
+    );
+    const both = mount(PlinthDataTable, { props: { contained: true, framed: true } });
+    expect(both.classes()).toEqual(['plinth-data-table-frame']);
+  });
 });
 
 describe('PlinthDataTableColumn', () => {
@@ -85,6 +98,20 @@ describe('PlinthDataTableColumn', () => {
     const wrapper = mount(PlinthDataTableColumn, { props: { numeric: true, hideOnPhone: true } });
     expect(wrapper.attributes('data-numeric')).toBe('');
     expect(wrapper.attributes('data-phone')).toBe('hidden');
+  });
+
+  it('prints a priority, falls back to 1, and leaves out a blank one', () => {
+    const priority = (value: string | number | undefined) =>
+      mount(PlinthDataTableColumn, { props: { priority: value as '1' } }).attributes(
+        'data-priority',
+      );
+
+    expect(priority('3')).toBe('3');
+    expect(priority(2)).toBe('2');
+    expect(priority('4')).toBe('1');
+    expect(priority(' ')).toBeUndefined();
+    expect(priority(undefined)).toBeUndefined();
+    expect(dataTablePriority(' 2 ')).toBe('1');
   });
 
   it('prints aria-sort on a sortable column, and falls back to none', () => {
@@ -175,13 +202,14 @@ describe('PlinthDataTableCell', () => {
     expect(dataTableCellKind(undefined)).toBe('field');
   });
 
-  it('marks a numeric cell and one hidden on a phone, and escapes the label', () => {
+  it('marks a numeric cell, one hidden on a phone and its priority, and escapes the label', () => {
     const wrapper = mount(PlinthDataTableCell, {
-      props: { numeric: true, hideOnPhone: true, label: '<b>x</b>' },
+      props: { numeric: true, hideOnPhone: true, priority: '2', label: '<b>x</b>' },
       attrs: { class: 'truncate' },
     });
     expect(wrapper.attributes('data-numeric')).toBe('');
     expect(wrapper.attributes('data-phone')).toBe('hidden');
+    expect(wrapper.attributes('data-priority')).toBe('2');
     expect(wrapper.html()).toContain('&lt;b&gt;x&lt;/b&gt;');
     expect(wrapper.classes()).toEqual(['plinth-data-table-cell', 'truncate']);
   });

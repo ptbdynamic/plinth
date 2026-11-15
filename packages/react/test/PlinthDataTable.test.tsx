@@ -4,6 +4,7 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it, vi } from 'vitest';
 import {
   dataTableCellKinds,
+  dataTablePriority,
   dataTableSortIcon,
   dataTableSorts,
   PlinthDataTable,
@@ -112,6 +113,17 @@ describe('PlinthDataTable', () => {
     );
     expect(ref.current).toBe(frame.firstElementChild);
   });
+
+  it('puts a contained table in its container, and a framed one only in its frame', () => {
+    const container = root(<PlinthDataTable contained id="orders" />);
+
+    expect(container.outerHTML).toBe(
+      '<div class="plinth-data-table-container"><table role="table" id="orders" class="plinth-data-table">' +
+        '<thead class="plinth-data-table-head" role="rowgroup"><tr class="plinth-data-table-head-row" role="row"></tr></thead>' +
+        '<tbody class="plinth-data-table-body" role="rowgroup"></tbody></table></div>',
+    );
+    expect(root(<PlinthDataTable contained framed />).className).toBe('plinth-data-table-frame');
+  });
 });
 
 describe('PlinthDataTableColumn', () => {
@@ -131,6 +143,20 @@ describe('PlinthDataTableColumn', () => {
 
     expect(sort(' ')).toBeNull();
     expect(sort('sideways')).toBe('none');
+  });
+
+  it('prints a priority, falls back to 1, and leaves out a blank one', () => {
+    const priority = (value: string | number | undefined) =>
+      inRow(
+        <PlinthDataTableColumn priority={value as '1'}>Date</PlinthDataTableColumn>,
+      ).getAttribute('data-priority');
+
+    expect(priority('3')).toBe('3');
+    expect(priority(2)).toBe('2');
+    expect(priority('4')).toBe('1');
+    expect(priority(' ')).toBeNull();
+    expect(priority(undefined)).toBeNull();
+    expect(dataTablePriority(' 2 ')).toBe('1');
   });
 
   it('takes numeric and hideOnPhone, and passes other props, letting a project attribute win', () => {
@@ -196,9 +222,15 @@ describe('PlinthDataTableCell', () => {
     ).toBe(kind);
   });
 
-  it('falls back to field, leaves out a blank label, and takes numeric and hideOnPhone', () => {
+  it('falls back to field, leaves out a blank label, and takes numeric, hideOnPhone and priority', () => {
     const cell = inRow(
-      <PlinthDataTableCell kind={'header' as DataTableCellKind} label=" " numeric hideOnPhone>
+      <PlinthDataTableCell
+        kind={'header' as DataTableCellKind}
+        label=" "
+        numeric
+        hideOnPhone
+        priority={3}
+      >
         €86.50
       </PlinthDataTableCell>,
     );
@@ -207,6 +239,7 @@ describe('PlinthDataTableCell', () => {
     expect(cell.querySelector('.plinth-data-table-label')).toBeNull();
     expect(cell.getAttribute('data-numeric')).toBe('');
     expect(cell.getAttribute('data-phone')).toBe('hidden');
+    expect(cell.getAttribute('data-priority')).toBe('3');
   });
 
   it('passes other props and the ref, letting a project attribute win', () => {

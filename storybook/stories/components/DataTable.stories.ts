@@ -111,12 +111,13 @@ const meta = {
     caption: { control: 'text' },
     empty: { control: 'text' },
     framed: { control: 'boolean' },
+    contained: { control: 'boolean' },
   },
   parameters: {
     docs: {
       description: {
         component:
-          'Records as cards on a phone and a table from 768px, from one markup, with no script. Framed, it is a card of its own from 768px up, with a header band, and scrolls a wide table inside its frame.',
+          "Records as cards on a phone and a table from 768px, from one markup, with no script. Framed, it is a card of its own from 768px up, with a header band, and scrolls a wide table inside its frame. In a frame or a container, columns with a priority give way to the table's own width.",
       },
     },
   },
@@ -262,4 +263,76 @@ export const RightToLeft: Story = {
 /** The framed table in right-to-left text: the edge padding and the actions follow the text. */
 export const FramedRightToLeft: Story = {
   render: () => `<div dir="rtl">${dataTable({ ...meta.args, ...Sorted.args, framed: true })}</div>`,
+};
+
+/**
+ * Columns with a priority: the email (3) shows from 960px of container, the date and the total
+ * (2) from 640px; the order, the customer, the status and the actions always. The table follows
+ * its own width, not the screen's; on a phone the card shows every field but the email.
+ */
+const priorityColumns = [
+  column('Order'),
+  column('Customer'),
+  column('Email', { hideOnPhone: true, priority: '3' }),
+  column('Date', { priority: '2' }),
+  column('Status'),
+  column('Total', { numeric: true, priority: '2' }),
+  column('Actions'),
+];
+
+const priorityRow = (order: Order, extra: Partial<DataTableRowArgs> = {}): DataTableRowArgs => {
+  const row = orderRow(order, extra);
+  row.cells.splice(2, 0, cell('Email', order.email, { hideOnPhone: true, priority: '3' }));
+  for (const field of row.cells) {
+    if (field.label === 'Date' || field.label === 'Total') field.priority = '2';
+  }
+  return row;
+};
+
+export const Priority: Story = {
+  args: {
+    contained: true,
+    columns: priorityColumns,
+    rows: orders.map((order) => priorityRow(order)),
+  },
+};
+
+export const FramedPriority: Story = {
+  args: {
+    framed: true,
+    columns: priorityColumns,
+    rows: orders.map((order, index) => priorityRow(order, { selected: index === 1 })),
+  },
+};
+
+/**
+ * Without actions, the total (2) ends the row: in a narrow container the status, the last column
+ * left, takes the frame's edge.
+ */
+export const FramedPriorityWithoutActions: Story = {
+  args: {
+    framed: true,
+    columns: priorityColumns.slice(0, -1),
+    rows: orders.map((order) => {
+      const row = priorityRow(order);
+      row.cells.pop();
+      return row;
+    }),
+  },
+};
+
+/** A narrow pane on a wide screen (a split view's list, say): the table gives way as on a tablet. */
+const pane = (table: string) => `<div style="max-inline-size: 36rem">${table}</div>`;
+
+export const PriorityInPane: Story = {
+  render: () => pane(dataTable({ ...meta.args, ...Priority.args })),
+};
+
+export const FramedPriorityInPane: Story = {
+  render: () =>
+    `<div style="display: grid; gap: var(--plinth-space-6)">${pane(
+      dataTable({ ...meta.args, ...FramedPriority.args }),
+    )}${pane(
+      dataTable({ ...meta.args, ...FramedPriorityWithoutActions.args, caption: 'Without actions' }),
+    )}</div>`,
 };

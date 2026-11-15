@@ -1,15 +1,25 @@
 import {
   dataTableCellKind,
   dataTableCellKinds,
+  dataTablePriorities,
+  dataTablePriority,
   dataTableSort,
   dataTableSortIcon,
   dataTableSorts,
   type DataTableCellKind,
+  type DataTablePriority,
   type DataTableSort,
 } from '@ptbdynamic/plinth-vue';
 import { escape, rootAttributes, type Attributes } from './markup.ts';
 
-export { dataTableCellKinds, dataTableSorts, type DataTableCellKind, type DataTableSort };
+export {
+  dataTableCellKinds,
+  dataTablePriorities,
+  dataTableSorts,
+  type DataTableCellKind,
+  type DataTablePriority,
+  type DataTableSort,
+};
 
 export interface DataTableColumnArgs {
   /** The column's name. */
@@ -20,6 +30,8 @@ export interface DataTableColumnArgs {
   numeric: boolean;
   /** Hidden on a phone's card; shown from 768px up. */
   hideOnPhone: boolean;
+  /** Gives way as the table narrows: 3 shows from 960px of container, 2 from 640px, 1 always. */
+  priority?: DataTablePriority;
 }
 
 export interface DataTableCellArgs {
@@ -31,6 +43,7 @@ export interface DataTableCellArgs {
   kind: DataTableCellKind;
   numeric: boolean;
   hideOnPhone: boolean;
+  priority?: DataTablePriority;
 }
 
 export interface DataTableRowArgs {
@@ -48,6 +61,8 @@ export interface DataTableArgs {
   empty?: string;
   /** A card of its own from 768px up: a frame that scrolls a wide table, and a header band. */
   framed?: boolean;
+  /** In a size container, so columns with a priority give way to the table's own width. */
+  contained?: boolean;
 }
 
 /** The sort button, the label of a sortable column. */
@@ -56,18 +71,24 @@ export function dataTableSortButton(label: string, attributes: Attributes = {}):
   return `<button class="${classes}"${extra} type="button"><span class="plinth-data-table-sort-label">${escape(label)}</span>${dataTableSortIcon}</button>`;
 }
 
-const flags = (numeric: boolean, hideOnPhone: boolean) =>
-  (numeric ? ' data-numeric' : '') + (hideOnPhone ? ' data-phone="hidden"' : '');
+const flags = (numeric: boolean, hideOnPhone: boolean, priority?: DataTablePriority) => {
+  const level = dataTablePriority(priority);
+  return (
+    (numeric ? ' data-numeric' : '') +
+    (hideOnPhone ? ' data-phone="hidden"' : '') +
+    (level === undefined ? '' : ` data-priority="${level}"`)
+  );
+};
 
 /** A column header. Its content is the label, or the sort button for a sortable column. */
 export function dataTableColumn(
-  { sort, numeric, hideOnPhone }: Omit<DataTableColumnArgs, 'label'>,
+  { sort, numeric, hideOnPhone, priority }: Omit<DataTableColumnArgs, 'label'>,
   content: string,
   attributes: Attributes = {},
 ): string {
   const { classes, extra } = rootAttributes('plinth-data-table-column', attributes);
   const ariaSort = sort === undefined ? '' : ` aria-sort="${dataTableSort(sort)}"`;
-  return `<th class="${classes}"${extra} role="columnheader" scope="col"${ariaSort}${flags(numeric, hideOnPhone)}>${content}</th>`;
+  return `<th class="${classes}"${extra} role="columnheader" scope="col"${ariaSort}${flags(numeric, hideOnPhone, priority)}>${content}</th>`;
 }
 
 /** A column from its args: a sortable one holds the sort button. */
@@ -78,12 +99,12 @@ export const dataTableColumnFor = (column: DataTableColumnArgs) =>
   );
 
 export function dataTableCell(
-  { content, label, kind, numeric, hideOnPhone }: DataTableCellArgs,
+  { content, label, kind, numeric, hideOnPhone, priority }: DataTableCellArgs,
   attributes: Attributes = {},
 ): string {
   const { classes, extra } = rootAttributes('plinth-data-table-cell', attributes);
   return [
-    `<td class="${classes}"${extra} role="cell" data-kind="${dataTableCellKind(kind)}"${flags(numeric, hideOnPhone)}>`,
+    `<td class="${classes}"${extra} role="cell" data-kind="${dataTableCellKind(kind)}"${flags(numeric, hideOnPhone, priority)}>`,
     label?.trim()
       ? `<span class="plinth-data-table-label" aria-hidden="true">${escape(label)}</span>`
       : '',
@@ -146,6 +167,10 @@ export const dataTableBody = ({ columns, rows, empty }: DataTableArgs) =>
 export const dataTableFrame = (table: string) =>
   `<div class="plinth-data-table-frame">${table}</div>`;
 
+/** The size container around a table without a frame; it takes no attributes either. */
+export const dataTableContainer = (table: string) =>
+  `<div class="plinth-data-table-container">${table}</div>`;
+
 /** The data table's markup contract. Blade and Vue must print exactly this (see parity.test.ts). */
 export function dataTable(args: DataTableArgs, attributes: Attributes = {}): string {
   const table = dataTableShell(
@@ -154,5 +179,6 @@ export function dataTable(args: DataTableArgs, attributes: Attributes = {}): str
     dataTableBody(args),
     attributes,
   );
-  return args.framed ? dataTableFrame(table) : table;
+  if (args.framed) return dataTableFrame(table);
+  return args.contained ? dataTableContainer(table) : table;
 }

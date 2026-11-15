@@ -24,3 +24,24 @@ export function dataTableCellKind(value: string | undefined): DataTableCellKind 
  */
 export const dataTableSortIcon =
   '<span class="plinth-icon plinth-data-table-sort-icon" data-size="sm" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path class="plinth-data-table-sort-up" d="M8 9l4-4 4 4"></path><path class="plinth-data-table-sort-down" d="M8 15l4 4 4-4"></path></svg></span>';
+
+/**
+ * A column's priority as the table narrows: 3 shows from the widest container, 2 from a
+ * narrower one, 1 always. Blade's DataTablePriority holds the same values.
+ */
+export const dataTablePriorities = ['1', '2', '3'] as const;
+export type DataTablePriority = (typeof dataTablePriorities)[number];
+
+/**
+ * The priority to print: none for a blank or missing one (as Blade's filled() decides), `1` for
+ * a value not on the list. A number counts as its digits.
+ */
+export function dataTablePriority(
+  value: string | number | undefined,
+): DataTablePriority | undefined {
+  const text = value === undefined ? '' : String(value);
+  if (text.trim() === '') return undefined;
+  return dataTablePriorities.includes(text as DataTablePriority)
+    ? (text as DataTablePriority)
+    : '1';
+}

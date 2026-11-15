@@ -1,6 +1,11 @@
 // Markup contract: packages/css/src/components/data-table.css
 import type { ComponentProps } from 'react';
-import { dataTableCellKind, type DataTableCellKind } from './data-table';
+import {
+  dataTableCellKind,
+  type DataTableCellKind,
+  dataTablePriority,
+  type DataTablePriority,
+} from './data-table';
 import { classNames } from './markup';
 
 interface DataTableCellOptions {
@@ -12,6 +17,11 @@ interface DataTableCellOptions {
   numeric?: boolean;
   /** Hidden on a phone's card; shown from 768px up. */
   hideOnPhone?: boolean;
+  /**
+   * Gives way as the table narrows, in a frame or a container: 3 shows from 960px of it, 2 from
+   * 640px, 1 always.
+   */
+  priority?: DataTablePriority | 1 | 2 | 3;
 }
 
 export type PlinthDataTableCellProps = DataTableCellOptions &
@@ -22,6 +32,7 @@ export function PlinthDataTableCell({
   kind,
   numeric = false,
   hideOnPhone = false,
+  priority,
   className,
   children,
   ...rest
@@ -32,6 +43,7 @@ export function PlinthDataTableCell({
       data-kind={dataTableCellKind(kind)}
       data-numeric={numeric ? '' : undefined}
       data-phone={hideOnPhone ? 'hidden' : undefined}
+      data-priority={dataTablePriority(priority)}
       {...rest}
       className={classNames('plinth-data-table-cell', className)}
     >

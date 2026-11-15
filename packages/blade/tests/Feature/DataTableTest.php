@@ -1,6 +1,7 @@
 <?php
 
 use BDynamic\Plinth\Enums\DataTableCellKind;
+use BDynamic\Plinth\Enums\DataTablePriority;
 use BDynamic\Plinth\Enums\DataTableSort;
 use Illuminate\Support\Facades\Blade;
 
@@ -40,6 +41,34 @@ it('puts a framed table in its frame, with the attributes on the table', functio
             .'<tbody class="plinth-data-table-body" role="rowgroup"></tbody></table></div>');
     expect(Blade::render('<x-plinth::data-table :framed="false"></x-plinth::data-table>'))
         ->not->toContain('plinth-data-table-frame');
+});
+
+it('puts a contained table in its container, and a framed one only in its frame', function () {
+    expect(squish(Blade::render('<x-plinth::data-table contained id="orders"></x-plinth::data-table>')))
+        ->toBe('<div class="plinth-data-table-container"><table class="plinth-data-table" role="table" id="orders">'
+            .'<thead class="plinth-data-table-head" role="rowgroup"><tr class="plinth-data-table-head-row" role="row"></tr></thead>'
+            .'<tbody class="plinth-data-table-body" role="rowgroup"></tbody></table></div>');
+    expect(Blade::render('<x-plinth::data-table contained framed></x-plinth::data-table>'))
+        ->toContain('plinth-data-table-frame')
+        ->not->toContain('plinth-data-table-container');
+});
+
+it('prints a priority on a column and a cell, falls back to 1, and leaves out a blank one', function () {
+    foreach (['data-table-column', 'data-table-cell'] as $component) {
+        $priority = fn (mixed $value) => Blade::render("<x-plinth::{$component} :priority=\"\$priority\">x</x-plinth::{$component}>", ['priority' => $value]);
+
+        expect($priority('3'))->toContain('data-priority="3"')
+            ->and($priority(2))->toContain('data-priority="2"')
+            ->and($priority(DataTablePriority::Three))->toContain('data-priority="3"')
+            ->and($priority('4'))->toContain('data-priority="1"')
+            ->and($priority(' 2 '))->toContain('data-priority="1"');
+        foreach (['', ' ', null] as $value) {
+            expect($priority($value))->not->toContain('data-priority');
+        }
+    }
+    expect(Blade::render('<x-plinth::data-table-cell priority="2" data-priority="3">x</x-plinth::data-table-cell>'))
+        ->toContain('data-priority="3"')
+        ->not->toContain('data-priority="2"');
 });
 
 it('escapes the caption, the column, the label and the empty text', function () {

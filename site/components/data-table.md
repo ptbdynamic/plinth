@@ -60,7 +60,8 @@ Narrow the window to see the cards.
   Put it on the column header **and** on every cell of the column, so the headers still match the
   cells for a screen reader.
 - A wide table from 768px up belongs in a scrolling container: a [framed](#framed) table brings
-  its own, or the app adds one. Text wraps in its cell.
+  its own, or the app adds one. Text wraps in its cell. Or let its less important columns give
+  way with a [priority](#column-priority).
 
 ## Framed
 
@@ -117,6 +118,67 @@ condensed or mono face, say) without touching the component:
 | `--plinth-data-table-head-tracking`    | `font-tracking-wide`   | their letter spacing                     |
 | `--plinth-data-table-head-color`       | `color-text-muted`     | their colour                             |
 | `--plinth-data-table-frame-edge`       | `space-5` (20px)       | the first and last cells' inline padding |
+
+## Column priority
+
+A table can be narrow on a wide screen: in a split view's list, beside a section column, on a
+tablet with a rail. Give its less important columns a `priority` and they give way to the
+table's own width, not the screen's. The table needs a size container to measure: `contained`
+wraps a table without a frame in one (`plinth-data-table-container`), and a `framed` table's
+frame becomes one once a column has a priority.
+
+- **`priority="3"`** shows from 960px of container, **`priority="2"`** from 640px, and
+  **`priority="1"`** always, like a column without one. Put it on the column header **and** on
+  every cell of the column, as with `hide-on-phone`.
+- It works in the table layout, from 768px up. A phone's card shows every field but those hidden
+  on a phone, so pair a priority with `hide-on-phone` where the card should leave it out too.
+- Leave the title column (the first) and the actions column without a priority, and a sortable
+  column or one whose cells hold controls: a column that gives way while one of its controls has
+  focus loses that focus. In a framed table the last column left takes the frame's edge padding.
+- What a hidden column holds must be reachable elsewhere, on the row's own page, say.
+- The container takes its width from its parent, never from the table: don't put it in a row
+  that sizes it to fit. Without a container (a bare table, or one nested in a cell), every column
+  shows.
+
+This page's column is narrower than 960px, so the email (`priority="3"`) stays hidden here; the
+Storybook stories show it on a wide screen. Narrow the window and below 640px of container the
+plan and the seats go too.
+
+```blade example layout="stack"
+<x-plinth::data-table contained aria-label="Clients">
+    <x-slot:head>
+        <x-plinth::data-table-column>Client</x-plinth::data-table-column>
+        <x-plinth::data-table-column priority="3" hide-on-phone>Email</x-plinth::data-table-column>
+        <x-plinth::data-table-column priority="2">Plan</x-plinth::data-table-column>
+        <x-plinth::data-table-column>Status</x-plinth::data-table-column>
+        <x-plinth::data-table-column numeric priority="2">Seats</x-plinth::data-table-column>
+        <x-plinth::data-table-column>Actions</x-plinth::data-table-column>
+    </x-slot:head>
+    <x-plinth::data-table-row>
+        <x-plinth::data-table-cell label="Client" kind="title">Atlas Studio</x-plinth::data-table-cell>
+        <x-plinth::data-table-cell label="Email" priority="3" hide-on-phone>billing@atlas.example</x-plinth::data-table-cell>
+        <x-plinth::data-table-cell label="Plan" priority="2">Business</x-plinth::data-table-cell>
+        <x-plinth::data-table-cell label="Status"><x-plinth::badge tone="success">Active</x-plinth::badge></x-plinth::data-table-cell>
+        <x-plinth::data-table-cell label="Seats" numeric priority="2">24</x-plinth::data-table-cell>
+        <x-plinth::data-table-cell kind="actions">
+            <x-plinth::button variant="secondary" size="sm" href="#">Open Atlas Studio</x-plinth::button>
+        </x-plinth::data-table-cell>
+    </x-plinth::data-table-row>
+    <x-plinth::data-table-row>
+        <x-plinth::data-table-cell label="Client" kind="title">Kestrel Labs</x-plinth::data-table-cell>
+        <x-plinth::data-table-cell label="Email" priority="3" hide-on-phone>ops@kestrel.example</x-plinth::data-table-cell>
+        <x-plinth::data-table-cell label="Plan" priority="2">Team</x-plinth::data-table-cell>
+        <x-plinth::data-table-cell label="Status"><x-plinth::badge tone="warning">Trial</x-plinth::badge></x-plinth::data-table-cell>
+        <x-plinth::data-table-cell label="Seats" numeric priority="2">6</x-plinth::data-table-cell>
+        <x-plinth::data-table-cell kind="actions">
+            <x-plinth::button variant="secondary" size="sm" href="#">Open Kestrel Labs</x-plinth::button>
+        </x-plinth::data-table-cell>
+    </x-plinth::data-table-row>
+</x-plinth::data-table>
+```
+
+960px and 640px are the table's own values, not tokens: a container query can't read a custom
+property.
 
 ## Sorting
 
@@ -177,13 +239,15 @@ buttons.
   or `aria-labelledby`.
 - **`plinth-data-table-frame`**, a `<div>` around the table when it is framed. It takes no
   attributes: to place a framed table, wrap it in your own element.
+- **`plinth-data-table-container`**, a `<div>` around a contained table without a frame: a size
+  container from 768px up, as a frame with a priority column is. It takes no attributes either.
 - **The explicit roles** (`table`, `rowgroup`, `row`, `columnheader`, `cell`) are part of the
   contract. Some browsers, Safari in particular, drop a table's semantics once its rows stop
   displaying as table rows, which is what the phone's cards do.
 - **`plinth-data-table-label`** repeats the column's name in each cell. It shows only on a phone's
   card and is `aria-hidden`, since the column header already names the cell.
-- `data-kind`, `data-numeric`, `data-phone="hidden"` and `aria-sort` are the attributes the props
-  print.
+- `data-kind`, `data-numeric`, `data-phone="hidden"`, `data-priority` and `aria-sort` are the
+  attributes the props print.
 
 ## Props
 
@@ -196,18 +260,21 @@ header row as the `head` prop, which takes a node.
 | data-table        | header row  | `<x-slot:head>`                                | `#head` slot         | `head` (a node)      | none    |
 | data-table        | rows        | the slot                                       | the default slot     | `children`           | none    |
 | data-table        | framed      | `framed`                                       | `framed`             | `framed`             | off     |
+| data-table        | contained   | `contained`                                    | `contained`          | `contained`          | off     |
 | data-table-column | sort        | `sort="ascending"` (or a `DataTableSort` case) | `sort="ascending"`   | `sort="ascending"`   | none    |
 | data-table-column | numeric     | `numeric`                                      | `numeric`            | `numeric`            | off     |
 | data-table-column | hideOnPhone | `hide-on-phone`                                | `hide-on-phone`      | `hideOnPhone`        | off     |
+| data-table-column | priority    | `priority="3"` (or a `DataTablePriority` case) | `priority="3"`       | `priority="3"`       | none    |
 | data-table-row    | selected    | `:selected="true"`                             | `:selected="true"`   | `selected={true}`    | none    |
 | data-table-cell   | label       | `label="Total"`                                | `label="Total"`      | `label="Total"`      | none    |
 | data-table-cell   | kind        | `kind="title"` (or a `DataTableCellKind` case) | `kind="title"`       | `kind="title"`       | `field` |
 | data-table-cell   | numeric     | `numeric`                                      | `numeric`            | `numeric`            | off     |
 | data-table-cell   | hideOnPhone | `hide-on-phone`                                | `hide-on-phone`      | `hideOnPhone`        | off     |
+| data-table-cell   | priority    | `priority="3"` (or a `DataTablePriority` case) | `priority="3"`       | `priority="3"`       | none    |
 | data-table-empty  | columns     | `:columns="4"`                                 | `:columns="4"`       | `columns={4}`        | `1`     |
 | data-table-sort   | label       | the slot                                       | the default slot     | `children`           | none    |
 
-An unknown sort falls back to `none` and an unknown kind to `field`. The app's attributes
+An unknown sort falls back to `none`, an unknown kind to `field` and an unknown priority to `1`. The app's attributes
 (`wire:key`, `wire:click`, `@click`, `onClick`, `data-*`, `aria-*`) reach each part's root.
 
 ```blade tab="Blade"
@@ -296,7 +363,9 @@ import {
 - The label repeated in each card is `aria-hidden`: the column header already names the cell.
 - A sorted column says so with `aria-sort`, and its sort button is a real `<button>`.
 - A hidden-on-phone column is hidden on its header and every cell, so headers and cells still
-  match.
+  match; so is a column that gives way to its priority (`display: none` on both). Its content
+  must be reachable elsewhere, such as the row's own page, and it holds no controls: a control
+  hidden while it has focus loses that focus.
 - A framed table scrolls inside its frame from 768px up; the frame changes nothing for a screen
   reader. Keyboard users scroll it by tabbing through the table's sort buttons and actions, so
   keep a wide read-only table (with neither) narrow enough for its frame: not every browser lets

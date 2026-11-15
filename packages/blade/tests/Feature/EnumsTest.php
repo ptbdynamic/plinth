@@ -7,6 +7,7 @@ use BDynamic\Plinth\Enums\CalloutTone;
 use BDynamic\Plinth\Enums\ConfirmDialogKind;
 use BDynamic\Plinth\Enums\ConfirmDialogTone;
 use BDynamic\Plinth\Enums\DataTableCellKind;
+use BDynamic\Plinth\Enums\DataTablePriority;
 use BDynamic\Plinth\Enums\DataTableSort;
 use BDynamic\Plinth\Enums\DialogSidePhone;
 use BDynamic\Plinth\Enums\DrawerDesktop;
@@ -40,6 +41,7 @@ it('defaults each choice the way the components do', function () {
         ->and(DrawerDesktop::default())->toBe(DrawerDesktop::Dialog)
         ->and(DataTableSort::default())->toBe(DataTableSort::None)
         ->and(DataTableCellKind::default())->toBe(DataTableCellKind::Field)
+        ->and(DataTablePriority::default())->toBe(DataTablePriority::One)
         ->and(CalloutTone::default())->toBe(CalloutTone::Neutral)
         ->and(CalloutRole::default())->toBe(CalloutRole::Note)
         ->and(ConfirmDialogKind::default())->toBe(ConfirmDialogKind::Simple)
@@ -133,7 +135,7 @@ it('matches the lists the Vue layer and the stories use', function () {
             expect($vue('confirm-dialog.ts'))->toContain("'{$kind->fieldLabel()}'");
         }
     }
-    foreach ([...DataTableSort::values(), ...DataTableCellKind::values()] as $value) {
+    foreach ([...DataTableSort::values(), ...DataTableCellKind::values(), ...DataTablePriority::values()] as $value) {
         expect($vue('data-table.ts'))->toContain("'{$value}'");
     }
     foreach (MenuItemTone::values() as $value) {

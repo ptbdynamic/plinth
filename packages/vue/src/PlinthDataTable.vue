@@ -10,13 +10,21 @@ withDefaults(
     caption?: string;
     /** A card of its own from 768px up: a frame that scrolls a wide table, and a header band. */
     framed?: boolean;
+    /**
+     * In a size container (plinth-data-table-container), so columns with a priority give way
+     * to the table's own width. A framed table is in one already.
+     */
+    contained?: boolean;
   }>(),
-  { caption: undefined, framed: false },
+  { caption: undefined, framed: false, contained: false },
 );
 </script>
 
 <template>
-  <div v-if="framed" class="plinth-data-table-frame">
+  <div
+    v-if="framed || contained"
+    :class="framed ? 'plinth-data-table-frame' : 'plinth-data-table-container'"
+  >
     <table class="plinth-data-table" role="table" v-bind="$attrs">
       <caption v-if="caption?.trim()" class="plinth-data-table-caption">
         {{
