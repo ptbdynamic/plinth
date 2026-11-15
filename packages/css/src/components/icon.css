@@ -19,8 +19,8 @@
  *     stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M4 12h16M4 17h16"></path></svg>
  * </span>
  * The glyphs: menu, close, back, chevron-left, chevron-right, chevron-up, chevron-down, check,
- * plus, search, more, external, sign-out, sun, moon, system, info, warning. They are drawn on a
- * 24 × 24 grid with a 2-unit round stroke; the paths are in iconGlyphs (Vue and React) and the
+ * plus, search, more, external, sign-out, sun, moon, system, info, warning, home, dashboard,
+ * settings, bell, help, refresh, play, pause. They are drawn on a 24 × 24 grid with a 2-unit round stroke; the paths are in iconGlyphs (Vue and React) and the
  * Glyph enum (Blade). An unknown name shows the slot. back, the side chevrons and sign-out point
  * a direction and get data-mirror without `mirror`. Not a general icon library: brand and domain
  * icons stay in the app, in the slot.

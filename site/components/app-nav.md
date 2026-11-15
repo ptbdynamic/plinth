@@ -48,7 +48,9 @@ shown on a phone.
 ```
 
 Every item needs its icon: in the rail the icon is all there is to see. The icon is decorative,
-since the label names the link.
+since the label names the link. Use a built-in glyph where one fits (`home`, `dashboard`,
+`settings`, `bell`, `help`) and the project's own icons for the rest, drawn to match; see
+[project icons](icon.md#project-icons).
 
 ## A rail at every width
 
@@ -112,12 +114,12 @@ not a name or a text button.
         Inbox
     </x-plinth::app-nav-item>
     <x-plinth::app-nav-item href="#" count="3">
-        <x-slot:icon><x-plinth::icon><x-site.glyph name="bell" /></x-plinth::icon></x-slot:icon>
+        <x-slot:icon><x-plinth::icon name="bell" /></x-slot:icon>
         Alerts
     </x-plinth::app-nav-item>
     <x-slot:footer>
         <x-plinth::app-nav-item href="#">
-            <x-slot:icon><x-plinth::icon><x-site.glyph name="help" /></x-plinth::icon></x-slot:icon>
+            <x-slot:icon><x-plinth::icon name="help" /></x-slot:icon>
             Help
         </x-plinth::app-nav-item>
     </x-slot:footer>

@@ -30,15 +30,16 @@ require the prop. A blank `label` falls back to an `aria-label` attribute in eve
 ## The icon
 
 Pass one of the [icon](icon.md)'s built-in glyphs by name as `icon` (menu, close, back, the
-chevrons, check, plus, search, more, external, sign-out, sun, moon, system, info, warning), or the
-project's own SVG in the slot. A glyph that points a direction (back, the side chevrons, sign-out)
+chevrons, check, plus, search, more, external, sign-out, sun, moon, system, info, warning, home,
+dashboard, settings, bell, help, refresh, play, pause), or the project's own SVG in the slot. A glyph that points a direction (back, the side chevrons, sign-out)
 flips in right-to-left text on its own; a name Plinth doesn't know shows the slot instead.
 
 ```blade example
 <x-plinth::icon-button label="Open menu" icon="menu" />
 <x-plinth::icon-button label="Back" icon="back" href="#" />
 <x-plinth::icon-button label="Switch to dark" icon="moon" />
-<x-plinth::icon-button label="Notifications"><x-site.glyph name="bell" /></x-plinth::icon-button>
+<x-plinth::icon-button label="Settings" icon="settings" />
+<x-plinth::icon-button label="Download"><x-site.glyph name="download" /></x-plinth::icon-button>
 ```
 
 ## Variants
@@ -50,7 +51,7 @@ dialog; **primary** or **accent** rarely, for the one main action in a compact p
 **danger-ghost** for removing an item from a row.
 
 ```blade example
-<x-plinth::icon-button label="Notifications"><x-site.glyph name="bell" /></x-plinth::icon-button>
+<x-plinth::icon-button label="Notifications" icon="bell" />
 <x-plinth::icon-button label="Close" icon="close" variant="secondary" />
 <x-plinth::icon-button label="New project" icon="plus" variant="primary" />
 <x-plinth::icon-button label="Remove" icon="close" variant="danger-ghost" />
@@ -65,8 +66,8 @@ the label the same in both states (_Notifications_), since `aria-pressed` alread
 is on.
 
 ```blade example
-<x-plinth::icon-button label="Notifications" :pressed="false"><x-site.glyph name="bell" /></x-plinth::icon-button>
-<x-plinth::icon-button label="Notifications" :pressed="true"><x-site.glyph name="bell" /></x-plinth::icon-button>
+<x-plinth::icon-button label="Notifications" :pressed="false" icon="bell" />
+<x-plinth::icon-button label="Notifications" :pressed="true" icon="bell" />
 ```
 
 ## Sizes and touch

@@ -5,6 +5,6 @@
         <span>Search</span>
         <kbd>⌘K</kbd>
     </span>
-    <x-plinth::icon><x-site.glyph name="bell" /></x-plinth::icon>
+    <x-plinth::icon name="bell" />
     <x-plinth::icon><x-site.glyph name="user" /></x-plinth::icon>
 </div>

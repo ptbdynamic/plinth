@@ -63,7 +63,7 @@ a list with icons, give every item one, so the labels line up.
             Preferences
         </x-plinth::nav-list-item>
         <x-plinth::nav-list-item href="#">
-            <x-slot:icon><x-plinth::icon size="sm"><x-site.glyph name="bell" /></x-plinth::icon></x-slot:icon>
+            <x-slot:icon><x-plinth::icon name="bell" size="sm" /></x-slot:icon>
             Notifications
         </x-plinth::nav-list-item>
     </x-plinth::nav-list-group>
