@@ -52,14 +52,70 @@ Narrow the window to see the cards.
   row's first cell, and the actions cell its last: the card moves them with `order`, which must
   not change the reading and focus order.
 - **`kind="actions"`** holds the row's buttons, last on the card, with no label. From 768px up
-  they sit at the start of their cell, under the column header.
+  they sit at the start of their cell, under the column header (at the end of the row in a
+  [framed](#framed) table).
 - **`numeric`** aligns numbers to the end of a table cell, with figures of one width. Put it on
   the column header and its cells.
 - **`hide-on-phone`** leaves a less important column out of the card and shows it from 768px up.
   Put it on the column header **and** on every cell of the column, so the headers still match the
   cells for a screen reader.
-- A wide table from 768px up belongs in a scrolling container the app adds; text wraps in its
-  cell.
+- A wide table from 768px up belongs in a scrolling container: a [framed](#framed) table brings
+  its own, or the app adds one. Text wraps in its cell.
+
+## Framed
+
+`framed` makes the table a card of its own, for a table that stands alone on an admin screen.
+From 768px up the table sits in a frame (a raised surface, a hairline border and the container
+radius), which is also its scrolling container, so a wide table scrolls inside it. The head row
+becomes a header band on a sunken surface, its labels small, uppercase and letter-spaced. The
+first and last cells take wider padding, the row dividers run to the frame's edges, and the
+actions cell, when it ends the row, holds its buttons to the end. On a phone the frame steps
+aside: the rows are already cards.
+
+```blade example layout="stack"
+<x-plinth::data-table framed aria-label="Clients">
+    <x-slot:head>
+        <x-plinth::data-table-column>Client</x-plinth::data-table-column>
+        <x-plinth::data-table-column sort="ascending">
+            <x-plinth::data-table-sort>Plan</x-plinth::data-table-sort>
+        </x-plinth::data-table-column>
+        <x-plinth::data-table-column>Status</x-plinth::data-table-column>
+        <x-plinth::data-table-column numeric>Seats</x-plinth::data-table-column>
+        <x-plinth::data-table-column>Actions</x-plinth::data-table-column>
+    </x-slot:head>
+    <x-plinth::data-table-row>
+        <x-plinth::data-table-cell label="Client" kind="title">Atlas Studio</x-plinth::data-table-cell>
+        <x-plinth::data-table-cell label="Plan">Business</x-plinth::data-table-cell>
+        <x-plinth::data-table-cell label="Status"><x-plinth::badge tone="success">Active</x-plinth::badge></x-plinth::data-table-cell>
+        <x-plinth::data-table-cell label="Seats" numeric>24</x-plinth::data-table-cell>
+        <x-plinth::data-table-cell kind="actions">
+            <x-plinth::button variant="secondary" size="sm" href="#">Open Atlas Studio</x-plinth::button>
+        </x-plinth::data-table-cell>
+    </x-plinth::data-table-row>
+    <x-plinth::data-table-row>
+        <x-plinth::data-table-cell label="Client" kind="title">Kestrel Labs</x-plinth::data-table-cell>
+        <x-plinth::data-table-cell label="Plan">Team</x-plinth::data-table-cell>
+        <x-plinth::data-table-cell label="Status"><x-plinth::badge tone="warning">Trial</x-plinth::badge></x-plinth::data-table-cell>
+        <x-plinth::data-table-cell label="Seats" numeric>6</x-plinth::data-table-cell>
+        <x-plinth::data-table-cell kind="actions">
+            <x-plinth::button variant="secondary" size="sm" href="#">Open Kestrel Labs</x-plinth::button>
+        </x-plinth::data-table-cell>
+    </x-plinth::data-table-row>
+</x-plinth::data-table>
+```
+
+The band's look is a set of component tokens, so a brand can pick its own label face (a
+condensed or mono face, say) without touching the component:
+
+| Token                                  | Default                | What it sets                             |
+| -------------------------------------- | ---------------------- | ---------------------------------------- |
+| `--plinth-data-table-head-background`  | `color-surface-sunken` | the header band                          |
+| `--plinth-data-table-head-font-family` | `font-family-body`     | the column labels' face                  |
+| `--plinth-data-table-head-font-size`   | `font-size-xs` (12px)  | their size                               |
+| `--plinth-data-table-head-font-weight` | `font-weight-medium`   | their weight                             |
+| `--plinth-data-table-head-tracking`    | `font-tracking-wide`   | their letter spacing                     |
+| `--plinth-data-table-head-color`       | `color-text-muted`     | their colour                             |
+| `--plinth-data-table-frame-edge`       | `space-5` (20px)       | the first and last cells' inline padding |
 
 ## Sorting
 
@@ -116,7 +172,9 @@ buttons.
 ## Markup contract
 
 - **`plinth-data-table`**, the root, is the `<table>`; a project's classes and attributes land on
-  it. The **caption** is optional: without one, name the table with `aria-label` or
+  it, framed or not.
+- **`plinth-data-table-frame`**, a `<div>` around the table when it is framed. It takes no
+  attributes: to place a framed table, wrap it in your own element. The **caption** is optional: without one, name the table with `aria-label` or
   `aria-labelledby`.
 - **The explicit roles** (`table`, `rowgroup`, `row`, `columnheader`, `cell`) are part of the
   contract. Some browsers, Safari in particular, drop a table's semantics once its rows stop
@@ -136,6 +194,7 @@ header row as the `head` prop, which takes a node.
 | data-table        | caption     | `caption="Invoices"`                           | `caption="Invoices"` | `caption="Invoices"` | none    |
 | data-table        | header row  | `<x-slot:head>`                                | `#head` slot         | `head` (a node)      | none    |
 | data-table        | rows        | the slot                                       | the default slot     | `children`           | none    |
+| data-table        | framed      | `framed`                                       | `framed`             | `framed`             | off     |
 | data-table-column | sort        | `sort="ascending"` (or a `DataTableSort` case) | `sort="ascending"`   | `sort="ascending"`   | none    |
 | data-table-column | numeric     | `numeric`                                      | `numeric`            | `numeric`            | off     |
 | data-table-column | hideOnPhone | `hide-on-phone`                                | `hide-on-phone`      | `hideOnPhone`        | off     |
@@ -237,6 +296,8 @@ import {
 - A sorted column says so with `aria-sort`, and its sort button is a real `<button>`.
 - A hidden-on-phone column is hidden on its header and every cell, so headers and cells still
   match.
+- A framed table scrolls inside its frame from 768px up; the frame changes nothing for a screen
+  reader.
 - The minimum row height is `--plinth-data-table-row-height` (44px) in the table layout.
 - Checked with axe in light and dark at 390, 768 and 1440px on every pull request.
 
