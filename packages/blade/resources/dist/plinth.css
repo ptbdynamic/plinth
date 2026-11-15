@@ -2859,6 +2859,12 @@
       background-color: var(--plinth-data-table-head-background);
     }
 
+    /* A button resets its case and spacing; a sort label takes the band's. */
+    .plinth-data-table-frame .plinth-data-table-sort {
+      text-transform: inherit;
+      letter-spacing: inherit;
+    }
+
     .plinth-data-table-frame .plinth-data-table-head-row > .plinth-data-table-column:first-child,
     .plinth-data-table-frame .plinth-data-table-row > .plinth-data-table-cell:first-child {
       padding-inline-start: var(--plinth-data-table-frame-edge);
