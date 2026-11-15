@@ -80,8 +80,9 @@ the split view and scrolls on its own, as the panes do, so the page's scrolling 
 768px. The default, **`split="md"`**, prints nothing.
 
 The app keeps setting `pane` from its URL, so back goes from the detail to the list on a tablet as
-it does on a phone; show the page header's back link up to 1280px too, with your own CSS (a
-`max-width: 1279px` media query, or a utility such as Tailwind's `xl:hidden`).
+it does on a phone. The page header's back link is the app's, with either split: with
+`split="lg"`, hide it from 1280px, where the list shows beside the detail, with your own CSS (a
+`min-width: 1280px` media query, or a utility such as Tailwind's `xl:hidden`).
 
 ```blade tab="Blade"
 <x-plinth::split-view split="lg" :pane="$client ? 'detail' : 'list'">…</x-plinth::split-view>
@@ -98,7 +99,8 @@ it does on a phone; show the page header's back link up to 1280px too, with your
 ```
 
 Plinth keeps two breakpoints, 768px and 1280px, so the split waits for 1280px rather than a
-landscape tablet's 1024px.
+landscape tablet's 1024px. The split follows the window's width, not the split view's, so in the
+playground above `split` changes nothing in a window 1280px or wider; narrow it to see one pane.
 
 ## The secondary column
 

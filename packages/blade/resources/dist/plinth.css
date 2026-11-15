@@ -7469,7 +7469,8 @@
  * State, set by the app (the split view doesn't remember or route; the app sets these from its
  * URL or its own state):
  * - data-pane="list" (the default, also when missing) or "detail": the one pane a phone shows,
- *   usually "detail" when the URL names an item. From 768px both show, whichever it says.
+ *   usually "detail" when the URL names an item. From 768px both show, whichever it says
+ *   (from 1280px with data-split="lg").
  * - data-secondary="closed": collapses the secondary column, for the page header's panel
  *   button (aria-expanded on the button, aria-controls naming the column's content). Missing
  *   means open.
@@ -7485,13 +7486,14 @@
  *   its content another way (a sheet, a pill row).
  * - from 768px: the list (--plinth-split-view-list-width, 320px) and the detail beside it, which
  *   takes the rest. With data-split="lg", still the one pane, now as wide as the split view.
- * - from 1280px: the list and the detail side by side, whatever data-split says.
- * - from 1280px: the secondary column (--plinth-split-view-secondary-width, 240px) before them,
- *   unless data-secondary="closed".
+ * - from 1280px: the list and the detail side by side, whatever data-split says, and the
+ *   secondary column (--plinth-split-view-secondary-width, 240px) before them, unless
+ *   data-secondary="closed".
  * From 768px the split view fills the height its parent leaves it when the parent is a flex
  * column, as the app shell's main is (elsewhere the app gives it a height), and each pane scrolls
- * on its own, the one pane of data-split="lg" too, so scrolling changes only once, at 768px. Panes are split by dividers on their end edges; sides are logical, so in
- * right-to-left text the list is on the right. Nothing moves, so there is no motion to reduce.
+ * on its own, the one pane of data-split="lg" too, so scrolling changes only once, at 768px.
+ * Panes are split by dividers on their end edges; sides are logical, so in right-to-left text
+ * the list is on the right. Nothing moves, so there is no motion to reduce.
  */
 
 @layer plinth {
