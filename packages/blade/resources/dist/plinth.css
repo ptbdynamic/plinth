@@ -252,6 +252,7 @@
     --plinth-app-bar-height: var(--plinth-space-14);
     --plinth-app-bar-search-width: var(--plinth-size-search);
     --plinth-app-bar-search-min-width: var(--plinth-size-search-min);
+    --plinth-app-shell-section-width: var(--plinth-size-sidebar);
     --plinth-split-view-secondary-width: var(--plinth-size-sidebar);
     --plinth-split-view-list-width: var(--plinth-size-list);
     --plinth-menu-min-width: var(--plinth-size-menu-min);
@@ -1012,12 +1013,21 @@
 
 /* app-shell.css */
 /*
- * App shell: the app's frame. The app nav full height on the start side, the app bar above the
- * content, and the content scrolling on its own (docs/adr/0008).
+ * App shell: the app's frame. The app nav full height on the start side, an optional section
+ * column beside it, the app bar above the content, and the content scrolling on its own
+ * (docs/adr/0008).
  *
  * <div class="plinth-app-shell">
  *   <div class="plinth-app-shell-nav">
  *     <nav class="plinth-app-nav" aria-label="Main">…</nav>
+ *   </div>
+ *   <div class="plinth-app-shell-section" id="section">
+ *     <div class="plinth-app-shell-section-header">
+ *       <p class="plinth-app-shell-section-title" id="section-title">Settings</p>
+ *     </div>
+ *     <div class="plinth-app-shell-section-body">
+ *       <nav class="plinth-nav-list" aria-labelledby="section-title">…</nav>
+ *     </div>
  *   </div>
  *   <div class="plinth-app-shell-bar">
  *     <header class="plinth-app-bar">…</header>
@@ -1030,18 +1040,30 @@
  *
  * The root is a <div>; its parts, in source order:
  * - the nav (optional): the app nav (app-nav.css), on the start side, as tall as the screen.
+ * - the section (optional): a column of the section's own links (Settings: Users, Roles…), part
+ *   of the frame, not of one page, so it stays put while the pages in the section change. It
+ *   holds an optional header, a row as tall as the app bar (--plinth-app-bar-height) with a
+ *   divider below, so it lines up with the bar and the app nav's brand, with the section's
+ *   title in it (a long title wraps and grows the row); then the body, which holds the
+ *   section's navigation, usually a nav list (nav-list.css), padded, and scrolls. The title
+ *   is a <p>, not a heading: it comes before the page's <h1> in the reading order, and it names
+ *   the body's <nav> through aria-labelledby, so the section reads as its own navigation
+ *   landmark. With section-id (sectionId in Vue and React) the column
+ *   takes that id, for the button's aria-controls, and the title takes "<id>-title", for the
+ *   nav's aria-labelledby; without one neither has an id, and the nav takes a label instead.
  * - the bar (optional): the app bar (app-bar.css), above the content and beside the nav.
  * - the main (always there): a <main>, the page's main landmark, holding the page: its page
  *   header, then its content (a split view, a table, a form). The landmarks (navigation, banner,
  *   main) let a screen reader skip the nav, so the shell has no skip link of its own.
- * Each part is printed only when it has content, the main always.
+ * Each part is printed only when it has content, the main always; the section's header only
+ * with a title.
  *
  * By width:
- * - phone (below 768px): the nav and the bar are not shown (the app nav and the app bar hide too)
- *   and the page is the screen: its page header, with data-top, is the top bar, and the document
- *   scrolls, so the browser's toolbars can collapse. The app's menu sheet, which the page
- *   header's menu button opens, holds the nav's items; put it inside the main or after the
- *   shell, never in the nav part, which a phone doesn't render.
+ * - phone (below 768px): the nav, the section and the bar are not shown (the app nav and the
+ *   app bar hide too) and the page is the screen: its page header, with data-top, is the top
+ *   bar, and the document scrolls, so the browser's toolbars can collapse. The app's menu
+ *   sheet, which the page header's menu button opens, holds the nav's items; put it inside the
+ *   main or after the shell, never in the nav part, which a phone doesn't render.
  * - from 768px: a grid as tall as the screen (100dvh). The nav fills the start column from top to
  *   bottom; the bar sits at the top of the other column and the main below it. The main scrolls
  *   on its own (the screen doesn't), and it is a flex column, so a split view in it fills the
@@ -1049,11 +1071,24 @@
  *   --plinth-page-header-offset at 0; the main keeps a focused element clear of it
  *   (scroll-padding), except a page header with data-narrow-only, which isn't shown there.
  *   Give it data-top for the phone; under the bar the shell drops the safe area it adds, since
- *   the bar is then the top of the screen.
+ *   the bar is then the top of the screen. The section column isn't shown yet: the app offers
+ *   its links another way, a section menu (section-menu.css) under the page header, or the menu
+ *   sheet on a phone, rendered from the same list.
+ * - from 1280px: the section column (--plinth-app-shell-section-width, 240px) sits between the
+ *   nav and the bar and main, full height, with a divider on its end edge; its body scrolls on
+ *   its own, under its header. The app nav beside it is either the sidebar or, with
+ *   data-variant="rail", the rail, which leaves the labels to the section column. The app hides
+ *   its section menu from 1280px with its own rule while the column shows.
  *
- * Sides are logical: in right-to-left text the nav is on the right. The shell has no states; the
- * app's layout state lives on its parts (aria-current on the nav's items, data-pane on a split
- * view).
+ * State, set by the app (the shell doesn't remember or route): data-section="closed" on the root
+ * (section-closed in Blade, sectionClosed in Vue and React) collapses the section column, for a
+ * button in the app bar or the page header with aria-expanded and aria-controls naming the
+ * column. Missing means open. A closed column isn't rendered (display: none), so it leaves the
+ * reading and tab order too; nothing animates, so there is no motion to reduce.
+ *
+ * Sides are logical: in right-to-left text the nav is on the right, and the section column on
+ * its left. The rest of the app's layout state lives on the parts (aria-current on the nav's and
+ * the section's items, data-pane on a split view).
  */
 
 @layer plinth {
@@ -1065,6 +1100,7 @@
   }
 
   .plinth-app-shell-nav,
+  .plinth-app-shell-section,
   .plinth-app-shell-bar {
     display: none;
   }
@@ -1119,6 +1155,62 @@
       > .plinth-page-header[data-top] {
       min-block-size: var(--plinth-page-header-height);
       padding-block-start: 0;
+    }
+  }
+
+  @media (min-width: 1280px) {
+    /* The section column's track is empty, and so as narrow as nothing, without the part. */
+    .plinth-app-shell {
+      grid-template:
+        'nav section bar' auto
+        'nav section main' minmax(0, 1fr)
+        / auto auto minmax(0, 1fr);
+    }
+
+    .plinth-app-shell-section {
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+      grid-area: section;
+      inline-size: var(--plinth-app-shell-section-width);
+      min-block-size: 0;
+      background-color: var(--plinth-color-surface);
+      border-inline-end: var(--plinth-border-width-thin) solid var(--plinth-color-divider);
+    }
+
+    :where(.plinth-app-shell[data-section='closed']) > .plinth-app-shell-section {
+      display: none;
+    }
+
+    .plinth-app-shell-section-header {
+      box-sizing: border-box;
+      display: flex;
+      flex: none;
+      align-items: center;
+      min-block-size: var(--plinth-app-bar-height);
+      padding-block: var(--plinth-space-2);
+      padding-inline: var(--plinth-space-4);
+      border-block-end: var(--plinth-border-width-thin) solid var(--plinth-color-divider);
+    }
+
+    .plinth-app-shell-section-title {
+      min-inline-size: 0;
+      margin: 0;
+      font-family: var(--plinth-font-family-body);
+      font-size: var(--plinth-font-size-md);
+      font-weight: var(--plinth-font-weight-semibold);
+      line-height: var(--plinth-font-leading-tight);
+      color: var(--plinth-color-text);
+      overflow-wrap: anywhere;
+    }
+
+    .plinth-app-shell-section-body {
+      box-sizing: border-box;
+      flex: 1 1 auto;
+      min-block-size: 0;
+      padding: var(--plinth-space-3);
+      overflow-y: auto;
+      overscroll-behavior-block: contain;
     }
   }
 }

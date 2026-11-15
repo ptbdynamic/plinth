@@ -495,7 +495,7 @@ return [
         'app-shell' => [
             'name' => 'App shell',
             'group' => 'Layout',
-            'description' => 'The app\'s frame: the app nav, the app bar and the page, which scrolls on its own.',
+            'description' => 'The app\'s frame: the app nav, an optional section column, the app bar and the page, which scrolls on its own.',
         ],
 
         'split-view' => [
