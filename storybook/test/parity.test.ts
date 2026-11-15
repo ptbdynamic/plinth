@@ -6,6 +6,9 @@ import {
   PlinthAppShell,
   PlinthAvatar,
   PlinthBadge,
+  PlinthBreadcrumbs,
+  PlinthBreadcrumbsItem,
+  PlinthBreadcrumbsMore,
   PlinthButton,
   PlinthCallout,
   PlinthCheckbox,
@@ -66,6 +69,9 @@ import {
   PlinthAppShell as ReactAppShell,
   PlinthAvatar as ReactAvatar,
   PlinthBadge as ReactBadge,
+  PlinthBreadcrumbs as ReactBreadcrumbs,
+  PlinthBreadcrumbsItem as ReactBreadcrumbsItem,
+  PlinthBreadcrumbsMore as ReactBreadcrumbsMore,
   PlinthButton as ReactButton,
   PlinthCallout as ReactCallout,
   PlinthCodeBlock as ReactCodeBlock,
@@ -153,6 +159,16 @@ import {
 import * as avatarStories from '../stories/components/Avatar.stories.ts';
 import { avatar, samplePhoto, type AvatarArgs } from '../stories/components/avatar.ts';
 import * as badgeStories from '../stories/components/Badge.stories.ts';
+import * as breadcrumbsStories from '../stories/components/Breadcrumbs.stories.ts';
+import {
+  breadcrumbs,
+  breadcrumbsItem,
+  breadcrumbsMore,
+  type BreadcrumbsArgs,
+  type BreadcrumbsEntry,
+  type BreadcrumbsItemArgs,
+  type BreadcrumbsMoreArgs,
+} from '../stories/components/breadcrumbs.ts';
 import { badge, type Attributes, type BadgeArgs } from '../stories/components/badge.ts';
 import * as buttonStories from '../stories/components/Button.stories.ts';
 import { button, type ButtonArgs } from '../stories/components/button.ts';
@@ -328,6 +344,9 @@ const reactComponents = new Map<Component, unknown>([
   [PlinthNavListItem, ReactNavListItem],
   [PlinthAvatar, ReactAvatar],
   [PlinthBadge, ReactBadge],
+  [PlinthBreadcrumbs, ReactBreadcrumbs],
+  [PlinthBreadcrumbsItem, ReactBreadcrumbsItem],
+  [PlinthBreadcrumbsMore, ReactBreadcrumbsMore],
   [PlinthStat, ReactStat],
   [PlinthMeter, ReactMeter],
   [PlinthButton, ReactButton],
@@ -534,6 +553,17 @@ const timelineEventDefaults: TimelineEventArgs = {
   text: 'Alex Morgan assigned it to <b>themselves</b>',
   time: '09:14',
   datetime: '2026-10-25T09:14',
+};
+
+const breadcrumbsItemDefaults: BreadcrumbsItemArgs = {
+  label: 'Users & roles',
+  href: '/settings/access',
+  current: false,
+};
+
+const breadcrumbsMoreDefaults: BreadcrumbsMoreArgs = {
+  menu: 'trail-more',
+  content: '<div class="plinth-menu" id="trail-more" popover="auto">Pages</div>',
 };
 
 const sectionMenuItemDefaults: SectionMenuItemArgs = {
@@ -1291,6 +1321,58 @@ const cases: ParityCase[] = [
     list: '<p>List</p>',
     detail: '<p>Detail</p>',
     footer: ' ',
+  }),
+  ...storyArgs<BreadcrumbsArgs>(breadcrumbsStories).map(([story, args]) =>
+    breadcrumbsCase(`Breadcrumbs/${story}`, args),
+  ),
+  breadcrumbsCase(
+    'Breadcrumbs/with extra attributes',
+    { collapse: 'parent', entries: [breadcrumbsItemDefaults] },
+    { class: 'ms-2', id: 'trail', 'data-testid': 'trail', 'aria-describedby': 'trail-help' },
+  ),
+  breadcrumbsCase(
+    'Breadcrumbs/with a clashing attribute',
+    { collapse: 'parent', entries: [] },
+    { 'aria-label': 'Path', 'data-collapse': 'none' },
+  ),
+  breadcrumbsCase('Breadcrumbs/blank label', { label: ' ', collapse: 'none', entries: [] }),
+  breadcrumbsCase('Breadcrumbs/default label', { collapse: 'none', entries: [] }),
+  breadcrumbsCase('Breadcrumbs/unknown collapse', {
+    collapse: 'menu' as BreadcrumbsArgs['collapse'],
+    entries: [],
+  }),
+  breadcrumbsItemCase('Breadcrumbs item/Default', breadcrumbsItemDefaults),
+  breadcrumbsItemCase('Breadcrumbs item/Current', { ...breadcrumbsItemDefaults, current: true }),
+  breadcrumbsItemCase('Breadcrumbs item/no href', { ...breadcrumbsItemDefaults, href: undefined }),
+  breadcrumbsItemCase('Breadcrumbs item/blank href', { ...breadcrumbsItemDefaults, href: ' ' }),
+  breadcrumbsItemCase('Breadcrumbs item/with extra attributes', breadcrumbsItemDefaults, {
+    class: 'ms-2',
+    id: 'access',
+    'data-testid': 'access',
+    'aria-describedby': 'access-help',
+  }),
+  breadcrumbsItemCase(
+    'Breadcrumbs item/with a clashing attribute',
+    { ...breadcrumbsItemDefaults, current: true },
+    { 'aria-current': 'location' },
+  ),
+  breadcrumbsMoreCase('Breadcrumbs more/Default', breadcrumbsMoreDefaults),
+  breadcrumbsMoreCase('Breadcrumbs more/label', {
+    ...breadcrumbsMoreDefaults,
+    label: 'Earlier pages',
+  }),
+  breadcrumbsMoreCase('Breadcrumbs more/menu with spaces', {
+    ...breadcrumbsMoreDefaults,
+    menu: ' trail-more ',
+  }),
+  breadcrumbsMoreCase('Breadcrumbs more/with extra attributes', breadcrumbsMoreDefaults, {
+    class: 'ms-2',
+    id: 'more',
+    'data-testid': 'more',
+    'aria-describedby': 'more-help',
+  }),
+  breadcrumbsMoreCase('Breadcrumbs more/with a clashing attribute', breadcrumbsMoreDefaults, {
+    'aria-label': 'Show the pages between',
   }),
   ...storyArgs<SectionMenuArgs>(sectionMenuStories).map(([story, args]) =>
     sectionMenuCase(`Section menu/${story}`, args),
@@ -2596,6 +2678,62 @@ function pillRowCase(story: string, args: PillRowArgs, attributes: Attributes = 
   };
 }
 
+function breadcrumbsItemProps(args: BreadcrumbsItemArgs) {
+  return { ...(args.href !== undefined ? { href: args.href } : {}), current: args.current };
+}
+
+function breadcrumbsItemCase(
+  story: string,
+  args: BreadcrumbsItemArgs,
+  attributes: Attributes = {},
+): ParityCase {
+  const props = breadcrumbsItemProps(args);
+  return {
+    story,
+    markup: breadcrumbsItem(args, attributes),
+    vue: { component: PlinthBreadcrumbsItem, props: { ...props, ...attributes }, slot: args.label },
+    blade: { component: 'breadcrumbs-item', props, attributes, slot: args.label },
+  };
+}
+
+function breadcrumbsMoreCase(
+  story: string,
+  args: BreadcrumbsMoreArgs,
+  attributes: Attributes = {},
+): ParityCase {
+  const props = { menu: args.menu, ...(args.label !== undefined ? { label: args.label } : {}) };
+  const slot = args.content ?? '';
+  return {
+    story,
+    markup: breadcrumbsMore(args, attributes),
+    vue: { component: PlinthBreadcrumbsMore, props: { ...props, ...attributes }, slot, html: true },
+    blade: { component: 'breadcrumbs-more', props, attributes, slot },
+  };
+}
+
+/** The trail's own parity; its entries are each an item or more case's markup, as the slot. */
+function breadcrumbsCase(
+  story: string,
+  args: BreadcrumbsArgs,
+  attributes: Attributes = {},
+): ParityCase {
+  const props = {
+    ...(args.label !== undefined ? { label: args.label } : {}),
+    collapse: args.collapse,
+  };
+  const slot = args.entries
+    .map((entry: BreadcrumbsEntry) =>
+      'more' in entry ? breadcrumbsMore(entry) : breadcrumbsItem(entry),
+    )
+    .join('');
+  return {
+    story,
+    markup: breadcrumbs(args, attributes),
+    vue: { component: PlinthBreadcrumbs, props: { ...props, ...attributes }, slot, html: true },
+    blade: { component: 'breadcrumbs', props, attributes, slot },
+  };
+}
+
 function sectionMenuItemProps(args: SectionMenuItemArgs) {
   return {
     ...(args.count !== undefined ? { count: args.count } : {}),
@@ -3759,6 +3897,27 @@ describe('parity with the stories', () => {
       'Split view/with extra attributes',
       'Split view/with a clashing attribute',
       'Split view/unknown pane and blank slots',
+      'Breadcrumbs/Default',
+      'Breadcrumbs/WithMore',
+      'Breadcrumbs/CollapseToParent',
+      'Breadcrumbs/CurrentOnly',
+      'Breadcrumbs/LongLabels',
+      'Breadcrumbs/with extra attributes',
+      'Breadcrumbs/with a clashing attribute',
+      'Breadcrumbs/blank label',
+      'Breadcrumbs/default label',
+      'Breadcrumbs/unknown collapse',
+      'Breadcrumbs item/Default',
+      'Breadcrumbs item/Current',
+      'Breadcrumbs item/no href',
+      'Breadcrumbs item/blank href',
+      'Breadcrumbs item/with extra attributes',
+      'Breadcrumbs item/with a clashing attribute',
+      'Breadcrumbs more/Default',
+      'Breadcrumbs more/label',
+      'Breadcrumbs more/menu with spaces',
+      'Breadcrumbs more/with extra attributes',
+      'Breadcrumbs more/with a clashing attribute',
       'Section menu/Default',
       'Section menu/WithCounts',
       'Section menu/Buttons',

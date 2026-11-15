@@ -49,17 +49,11 @@
 
         <article class="site-docs-article">
             <div class="site-docs-top">
-                <nav class="site-docs-breadcrumb" aria-label="Breadcrumb">
-                    <ol class="site-docs-breadcrumb-list" role="list">
-                        @foreach ($crumbs as $crumb)
-                            @if (filled($crumb['url']))
-                                <li><a class="site-docs-breadcrumb-link" href="{{ $crumb['url'] }}">{{ $crumb['label'] }}</a></li>
-                            @else
-                                <li class="site-docs-breadcrumb-item">{{ $crumb['label'] }}</li>
-                            @endif
-                        @endforeach
-                    </ol>
-                </nav>
+                <x-plinth::breadcrumbs class="site-docs-breadcrumb">
+                    @foreach ($crumbs as $crumb)
+                        <x-plinth::breadcrumbs-item :href="$crumb['url']">{{ $crumb['label'] }}</x-plinth::breadcrumbs-item>
+                    @endforeach
+                </x-plinth::breadcrumbs>
                 <x-plinth::button class="site-docs-menu-button" variant="secondary" size="sm" commandfor="docs-menu" command="show-modal">
                     <x-slot:icon><x-site.glyph name="lines" /></x-slot:icon>
                     Menu

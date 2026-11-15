@@ -47,8 +47,7 @@
     }
 
     .site-docs-nav-list,
-    .site-docs-toc-list,
-    .site-docs-breadcrumb-list {
+    .site-docs-toc-list {
         padding: 0;
         margin: 0;
         list-style: none;
@@ -117,25 +116,9 @@
         justify-content: space-between;
     }
 
-    .site-docs-breadcrumb-list {
-        display: flex;
-        flex-wrap: wrap;
-        align-items: center;
-        font-size: var(--plinth-font-size-sm);
-        color: var(--plinth-color-text-subtle);
-    }
-
-    .site-docs-breadcrumb-item::before {
-        padding-inline: var(--plinth-space-2);
-        content: '/';
-    }
-
-    .site-docs-breadcrumb-link {
-        display: inline-flex;
-        align-items: center;
-        min-block-size: var(--plinth-touch-target);
-        color: var(--plinth-color-text-muted);
-        text-decoration: none;
+    /* The trail's links pad their text; pull it back so the words line up with the title. */
+    .site-docs-breadcrumb {
+        margin-inline-start: calc(-1 * var(--plinth-space-1));
     }
 
     .site-docs-header {
@@ -417,10 +400,6 @@
 
         .site-docs-pager-link:hover {
             background: var(--plinth-color-surface-hover);
-        }
-
-        .site-docs-breadcrumb-link:hover {
-            color: var(--plinth-color-text);
         }
     }
 

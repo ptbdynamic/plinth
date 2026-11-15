@@ -1,5 +1,6 @@
 <?php
 
+use BDynamic\Plinth\Enums\BreadcrumbsCollapse;
 use BDynamic\Plinth\Enums\ButtonVariant;
 use BDynamic\Plinth\Enums\CalloutRole;
 use BDynamic\Plinth\Enums\CalloutTone;
@@ -45,7 +46,8 @@ it('defaults each choice the way the components do', function () {
         ->and(ConfirmDialogTone::default())->toBe(ConfirmDialogTone::Neutral)
         ->and(MenuItemTone::default())->toBe(MenuItemTone::Neutral)
         ->and(SplitViewPane::default())->toBe(SplitViewPane::List)
-        ->and(TimelineKind::default())->toBe(TimelineKind::Team);
+        ->and(TimelineKind::default())->toBe(TimelineKind::Team)
+        ->and(BreadcrumbsCollapse::default())->toBe(BreadcrumbsCollapse::None);
 });
 
 it('resolves an optional side to a case or nothing', function () {
@@ -96,6 +98,9 @@ it('matches the lists the Vue layer and the stories use', function () {
     }
     foreach (HeadingLevel::values() as $value) {
         expect($vue('heading.ts'))->toContain("'{$value}'");
+    }
+    foreach (BreadcrumbsCollapse::values() as $value) {
+        expect($vue('breadcrumbs.ts'))->toContain("'{$value}'");
     }
     foreach (PageHeaderLevel::values() as $value) {
         expect($vue('page-header.ts'))->toContain("'{$value}'");

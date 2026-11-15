@@ -6,6 +6,9 @@ import PlinthAppNavItem from './PlinthAppNavItem.vue';
 import PlinthAppShell from './PlinthAppShell.vue';
 import PlinthAvatar from './PlinthAvatar.vue';
 import PlinthBadge from './PlinthBadge.vue';
+import PlinthBreadcrumbs from './PlinthBreadcrumbs.vue';
+import PlinthBreadcrumbsItem from './PlinthBreadcrumbsItem.vue';
+import PlinthBreadcrumbsMore from './PlinthBreadcrumbsMore.vue';
 import PlinthButton from './PlinthButton.vue';
 import PlinthCallout from './PlinthCallout.vue';
 import PlinthCheckbox from './PlinthCheckbox.vue';
@@ -66,6 +69,9 @@ export {
   PlinthAppShell,
   PlinthAvatar,
   PlinthBadge,
+  PlinthBreadcrumbs,
+  PlinthBreadcrumbsItem,
+  PlinthBreadcrumbsMore,
   PlinthButton,
   PlinthCallout,
   PlinthCheckbox,
@@ -182,6 +188,7 @@ export {
 } from './one-time-code';
 export { meterNumber, meterRange, meterTone, type MeterNumbers } from './meter';
 export { menuIdKey, menuItemTone, menuItemTones, type MenuItemTone } from './menu';
+export { breadcrumbsCollapse, breadcrumbsCollapses, type BreadcrumbsCollapse } from './breadcrumbs';
 export { pageHeaderLevel, pageHeaderLevels, type PageHeaderLevel } from './page-header';
 export { splitViewPane, splitViewPanes, type SplitViewPane } from './split-view';
 export {
@@ -214,6 +221,9 @@ export const Plinth: Plugin = {
     app.component('PlinthAppShell', PlinthAppShell);
     app.component('PlinthAvatar', PlinthAvatar);
     app.component('PlinthBadge', PlinthBadge);
+    app.component('PlinthBreadcrumbs', PlinthBreadcrumbs);
+    app.component('PlinthBreadcrumbsItem', PlinthBreadcrumbsItem);
+    app.component('PlinthBreadcrumbsMore', PlinthBreadcrumbsMore);
     app.component('PlinthButton', PlinthButton);
     app.component('PlinthCallout', PlinthCallout);
     app.component('PlinthCheckbox', PlinthCheckbox);

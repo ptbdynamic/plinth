@@ -1,0 +1,240 @@
+/*
+ * Breadcrumbs: where a deep page sits, and a way back up: Settings / Users & roles / Users.
+ *
+ * <nav class="plinth-breadcrumbs" aria-label="Breadcrumb">
+ *   <ol class="plinth-breadcrumbs-list">
+ *     <li class="plinth-breadcrumbs-item">
+ *       <a class="plinth-breadcrumbs-link" href="/settings">
+ *         <span class="plinth-breadcrumbs-label">Settings</span>
+ *       </a>
+ *     </li>
+ *     <li class="plinth-breadcrumbs-item">
+ *       <button type="button" class="plinth-breadcrumbs-more" popovertarget="trail-more"
+ *         aria-label="More pages">
+ *         <span class="plinth-icon" data-size="sm" data-icon="more" aria-hidden="true"><svg>…</svg></span>
+ *       </button>
+ *       <div class="plinth-menu" id="trail-more" popover="auto">
+ *         <a class="plinth-menu-item" href="/settings/organisation">…</a>
+ *       </div>
+ *     </li>
+ *     <li class="plinth-breadcrumbs-item">
+ *       <a class="plinth-breadcrumbs-link" href="/settings/access">
+ *         <span class="plinth-breadcrumbs-label">Users &amp; roles</span>
+ *       </a>
+ *     </li>
+ *     <li class="plinth-breadcrumbs-item">
+ *       <a class="plinth-breadcrumbs-link" aria-current="page">
+ *         <span class="plinth-breadcrumbs-label">Users</span>
+ *       </a>
+ *     </li>
+ *   </ol>
+ * </nav>
+ *
+ * The root is a <nav> named "Breadcrumb" (label in Blade, Vue and React; blank leaves the name to
+ * the app's aria-labelledby), holding an ordered list, so a screen reader announces a list of n
+ * items. The trail runs from the top of the app down to the current page, which is last.
+ *
+ * Parts, each its own component in Blade, Vue and React:
+ * - item (<x-plinth::breadcrumbs-item>, PlinthBreadcrumbsItem): an <li> holding a link. The link
+ *   is the component's root: the app's attributes and listeners land on it, not on the <li>
+ *   (ADR 2). The label is the link's text and name, cut with an ellipsis when the trail is too
+ *   wide, never wrapped. plinth-breadcrumbs-label is the part that truncates.
+ * - more (<x-plinth::breadcrumbs-more>, PlinthBreadcrumbsMore): an <li> holding an icon button
+ *   that opens a menu of the pages the app left out of the trail. The button is the root; it names
+ *   the menu in popovertarget and needs a name (label, "More pages" by default). The menu is the
+ *   app's own <x-plinth::menu> (link items) in the component's slot, after the button. The app
+ *   decides which pages go in it, usually the middle ones of a long trail.
+ *
+ * States, set by the app:
+ * - current: the last item, the page being shown, prints aria-current="page" and no href, so it
+ *   is not a link anyone can follow; it takes the full text colour and a medium weight.
+ * - an item without href that isn't current is plain text too, in the muted colour.
+ * - hover only where the device can hover (the link takes the full text colour); the focus ring
+ *   on :focus-visible.
+ *
+ * Variants on the root:
+ * - data-collapse="parent" (collapse in Blade, Vue and React; default none): on a phone, only
+ *   the parent of the current page shows, as a back link with a chevron before it. From 768px the
+ *   full trail shows again. The page's title then says where it is.
+ *
+ * Separators are drawn by each item's ::before, a slash with no text for assistive technology,
+ * never in the text content; in right-to-left text they mirror, and so does the back chevron.
+ *
+ * Size: links and the more button are --plinth-touch-target (40px) tall, and a label never gets
+ * narrower than that either. Labels truncate rather than wrap, so the trail stays one line.
+ *
+ * Placement: above a page's title, or in the app bar's start before the search (app-bar.css),
+ * where the search takes the rest of the bar. The app bar isn't shown on a phone, so a page that
+ * keeps its trail there puts it above the title too.
+ *
+ * The app owns the state: which page is current and what goes in the menu are the app's.
+ */
+
+@layer plinth {
+  .plinth-breadcrumbs {
+    min-inline-size: 0;
+    margin: 0;
+    font-family: var(--plinth-font-family-body);
+    font-size: var(--plinth-font-size-md);
+    line-height: var(--plinth-font-leading-tight);
+  }
+
+  .plinth-breadcrumbs-list {
+    display: flex;
+    align-items: center;
+    min-inline-size: 0;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+  }
+
+  .plinth-breadcrumbs-item {
+    display: flex;
+    flex: 0 1 auto;
+    align-items: center;
+    min-inline-size: 0;
+  }
+
+  /* The separator: a slash before every item but the first, with no text to read. */
+  .plinth-breadcrumbs-item + .plinth-breadcrumbs-item::before {
+    flex: none;
+    padding-inline: var(--plinth-space-1);
+    color: var(--plinth-color-text-subtle);
+    content: '/' / '';
+  }
+
+  .plinth-breadcrumbs-item:dir(rtl)::before {
+    scale: -1 1;
+  }
+
+  .plinth-breadcrumbs-link {
+    box-sizing: border-box;
+    display: inline-flex;
+    gap: var(--plinth-space-1);
+    align-items: center;
+    min-inline-size: var(--plinth-touch-target);
+    min-block-size: var(--plinth-touch-target);
+    padding-inline: var(--plinth-space-1);
+    color: var(--plinth-color-text-muted);
+    text-decoration: none;
+    border-radius: var(--plinth-radius-control);
+    transition: color var(--plinth-duration-fast) var(--plinth-easing-standard);
+  }
+
+  .plinth-breadcrumbs-label {
+    min-inline-size: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .plinth-breadcrumbs-link[aria-current='page'] {
+    font-weight: var(--plinth-font-weight-medium);
+    color: var(--plinth-color-text);
+  }
+
+  @media (hover: hover) {
+    .plinth-breadcrumbs-link[href]:hover {
+      color: var(--plinth-color-text);
+    }
+  }
+
+  .plinth-breadcrumbs-link[href]:active {
+    color: var(--plinth-color-text);
+  }
+
+  .plinth-breadcrumbs-more {
+    box-sizing: border-box;
+    display: inline-flex;
+    flex: none;
+    align-items: center;
+    justify-content: center;
+    inline-size: var(--plinth-touch-target);
+    block-size: var(--plinth-touch-target);
+    padding: 0;
+    margin: 0;
+    font: inherit;
+    color: var(--plinth-color-text-muted);
+    cursor: pointer;
+    background-color: transparent;
+    border: 0;
+    border-radius: var(--plinth-radius-control);
+    transition:
+      background-color var(--plinth-duration-fast) var(--plinth-easing-standard),
+      color var(--plinth-duration-fast) var(--plinth-easing-standard);
+  }
+
+  @media (hover: hover) {
+    .plinth-breadcrumbs-more:hover {
+      color: var(--plinth-color-text);
+      background-color: var(--plinth-color-surface-hover);
+    }
+  }
+
+  .plinth-breadcrumbs-more:active {
+    color: var(--plinth-color-text);
+    background-color: var(--plinth-color-surface-sunken);
+  }
+
+  .plinth-breadcrumbs-link:focus-visible,
+  .plinth-breadcrumbs-more:focus-visible {
+    outline: var(--plinth-focus-ring-width) solid var(--plinth-color-focus-ring);
+    outline-offset: var(--plinth-focus-ring-offset);
+  }
+
+  /* On a phone, a collapsed trail shows only the parent of the current page, as a back link. */
+  .plinth-breadcrumbs[data-collapse='parent']
+    .plinth-breadcrumbs-item:not(:nth-last-child(2), :only-child) {
+    display: none;
+  }
+
+  .plinth-breadcrumbs[data-collapse='parent'] .plinth-breadcrumbs-item:nth-last-child(2)::before {
+    content: none;
+  }
+
+  /* The back chevron: a filled < clipped from a box the size of a small icon. */
+  .plinth-breadcrumbs[data-collapse='parent']
+    .plinth-breadcrumbs-item:nth-last-child(2)
+    .plinth-breadcrumbs-link::before {
+    flex: none;
+    inline-size: var(--plinth-size-icon-sm);
+    block-size: var(--plinth-size-icon-sm);
+    content: '';
+    background-color: currentcolor;
+    clip-path: polygon(36% 50%, 69% 83%, 62% 90%, 22% 50%, 62% 10%, 69% 17%);
+  }
+
+  .plinth-breadcrumbs[data-collapse='parent']
+    .plinth-breadcrumbs-item:nth-last-child(2)
+    .plinth-breadcrumbs-link:dir(rtl)::before {
+    scale: -1 1;
+  }
+
+  @media (min-width: 768px) {
+    .plinth-breadcrumbs[data-collapse='parent']
+      .plinth-breadcrumbs-item:not(:nth-last-child(2), :only-child) {
+      display: flex;
+    }
+
+    .plinth-breadcrumbs[data-collapse='parent']
+      .plinth-breadcrumbs-item
+      + .plinth-breadcrumbs-item:nth-last-child(2)::before {
+      content: '/' / '';
+    }
+
+    .plinth-breadcrumbs[data-collapse='parent']
+      .plinth-breadcrumbs-item:nth-last-child(2)
+      .plinth-breadcrumbs-link::before {
+      content: none;
+    }
+  }
+
+  /* The chevron is only a fill: in forced colours it takes the link's system colour. */
+  @media (forced-colors: active) {
+    .plinth-breadcrumbs[data-collapse='parent']
+      .plinth-breadcrumbs-item:nth-last-child(2)
+      .plinth-breadcrumbs-link::before {
+      background-color: LinkText;
+    }
+  }
+}

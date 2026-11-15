@@ -129,6 +129,11 @@
       "$type": "dimension",
       "$value": "{size.search}",
       "$description": "The most width of the app bar's search button (320px); it narrows with the bar."
+    },
+    "search-min-width": {
+      "$type": "dimension",
+      "$value": "{size.search-min}",
+      "$description": "The least width of the app bar's search button beside the breadcrumbs (160px); past it, the trail's labels are cut short."
     }
   },
   "split-view": {
