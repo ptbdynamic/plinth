@@ -362,6 +362,31 @@ return [
             'description' => 'The row under the page header that switches between a page\'s sections.',
         ],
 
+        'meter' => [
+            'name' => 'Meter',
+            'group' => 'Content',
+            'description' => 'A value against a limit: a label, the numbers, a bar and a tone that changes near the limit.',
+            'playground' => [
+                'template' => '<x-plinth::meter label="Spend this month" :max="150" :low="105" :high="135" :optimum="0"{attributes} />',
+                'options' => [
+                    'level' => [
+                        'values' => ['under', 'near', 'at', 'over'],
+                        'default' => 'under',
+                        'print' => [
+                            'under' => ':value="38" value-text="€38 of €150" description="Runs pause at €150."',
+                            'near' => ':value="120" value-text="€120 of €150" description="Runs pause at €150."',
+                            'at' => ':value="142" value-text="€142 of €150" description="Runs pause at €150, in €8."',
+                            'over' => ':value="162" value-text="€162 of €150" description="Over the cap by €12. Runs are paused."',
+                        ],
+                    ],
+                    'tone' => [
+                        'values' => ['auto', 'neutral', 'success', 'warning', 'danger'],
+                        'default' => 'auto',
+                    ],
+                ],
+            ],
+        ],
+
         'stat' => [
             'name' => 'Stat',
             'group' => 'Content',

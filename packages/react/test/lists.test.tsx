@@ -21,6 +21,8 @@ import * as vueSelect from '../../vue/src/select.ts';
 import * as vueTextField from '../../vue/src/text-field.ts';
 import * as vueTimeline from '../../vue/src/timeline.ts';
 import * as vueOneTimeCode from '../../vue/src/one-time-code.ts';
+import * as vueMeter from '../../vue/src/meter.ts';
+import * as reactMeter from '../src/meter.ts';
 import { buttonVariant } from '../src/button.ts';
 import { iconName } from '../src/icon.ts';
 import { swipeToClose } from '../src/swipe.ts';
@@ -125,6 +127,10 @@ describe('the shared lists', () => {
     expect(oneTimeCodeDigits('12a 34-567', 6)).toBe(
       vueOneTimeCode.oneTimeCodeDigits('12a 34-567', 6),
     );
+    // The meter's numbers and tone are written once per layer; the React copy is the Vue one.
+    for (const name of ['meterNumber', 'meterRange', 'meterTone'] as const) {
+      expect(reactMeter[name].toString()).toBe(vueMeter[name].toString());
+    }
     expect(sheetCloseIcon).toBe(vueSheet.sheetCloseIcon);
     expect(dialogSidePhones).toEqual(vueDialog.dialogSidePhones);
     expect(dialogCloseIcon).toBe(vueDialog.dialogCloseIcon);

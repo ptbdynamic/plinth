@@ -30,6 +30,7 @@ export { PlinthMenuGroup, type PlinthMenuGroupProps } from './PlinthMenuGroup';
 export { PlinthMenuItem, type PlinthMenuItemProps } from './PlinthMenuItem';
 export { PlinthMenuSeparator, type PlinthMenuSeparatorProps } from './PlinthMenuSeparator';
 export { PlinthMenuSheet, type PlinthMenuSheetProps } from './PlinthMenuSheet';
+export { PlinthMeter, type PlinthMeterProps } from './PlinthMeter';
 export { PlinthNavList, type PlinthNavListProps } from './PlinthNavList';
 export { PlinthNavListGroup, type PlinthNavListGroupProps } from './PlinthNavListGroup';
 export { PlinthNavListItem, type PlinthNavListItemProps } from './PlinthNavListItem';
@@ -112,6 +113,7 @@ export {
   pasteOneTimeCode,
   type OneTimeCodeLength,
 } from './one-time-code';
+export { meterNumber, meterRange, meterTone, type MeterNumbers } from './meter';
 export { MenuIdContext, menuItemTone, menuItemTones, type MenuItemTone } from './menu';
 export { pageHeaderLevel, pageHeaderLevels, type PageHeaderLevel } from './page-header';
 export {
