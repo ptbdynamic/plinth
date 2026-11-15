@@ -41,6 +41,7 @@ import {
   PlinthPageHeader,
   PlinthPill,
   PlinthPillRow,
+  PlinthSectionHeading,
   PlinthSectionMenu,
   PlinthSectionMenuItem,
   PlinthSelect,
@@ -104,6 +105,7 @@ describe('the Plinth plugin', () => {
     expect(app.component('PlinthPageHeader')).toBe(PlinthPageHeader);
     expect(app.component('PlinthPill')).toBe(PlinthPill);
     expect(app.component('PlinthPillRow')).toBe(PlinthPillRow);
+    expect(app.component('PlinthSectionHeading')).toBe(PlinthSectionHeading);
     expect(app.component('PlinthSectionMenu')).toBe(PlinthSectionMenu);
     expect(app.component('PlinthSectionMenuItem')).toBe(PlinthSectionMenuItem);
     expect(app.component('PlinthSelect')).toBe(PlinthSelect);

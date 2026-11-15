@@ -37,6 +37,7 @@ export { PlinthOneTimeCode, type PlinthOneTimeCodeProps } from './PlinthOneTimeC
 export { PlinthPageHeader, type PlinthPageHeaderProps } from './PlinthPageHeader';
 export { PlinthPill, type PlinthPillProps } from './PlinthPill';
 export { PlinthPillRow, type PlinthPillRowProps } from './PlinthPillRow';
+export { PlinthSectionHeading, type PlinthSectionHeadingProps } from './PlinthSectionHeading';
 export { PlinthSectionMenu, type PlinthSectionMenuProps } from './PlinthSectionMenu';
 export { PlinthSectionMenuItem, type PlinthSectionMenuItemProps } from './PlinthSectionMenuItem';
 export { PlinthSelect, type PlinthSelectProps } from './PlinthSelect';

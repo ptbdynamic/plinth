@@ -37,6 +37,7 @@ import {
   PlinthField,
   PlinthPill,
   PlinthPillRow,
+  PlinthSectionHeading,
   PlinthSectionMenu,
   PlinthSectionMenuItem,
   PlinthSheet,
@@ -93,6 +94,7 @@ import {
   PlinthEmptyState as ReactEmptyState,
   PlinthPill as ReactPill,
   PlinthPillRow as ReactPillRow,
+  PlinthSectionHeading as ReactSectionHeading,
   PlinthSectionMenu as ReactSectionMenu,
   PlinthSectionMenuItem as ReactSectionMenuItem,
   PlinthSheet as ReactSheet,
@@ -213,6 +215,8 @@ import {
 } from '../stories/components/page-header.ts';
 import * as pillRowStories from '../stories/components/PillRow.stories.ts';
 import { pill, pillRow, type PillArgs, type PillRowArgs } from '../stories/components/pill-row.ts';
+import * as sectionHeadingStories from '../stories/components/SectionHeading.stories.ts';
+import { sectionHeading, type SectionHeadingArgs } from '../stories/components/section-heading.ts';
 import * as sectionMenuStories from '../stories/components/SectionMenu.stories.ts';
 import {
   sectionMenu,
@@ -347,6 +351,7 @@ const reactComponents = new Map<Component, unknown>([
   [PlinthEmptyState, ReactEmptyState],
   [PlinthPill, ReactPill],
   [PlinthPillRow, ReactPillRow],
+  [PlinthSectionHeading, ReactSectionHeading],
   [PlinthSectionMenu, ReactSectionMenu],
   [PlinthSectionMenuItem, ReactSectionMenuItem],
   [PlinthSheet, ReactSheet],
@@ -931,6 +936,34 @@ const cases: ParityCase[] = [
     heading: '<b>Open</b>',
     count: '<i>12</i>',
     selection: '<b>2</b> selected',
+  }),
+  ...storyArgs<SectionHeadingArgs>(sectionHeadingStories).map(([story, args]) =>
+    sectionHeadingCase(`Section heading/${story}`, args),
+  ),
+  sectionHeadingCase(
+    'Section heading/with extra attributes',
+    { heading: 'Budget', headingId: 'budget-heading', description: 'Monthly cap.' },
+    { class: 'mb-4', id: 'budget', 'data-testid': 'budget', 'aria-describedby': 'budget-note' },
+  ),
+  sectionHeadingCase(
+    'Section heading/with a clashing attribute',
+    { heading: 'Budget', divider: true },
+    { class: 'mb-4', 'data-divider': 'strong' },
+  ),
+  sectionHeadingCase('Section heading/blank description, id and actions', {
+    heading: 'Budget',
+    headingId: ' ',
+    description: '  ',
+    actions: ' ',
+  }),
+  sectionHeadingCase('Section heading/unknown heading level', {
+    heading: 'Budget',
+    headingLevel: 'h1' as SectionHeadingArgs['headingLevel'],
+  }),
+  sectionHeadingCase('Section heading/escaped text', {
+    heading: '<b>Budget</b>',
+    headingId: '"budget"',
+    description: '<i>Monthly</i> cap',
   }),
   ...storyArgs<ListCardArgs>(listCardStories).map(([story, args]) =>
     listCardCase(`List card/${story}`, args),
@@ -2333,6 +2366,27 @@ function listRowCase(story: string, args: ListRowArgs, attributes: Attributes = 
   };
 }
 
+function sectionHeadingCase(
+  story: string,
+  args: SectionHeadingArgs,
+  attributes: Attributes = {},
+): ParityCase {
+  const props = {
+    heading: args.heading,
+    ...(args.headingLevel ? { headingLevel: args.headingLevel } : {}),
+    ...(args.headingId !== undefined ? { headingId: args.headingId } : {}),
+    ...(args.description !== undefined ? { description: args.description } : {}),
+    ...(args.divider ? { divider: true } : {}),
+  };
+  const named = args.actions ? { actions: args.actions } : undefined;
+  return {
+    story,
+    markup: sectionHeading(args, attributes),
+    vue: { component: PlinthSectionHeading, props: { ...props, ...attributes }, slot: '', named },
+    blade: { component: 'section-heading', props, attributes, slot: '', named },
+  };
+}
+
 function listHeaderCase(
   story: string,
   args: ListHeaderArgs,
@@ -3432,6 +3486,19 @@ describe('parity with the stories', () => {
       'List header/blank count and selection',
       'List header/unknown heading level',
       'List header/escaped text',
+      'Section heading/Default',
+      'Section heading/HeadingOnly',
+      'Section heading/WithoutActions',
+      'Section heading/WithoutDescription',
+      'Section heading/TwoActions',
+      'Section heading/Divider',
+      'Section heading/HeadingLevel',
+      'Section heading/LongText',
+      'Section heading/with extra attributes',
+      'Section heading/with a clashing attribute',
+      'Section heading/blank description, id and actions',
+      'Section heading/unknown heading level',
+      'Section heading/escaped text',
       'List card/Default',
       'List card/WithoutHeading',
       'List card/WithFooter',
