@@ -115,3 +115,33 @@ it('keeps name and value on the root of a row that is not selectable', function 
     expect(Blade::render('<x-plinth::list-row button type="submit" name="action" value="archive">Archive</x-plinth::list-row>'))
         ->toStartWith('<button class="plinth-list-row" type="submit" name="action" value="archive">');
 });
+
+it('is a label with a switch in a setting row, named by its title', function () {
+    $html = squish(Blade::render(<<<'BLADE'
+        <x-plinth::list-row toggle switch-id="paused" name="paused" value="1" checked description="Stop new runs" href="/runs" chevron button>
+            Pause runs
+        </x-plinth::list-row>
+        BLADE));
+
+    expect($html)->toBe('<label class="plinth-list-row"><span class="plinth-list-row-content">'
+        .'<span class="plinth-list-row-title" id="paused-title">Pause runs</span>'
+        .'<span class="plinth-list-row-description" id="paused-description">Stop new runs</span></span>'
+        .'<span class="plinth-list-row-trailing"><input type="checkbox" role="switch" class="plinth-switch-input" id="paused" aria-labelledby="paused-title" aria-describedby="paused-description" name="paused" value="1" checked=""></span></label>');
+});
+
+it('disables a setting row\'s switch and generates its id when it is missing', function () {
+    $html = Blade::render('<x-plinth::list-row toggle disabled>Pause runs</x-plinth::list-row>');
+
+    expect($html)
+        ->toMatch('/<span class="plinth-list-row-title" id="(plinth-list-row-switch-[a-z0-9]{8})-title">Pause runs<\/span>/')
+        ->toMatch('/<input type="checkbox" role="switch" class="plinth-switch-input" id="plinth-list-row-switch-[a-z0-9]{8}" aria-labelledby="plinth-list-row-switch-[a-z0-9]{8}-title" disabled="">/')
+        ->not->toContain('aria-describedby')
+        ->not->toContain('checked');
+});
+
+it('lets a selectable row win over a setting row', function () {
+    expect(Blade::render('<x-plinth::list-row selectable toggle switch-id="paused">Ticket</x-plinth::list-row>'))
+        ->toContain('plinth-list-row-checkbox')
+        ->not->toContain('role="switch"')
+        ->not->toContain('id="paused-title"');
+});

@@ -143,4 +143,58 @@ describe('PlinthListRow', () => {
       value: 'archive',
     });
   });
+
+  it('is a label with a switch in a setting row, named by its title', async () => {
+    const wrapper = mount(PlinthListRow, {
+      props: {
+        toggle: true,
+        switchId: 'paused',
+        name: 'paused',
+        value: '1',
+        checked: true,
+        description: 'Stop new runs',
+        href: '/runs',
+        chevron: true,
+      },
+      slots: { default: 'Pause runs' },
+    });
+
+    expect(squish(wrapper.html())).toBe(
+      '<label class="plinth-list-row"><span class="plinth-list-row-content">' +
+        '<span class="plinth-list-row-title" id="paused-title">Pause runs</span>' +
+        '<span class="plinth-list-row-description" id="paused-description">Stop new runs</span></span>' +
+        '<span class="plinth-list-row-trailing"><input id="paused" type="checkbox" role="switch" class="plinth-switch-input" aria-labelledby="paused-title" aria-describedby="paused-description" name="paused" value="1"></span></label>',
+    );
+    expect((wrapper.get('input').element as HTMLInputElement).checked).toBe(true);
+
+    await wrapper.get('input').setValue(false);
+    expect(wrapper.emitted('update:checked')).toEqual([[false]]);
+  });
+
+  it("disables a setting row's switch and generates its id when it is missing", () => {
+    const wrapper = mount(PlinthListRow, {
+      props: { toggle: true, disabled: true },
+      slots: { default: 'Pause runs' },
+    });
+    const input = wrapper.get('input');
+
+    expect((input.element as HTMLInputElement).disabled).toBe(true);
+    expect(input.attributes('id')).toMatch(/^plinth-list-row-switch-/);
+    expect(input.attributes('aria-labelledby')).toBe(`${input.attributes('id')}-title`);
+    expect(wrapper.get('.plinth-list-row-title').attributes('id')).toBe(
+      `${input.attributes('id')}-title`,
+    );
+    expect(input.attributes('aria-describedby')).toBeUndefined();
+  });
+
+  it('lets a selectable row win over a setting row', () => {
+    const wrapper = mount(PlinthListRow, {
+      props: { selectable: true, toggle: true, switchId: 'paused' },
+      slots: { default: 'Ticket' },
+    });
+
+    expect(wrapper.find('.plinth-list-row-checkbox').exists()).toBe(true);
+    expect(wrapper.find('[role="switch"]').exists()).toBe(false);
+    expect(wrapper.get('.plinth-list-row-title').attributes('id')).toBeUndefined();
+  });
 });
