@@ -24,7 +24,6 @@ import {
   PlinthListCard,
   PlinthListHeader,
   PlinthListRow,
-  PlinthSectionHeading,
   PlinthMenu,
   PlinthMenuGroup,
   PlinthMenuItem,
@@ -38,6 +37,7 @@ import {
   PlinthField,
   PlinthPill,
   PlinthPillRow,
+  PlinthSectionHeading,
   PlinthSectionMenu,
   PlinthSectionMenuItem,
   PlinthSheet,
@@ -81,7 +81,6 @@ import {
   PlinthIconButton as ReactIconButton,
   PlinthListCard as ReactListCard,
   PlinthListHeader as ReactListHeader,
-  PlinthSectionHeading as ReactSectionHeading,
   PlinthListRow as ReactListRow,
   PlinthMenu as ReactMenu,
   PlinthMenuGroup as ReactMenuGroup,
@@ -95,6 +94,7 @@ import {
   PlinthEmptyState as ReactEmptyState,
   PlinthPill as ReactPill,
   PlinthPillRow as ReactPillRow,
+  PlinthSectionHeading as ReactSectionHeading,
   PlinthSectionMenu as ReactSectionMenu,
   PlinthSectionMenuItem as ReactSectionMenuItem,
   PlinthSheet as ReactSheet,
@@ -191,8 +191,6 @@ import * as listCardStories from '../stories/components/ListCard.stories.ts';
 import { listCard, listCardRows, type ListCardArgs } from '../stories/components/list-card.ts';
 import * as listHeaderStories from '../stories/components/ListHeader.stories.ts';
 import { listHeader, type ListHeaderArgs } from '../stories/components/list-header.ts';
-import * as sectionHeadingStories from '../stories/components/SectionHeading.stories.ts';
-import { sectionHeading, type SectionHeadingArgs } from '../stories/components/section-heading.ts';
 import * as listRowStories from '../stories/components/ListRow.stories.ts';
 import { listRow, type ListRowArgs } from '../stories/components/list-row.ts';
 import * as menuStories from '../stories/components/Menu.stories.ts';
@@ -217,6 +215,8 @@ import {
 } from '../stories/components/page-header.ts';
 import * as pillRowStories from '../stories/components/PillRow.stories.ts';
 import { pill, pillRow, type PillArgs, type PillRowArgs } from '../stories/components/pill-row.ts';
+import * as sectionHeadingStories from '../stories/components/SectionHeading.stories.ts';
+import { sectionHeading, type SectionHeadingArgs } from '../stories/components/section-heading.ts';
 import * as sectionMenuStories from '../stories/components/SectionMenu.stories.ts';
 import {
   sectionMenu,
@@ -341,7 +341,6 @@ const reactComponents = new Map<Component, unknown>([
   [PlinthIconButton, ReactIconButton],
   [PlinthListCard, ReactListCard],
   [PlinthListHeader, ReactListHeader],
-  [PlinthSectionHeading, ReactSectionHeading],
   [PlinthListRow, ReactListRow],
   [PlinthMenu, ReactMenu],
   [PlinthMenuGroup, ReactMenuGroup],
@@ -352,6 +351,7 @@ const reactComponents = new Map<Component, unknown>([
   [PlinthEmptyState, ReactEmptyState],
   [PlinthPill, ReactPill],
   [PlinthPillRow, ReactPillRow],
+  [PlinthSectionHeading, ReactSectionHeading],
   [PlinthSectionMenu, ReactSectionMenu],
   [PlinthSectionMenuItem, ReactSectionMenuItem],
   [PlinthSheet, ReactSheet],

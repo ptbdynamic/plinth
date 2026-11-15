@@ -22,13 +22,18 @@
  * Variant: data-divider on the root draws a hairline (color.divider) under the heading, for a
  * settings page's look. Without it there is no line.
  *
+ * <div class="plinth-section-heading" data-divider>…</div>
+ *
  * Layout: on a phone the actions sit under the text, at the start; from 768px they sit on the
- * end edge, beside it. A long title or description wraps.
+ * end edge, beside it, while the text keeps at least --plinth-section-heading-text-min-width
+ * (240px), and move under it in a narrower container (a pane, a drawer). A long title or
+ * description wraps.
  *
  * Spacing: --plinth-section-heading-space-after (16px) separates the heading from its content.
- * --plinth-section-heading-space-before (40px) goes above a heading that follows other content,
- * or that opens a section following another, so sections stack evenly; the first one on the page
- * adds no space above itself.
+ * --plinth-section-heading-space-before (40px) goes above a heading that follows other content
+ * in the same parent, or that opens a <section> following another <section>, so sections stack
+ * evenly. A heading that is its parent's first child, such as the first section's, adds no space
+ * above itself.
  */
 
 @layer plinth {
@@ -43,7 +48,7 @@
   }
 
   .plinth-section-heading:not(:first-child),
-  :where(* + *) > .plinth-section-heading:first-child {
+  :where(section + section) > .plinth-section-heading:first-child {
     margin-block-start: var(--plinth-section-heading-space-before);
   }
 
@@ -84,18 +89,18 @@
 
   @media (min-width: 768px) {
     .plinth-section-heading {
-      flex-direction: row;
-      gap: var(--plinth-space-4);
+      flex-flow: row wrap;
+      gap: var(--plinth-space-3) var(--plinth-space-4);
       align-items: center;
     }
 
     .plinth-section-heading-text {
-      flex: 1 1 auto;
+      flex: 1 1 var(--plinth-section-heading-text-min-width);
     }
 
     .plinth-section-heading-actions {
-      flex: none;
-      justify-content: flex-end;
+      flex: 0 1 auto;
+      justify-content: flex-start;
     }
   }
 }

@@ -16,7 +16,8 @@ with one stack evenly down the page.
 Give it the section's **`heading`**, an `<h2>` unless **`heading-level`** says otherwise (h2 to
 h6), an optional **`description`** that says what the section holds, and the section's actions in
 the **`actions`** slot: a button or two, each with its own name. On a phone the actions sit under
-the text; from 768px they sit on the end edge. A long heading or description wraps.
+the text; from 768px they sit on the end edge, and move under the text when its container leaves
+it less than 240px (a pane, a drawer). A long heading or description wraps.
 
 ```blade example layout="stack"
 <x-plinth::section-heading heading="Connections" description="The services this workspace sends data to.">
@@ -48,10 +49,10 @@ The description and the actions are optional:
 
 To make a section a landmark region a screen reader can list, wrap it in a
 `<section aria-labelledby>` and give the heading the matching **`heading-id`**. A heading that
-follows other content, or opens a section that follows another, has
-`--plinth-section-heading-space-before` (40px) above it, so the sections stack evenly; the first
-on the page adds nothing above itself. `--plinth-section-heading-space-after` (16px) separates it
-from its content.
+follows other content in the same parent, or opens a `<section>` that follows another, has
+`--plinth-section-heading-space-before` (40px) above it, so the sections stack evenly; a heading
+that is its parent's first child, such as the first section's, adds nothing above itself.
+`--plinth-section-heading-space-after` (16px) separates it from its content.
 
 ```blade example layout="stack"
 <div>
@@ -89,7 +90,9 @@ Blade, Vue and React print exactly this markup, and the parity tests hold them t
 | `data-divider`     | the root  | present for a hairline under the heading       | absent  |
 
 The spacing is `--plinth-section-heading-space-before` (40px) and
-`--plinth-section-heading-space-after` (16px), component tokens a project can override.
+`--plinth-section-heading-space-after` (16px), and the least width the text keeps beside the
+actions is `--plinth-section-heading-text-min-width` (240px): component tokens a project can
+override.
 
 ## Props
 

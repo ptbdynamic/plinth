@@ -25,7 +25,6 @@ import PlinthIcon from './PlinthIcon.vue';
 import PlinthIconButton from './PlinthIconButton.vue';
 import PlinthListCard from './PlinthListCard.vue';
 import PlinthListHeader from './PlinthListHeader.vue';
-import PlinthSectionHeading from './PlinthSectionHeading.vue';
 import PlinthListRow from './PlinthListRow.vue';
 import PlinthMenu from './PlinthMenu.vue';
 import PlinthMenuGroup from './PlinthMenuGroup.vue';
@@ -39,6 +38,7 @@ import PlinthOneTimeCode from './PlinthOneTimeCode.vue';
 import PlinthPageHeader from './PlinthPageHeader.vue';
 import PlinthPill from './PlinthPill.vue';
 import PlinthPillRow from './PlinthPillRow.vue';
+import PlinthSectionHeading from './PlinthSectionHeading.vue';
 import PlinthSectionMenu from './PlinthSectionMenu.vue';
 import PlinthSectionMenuItem from './PlinthSectionMenuItem.vue';
 import PlinthSelect from './PlinthSelect.vue';
@@ -84,7 +84,6 @@ export {
   PlinthIconButton,
   PlinthListCard,
   PlinthListHeader,
-  PlinthSectionHeading,
   PlinthListRow,
   PlinthMenu,
   PlinthMenuGroup,
@@ -98,6 +97,7 @@ export {
   PlinthPageHeader,
   PlinthPill,
   PlinthPillRow,
+  PlinthSectionHeading,
   PlinthSectionMenu,
   PlinthSectionMenuItem,
   PlinthSelect,
@@ -220,7 +220,6 @@ export const Plinth: Plugin = {
     app.component('PlinthIconButton', PlinthIconButton);
     app.component('PlinthListCard', PlinthListCard);
     app.component('PlinthListHeader', PlinthListHeader);
-    app.component('PlinthSectionHeading', PlinthSectionHeading);
     app.component('PlinthListRow', PlinthListRow);
     app.component('PlinthMenu', PlinthMenu);
     app.component('PlinthMenuGroup', PlinthMenuGroup);
@@ -234,6 +233,7 @@ export const Plinth: Plugin = {
     app.component('PlinthPageHeader', PlinthPageHeader);
     app.component('PlinthPill', PlinthPill);
     app.component('PlinthPillRow', PlinthPillRow);
+    app.component('PlinthSectionHeading', PlinthSectionHeading);
     app.component('PlinthSectionMenu', PlinthSectionMenu);
     app.component('PlinthSectionMenuItem', PlinthSectionMenuItem);
     app.component('PlinthSelect', PlinthSelect);
