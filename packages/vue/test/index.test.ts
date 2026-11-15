@@ -9,6 +9,9 @@ import {
   PlinthAppShell,
   PlinthAvatar,
   PlinthBadge,
+  PlinthBreadcrumbs,
+  PlinthBreadcrumbsItem,
+  PlinthBreadcrumbsMore,
   PlinthButton,
   PlinthCallout,
   PlinthCheckbox,
@@ -74,6 +77,9 @@ describe('the Plinth plugin', () => {
     expect(app.component('PlinthAppShell')).toBe(PlinthAppShell);
     expect(app.component('PlinthAvatar')).toBe(PlinthAvatar);
     expect(app.component('PlinthBadge')).toBe(PlinthBadge);
+    expect(app.component('PlinthBreadcrumbs')).toBe(PlinthBreadcrumbs);
+    expect(app.component('PlinthBreadcrumbsItem')).toBe(PlinthBreadcrumbsItem);
+    expect(app.component('PlinthBreadcrumbsMore')).toBe(PlinthBreadcrumbsMore);
     expect(app.component('PlinthButton')).toBe(PlinthButton);
     expect(app.component('PlinthCallout')).toBe(PlinthCallout);
     expect(app.component('PlinthCheckbox')).toBe(PlinthCheckbox);

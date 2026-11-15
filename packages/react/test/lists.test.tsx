@@ -8,6 +8,7 @@ import * as vueDrawer from '../../vue/src/drawer.ts';
 import * as vueSwipe from '../../vue/src/swipe.ts';
 import * as vueHeading from '../../vue/src/heading.ts';
 import * as vuePageHeader from '../../vue/src/page-header.ts';
+import * as vueBreadcrumbs from '../../vue/src/breadcrumbs.ts';
 import * as vueListRow from '../../vue/src/list-row.ts';
 import * as vueMenu from '../../vue/src/menu.ts';
 import * as vueSheet from '../../vue/src/sheet.ts';
@@ -61,6 +62,8 @@ import {
   headingLevels,
   pageHeaderLevel,
   pageHeaderLevels,
+  breadcrumbsCollapse,
+  breadcrumbsCollapses,
   iconGlyph,
   iconGlyphs,
   iconNames,
@@ -115,6 +118,7 @@ describe('the shared lists', () => {
     expect(dataTableSortIcon).toBe(vueDataTable.dataTableSortIcon);
     expect(headingLevels).toEqual(vueHeading.headingLevels);
     expect(pageHeaderLevels).toEqual(vuePageHeader.pageHeaderLevels);
+    expect(breadcrumbsCollapses).toEqual(vueBreadcrumbs.breadcrumbsCollapses);
     expect(listRowChevron).toBe(vueListRow.listRowChevron);
     expect(statChevron).toBe(vueStat.statChevron);
     expect(menuItemTones).toEqual(vueMenu.menuItemTones);
@@ -167,6 +171,8 @@ describe('the shared lists', () => {
     expect(timelineHeadingLevel('h4')).toBe('h4');
     expect(pageHeaderLevel('h7')).toBe('h1');
     expect(pageHeaderLevel('h3')).toBe('h3');
+    expect(breadcrumbsCollapse('menu')).toBe('none');
+    expect(breadcrumbsCollapse('parent')).toBe('parent');
     expect(sheetSide('left')).toBe('end');
     expect(sheetSide('top')).toBe('top');
     expect(splitViewPane('side')).toBe('list');

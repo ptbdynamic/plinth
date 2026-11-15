@@ -5,6 +5,7 @@
  *
  * <header class="plinth-app-bar">
  *   <div class="plinth-app-bar-start">
+ *     <nav class="plinth-breadcrumbs" aria-label="Breadcrumb">…</nav>
  *     <button type="button" class="plinth-app-bar-search" commandfor="search"
  *       command="show-modal" aria-keyshortcuts="Control+K Meta+K">
  *       <span class="plinth-icon" data-size="sm" data-icon="search" aria-hidden="true"><svg>…</svg></span>
@@ -26,7 +27,10 @@
  * The root is a <header>. Outside <main>, as in the app shell, it is the page's banner landmark,
  * so a page has one app bar. Its parts, each printed only when it has content:
  * - the start: the search button, as wide as --plinth-app-bar-search-width (320px) at most and
- *   narrower when the bar is. It takes the rest of the bar, so the actions keep to the end.
+ *   narrower when the bar is. It takes the rest of the bar, so the actions keep to the end. The
+ *   page's breadcrumbs (breadcrumbs.css) may come before the search, var(--plinth-space-4) apart:
+ *   the trail keeps its own width, its labels cut with an ellipsis when the bar is short, and the
+ *   search takes what is left.
  * - the actions: icon buttons such as Notifications and Help, var(--plinth-space-2) apart. Each
  *   needs its own name (label). Two or three at most; put the rest in a menu.
  * - the account: the account's button or menu, usually an avatar in an icon button, after the
@@ -146,8 +150,19 @@
     .plinth-app-bar-start {
       display: flex;
       flex: 1 1 auto;
+      gap: var(--plinth-space-4);
       align-items: center;
       min-inline-size: 0;
+    }
+
+    /* The trail before the search keeps its width until the bar is short, then cuts its labels. */
+    .plinth-app-bar-start > .plinth-breadcrumbs {
+      flex: 0 1 auto;
+    }
+
+    .plinth-app-bar-start > .plinth-breadcrumbs + .plinth-app-bar-search {
+      flex: 1 1 0;
+      min-inline-size: var(--plinth-app-bar-search-min-width);
     }
 
     .plinth-app-bar-actions,

@@ -348,6 +348,18 @@ return [
             ],
         ],
 
+        'breadcrumbs' => [
+            'name' => 'Breadcrumbs',
+            'group' => 'Navigation',
+            'description' => 'Where a deep page sits, and a way back up: the pages above it, then the current one.',
+            'playground' => [
+                'template' => "<x-plinth::breadcrumbs{attributes}>\n    <x-plinth::breadcrumbs-item href=\"#\">Settings</x-plinth::breadcrumbs-item>\n    <x-plinth::breadcrumbs-item href=\"#\">Users &amp; roles</x-plinth::breadcrumbs-item>\n    <x-plinth::breadcrumbs-item current>Users</x-plinth::breadcrumbs-item>\n</x-plinth::breadcrumbs>",
+                'options' => [
+                    'collapse' => ['values' => ['none', 'parent'], 'default' => 'none'],
+                ],
+            ],
+        ],
+
         'page-header' => [
             'name' => 'Page header',
             'group' => 'Navigation',

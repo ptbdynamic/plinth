@@ -5,6 +5,9 @@ export { PlinthAppNavItem, type PlinthAppNavItemProps } from './PlinthAppNavItem
 export { PlinthAppShell, type PlinthAppShellProps } from './PlinthAppShell';
 export { PlinthAvatar, type PlinthAvatarProps } from './PlinthAvatar';
 export { PlinthBadge, type PlinthBadgeProps } from './PlinthBadge';
+export { PlinthBreadcrumbs, type PlinthBreadcrumbsProps } from './PlinthBreadcrumbs';
+export { PlinthBreadcrumbsItem, type PlinthBreadcrumbsItemProps } from './PlinthBreadcrumbsItem';
+export { PlinthBreadcrumbsMore, type PlinthBreadcrumbsMoreProps } from './PlinthBreadcrumbsMore';
 export { PlinthButton, type PlinthButtonProps } from './PlinthButton';
 export { PlinthCallout, type PlinthCalloutProps } from './PlinthCallout';
 export { PlinthCheckbox, type PlinthCheckboxProps } from './PlinthCheckbox';
@@ -115,6 +118,7 @@ export {
 } from './one-time-code';
 export { meterNumber, meterRange, meterTone, type MeterNumbers } from './meter';
 export { MenuIdContext, menuItemTone, menuItemTones, type MenuItemTone } from './menu';
+export { breadcrumbsCollapse, breadcrumbsCollapses, type BreadcrumbsCollapse } from './breadcrumbs';
 export { pageHeaderLevel, pageHeaderLevels, type PageHeaderLevel } from './page-header';
 export {
   drawerCloseIcon,
