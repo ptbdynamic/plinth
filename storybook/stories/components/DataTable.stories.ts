@@ -258,3 +258,8 @@ export const FramedWide: Story = {
 export const RightToLeft: Story = {
   render: () => `<div dir="rtl">${dataTable({ ...meta.args, ...Sorted.args })}</div>`,
 };
+
+/** The framed table in right-to-left text: the edge padding and the actions follow the text. */
+export const FramedRightToLeft: Story = {
+  render: () => `<div dir="rtl">${dataTable({ ...meta.args, ...Sorted.args, framed: true })}</div>`,
+};

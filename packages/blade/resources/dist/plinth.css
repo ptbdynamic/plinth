@@ -2453,8 +2453,11 @@
  * --plinth-data-table-head-* tokens, so a brand can pick a condensed or mono label face. The
  * first and last cells take --plinth-data-table-frame-edge (20px) of inline padding, the row
  * dividers run to the frame's edges, and an actions cell that ends its row holds its actions to
- * the end of the row (and the last column header follows). On a phone the frame steps aside: the
- * rows are already cards. The table stays the root: the frame takes no attributes.
+ * the end of the row (and the last column header follows, while a row ends in actions). On a
+ * phone the frame steps aside: the rows are already cards. The table stays the root: the frame
+ * takes no attributes. A frame that scrolls is reached with Tab through the table's own controls
+ * (sort buttons, actions); a wide read-only table, with none, can't be scrolled by keyboard in
+ * every browser, so keep such a table narrow enough for its frame.
  */
 
 @layer plinth {
@@ -2849,7 +2852,12 @@
       margin-block-end: 0;
     }
 
-    .plinth-data-table-frame .plinth-data-table-column {
+    /* Child chains, so a table nested in a framed table's cell keeps its own look. */
+    .plinth-data-table-frame
+      > .plinth-data-table
+      > .plinth-data-table-head
+      > .plinth-data-table-head-row
+      > .plinth-data-table-column {
       font-family: var(--plinth-data-table-head-font-family);
       font-size: var(--plinth-data-table-head-font-size);
       font-weight: var(--plinth-data-table-head-font-weight);
@@ -2860,30 +2868,76 @@
     }
 
     /* A button resets its case and spacing; a sort label takes the band's. */
-    .plinth-data-table-frame .plinth-data-table-sort {
+    .plinth-data-table-frame
+      > .plinth-data-table
+      > .plinth-data-table-head
+      > .plinth-data-table-head-row
+      > .plinth-data-table-column
+      > .plinth-data-table-sort {
       text-transform: inherit;
       letter-spacing: inherit;
     }
 
-    .plinth-data-table-frame .plinth-data-table-head-row > .plinth-data-table-column:first-child,
-    .plinth-data-table-frame .plinth-data-table-row > .plinth-data-table-cell:first-child {
+    /* The band is as tall as the button and the frame clips: the ring goes inside. */
+    .plinth-data-table-frame
+      > .plinth-data-table
+      > .plinth-data-table-head
+      > .plinth-data-table-head-row
+      > .plinth-data-table-column
+      > .plinth-data-table-sort:focus-visible {
+      outline-offset: var(--plinth-focus-ring-offset-inset);
+    }
+
+    .plinth-data-table-frame
+      > .plinth-data-table
+      > .plinth-data-table-head
+      > .plinth-data-table-head-row
+      > .plinth-data-table-column:first-child,
+    .plinth-data-table-frame
+      > .plinth-data-table
+      > .plinth-data-table-body
+      > .plinth-data-table-row
+      > .plinth-data-table-cell:first-child {
       padding-inline-start: var(--plinth-data-table-frame-edge);
     }
 
-    .plinth-data-table-frame .plinth-data-table-head-row > .plinth-data-table-column:last-child,
-    .plinth-data-table-frame .plinth-data-table-row > .plinth-data-table-cell:last-child {
+    .plinth-data-table-frame
+      > .plinth-data-table
+      > .plinth-data-table-head
+      > .plinth-data-table-head-row
+      > .plinth-data-table-column:last-child,
+    .plinth-data-table-frame
+      > .plinth-data-table
+      > .plinth-data-table-body
+      > .plinth-data-table-row
+      > .plinth-data-table-cell:last-child {
       padding-inline-end: var(--plinth-data-table-frame-edge);
     }
 
-    .plinth-data-table-frame .plinth-data-table-empty-cell {
+    .plinth-data-table-frame
+      > .plinth-data-table
+      > .plinth-data-table-body
+      > .plinth-data-table-empty
+      > .plinth-data-table-empty-cell {
       padding-inline: var(--plinth-data-table-frame-edge);
     }
 
-    /* The actions held to the end of the row, and their column header with them. */
-    .plinth-data-table-frame .plinth-data-table-cell[data-kind='actions']:last-child,
+    /*
+     * The actions held to the end of the row, and their column header with them while a row
+     * ends in actions (an empty table's last header stays at the start).
+     */
     .plinth-data-table-frame
-      .plinth-data-table:has(.plinth-data-table-cell[data-kind='actions']:last-child)
-      .plinth-data-table-column:last-child {
+      > .plinth-data-table
+      > .plinth-data-table-body
+      > .plinth-data-table-row
+      > .plinth-data-table-cell[data-kind='actions']:last-child,
+    .plinth-data-table-frame
+      > .plinth-data-table:has(
+        > .plinth-data-table-body > .plinth-data-table-row > [data-kind='actions']:last-child
+      )
+      > .plinth-data-table-head
+      > .plinth-data-table-head-row
+      > .plinth-data-table-column:last-child {
       text-align: end;
     }
   }

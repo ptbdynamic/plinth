@@ -69,7 +69,8 @@ From 768px up the table sits in a frame (a raised surface, a hairline border and
 radius), which is also its scrolling container, so a wide table scrolls inside it. The head row
 becomes a header band on a sunken surface, its labels small, uppercase and letter-spaced. The
 first and last cells take wider padding, the row dividers run to the frame's edges, and the
-actions cell, when it ends the row, holds its buttons to the end. On a phone the frame steps
+actions cell, when it ends the row, holds its buttons to the end, and the last column header
+with it (while the table has rows). On a phone the frame steps
 aside: the rows are already cards.
 
 ```blade example layout="stack"
@@ -172,10 +173,10 @@ buttons.
 ## Markup contract
 
 - **`plinth-data-table`**, the root, is the `<table>`; a project's classes and attributes land on
-  it, framed or not.
+  it, framed or not. The **caption** is optional: without one, name the table with `aria-label`
+  or `aria-labelledby`.
 - **`plinth-data-table-frame`**, a `<div>` around the table when it is framed. It takes no
-  attributes: to place a framed table, wrap it in your own element. The **caption** is optional: without one, name the table with `aria-label` or
-  `aria-labelledby`.
+  attributes: to place a framed table, wrap it in your own element.
 - **The explicit roles** (`table`, `rowgroup`, `row`, `columnheader`, `cell`) are part of the
   contract. Some browsers, Safari in particular, drop a table's semantics once its rows stop
   displaying as table rows, which is what the phone's cards do.
@@ -297,7 +298,9 @@ import {
 - A hidden-on-phone column is hidden on its header and every cell, so headers and cells still
   match.
 - A framed table scrolls inside its frame from 768px up; the frame changes nothing for a screen
-  reader.
+  reader. Keyboard users scroll it by tabbing through the table's sort buttons and actions, so
+  keep a wide read-only table (with neither) narrow enough for its frame: not every browser lets
+  the keyboard scroll a frame with nothing to focus in it.
 - The minimum row height is `--plinth-data-table-row-height` (44px) in the table layout.
 - Checked with axe in light and dark at 390, 768 and 1440px on every pull request.
 
