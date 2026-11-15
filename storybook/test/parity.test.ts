@@ -311,8 +311,8 @@ import {
  * Each component also has a case with extra attributes, as a project adds them (a class, an id,
  * data-* and aria-*), so attribute forwarding cannot drift between the layers either, and a case
  * with an attribute that clashes with one the component sets on its root, where the project's
- * value wins (docs/adr/0002). The list card, code block, app shell, toolbar and timeline event set
- * no attribute on their root but the class (the code block's id is a prop), so they have no
+ * value wins (docs/adr/0002). The list card, code block, toolbar and timeline event set no
+ * attribute on their root but the class (the code block's id is a prop), so they have no
  * clashing case.
  *
  * React takes the same props as Vue (docs/adr/0006), so a case's React side is its Vue side
@@ -1339,7 +1339,24 @@ const cases: ParityCase[] = [
     { main: '<p>Page</p>' },
     { class: 'is-wide', id: 'app', 'data-testid': 'shell', 'aria-busy': 'true' },
   ),
+  appShellCase(
+    'App shell/with a clashing attribute',
+    { section: '<nav>Section</nav>', sectionClosed: true, main: '<p>Page</p>' },
+    { 'data-section': 'open' },
+  ),
   appShellCase('App shell/blank nav and bar', { nav: ' ', bar: ' ', main: '<p>Page</p>' }),
+  appShellCase('App shell/blank title and id', {
+    section: '<nav aria-label="Settings">Links</nav>',
+    sectionTitle: ' ',
+    sectionId: ' ',
+    main: '<p>Page</p>',
+  }),
+  appShellCase('App shell/blank section', {
+    section: ' ',
+    sectionTitle: 'Settings',
+    sectionId: 'settings',
+    main: '<p>Page</p>',
+  }),
   ...storyArgs<AppBarArgs>(appBarStories).map(([story, args]) =>
     appBarCase(`App bar/${story}`, args),
   ),
@@ -3091,8 +3108,14 @@ function navListCase(story: string, args: NavListArgs, attributes: Attributes = 
 
 /** The shell's parity; the nav, the bar and the page are markup, passed in as slots. */
 function appShellCase(story: string, args: AppShellArgs, attributes: Attributes = {}): ParityCase {
+  const props = {
+    ...(args.sectionTitle !== undefined ? { sectionTitle: args.sectionTitle } : {}),
+    ...(args.sectionId !== undefined ? { sectionId: args.sectionId } : {}),
+    ...(args.sectionClosed !== undefined ? { sectionClosed: args.sectionClosed } : {}),
+  };
   const named = {
     ...(args.nav !== undefined ? { nav: args.nav } : {}),
+    ...(args.section !== undefined ? { section: args.section } : {}),
     ...(args.bar !== undefined ? { bar: args.bar } : {}),
   };
   return {
@@ -3100,12 +3123,12 @@ function appShellCase(story: string, args: AppShellArgs, attributes: Attributes 
     markup: appShell(args, attributes),
     vue: {
       component: PlinthAppShell,
-      props: { ...attributes },
+      props: { ...props, ...attributes },
       slot: args.main,
       html: true,
       named,
     },
-    blade: { component: 'app-shell', props: {}, attributes, slot: args.main, named },
+    blade: { component: 'app-shell', props, attributes, slot: args.main, named },
   };
 }
 
@@ -4138,8 +4161,15 @@ describe('parity with the stories', () => {
       'App shell/WithoutNav',
       'App shell/PageOnly',
       'App shell/LongPage',
+      'App shell/Section',
+      'App shell/SectionWithSidebar',
+      'App shell/SectionClosed',
+      'App shell/SectionWithoutTitle',
       'App shell/with extra attributes',
+      'App shell/with a clashing attribute',
       'App shell/blank nav and bar',
+      'App shell/blank title and id',
+      'App shell/blank section',
       'App bar/Default',
       'App bar/SearchLabel',
       'App bar/WithoutShortcut',

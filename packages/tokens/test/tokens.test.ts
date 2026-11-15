@@ -116,6 +116,7 @@ describe('tiers', () => {
       'app-bar.height',
       'app-bar.search-width',
       'app-bar.search-min-width',
+      'app-shell.section-width',
       'split-view.secondary-width',
       'split-view.list-width',
       'menu.min-width',

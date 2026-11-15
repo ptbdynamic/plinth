@@ -5,20 +5,56 @@ import { classNames, hasContent } from './markup';
 interface AppShellOptions {
   /** The app nav, on the start side, as tall as the screen (Vue's `nav` slot). */
   nav?: ReactNode;
+  /** The section column's navigation, beside the nav from 1280px (Vue's `section` slot). */
+  section?: ReactNode;
+  /** The section's title, on a row as tall as the app bar, at the top of its column. */
+  sectionTitle?: string;
+  /** The section column's id, for aria-controls; its title takes "<id>-title". */
+  sectionId?: string;
+  /** Collapses the section column: data-section="closed". */
+  sectionClosed?: boolean;
   /** The app bar, above the content, beside the nav (Vue's `bar` slot). */
   bar?: ReactNode;
 }
 
-/** The app's frame: the nav, the bar and the page in a `<main>` (`children`). */
+/** The app's frame: the nav, the section column, the bar and the page in a `<main>` (`children`). */
 export type PlinthAppShellProps = AppShellOptions &
   Omit<ComponentProps<'div'>, keyof AppShellOptions>;
 
-export function PlinthAppShell({ nav, bar, className, children, ...rest }: PlinthAppShellProps) {
+export function PlinthAppShell({
+  nav,
+  section,
+  sectionTitle,
+  sectionId,
+  sectionClosed = false,
+  bar,
+  className,
+  children,
+  ...rest
+}: PlinthAppShellProps) {
+  // A blank title or id counts as missing, as Blade's filled() decides.
+  const id = sectionId?.trim() || undefined;
   // The project's own attributes come after Plinth's and win, as in Blade and Vue; its class is
   // added to Plinth's.
   return (
-    <div {...rest} className={classNames('plinth-app-shell', className)}>
+    <div
+      data-section={sectionClosed ? 'closed' : undefined}
+      {...rest}
+      className={classNames('plinth-app-shell', className)}
+    >
       {hasContent(nav) ? <div className="plinth-app-shell-nav">{nav}</div> : null}
+      {hasContent(section) ? (
+        <div className="plinth-app-shell-section" id={id}>
+          {sectionTitle?.trim() ? (
+            <div className="plinth-app-shell-section-header">
+              <p className="plinth-app-shell-section-title" id={id ? `${id}-title` : undefined}>
+                {sectionTitle}
+              </p>
+            </div>
+          ) : null}
+          <div className="plinth-app-shell-section-body">{section}</div>
+        </div>
+      ) : null}
       {hasContent(bar) ? <div className="plinth-app-shell-bar">{bar}</div> : null}
       <main className="plinth-app-shell-main">{children}</main>
     </div>
