@@ -16,11 +16,13 @@ final readonly class Playground
      * @param  array<string, Option>  $options  each value is printed as name="value", or as the option's print says;
      *                                          its content fills the template's other placeholders
      * @param  list<string>  $states
+     * @param  string|null  $layout  how the stage lays the component out, as an example's layout does (stack, grid)
      */
     public function __construct(
         public string $template,
         public array $options,
         public array $states,
+        public ?string $layout = null,
     ) {}
 
     /**

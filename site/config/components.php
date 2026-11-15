@@ -368,6 +368,7 @@ return [
             'description' => 'A value against a limit: a label, the numbers, a bar and a tone that changes near the limit.',
             'playground' => [
                 'template' => '<x-plinth::meter label="Spend this month" :max="150" :low="105" :high="135" :optimum="0"{attributes} />',
+                'layout' => 'stack',
                 'options' => [
                     'level' => [
                         'values' => ['under', 'near', 'at', 'over'],

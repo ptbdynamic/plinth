@@ -19,7 +19,7 @@ otherwise). The **value text** is the numbers in words, formatted and translated
 units and all: _€38 of €150_, _640 of 1,000 runs_, _7.5 GB of 10 GB_. Screen readers hear it as
 the meter's value. The optional **description** says what happens at the limit.
 
-```blade example
+```blade example layout="stack"
 <x-plinth::meter label="Spend this month" :value="38" :max="150" value-text="€38 of €150" description="Runs pause at €150." />
 ```
 
@@ -33,7 +33,7 @@ as the browser chooses the meter's region. For a cap, the optimum is 0: up to `l
 neutral, past it warning, past `high` danger. Past `max` the bar is full and a cap's meter is
 danger, even without `high`; say by how much in the words.
 
-```blade example
+```blade example layout="stack"
 <x-plinth::meter label="Spend this month" :value="38" :max="150" :low="105" :high="135" :optimum="0" value-text="€38 of €150" description="Runs pause at €150." />
 <x-plinth::meter label="Spend this month" :value="120" :max="150" :low="105" :high="135" :optimum="0" value-text="€120 of €150" description="Runs pause at €150." />
 <x-plinth::meter label="Spend this month" :value="142" :max="150" :low="105" :high="135" :optimum="0" value-text="€142 of €150" description="Runs pause at €150, in €8." />
@@ -58,7 +58,7 @@ The **tone** prop (neutral, success, warning, danger) sets the tone whatever the
 quota met is a success, a storage limit the app treats as a warning. It colours the bar and the
 description, and puts the tone's icon before the description.
 
-```blade example
+```blade example layout="stack"
 <x-plinth::meter label="Checks passed" :value="46" :max="50" value-text="46 of 50" description="Above the target of 45." tone="success" />
 <x-plinth::meter label="Storage" :value="7.5" :max="10" value-text="7.5 GB of 10 GB" description="Old exports are removed after 30 days." tone="warning" />
 ```
