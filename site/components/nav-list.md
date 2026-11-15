@@ -2,8 +2,9 @@
 
 A vertical list of links for a page's own navigation, such as an inbox's folders (_Open 12_,
 _Pending 3_, _Solved_, _Spam_) and its saved views under a heading (_Views_: _Assigned to me 5_,
-_Unassigned 4_). Each item has a label and an optional count, and the current one is marked. It
-fills its column, such as the [split view](split-view.md)'s secondary column.
+_Unassigned 4_), or a settings column in groups (_Account_, _Workspace_). Each item has a label,
+an optional icon and an optional count, and the current one is marked. It fills its column, such
+as the [split view](split-view.md)'s secondary column.
 
 ## When not to use it
 
@@ -38,7 +39,67 @@ plain `<a>`, which is no link and can't be reached with Tab.
 ```
 
 Items always go in a group; a list with no headings is one group without one. The heading is a
-real heading, so a screen reader can jump to it: pick the level that fits the page's outline.
+real heading, so a screen reader can jump to it: pick the level that fits the page's outline. It
+reads as a heading, not as one more item: smaller than the items, uppercase, letter-spaced and a
+step quieter, with a wider space above each group after the first.
+
+## Icons
+
+Put a 16px icon before an item's label in its **`icon`** slot (a prop that takes a node in
+React), such as in a long settings column, where the icons help the eye find its place. The icon
+is decorative: the label names the link. Use an SVG that draws with `currentColor`, or the
+[icon](icon.md) at `size="sm"`, so it takes the item's colour, the accent on the current item. In
+a list with icons, give every item one, so the labels line up.
+
+```blade example
+<x-plinth::nav-list label="Settings" style="inline-size: 15rem">
+    <x-plinth::nav-list-group heading="Account">
+        <x-plinth::nav-list-item href="#" current>
+            <x-slot:icon><x-plinth::icon size="sm"><x-site.glyph name="user" /></x-plinth::icon></x-slot:icon>
+            Profile
+        </x-plinth::nav-list-item>
+        <x-plinth::nav-list-item href="#">
+            <x-slot:icon><x-plinth::icon size="sm"><x-site.glyph name="sliders" /></x-plinth::icon></x-slot:icon>
+            Preferences
+        </x-plinth::nav-list-item>
+        <x-plinth::nav-list-item href="#">
+            <x-slot:icon><x-plinth::icon size="sm"><x-site.glyph name="bell" /></x-plinth::icon></x-slot:icon>
+            Notifications
+        </x-plinth::nav-list-item>
+    </x-plinth::nav-list-group>
+    <x-plinth::nav-list-group heading="Workspace">
+        <x-plinth::nav-list-item href="#">
+            <x-slot:icon><x-plinth::icon size="sm"><x-site.glyph name="layers" /></x-plinth::icon></x-slot:icon>
+            General
+        </x-plinth::nav-list-item>
+        <x-plinth::nav-list-item href="#" count="8">
+            <x-slot:icon><x-plinth::icon size="sm"><x-site.glyph name="user" /></x-plinth::icon></x-slot:icon>
+            Members
+        </x-plinth::nav-list-item>
+        <x-plinth::nav-list-item href="#">
+            <x-slot:icon><x-plinth::icon size="sm"><x-site.glyph name="clock" /></x-plinth::icon></x-slot:icon>
+            Audit log
+        </x-plinth::nav-list-item>
+    </x-plinth::nav-list-group>
+</x-plinth::nav-list>
+```
+
+## Tokens
+
+The group heading's look is a set of component tokens, so a brand can pick its own label face,
+such as a condensed one, without forking the component:
+
+| Token                                   | Default               |
+| --------------------------------------- | --------------------- |
+| `--plinth-nav-list-heading-font-family` | the body face         |
+| `--plinth-nav-list-heading-font-size`   | `font-size-xs` (12px) |
+| `--plinth-nav-list-heading-font-weight` | `font-weight-medium`  |
+| `--plinth-nav-list-heading-tracking`    | `font-tracking-wide`  |
+| `--plinth-nav-list-heading-color`       | `color-text-subtle`   |
+| `--plinth-nav-list-group-gap`           | `space-6` (24px)      |
+
+A brand that wants no capitals sets `text-transform: none` on `.plinth-nav-list-heading` in its
+own CSS, outside `@layer plinth`.
 
 ## Counts
 
@@ -107,6 +168,7 @@ Blade, Vue and React print exactly this markup, and the parity tests hold them t
 | `plinth-nav-list-group`   | `<div>`          | a group, its own component            |
 | `plinth-nav-list-heading` | `<h2>` to `<h6>` | the group's optional heading          |
 | `plinth-nav-list-item`    | `<a>`            | an item, its own component            |
+| `plinth-nav-list-icon`    | `<span>`         | the optional icon, `aria-hidden`      |
 | `plinth-nav-list-label`   | `<span>`         | the item's label, its accessible name |
 | `plinth-nav-list-count`   | `<span>`         | the optional count, on the end edge   |
 
@@ -133,6 +195,7 @@ same names in every layer; React takes the Vue props, with the slot as `children
 | item      | href          | `href="/inbox/open"`             | `href="/inbox/open"`         | `href="/inbox/open"` | none    |
 | item      | count         | `count="12"` or `:count="$open"` | `:count="12"`                | `count={12}`         | none    |
 | item      | current       | `current` or `:current="$on"`    | `current` or `:current="on"` | `current={on}`       | off     |
+| item      | icon          | `<x-slot:icon>`                  | the `icon` slot              | `icon={<svg />}`     | none    |
 | item      | label         | the slot                         | the default slot             | `children`           | none    |
 
 In Blade, `heading-level` takes the string or the `HeadingLevel` enum.
@@ -173,7 +236,8 @@ import { PlinthNavList, PlinthNavListGroup, PlinthNavListItem } from '@ptbdynami
 
 - The nav list is a named `<nav>` landmark, and the current item says so (`aria-current="page"`).
 - Group headings are real headings, so they can be reached from a screen reader's list of
-  headings; a count is read after the label (_Open 12_).
+  headings; a count is read after the label (_Open 12_). An item's icon is hidden from
+  assistive technology, so the label alone names the link.
 - The current item has a 2px accent edge and a heavier label as well as its tint, so colour is not
   its only cue; in forced colours it takes the system highlight.
 - Every item is at least 40px tall, and shows the focus ring on `:focus-visible`, inside its row

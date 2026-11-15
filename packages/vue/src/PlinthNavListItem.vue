@@ -1,6 +1,14 @@
 <script setup lang="ts">
 // Markup contract: packages/css/src/components/nav-list.css
-import { computed } from 'vue';
+import { computed, useSlots } from 'vue';
+import { hasContent } from './slots';
+
+defineSlots<{
+  /** The link's label. */
+  default?: () => unknown;
+  /** A decorative icon before the label. */
+  icon?: () => unknown;
+}>();
 
 const props = withDefaults(
   defineProps<{
@@ -14,6 +22,7 @@ const props = withDefaults(
   { href: undefined, count: undefined, current: false },
 );
 
+const slots = useSlots();
 // Missing or blank prints no count, as Blade's filled() decides.
 const hasCount = computed(() => props.count != null && String(props.count).trim() !== '');
 </script>
@@ -24,6 +33,9 @@ const hasCount = computed(() => props.count != null && String(props.count).trim(
     :href="href?.trim() ? href : undefined"
     :aria-current="current ? 'page' : undefined"
   >
+    <span v-if="hasContent(slots.icon?.())" class="plinth-nav-list-icon" aria-hidden="true"
+      ><slot name="icon"
+    /></span>
     <span class="plinth-nav-list-label"><slot /></span>
     <span v-if="hasCount" class="plinth-nav-list-count">{{ count }}</span>
   </a>

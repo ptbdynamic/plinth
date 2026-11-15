@@ -7,6 +7,7 @@ import {
   sampleNoTicket,
   sampleTickets,
 } from './inbox.ts';
+import { sampleIcons } from './icons.ts';
 import { navList, type NavListArgs, type NavListItemArgs } from './nav-list.ts';
 import { sectionMenu } from './section-menu.ts';
 import { splitView } from './split-view.ts';
@@ -43,7 +44,7 @@ const meta = {
     docs: {
       description: {
         component:
-          "A vertical list of links with counts and group headings, for a page's own navigation, such as an inbox's folders and views. Name it with `label`, put the items in groups (a heading is optional), and set `current` on the item of the view being shown: it takes a tint, an accent edge and a heavier label. It fills its column; the split view's secondary column shows it from 1280px, and below that the app shows the same items as a section menu under the page header.",
+          "A vertical list of links with counts and group headings, for a page's own navigation, such as an inbox's folders and views or a settings column. Name it with `label`, put the items in groups (a heading is optional; it is small, uppercase and quieter than the items, so it reads as a heading), give items an optional decorative `icon` before the label, and set `current` on the item of the view being shown: it takes a tint, an accent edge and a heavier label. It fills its column; the split view's secondary column shows it from 1280px, and below that the app shows the same items as a section menu under the page header.",
       },
     },
   },
@@ -66,6 +67,53 @@ export const WithoutHeadings: Story = {
           item('Notifications'),
           item('Security'),
           item('Billing'),
+        ],
+      },
+    ],
+  },
+};
+
+/**
+ * A settings column: four groups under headings that read as headings (small, uppercase,
+ * letter-spaced and quieter than the items), and an icon before each label.
+ */
+export const WithIcons: Story = {
+  args: {
+    label: 'Settings',
+    groups: [
+      {
+        heading: 'Account',
+        items: [
+          item('Profile', { icon: sampleIcons.user, current: true }),
+          item('Preferences', { icon: sampleIcons.settings }),
+          item('Notifications', { icon: sampleIcons.bell }),
+          item('Security', { icon: sampleIcons.alert }),
+        ],
+      },
+      {
+        heading: 'Workspace',
+        items: [
+          item('General', { icon: sampleIcons.globe }),
+          item('Members', { icon: sampleIcons.user, count: 8 }),
+          item('Billing', { icon: sampleIcons.file }),
+          item('Integrations', { icon: sampleIcons.copy }),
+        ],
+      },
+      {
+        heading: 'Administration',
+        items: [
+          item('Audit log', { icon: sampleIcons.clock }),
+          item('Feature flags', { icon: sampleIcons.flag }),
+          item('Support access', { icon: sampleIcons.support }),
+        ],
+      },
+      {
+        heading: 'Other workspaces',
+        items: [
+          item('Northwind', { icon: sampleIcons.inbox }),
+          item('Riverside', { icon: sampleIcons.inbox }),
+          item('Harbour', { icon: sampleIcons.inbox }),
+          item('Help', { icon: sampleIcons.help }),
         ],
       },
     ],

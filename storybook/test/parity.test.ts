@@ -1120,6 +1120,13 @@ const cases: ParityCase[] = [
   navListItemCase('Nav list item/Current', { ...navListItemDefaults, current: true }),
   navListItemCase('Nav list item/WithCount', { ...navListItemDefaults, count: 12 }),
   navListItemCase('Nav list item/ZeroCount', { ...navListItemDefaults, count: 0 }),
+  navListItemCase('Nav list item/WithIcon', {
+    ...navListItemDefaults,
+    icon: sampleIcons.inbox,
+    count: 12,
+    current: true,
+  }),
+  navListItemCase('Nav list item/blank icon', { ...navListItemDefaults, icon: '  ' }),
   navListItemCase('Nav list item/blank href and count', {
     ...navListItemDefaults,
     href: ' ',
@@ -2565,6 +2572,7 @@ function navListItemCase(
     ...(args.count !== undefined ? { count: args.count } : {}),
     current: args.current,
   };
+  const named: Record<string, string> = args.icon ? { icon: args.icon } : {};
   return {
     story,
     markup: navListItem(args, attributes),
@@ -2573,8 +2581,9 @@ function navListItemCase(
       props: { ...props, ...attributes },
       slot: escape(args.label),
       html: true,
+      named,
     },
-    blade: { component: 'nav-list-item', props, attributes, slot: escape(args.label) },
+    blade: { component: 'nav-list-item', props, attributes, slot: escape(args.label), named },
   };
 }
 
@@ -3553,6 +3562,7 @@ describe('parity with the stories', () => {
       'App nav item/with a clashing attribute',
       'Nav list/Default',
       'Nav list/WithoutHeadings',
+      'Nav list/WithIcons',
       'Nav list/NoneCurrent',
       'Nav list/WithCounts',
       'Nav list/LongLabels',
@@ -3571,6 +3581,8 @@ describe('parity with the stories', () => {
       'Nav list item/Current',
       'Nav list item/WithCount',
       'Nav list item/ZeroCount',
+      'Nav list item/WithIcon',
+      'Nav list item/blank icon',
       'Nav list item/blank href and count',
       'Nav list item/escaped text',
       'Nav list item/with extra attributes',

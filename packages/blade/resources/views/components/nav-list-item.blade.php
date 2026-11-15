@@ -9,6 +9,9 @@
     'href' => filled($href) ? $href : null,
     'aria-current' => $current ? 'page' : null,
 ], fn ($value) => $value !== null)) }}>
+    @if (isset($icon) && $icon->hasActualContent())
+        <span class="plinth-nav-list-icon" aria-hidden="true">{{ $icon }}</span>
+    @endif
     <span class="plinth-nav-list-label">{{ $slot }}</span>
     @if (filled($count))
         <span class="plinth-nav-list-count">{{ $count }}</span>

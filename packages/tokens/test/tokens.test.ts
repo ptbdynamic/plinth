@@ -115,6 +115,12 @@ describe('tiers', () => {
       'text-field.trailing-size',
       'switch.width',
       'switch.height',
+      'nav-list.group-gap',
+      'nav-list.heading-font-family',
+      'nav-list.heading-font-size',
+      'nav-list.heading-font-weight',
+      'nav-list.heading-tracking',
+      'nav-list.heading-color',
       ...['neutral', 'info', 'success', 'warning', 'danger'].flatMap((tone) => [
         `callout.${tone}-surface`,
         `callout.${tone}-border`,
@@ -180,8 +186,9 @@ describe('tiers', () => {
     expect(token('ref.font.family.mono').value).toMatch(/^'Geist Mono Variable', 'Geist Mono'/);
   });
 
-  it('has letter spacing for headings', () => {
+  it('has letter spacing for headings, and for small uppercase labels', () => {
     expect(token('font.tracking.tight').value).toBe('-0.02em');
+    expect(token('font.tracking.wide').value).toBe('0.04em');
   });
 
   it('has a type scale from 12 to 36 px, and display sizes of 48 and 64 px for marketing pages', () => {

@@ -125,6 +125,7 @@
     --plinth-ref-font-leading-125: 1.25;
     --plinth-ref-font-leading-150: 1.5;
     --plinth-ref-font-tracking-0: 0;
+    --plinth-ref-font-tracking-4: 0.04em;
     --plinth-ref-font-tracking-neg-1: -0.01em;
     --plinth-ref-font-tracking-neg-2: -0.02em;
     --plinth-ref-font-tracking-neg-4: -0.04em;
@@ -181,6 +182,7 @@
     --plinth-font-tracking-snug: var(--plinth-ref-font-tracking-neg-1);
     --plinth-font-tracking-tight: var(--plinth-ref-font-tracking-neg-2);
     --plinth-font-tracking-tighter: var(--plinth-ref-font-tracking-neg-4);
+    --plinth-font-tracking-wide: var(--plinth-ref-font-tracking-4);
     --plinth-duration-fast: var(--plinth-ref-duration-120);
     --plinth-duration-normal: var(--plinth-ref-duration-200);
     --plinth-duration-slow: var(--plinth-ref-duration-320);
@@ -244,6 +246,12 @@
     --plinth-text-field-trailing-size: var(--plinth-control-md);
     --plinth-switch-width: var(--plinth-control-md);
     --plinth-switch-height: var(--plinth-size-icon-md);
+    --plinth-nav-list-group-gap: var(--plinth-space-6);
+    --plinth-nav-list-heading-font-family: var(--plinth-font-family-body);
+    --plinth-nav-list-heading-font-size: var(--plinth-font-size-xs);
+    --plinth-nav-list-heading-font-weight: var(--plinth-font-weight-medium);
+    --plinth-nav-list-heading-tracking: var(--plinth-font-tracking-wide);
+    --plinth-nav-list-heading-color: var(--plinth-color-text-subtle);
   }
 
   :root,
@@ -4505,6 +4513,7 @@
  *   <div class="plinth-nav-list-group">
  *     <h2 class="plinth-nav-list-heading">Views</h2>
  *     <a class="plinth-nav-list-item" href="/inbox/mine">
+ *       <span class="plinth-nav-list-icon" aria-hidden="true"><svg>…</svg></span>
  *       <span class="plinth-nav-list-label">Assigned to me</span>
  *       <span class="plinth-nav-list-count">5</span>
  *     </a>
@@ -4516,13 +4525,22 @@
  * - groups (<x-plinth::nav-list-group>, PlinthNavListGroup): a run of items with an optional
  *   heading, an <h2> by default (heading-level h2 to h6 in Blade, headingLevel in Vue and React;
  *   pick the level that fits the page). The heading is a real heading, so a screen reader can
- *   jump to it; it is small muted text, lined up with the items' labels. A space sets groups
- *   apart. Items always go in a group, a list with no headings in one group without one.
+ *   jump to it. It reads as a heading, not as one more item: smaller than the items, uppercase,
+ *   letter-spaced and a step quieter (text-subtle), lined up with the items' start edge, and a
+ *   wider space (--plinth-nav-list-group-gap) sets each group apart from the one before. Its
+ *   face, size, weight, letter spacing and colour are the --plinth-nav-list-heading-* tokens, so
+ *   a brand can pick its label face; a brand that wants no capitals sets text-transform on the
+ *   class in its own layer. Items always go in a group, a list with no headings in one group
+ *   without one.
  * - items (<x-plinth::nav-list-item>, PlinthNavListItem): links, each its own component so the
- *   app's attributes and listeners land on the link (ADR 2). An item has a label, which wraps
- *   when it is long, and an optional count on the end edge, in the mono face. Give every item
- *   its href: without one it prints a plain <a>, which is no link and can't be reached with
- *   Tab, so keep that for a placeholder.
+ *   app's attributes and listeners land on the link (ADR 2). An item has an optional icon before
+ *   its label (the icon slot in Blade and Vue, the icon prop in React), a label, which wraps
+ *   when it is long, and an optional count on the end edge, in the mono face. The icon is
+ *   decorative (aria-hidden; the label names the link), 16px (size.icon.sm) and drawn in the
+ *   item's colour: put an <svg> that draws with currentColor in it, or the icon component at
+ *   data-size="sm". In a list with icons, give every item one, so the labels line up. Give
+ *   every item its href: without one it prints a plain <a>, which is no link and can't be
+ *   reached with Tab, so keep that for a placeholder.
  *   plinth-nav-list-label has no rule of its own beyond its layout: it is a hook for a project.
  *
  * State, set by the app: aria-current="page" on the item of the view being shown. The current
@@ -4545,7 +4563,7 @@
   .plinth-nav-list {
     display: flex;
     flex-direction: column;
-    gap: var(--plinth-space-4);
+    gap: var(--plinth-nav-list-group-gap);
     min-inline-size: 0;
     margin: 0;
     font-family: var(--plinth-font-family-body);
@@ -4565,10 +4583,13 @@
     padding-block: var(--plinth-space-1);
     padding-inline: var(--plinth-space-3);
     margin: 0;
-    font-size: var(--plinth-font-size-sm);
-    font-weight: var(--plinth-font-weight-medium);
+    font-family: var(--plinth-nav-list-heading-font-family);
+    font-size: var(--plinth-nav-list-heading-font-size);
+    font-weight: var(--plinth-nav-list-heading-font-weight);
     line-height: var(--plinth-font-leading-normal);
-    color: var(--plinth-color-text-muted);
+    color: var(--plinth-nav-list-heading-color);
+    text-transform: uppercase;
+    letter-spacing: var(--plinth-nav-list-heading-tracking);
     overflow-wrap: anywhere;
   }
 
@@ -4593,6 +4614,20 @@
     transition:
       background-color var(--plinth-duration-fast) var(--plinth-easing-standard),
       color var(--plinth-duration-fast) var(--plinth-easing-standard);
+  }
+
+  .plinth-nav-list-icon {
+    display: inline-flex;
+    flex: none;
+    align-items: center;
+    justify-content: center;
+    inline-size: var(--plinth-size-icon-sm);
+    block-size: var(--plinth-size-icon-sm);
+  }
+
+  .plinth-nav-list-icon > svg {
+    inline-size: 100%;
+    block-size: 100%;
   }
 
   .plinth-nav-list-label {
