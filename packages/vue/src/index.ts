@@ -192,6 +192,7 @@ export { meterNumber, meterRange, meterTone, type MeterNumbers } from './meter';
 export { menuIdKey, menuItemTone, menuItemTones, type MenuItemTone } from './menu';
 export { breadcrumbsCollapse, breadcrumbsCollapses, type BreadcrumbsCollapse } from './breadcrumbs';
 export { pageHeaderLevel, pageHeaderLevels, type PageHeaderLevel } from './page-header';
+export { appNavVariant, appNavVariants, type AppNavVariant } from './app-nav';
 export { splitViewPane, splitViewPanes, type SplitViewPane } from './split-view';
 export {
   sheetCloseIcon,

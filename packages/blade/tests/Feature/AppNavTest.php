@@ -1,5 +1,6 @@
 <?php
 
+use BDynamic\Plinth\Enums\AppNavVariant;
 use Illuminate\Support\Facades\Blade;
 
 it('prints a named nav with its brand, items and footer', function () {
@@ -46,6 +47,24 @@ it('escapes the label, the brand name and its href', function () {
         ->toContain('aria-label="&quot;&gt;&lt;b&gt;x&lt;/b&gt;"')
         ->toContain('href="&quot;&gt;&lt;b&gt;x&lt;/b&gt;"')
         ->toContain('<span class="plinth-app-nav-name">&quot;&gt;&lt;b&gt;x&lt;/b&gt;</span>');
+});
+
+it('keeps the rail with the rail variant, and prints nothing for the sidebar', function () {
+    expect(squish(Blade::render('<x-plinth::app-nav variant="rail">x</x-plinth::app-nav>')))
+        ->toBe('<nav class="plinth-app-nav" data-variant="rail"><div class="plinth-app-nav-items">x</div></nav>')
+        ->and(Blade::render('<x-plinth::app-nav :variant="$variant">x</x-plinth::app-nav>', ['variant' => AppNavVariant::Rail]))
+        ->toContain('data-variant="rail"');
+
+    foreach (['sidebar', 'wide', null] as $variant) {
+        expect(Blade::render('<x-plinth::app-nav :variant="$variant">x</x-plinth::app-nav>', ['variant' => $variant]))
+            ->not->toContain('data-variant');
+    }
+});
+
+it('lets the project set its own data-variant', function () {
+    expect(Blade::render('<x-plinth::app-nav variant="rail" data-variant="sidebar">x</x-plinth::app-nav>'))
+        ->toContain('data-variant="sidebar"')
+        ->not->toContain('data-variant="rail"');
 });
 
 it('passes extra attributes to its root, and the project wins a clash', function () {

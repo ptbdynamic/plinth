@@ -1,5 +1,6 @@
 // Markup contract: packages/css/src/components/app-nav.css
 import type { ComponentProps, ReactNode } from 'react';
+import { appNavVariant, type AppNavVariant } from './app-nav';
 import { classNames, hasContent } from './markup';
 
 interface AppNavOptions {
@@ -9,6 +10,8 @@ interface AppNavOptions {
   brandName?: string;
   /** Makes the brand a link, to the app's home. */
   brandHref?: string;
+  /** `rail` keeps the rail from 1280px; the default, `sidebar`, prints no attribute. */
+  variant?: AppNavVariant;
   /** The app's logo mark: the rail shows it alone (Vue's `mark` slot). */
   mark?: ReactNode;
   /** Below the items, on the bottom edge: more items, or the account (Vue's `footer` slot). */
@@ -22,6 +25,7 @@ export function PlinthAppNav({
   label,
   brandName,
   brandHref,
+  variant,
   mark,
   footer,
   className,
@@ -37,6 +41,7 @@ export function PlinthAppNav({
   // added to Plinth's.
   return (
     <nav
+      data-variant={appNavVariant(variant) === 'rail' ? 'rail' : undefined}
       aria-label={label?.trim() ? label : undefined}
       {...rest}
       className={classNames('plinth-app-nav', className)}

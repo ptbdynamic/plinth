@@ -3,7 +3,8 @@
 The app's main navigation, down its start side: the app's logo at the top, then a link to each
 part of the app (_Content_, _Media_, _Support_, _Settings_). From 1280px it is a 240px sidebar
 with an icon, a label and an optional count on each item; from 768px a 56px rail of icons alone.
-On a phone it is not shown: the [menu sheet](menu-sheet.md) holds the same items.
+With **`variant="rail"`** it stays the rail from 1280px too. On a phone it is not shown: the
+[menu sheet](menu-sheet.md) holds the same items.
 
 ## When not to use it
 
@@ -48,6 +49,37 @@ shown on a phone.
 
 Every item needs its icon: in the rail the icon is all there is to see. The icon is decorative,
 since the label names the link.
+
+## A rail at every width
+
+Some apps put a second column of links, a section's own, right beside the app nav. With a 240px
+sidebar and a 240px section column the content loses almost 500px on a laptop, so set
+**`variant="rail"`**: the app nav keeps the rail's form from 1280px (56px wide, the mark alone, the
+icons in 40px squares, the counts on the icons' corners), and the section column carries the
+labels. Without it, or with `variant="sidebar"`, the app nav becomes the sidebar from 1280px. The
+phone is the same either way: hidden, with the menu sheet holding the items.
+
+```blade example
+<x-plinth::app-nav label="Main" brand-name="Harbour" brand-href="#" variant="rail">
+    <x-slot:mark><x-site.glyph name="harbour" /></x-slot:mark>
+    <x-plinth::app-nav-item href="#">
+        <x-slot:icon><x-plinth::icon><x-site.glyph name="lines" /></x-plinth::icon></x-slot:icon>
+        Content
+    </x-plinth::app-nav-item>
+    <x-plinth::app-nav-item href="#" count="12">
+        <x-slot:icon><x-plinth::icon><x-site.glyph name="support" /></x-plinth::icon></x-slot:icon>
+        Support
+    </x-plinth::app-nav-item>
+    <x-plinth::app-nav-item href="#" current>
+        <x-slot:icon><x-plinth::icon><x-site.glyph name="sliders" /></x-plinth::icon></x-slot:icon>
+        Settings
+    </x-plinth::app-nav-item>
+</x-plinth::app-nav>
+```
+
+The labels stay the links' accessible names, but at no width does a mouse user see them: the rail
+shows no label on hover, since nothing may depend on hover. Pick icons that read on their own, and
+keep the rail to a handful of parts of the app.
 
 ## The brand
 
@@ -235,6 +267,7 @@ as a rail. Its items are 40px tall and, in the rail, 40px wide: never less than 
 | `aria-label`          | the root   | the nav's name                                           | none     |
 | `aria-current="page"` | an item    | the item of the page being shown, set by the app         | none     |
 | `aria-hidden="true"`  | mark, icon | decorative: the name and the label name the links        | set      |
+| `data-variant`        | the root   | `rail`: the rail from 1280px too; missing is the sidebar | missing  |
 | width                 | the root   | hidden below 768px, rail from 768px, sidebar from 1280px | by width |
 
 ## Props
@@ -248,6 +281,7 @@ every layer; React takes the Vue props, with slots as `children` and node props.
 | nav       | label      | `label="Main"`                   | `label="Main"`               | `label="Main"`        | none    |
 | nav       | brand name | `brand-name="Harbour"`           | `brand-name="Harbour"`       | `brandName="Harbour"` | none    |
 | nav       | brand href | `brand-href="/"`                 | `brand-href="/"`             | `brandHref="/"`       | none    |
+| nav       | variant    | `variant="rail"`                 | `variant="rail"`             | `variant="rail"`      | sidebar |
 | nav       | mark       | `<x-slot:mark>`                  | `#mark` slot                 | `mark={…}`            | none    |
 | nav       | items      | the slot                         | the default slot             | `children`            | none    |
 | nav       | footer     | `<x-slot:footer>`                | `#footer` slot               | `footer={…}`          | none    |
@@ -256,6 +290,8 @@ every layer; React takes the Vue props, with slots as `children` and node props.
 | item      | count      | `count="12"` or `:count="$open"` | `:count="12"`                | `count={12}`          | none    |
 | item      | icon       | `<x-slot:icon>`                  | `#icon` slot                 | `icon={…}`            | none    |
 | item      | label      | the slot                         | the default slot             | `children`            | none    |
+
+In Blade, `variant` takes the string or the `AppNavVariant` enum; an unknown value is the sidebar.
 
 ```blade tab="Blade"
 <x-plinth::app-nav label="Main" brand-name="Harbour" :brand-href="route('home')">
@@ -300,6 +336,8 @@ import { PlinthAppNav, PlinthAppNavItem, PlinthIcon } from '@ptbdynamic/plinth/r
 - The app nav is a named `<nav>` landmark, and the current item says so (`aria-current="page"`).
 - In the rail the labels and the app's name are visually hidden, not removed: each link keeps its
   accessible name, and a count is read after the label (_Support 12_).
+- With `variant="rail"` the labels are hidden at every width and the rail shows none on hover, so
+  each icon has to be clear on its own.
 - The current item has a 2px accent edge and a heavier label as well as its tint, so colour is not
   its only cue; in forced colours it takes the system highlight.
 - Every item keeps a 40px touch target, and shows the focus ring on `:focus-visible`; the brand

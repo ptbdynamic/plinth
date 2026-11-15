@@ -1,5 +1,11 @@
 import type { Meta, StoryObj } from '@storybook/html-vite';
-import { appNav, appNavItem, type AppNavArgs, type AppNavItemArgs } from './app-nav.ts';
+import {
+  appNav,
+  appNavItem,
+  appNavVariants,
+  type AppNavArgs,
+  type AppNavItemArgs,
+} from './app-nav.ts';
 import { icon } from './icon.ts';
 import { iconButton } from './icon-button.ts';
 import { sampleIcons } from './icons.ts';
@@ -54,12 +60,13 @@ const meta = {
     mark: sampleIcons.mark,
     items,
   },
+  argTypes: { variant: { control: 'inline-radio', options: appNavVariants } },
   parameters: {
     layout: 'fullscreen',
     docs: {
       description: {
         component:
-          "The app's main navigation: a rail of icons from 768px and a sidebar from 1280px, with the app's logo at its top. On a phone it is hidden, and the menu sheet holds the same items, rendered from the same list. Name it with `label`, give every item an icon (all the rail shows), and set `current` on the item of the page being shown. In the rail the footer holds items, or content no wider than 40px.",
+          "The app's main navigation: a rail of icons from 768px and a sidebar from 1280px, with the app's logo at its top. With `variant: 'rail'` it stays a rail from 1280px too, for an app whose section column beside it carries the labels. On a phone it is hidden, and the menu sheet holds the same items, rendered from the same list. Name it with `label`, give every item an icon (all the rail shows), and set `current` on the item of the page being shown. In the rail the footer holds items, or content no wider than 40px.",
       },
     },
   },
@@ -131,6 +138,12 @@ export const ManyItems: Story = {
     ).map(([label, name], index) => item(label, name, { current: index === 0 })),
   },
 };
+
+/**
+ * `variant: 'rail'` keeps the rail from 1280px too, for an app that puts a section's own column of
+ * links beside the nav. The labels stay the links' accessible names; nothing shows on hover.
+ */
+export const RailAtEveryWidth: Story = { args: { variant: 'rail', footer } };
 
 /** In right-to-left text the nav sits on the right, its edge and the current item's on its start. */
 export const RightToLeft: Story = {

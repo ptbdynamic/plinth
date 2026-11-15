@@ -329,7 +329,13 @@ return [
         'app-nav' => [
             'name' => 'App nav',
             'group' => 'Navigation',
-            'description' => 'The app\'s main navigation: a sidebar from 1280px, a rail of icons from 768px.',
+            'description' => 'The app\'s main navigation: a sidebar from 1280px, a rail of icons from 768px, or a rail at both.',
+            'playground' => [
+                'template' => "<x-plinth::app-nav label=\"Main\" brand-name=\"Harbour\" brand-href=\"#\"{attributes}>\n    <x-slot:mark><x-site.glyph name=\"harbour\" /></x-slot:mark>\n    <x-plinth::app-nav-item href=\"#\" current>\n        <x-slot:icon><x-plinth::icon><x-site.glyph name=\"lines\" /></x-plinth::icon></x-slot:icon>\n        Content\n    </x-plinth::app-nav-item>\n    <x-plinth::app-nav-item href=\"#\" count=\"12\">\n        <x-slot:icon><x-plinth::icon><x-site.glyph name=\"support\" /></x-plinth::icon></x-slot:icon>\n        Support\n    </x-plinth::app-nav-item>\n    <x-plinth::app-nav-item href=\"#\">\n        <x-slot:icon><x-plinth::icon><x-site.glyph name=\"sliders\" /></x-plinth::icon></x-slot:icon>\n        Settings\n    </x-plinth::app-nav-item>\n</x-plinth::app-nav>",
+                'options' => [
+                    'variant' => ['values' => ['sidebar', 'rail'], 'default' => 'sidebar'],
+                ],
+            ],
         ],
 
         'app-bar' => [

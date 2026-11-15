@@ -663,8 +663,9 @@
 
 /* app-nav.css */
 /*
- * App nav: the app's main navigation, a rail from 768px and a sidebar from 1280px. On a phone it
- * is not shown, and the menu sheet (menu-sheet.css) holds the same items.
+ * App nav: the app's main navigation, a rail from 768px and a sidebar from 1280px, or a rail from
+ * 768px up with data-variant="rail". On a phone it is not shown, and the menu sheet
+ * (menu-sheet.css) holds the same items.
  *
  * <nav class="plinth-app-nav" aria-label="Main">
  *   <a class="plinth-app-nav-brand" href="/">
@@ -719,6 +720,13 @@
  *   small number on the icon's top end corner.
  * - sidebar (from 1280px): --plinth-app-nav-width (240px) wide, the mark beside the name, and
  *   each item a 40px row: the icon, the label and the count on the end edge.
+ *
+ * Variant, set by the app: data-variant="rail" (variant in Blade, Vue and React) keeps the rail
+ * from 1280px too, for an app that puts a section's own column of links beside the nav and lets
+ * that column carry the labels. Missing (Blade, Vue and React print nothing for the default,
+ * sidebar), the nav becomes the sidebar from 1280px. The phone is the same either way. The rail
+ * shows no label on hover: nothing may depend on hover, so each icon must be clear on its own,
+ * and the labels stay the links' accessible names.
  *
  * Height is the parent's: the app nav stretches to fill it (in the app shell, the screen's
  * height), the items scroll and the footer keeps to the bottom. On the start side, with a divider
@@ -915,30 +923,31 @@
     }
   }
 
+  /* From 1280px the sidebar, unless the app keeps the rail with data-variant="rail". */
   @media (min-width: 1280px) {
-    .plinth-app-nav {
+    .plinth-app-nav:where(:not([data-variant='rail'])) {
       inline-size: var(--plinth-app-nav-width);
     }
 
-    .plinth-app-nav-brand {
+    :where(.plinth-app-nav:not([data-variant='rail'])) .plinth-app-nav-brand {
       justify-content: flex-start;
       padding-inline: var(--plinth-space-4);
     }
 
-    .plinth-app-nav-items,
-    .plinth-app-nav-footer {
+    :where(.plinth-app-nav:not([data-variant='rail'])) .plinth-app-nav-items,
+    :where(.plinth-app-nav:not([data-variant='rail'])) .plinth-app-nav-footer {
       align-items: stretch;
       padding-inline: var(--plinth-space-2);
     }
 
-    .plinth-app-nav-item {
+    :where(.plinth-app-nav:not([data-variant='rail'])) .plinth-app-nav-item {
       justify-content: flex-start;
       inline-size: auto;
       padding-inline: var(--plinth-space-3);
     }
 
-    .plinth-app-nav-name,
-    .plinth-app-nav-label {
+    :where(.plinth-app-nav:not([data-variant='rail'])) .plinth-app-nav-name,
+    :where(.plinth-app-nav:not([data-variant='rail'])) .plinth-app-nav-label {
       position: static;
       inline-size: auto;
       block-size: auto;
@@ -946,11 +955,11 @@
       clip-path: none;
     }
 
-    .plinth-app-nav-label {
+    :where(.plinth-app-nav:not([data-variant='rail'])) .plinth-app-nav-label {
       flex: 1 1 auto;
     }
 
-    .plinth-app-nav-count {
+    :where(.plinth-app-nav:not([data-variant='rail'])) .plinth-app-nav-count {
       position: static;
       min-inline-size: 0;
       padding-inline: 0;
@@ -960,7 +969,9 @@
       background-color: transparent;
     }
 
-    .plinth-app-nav-item[aria-current='page'] .plinth-app-nav-count {
+    :where(.plinth-app-nav:not([data-variant='rail']))
+      .plinth-app-nav-item[aria-current='page']
+      .plinth-app-nav-count {
       color: inherit;
     }
   }
@@ -987,9 +998,9 @@
     }
   }
 
-  /* In the sidebar the count is plain text again. */
+  /* In the sidebar the count is plain text again; the rail keeps its pill. */
   @media (min-width: 1280px) and (forced-colors: active) {
-    .plinth-app-nav-count {
+    :where(.plinth-app-nav:not([data-variant='rail'])) .plinth-app-nav-count {
       border: 0;
     }
   }

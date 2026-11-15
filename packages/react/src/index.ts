@@ -136,6 +136,7 @@ export { toolbarKeys } from './toolbar';
 export { fieldControl, type FieldControl } from './field';
 export { selectSize, selectSizes, type SelectSize } from './select';
 export { fieldDescribedBy, textFieldSize, textFieldSizes, type TextFieldSize } from './text-field';
+export { appNavVariant, appNavVariants, type AppNavVariant } from './app-nav';
 export { splitViewPane, splitViewPanes, type SplitViewPane } from './split-view';
 export {
   sheetCloseIcon,

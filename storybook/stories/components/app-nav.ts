@@ -1,4 +1,7 @@
+import { appNavVariant, appNavVariants, type AppNavVariant } from '@ptbdynamic/plinth-vue';
 import { escape, rootAttributes, type Attributes } from './markup.ts';
+
+export { appNavVariants, type AppNavVariant };
 
 export interface AppNavItemArgs {
   label: string;
@@ -19,6 +22,8 @@ export interface AppNavArgs {
   brandName?: string;
   /** Makes the brand a link, to the app's home. */
   brandHref?: string;
+  /** `rail` keeps the rail from 1280px; the default, `sidebar`, prints no attribute. */
+  variant?: AppNavVariant;
   /** The app's logo mark (trusted markup): the rail shows it alone. */
   mark?: string;
   items: AppNavItemArgs[];
@@ -69,11 +74,13 @@ function appNavBrand({ brandName, brandHref, mark }: AppNavArgs): string {
 
 /** The app nav's markup contract, with its items. */
 export function appNav(args: AppNavArgs, attributes: Attributes = {}): string {
-  const { label, items, footer } = args;
+  const { label, items, footer, variant } = args;
   const { classes, extra } = rootAttributes('plinth-app-nav', attributes);
   return [
     `<nav class="${classes}"`,
     extra,
+    // The default, the sidebar, prints no attribute.
+    appNavVariant(variant) === 'rail' ? ' data-variant="rail"' : '',
     label?.trim() ? ` aria-label="${escape(label)}"` : '',
     '>',
     appNavBrand(args),

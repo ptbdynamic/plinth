@@ -61,6 +61,23 @@ describe('PlinthAppNav', () => {
     );
   });
 
+  it('keeps the rail with the rail variant, and prints nothing for the sidebar', () => {
+    expect(renderToStaticMarkup(<PlinthAppNav variant="rail" />)).toBe(
+      '<nav data-variant="rail" class="plinth-app-nav"><div class="plinth-app-nav-items"></div></nav>',
+    );
+    expect(renderToStaticMarkup(<PlinthAppNav variant="sidebar" />)).not.toContain('data-variant');
+    expect(renderToStaticMarkup(<PlinthAppNav />)).not.toContain('data-variant');
+    expect(
+      renderToStaticMarkup(<PlinthAppNav variant={'wide' as unknown as 'rail'} />),
+    ).not.toContain('data-variant');
+  });
+
+  it('lets the project set its own data-variant', () => {
+    expect(renderToStaticMarkup(<PlinthAppNav variant="rail" data-variant="sidebar" />)).toContain(
+      'data-variant="sidebar"',
+    );
+  });
+
   it('keeps extra classes, attributes and the ref on its root; the project wins a clash', () => {
     const ref = createRef<HTMLElement>();
     const { container } = render(
