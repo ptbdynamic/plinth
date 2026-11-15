@@ -948,7 +948,7 @@ const cases: ParityCase[] = [
   sectionHeadingCase(
     'Section heading/with a clashing attribute',
     { heading: 'Budget', divider: true },
-    { class: 'plinth-section-heading', 'data-divider': 'strong' },
+    { class: 'mb-4', 'data-divider': 'strong' },
   ),
   sectionHeadingCase('Section heading/blank description, id and actions', {
     heading: 'Budget',
