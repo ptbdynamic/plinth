@@ -36,6 +36,7 @@ import {
   PlinthNavListGroup,
   PlinthNavListItem,
   PlinthPageHeader,
+  PlinthPageIntro,
   PlinthEmptyState,
   PlinthField,
   PlinthPill,
@@ -98,6 +99,7 @@ import {
   PlinthNavListGroup as ReactNavListGroup,
   PlinthNavListItem as ReactNavListItem,
   PlinthPageHeader as ReactPageHeader,
+  PlinthPageIntro as ReactPageIntro,
   PlinthEmptyState as ReactEmptyState,
   PlinthPill as ReactPill,
   PlinthPillRow as ReactPillRow,
@@ -226,6 +228,8 @@ import { menuSheet, type MenuSheetArgs } from '../stories/components/menu-sheet.
 import * as emptyStateStories from '../stories/components/EmptyState.stories.ts';
 import { emptyState, type EmptyStateArgs } from '../stories/components/empty-state.ts';
 import * as pageHeaderStories from '../stories/components/PageHeader.stories.ts';
+import * as pageIntroStories from '../stories/components/PageIntro.stories.ts';
+import { pageIntro, type PageIntroArgs } from '../stories/components/page-intro.ts';
 import {
   pageHeader,
   type PageHeaderArgs,
@@ -372,6 +376,7 @@ const reactComponents = new Map<Component, unknown>([
   [PlinthMenuSeparator, ReactMenuSeparator],
   [PlinthMenuSheet, ReactMenuSheet],
   [PlinthPageHeader, ReactPageHeader],
+  [PlinthPageIntro, ReactPageIntro],
   [PlinthEmptyState, ReactEmptyState],
   [PlinthPill, ReactPill],
   [PlinthPillRow, ReactPillRow],
@@ -1673,6 +1678,11 @@ const cases: ParityCase[] = [
     { ...pageHeaderDefaults, top: true },
     { 'data-top': 'notch' },
   ),
+  pageHeaderCase(
+    'Page header/with a clashing narrow-only attribute',
+    { ...pageHeaderDefaults, narrowOnly: true },
+    { 'data-narrow-only': 'phone' },
+  ),
   pageHeaderCase('Page header/blank slots', {
     ...pageHeaderDefaults,
     heading: 'Settings',
@@ -1682,6 +1692,49 @@ const cases: ParityCase[] = [
   pageHeaderCase('Page header/unknown level', {
     ...pageHeaderDefaults,
     level: 'h7' as PageHeaderLevel,
+  }),
+  ...storyArgs<PageIntroArgs>(pageIntroStories).map(([story, args]) =>
+    pageIntroCase(`Page intro/${story}`, args),
+  ),
+  pageIntroCase(
+    'Page intro/with extra attributes',
+    {
+      heading: 'Users',
+      description: 'Who can sign in.',
+      actions: '<button type="button">Invite</button>',
+    },
+    {
+      class: 'mb-4',
+      id: 'intro',
+      title: 'Users',
+      'data-testid': 'intro',
+      'aria-describedby': 'users-note',
+    },
+  ),
+  pageIntroCase(
+    'Page intro/with a clashing attribute',
+    { heading: 'Users', wideOnly: true },
+    { class: 'mb-4', 'data-wide-only': 'desktop' },
+  ),
+  pageIntroCase('Page intro/blank description, id and actions', {
+    heading: 'Users',
+    description: '  ',
+    descriptionId: 'users-description',
+    actions: ' ',
+  }),
+  pageIntroCase('Page intro/blank description id', {
+    heading: 'Users',
+    description: 'Who can sign in.',
+    descriptionId: ' ',
+  }),
+  pageIntroCase('Page intro/unknown level', {
+    heading: 'Users',
+    level: 'h7' as PageHeaderLevel,
+  }),
+  pageIntroCase('Page intro/escaped text', {
+    heading: '<b>Users</b>',
+    description: '<i>Who</i> can sign in',
+    descriptionId: '"users"',
   }),
   ...storyArgs<EmptyStateArgs>(emptyStateStories).map(([story, args]) =>
     emptyStateCase(`Empty state/${story}`, args),
@@ -2650,7 +2703,12 @@ function pageHeaderCase(
   args: PageHeaderArgs,
   attributes: Attributes = {},
 ): ParityCase {
-  const props = { heading: args.heading, level: args.level, top: args.top };
+  const props = {
+    heading: args.heading,
+    level: args.level,
+    top: args.top,
+    ...(args.narrowOnly ? { narrowOnly: true } : {}),
+  };
   const named = {
     ...(args.leading ? { leading: args.leading } : {}),
     ...(args.actions ? { actions: args.actions } : {}),
@@ -2660,6 +2718,27 @@ function pageHeaderCase(
     markup: pageHeader(args, attributes),
     vue: { component: PlinthPageHeader, props: { ...props, ...attributes }, slot: '', named },
     blade: { component: 'page-header', props, attributes, slot: '', named },
+  };
+}
+
+function pageIntroCase(
+  story: string,
+  args: PageIntroArgs,
+  attributes: Attributes = {},
+): ParityCase {
+  const props = {
+    heading: args.heading,
+    ...(args.level ? { level: args.level } : {}),
+    ...(args.description !== undefined ? { description: args.description } : {}),
+    ...(args.descriptionId !== undefined ? { descriptionId: args.descriptionId } : {}),
+    ...(args.wideOnly ? { wideOnly: true } : {}),
+  };
+  const named = args.actions ? { actions: args.actions } : undefined;
+  return {
+    story,
+    markup: pageIntro(args, attributes),
+    vue: { component: PlinthPageIntro, props: { ...props, ...attributes }, slot: '', named },
+    blade: { component: 'page-intro', props, attributes, slot: '', named },
   };
 }
 
@@ -4085,10 +4164,27 @@ describe('parity with the stories', () => {
       'Page header/LongHeading',
       'Page header/LevelTwo',
       'Page header/TopBar',
+      'Page header/NarrowOnly',
       'Page header/with extra attributes',
       'Page header/with a clashing attribute',
+      'Page header/with a clashing narrow-only attribute',
       'Page header/blank slots',
       'Page header/unknown level',
+      'Page intro/Default',
+      'Page intro/HeadingOnly',
+      'Page intro/WithoutActions',
+      'Page intro/WithoutDescription',
+      'Page intro/TwoActions',
+      'Page intro/DescriptionId',
+      'Page intro/LevelTwo',
+      'Page intro/LongText',
+      'Page intro/WideOnly',
+      'Page intro/with extra attributes',
+      'Page intro/with a clashing attribute',
+      'Page intro/blank description, id and actions',
+      'Page intro/blank description id',
+      'Page intro/unknown level',
+      'Page intro/escaped text',
       'Empty state/Default',
       'Empty state/HeadingOnly',
       'Empty state/WithoutIcon',

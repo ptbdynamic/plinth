@@ -108,6 +108,7 @@ describe('tiers', () => {
       'section-heading.space-before',
       'section-heading.space-after',
       'section-heading.text-min-width',
+      'page-intro.text-min-width',
       'section-menu.height',
       'section-menu.item-height',
       'app-nav.width',

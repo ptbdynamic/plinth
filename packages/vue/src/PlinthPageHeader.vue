@@ -12,8 +12,10 @@ const props = withDefaults(
     level?: PageHeaderLevel;
     /** The screen's top bar: it adds the top safe-area inset (data-top). */
     top?: boolean;
+    /** Shown on a phone only, for a page that opens with a page intro from 768px (data-narrow-only). */
+    narrowOnly?: boolean;
   }>(),
-  { level: 'h1', top: false },
+  { level: 'h1', top: false, narrowOnly: false },
 );
 
 defineSlots<{
@@ -32,7 +34,11 @@ const slots = useSlots();
 </script>
 
 <template>
-  <header class="plinth-page-header" :data-top="top ? '' : undefined">
+  <header
+    class="plinth-page-header"
+    :data-top="top ? '' : undefined"
+    :data-narrow-only="narrowOnly ? '' : undefined"
+  >
     <div v-if="hasContent(slots.leading?.())" class="plinth-page-header-leading">
       <slot name="leading" />
     </div>

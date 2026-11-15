@@ -102,6 +102,21 @@ guess. In the [app shell](app-shell.md), set it: the page header is the phone's 
 The page header is **`--plinth-page-header-height`** tall (56px), a component token a project
 can tune. Its inline padding clears the notch on a phone held sideways.
 
+## With a page intro on wide screens
+
+A list or settings page can open with a [page intro](page-intro.md) from 768px instead: a larger
+heading in the content, with a line of description and the primary action. Set **`narrow-only`**
+on the page header (it prints `data-narrow-only`) and `wide-only` on the page intro: the phone
+keeps the page header as its top bar, and from 768px the page header is `display: none` and the
+intro shows. The one not shown is out of the accessibility tree, so the page has one `<h1>` at
+every width. In the app shell, the main's `scroll-padding` leaves out a page header with
+`data-narrow-only`, since nothing sticks there from 768px.
+
+```blade
+<x-plinth::page-header heading="Users" top narrow-only>…</x-plinth::page-header>
+<x-plinth::page-intro heading="Users" description="Manage who can sign in." wide-only>…</x-plinth::page-intro>
+```
+
 ## Sticky, and the offset
 
 The page header is `position: sticky` on the **`--plinth-layer-sticky`** z-index: above the
@@ -142,9 +157,10 @@ the page's heading in it.
 
 ## Markup contract
 
-| Attribute  | On       | Values  | Default | What it does                                       |
-| ---------- | -------- | ------- | ------- | -------------------------------------------------- |
-| `data-top` | the root | present | absent  | The screen's top bar: adds the top safe-area inset |
+| Attribute          | On       | Values  | Default | What it does                                       |
+| ------------------ | -------- | ------- | ------- | -------------------------------------------------- |
+| `data-top`         | the root | present | absent  | The screen's top bar: adds the top safe-area inset |
+| `data-narrow-only` | the root | present | absent  | Shown on a phone only: `display: none` from 768px  |
 
 The heading's element is `h1` to `h6`; an unknown level prints `h1`.
 
@@ -153,17 +169,18 @@ The heading's element is `h1` to `h6`; an unknown level prints `h1`.
 The same names in every layer. React takes the Vue props, with the slots as props that take a
 node.
 
-| Prop    | Blade                           | Vue                  | React                | Default |
-| ------- | ------------------------------- | -------------------- | -------------------- | ------- |
-| heading | `heading="Invoices"` (required) | `heading="Invoices"` | `heading="Invoices"` | none    |
-| level   | `level="h2"`                    | `level="h2"`         | `level="h2"`         | `h1`    |
-| top     | `top`                           | `top`                | `top`                | off     |
-| leading | `<x-slot:leading>`              | `#leading` slot      | `leading` (a node)   | none    |
-| actions | `<x-slot:actions>`              | `#actions` slot      | `actions` (a node)   | none    |
+| Prop        | Blade                           | Vue                  | React                | Default |
+| ----------- | ------------------------------- | -------------------- | -------------------- | ------- |
+| heading     | `heading="Invoices"` (required) | `heading="Invoices"` | `heading="Invoices"` | none    |
+| level       | `level="h2"`                    | `level="h2"`         | `level="h2"`         | `h1`    |
+| top         | `top`                           | `top`                | `top`                | off     |
+| narrow only | `narrow-only`                   | `narrow-only`        | `narrowOnly`         | off     |
+| leading     | `<x-slot:leading>`              | `#leading` slot      | `leading` (a node)   | none    |
+| actions     | `<x-slot:actions>`              | `#actions` slot      | `actions` (a node)   | none    |
 
 Every layer needs a `heading` and throws without one. Blade takes `level` as a string or a
 `PageHeaderLevel` case. Extra attributes reach the `<header>`, the HTML `title` attribute too,
-and a project's attribute wins over the page header's own (`data-top`). Vue emits no events.
+and a project's attribute wins over the page header's own (`data-top`, `data-narrow-only`). Vue emits no events.
 
 ```blade tab="Blade"
 <x-plinth::page-header heading="Message">

@@ -2,7 +2,7 @@
 
 namespace BDynamic\Plinth\Enums;
 
-/** The page header's heading: the page's <h1>, or a lower level beside another page's <h1>. */
+/** The page header's and the page intro's heading: the page's <h1>, or a lower level beside another page's <h1>. */
 enum PageHeaderLevel: string
 {
     use ResolvesToDefault;

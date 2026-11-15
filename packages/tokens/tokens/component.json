@@ -130,6 +130,13 @@
       "$description": "From 768px, the least width the heading's text keeps beside the actions (240px); past it the actions move under the text."
     }
   },
+  "page-intro": {
+    "text-min-width": {
+      "$type": "dimension",
+      "$value": "{size.sidebar}",
+      "$description": "From 768px, the least width the page intro's text keeps beside the actions (240px); past it the actions move under the text."
+    }
+  },
   "section-menu": {
     "height": {
       "$type": "dimension",

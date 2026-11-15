@@ -3,6 +3,7 @@
     'heading' => null,
     'level' => 'h1',
     'top' => false,
+    'narrowOnly' => false,
 ])
 @php
     if (blank($heading)) {
@@ -13,6 +14,7 @@
 <header {{ $attributes->merge(array_filter([
     'class' => 'plinth-page-header',
     'data-top' => $top ? '' : null,
+    'data-narrow-only' => $narrowOnly ? '' : null,
 ], fn ($value) => $value !== null)) }}>
     @if (isset($leading) && $leading->hasActualContent())
         <div class="plinth-page-header-leading">{{ $leading }}</div>

@@ -1,4 +1,4 @@
-/** The levels the page header's heading can take. `h1` is the default. */
+/** The levels the page header's and the page intro's heading can take. `h1` is the default. */
 export const pageHeaderLevels = ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'] as const;
 export type PageHeaderLevel = (typeof pageHeaderLevels)[number];
 

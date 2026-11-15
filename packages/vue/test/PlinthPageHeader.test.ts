@@ -64,6 +64,17 @@ describe('PlinthPageHeader', () => {
     ).toBeUndefined();
   });
 
+  it('shows on a phone only with narrowOnly', () => {
+    expect(
+      mount(PlinthPageHeader, { props: { heading: 'Users', narrowOnly: true } }).attributes(
+        'data-narrow-only',
+      ),
+    ).toBe('');
+    expect(
+      mount(PlinthPageHeader, { props: { heading: 'Users' } }).attributes('data-narrow-only'),
+    ).toBeUndefined();
+  });
+
   it('needs a heading', () => {
     expect(() => mount(PlinthPageHeader, { props: { heading: ' ' } })).toThrow('needs a heading');
     expect(() => mount(PlinthPageHeader, { props: {} as { heading: string } })).toThrow(

@@ -36,6 +36,10 @@
  *   adds env(safe-area-inset-top) above its height, which pads it below the status bar and the
  *   notch on a phone that draws under them (viewport-fit=cover). Leave it off under an app bar in the document's flow; in the app
  *   shell, set it for the phone, and the shell drops the safe area under its app bar.
+ * - data-narrow-only: the page header shows on a phone only, and is display: none from 768px, for
+ *   a page that opens with a page intro there instead (page-intro.css, with data-wide-only). The
+ *   one that is not shown is out of the accessibility tree, so the page has one <h1> at every
+ *   width.
  *
  * Its height is the page-header.height component token (56px). The inline padding clears the
  * notch on a phone held sideways. It is sticky on the layer.sticky z-index, so it sits above the
@@ -113,6 +117,10 @@
   }
 
   @media (min-width: 768px) {
+    .plinth-page-header[data-narrow-only] {
+      display: none;
+    }
+
     .plinth-page-header {
       padding-inline: max(var(--plinth-space-4), env(safe-area-inset-left))
         max(var(--plinth-space-4), env(safe-area-inset-right));
