@@ -65,6 +65,7 @@ const meta = {
     title: 'Filters',
     closeLabel: 'Close',
     side: 'end',
+    size: 'md',
     body: filters,
     footer: footer('filters'),
   },
