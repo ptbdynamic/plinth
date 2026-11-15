@@ -33,6 +33,15 @@ it('leaves out an empty caption, and prints an empty head without the slot', fun
     }
 });
 
+it('puts a framed table in its frame, with the attributes on the table', function () {
+    expect(squish(Blade::render('<x-plinth::data-table framed class="mt-4" id="orders"></x-plinth::data-table>')))
+        ->toBe('<div class="plinth-data-table-frame"><table class="plinth-data-table mt-4" role="table" id="orders">'
+            .'<thead class="plinth-data-table-head" role="rowgroup"><tr class="plinth-data-table-head-row" role="row"></tr></thead>'
+            .'<tbody class="plinth-data-table-body" role="rowgroup"></tbody></table></div>');
+    expect(Blade::render('<x-plinth::data-table :framed="false"></x-plinth::data-table>'))
+        ->not->toContain('plinth-data-table-frame');
+});
+
 it('escapes the caption, the column, the label and the empty text', function () {
     $html = Blade::render(
         '<x-plinth::data-table :caption="$x"></x-plinth::data-table>'

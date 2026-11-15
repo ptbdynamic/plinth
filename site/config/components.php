@@ -258,6 +258,10 @@ return [
             'name' => 'Data table',
             'group' => 'Content',
             'description' => 'Records as cards on a phone and a table from 768px, from one markup, with no script.',
+            'playground' => [
+                'template' => "<x-plinth::data-table caption=\"Invoices\"{attributes}>\n    <x-slot:head>\n        <x-plinth::data-table-column>Invoice</x-plinth::data-table-column>\n        <x-plinth::data-table-column>Client</x-plinth::data-table-column>\n        <x-plinth::data-table-column numeric>Total</x-plinth::data-table-column>\n        <x-plinth::data-table-column>Actions</x-plinth::data-table-column>\n    </x-slot:head>\n    <x-plinth::data-table-row>\n        <x-plinth::data-table-cell label=\"Invoice\" kind=\"title\">INV-1042</x-plinth::data-table-cell>\n        <x-plinth::data-table-cell label=\"Client\">Atlas Studio</x-plinth::data-table-cell>\n        <x-plinth::data-table-cell label=\"Total\" numeric>€1,240.00</x-plinth::data-table-cell>\n        <x-plinth::data-table-cell kind=\"actions\">\n            <x-plinth::button variant=\"secondary\" size=\"sm\" href=\"#\">View INV-1042</x-plinth::button>\n        </x-plinth::data-table-cell>\n    </x-plinth::data-table-row>\n</x-plinth::data-table>",
+                'states' => ['framed'],
+            ],
         ],
 
         'empty-state' => [

@@ -225,6 +225,13 @@
     --plinth-page-header-height: var(--plinth-space-14);
     --plinth-page-header-offset: var(--plinth-space-0);
     --plinth-data-table-row-height: var(--plinth-size-row);
+    --plinth-data-table-frame-edge: var(--plinth-space-5);
+    --plinth-data-table-head-background: var(--plinth-color-surface-sunken);
+    --plinth-data-table-head-font-family: var(--plinth-font-family-body);
+    --plinth-data-table-head-font-size: var(--plinth-font-size-xs);
+    --plinth-data-table-head-font-weight: var(--plinth-font-weight-medium);
+    --plinth-data-table-head-tracking: var(--plinth-font-tracking-wide);
+    --plinth-data-table-head-color: var(--plinth-color-text-muted);
     --plinth-list-row-height: var(--plinth-size-row);
     --plinth-list-header-height: var(--plinth-size-row);
     --plinth-meter-height: var(--plinth-space-2);
@@ -2429,7 +2436,28 @@
  * From 768px up the actions sit at the start of their cell, under their column header.
  *
  * Text wraps in its cell. A table wider than its container, from 768px up, belongs in a
- * scrolling container the app adds. --plinth-data-table-row-height is a body row's height (44px).
+ * scrolling container: the frame below, or one the app adds. --plinth-data-table-row-height is a
+ * body row's height (44px).
+ *
+ * Framed: the table in a plinth-data-table-frame, for a table that stands as a card of its own
+ * (an admin screen's list of records):
+ *
+ *   <div class="plinth-data-table-frame">
+ *     <table class="plinth-data-table" role="table">…</table>
+ *   </div>
+ *
+ * From 768px up the frame is a raised surface with a hairline border and the container radius,
+ * and the table's scrolling container (overflow-x), so a wide table scrolls inside it. The head
+ * row is a header band on --plinth-data-table-head-background, its labels small, uppercase and
+ * letter-spaced; their face, size, weight, letter spacing and colour are the
+ * --plinth-data-table-head-* tokens, so a brand can pick a condensed or mono label face. The
+ * first and last cells take --plinth-data-table-frame-edge (20px) of inline padding, the row
+ * dividers run to the frame's edges, and an actions cell that ends its row holds its actions to
+ * the end of the row (and the last column header follows, while a row ends in actions). On a
+ * phone the frame steps aside: the rows are already cards. The table stays the root: the frame
+ * takes no attributes. A frame that scrolls is reached with Tab through the table's own controls
+ * (sort buttons, actions); a wide read-only table, with none, can't be scrolled by keyboard in
+ * every browser, so keep such a table narrow enough for its frame.
  */
 
 @layer plinth {
@@ -2806,6 +2834,111 @@
     .plinth-data-table-cell[data-kind='actions'],
     .plinth-data-table [data-phone='hidden'].plinth-data-table-cell {
       padding-inline: var(--plinth-space-4);
+    }
+  }
+
+  /* Framed, from 768px: a card with a header band, which scrolls a wide table. */
+  @media (min-width: 768px) {
+    .plinth-data-table-frame {
+      overflow-x: auto;
+      background-color: var(--plinth-color-surface-raised);
+      border: var(--plinth-border-width-thin) solid var(--plinth-color-border);
+      border-radius: var(--plinth-radius-container);
+    }
+
+    .plinth-data-table-frame > .plinth-data-table > .plinth-data-table-caption {
+      padding-block: var(--plinth-space-3);
+      padding-inline: var(--plinth-data-table-frame-edge);
+      margin-block-end: 0;
+    }
+
+    /* Child chains, so a table nested in a framed table's cell keeps its own look. */
+    .plinth-data-table-frame
+      > .plinth-data-table
+      > .plinth-data-table-head
+      > .plinth-data-table-head-row
+      > .plinth-data-table-column {
+      font-family: var(--plinth-data-table-head-font-family);
+      font-size: var(--plinth-data-table-head-font-size);
+      font-weight: var(--plinth-data-table-head-font-weight);
+      color: var(--plinth-data-table-head-color);
+      text-transform: uppercase;
+      letter-spacing: var(--plinth-data-table-head-tracking);
+      background-color: var(--plinth-data-table-head-background);
+    }
+
+    /* A button resets its case and spacing; a sort label takes the band's. */
+    .plinth-data-table-frame
+      > .plinth-data-table
+      > .plinth-data-table-head
+      > .plinth-data-table-head-row
+      > .plinth-data-table-column
+      > .plinth-data-table-sort {
+      text-transform: inherit;
+      letter-spacing: inherit;
+    }
+
+    /* The band is as tall as the button and the frame clips: the ring goes inside. */
+    .plinth-data-table-frame
+      > .plinth-data-table
+      > .plinth-data-table-head
+      > .plinth-data-table-head-row
+      > .plinth-data-table-column
+      > .plinth-data-table-sort:focus-visible {
+      outline-offset: var(--plinth-focus-ring-offset-inset);
+    }
+
+    .plinth-data-table-frame
+      > .plinth-data-table
+      > .plinth-data-table-head
+      > .plinth-data-table-head-row
+      > .plinth-data-table-column:first-child,
+    .plinth-data-table-frame
+      > .plinth-data-table
+      > .plinth-data-table-body
+      > .plinth-data-table-row
+      > .plinth-data-table-cell:first-child {
+      padding-inline-start: var(--plinth-data-table-frame-edge);
+    }
+
+    .plinth-data-table-frame
+      > .plinth-data-table
+      > .plinth-data-table-head
+      > .plinth-data-table-head-row
+      > .plinth-data-table-column:last-child,
+    .plinth-data-table-frame
+      > .plinth-data-table
+      > .plinth-data-table-body
+      > .plinth-data-table-row
+      > .plinth-data-table-cell:last-child {
+      padding-inline-end: var(--plinth-data-table-frame-edge);
+    }
+
+    .plinth-data-table-frame
+      > .plinth-data-table
+      > .plinth-data-table-body
+      > .plinth-data-table-empty
+      > .plinth-data-table-empty-cell {
+      padding-inline: var(--plinth-data-table-frame-edge);
+    }
+
+    /*
+     * The actions held to the end of the row, and their column header with them while a row
+     * ends in actions (an empty table's last header stays at the start).
+     */
+    .plinth-data-table-frame
+      > .plinth-data-table
+      > .plinth-data-table-body
+      > .plinth-data-table-row
+      > .plinth-data-table-cell[data-kind='actions']:last-child,
+    .plinth-data-table-frame
+      > .plinth-data-table:has(
+        > .plinth-data-table-body > .plinth-data-table-row > [data-kind='actions']:last-child
+      )
+      > .plinth-data-table-head
+      > .plinth-data-table-head-row
+      > .plinth-data-table-column:last-child {
+      text-align: end;
     }
   }
 

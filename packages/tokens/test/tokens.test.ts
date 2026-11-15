@@ -90,6 +90,10 @@ describe('tiers', () => {
       'page-header.height',
       'page-header.offset',
       'data-table.row-height',
+      'data-table.frame-edge',
+      ...['background', 'font-family', 'font-size', 'font-weight', 'tracking', 'color'].map(
+        (part) => `data-table.head-${part}`,
+      ),
       'list-row.height',
       'list-header.height',
       'meter.height',

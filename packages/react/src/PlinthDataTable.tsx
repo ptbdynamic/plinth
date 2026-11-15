@@ -7,6 +7,8 @@ interface DataTableOptions {
   caption?: string;
   /** The column headers, PlinthDataTableColumn elements (Vue's `head` slot). */
   head?: ReactNode;
+  /** A card of its own from 768px up: a frame that scrolls a wide table, and a header band. */
+  framed?: boolean;
 }
 
 /** A table that becomes a card per row on a phone: `children` are its rows. */
@@ -16,11 +18,12 @@ export type PlinthDataTableProps = DataTableOptions &
 export function PlinthDataTable({
   caption,
   head,
+  framed = false,
   className,
   children,
   ...rest
 }: PlinthDataTableProps) {
-  return (
+  const table = (
     <table role="table" {...rest} className={classNames('plinth-data-table', className)}>
       {caption?.trim() ? <caption className="plinth-data-table-caption">{caption}</caption> : null}
       <thead className="plinth-data-table-head" role="rowgroup">
@@ -33,4 +36,6 @@ export function PlinthDataTable({
       </tbody>
     </table>
   );
+  // The frame takes no props: the table is the root, framed or not.
+  return framed ? <div className="plinth-data-table-frame">{table}</div> : table;
 }

@@ -1644,6 +1644,22 @@ const cases: ParityCase[] = [
     { caption: undefined, columns: [dataTableColumnDefaults], rows: [] },
     { role: 'grid' },
   ),
+  dataTableCase(
+    'Data table/framed with extra attributes',
+    { caption: undefined, columns: [dataTableColumnDefaults], rows: [], framed: true },
+    { class: 'mt-4', id: 'orders', 'data-testid': 'orders', 'aria-label': 'Orders' },
+  ),
+  dataTableCase(
+    'Data table/framed with a clashing attribute',
+    { caption: undefined, columns: [dataTableColumnDefaults], rows: [], framed: true },
+    { role: 'grid' },
+  ),
+  dataTableCase('Data table/not framed', {
+    caption: undefined,
+    columns: [dataTableColumnDefaults],
+    rows: [],
+    framed: false,
+  }),
   dataTableCase('Data table/blank caption', {
     caption: '  ',
     columns: [dataTableColumnDefaults],
@@ -3063,7 +3079,10 @@ function dataTableCase(
   args: DataTableArgs,
   attributes: Attributes = {},
 ): ParityCase {
-  const props = args.caption !== undefined ? { caption: args.caption } : {};
+  const props = {
+    ...(args.caption !== undefined ? { caption: args.caption } : {}),
+    ...(args.framed !== undefined ? { framed: args.framed } : {}),
+  };
   const named = { head: dataTableHead(args.columns) };
   const slot = dataTableBody(args);
   return {
@@ -3929,8 +3948,15 @@ describe('parity with the stories', () => {
       'Data table/HiddenOnPhone',
       'Data table/Empty',
       'Data table/LongText',
+      'Data table/Framed',
+      'Data table/FramedSelected',
+      'Data table/FramedEmpty',
+      'Data table/FramedWide',
       'Data table/with extra attributes',
       'Data table/with a clashing attribute',
+      'Data table/framed with extra attributes',
+      'Data table/framed with a clashing attribute',
+      'Data table/not framed',
       'Data table/blank caption',
       'Data table column/Default',
       'Data table column/Numeric',

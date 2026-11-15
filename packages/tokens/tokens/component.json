@@ -17,6 +17,41 @@
       "$type": "dimension",
       "$value": "{size.row}",
       "$description": "A body row's height in the table layout, from 768 px up (44px)."
+    },
+    "frame-edge": {
+      "$type": "dimension",
+      "$value": "{space.5}",
+      "$description": "A framed table's inline padding at the first and last cell (20px), wider than between cells."
+    },
+    "head-background": {
+      "$type": "color",
+      "$value": "{color.surface-sunken}",
+      "$description": "A framed table's header band, a surface step down from the frame."
+    },
+    "head-font-family": {
+      "$type": "fontFamily",
+      "$value": "{font.family.body}",
+      "$description": "A framed table's column labels' face; a brand may pick a condensed or mono label face."
+    },
+    "head-font-size": {
+      "$type": "dimension",
+      "$value": "{font.size.xs}",
+      "$description": "A framed table's column labels' size (12px)."
+    },
+    "head-font-weight": {
+      "$type": "fontWeight",
+      "$value": "{font.weight.medium}",
+      "$description": "A framed table's column labels' weight."
+    },
+    "head-tracking": {
+      "$type": "dimension",
+      "$value": "{font.tracking.wide}",
+      "$description": "A framed table's column labels' letter spacing, opened up for their uppercase letters."
+    },
+    "head-color": {
+      "$type": "color",
+      "$value": "{color.text-muted}",
+      "$description": "A framed table's column labels' colour."
     }
   },
   "list-row": {
