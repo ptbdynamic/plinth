@@ -5,10 +5,12 @@
  * <nav class="plinth-nav-list" aria-label="Folders">
  *   <div class="plinth-nav-list-group">
  *     <a class="plinth-nav-list-item" href="/inbox/open" aria-current="page">
+ *       <span class="plinth-nav-list-icon" aria-hidden="true"><svg>…</svg></span>
  *       <span class="plinth-nav-list-label">Open</span>
  *       <span class="plinth-nav-list-count">12</span>
  *     </a>
  *     <a class="plinth-nav-list-item" href="/inbox/solved">
+ *       <span class="plinth-nav-list-icon" aria-hidden="true"><svg>…</svg></span>
  *       <span class="plinth-nav-list-label">Solved</span>
  *     </a>
  *   </div>
@@ -40,7 +42,8 @@
  *   when it is long, and an optional count on the end edge, in the mono face. The icon is
  *   decorative (aria-hidden; the label names the link), 16px (size.icon.sm) and drawn in the
  *   item's colour: put an <svg> that draws with currentColor in it, or the icon component at
- *   data-size="sm". In a list with icons, give every item one, so the labels line up. Give
+ *   data-size="sm". It sits beside the label's first line when the label wraps. In a list with
+ *   icons, give every item one, so the labels line up (the icons are optional). Give
  *   every item its href: without one it prints a plain <a>, which is no link and can't be
  *   reached with Tab, so keep that for a placeholder.
  *   plinth-nav-list-label has no rule of its own beyond its layout: it is a hook for a project.
@@ -95,14 +98,19 @@
     overflow-wrap: anywhere;
   }
 
+  /*
+   * The row lines its parts up with the label's first line, padded so one line sits in the
+   * middle of the 40px row; a label that wraps grows the row and keeps the icon beside its
+   * first line.
+   */
   .plinth-nav-list-item {
     position: relative;
     box-sizing: border-box;
     display: flex;
     gap: var(--plinth-space-3);
-    align-items: center;
+    align-items: flex-start;
     min-block-size: var(--plinth-touch-target);
-    padding-block: var(--plinth-space-2);
+    padding-block: calc((var(--plinth-touch-target) - 1lh) / 2);
     padding-inline: var(--plinth-space-3);
     margin: 0;
     font-family: inherit;
@@ -118,6 +126,7 @@
       color var(--plinth-duration-fast) var(--plinth-easing-standard);
   }
 
+  /* Centred on the label's first line. */
   .plinth-nav-list-icon {
     display: inline-flex;
     flex: none;
@@ -125,6 +134,7 @@
     justify-content: center;
     inline-size: var(--plinth-size-icon-sm);
     block-size: var(--plinth-size-icon-sm);
+    margin-block-start: calc((1lh - var(--plinth-size-icon-sm)) / 2);
   }
 
   .plinth-nav-list-icon > svg {
@@ -138,8 +148,10 @@
     overflow-wrap: anywhere;
   }
 
+  /* The count stays in the middle of the row, as before. */
   .plinth-nav-list-count {
     flex: none;
+    align-self: center;
     font-family: var(--plinth-font-family-mono);
     font-size: var(--plinth-font-size-xs);
     font-weight: var(--plinth-font-weight-regular);

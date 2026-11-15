@@ -75,7 +75,8 @@ export const WithoutHeadings: Story = {
 
 /**
  * A settings column: four groups under headings that read as headings (small, uppercase,
- * letter-spaced and quieter than the items), and an icon before each label.
+ * letter-spaced and quieter than the items), and an icon before each label, which keeps to the
+ * first line of a label that wraps.
  */
 export const WithIcons: Story = {
   args: {
@@ -104,7 +105,9 @@ export const WithIcons: Story = {
         items: [
           item('Audit log', { icon: sampleIcons.clock }),
           item('Feature flags', { icon: sampleIcons.flag }),
-          item('Support access', { icon: sampleIcons.support }),
+          item('Support access for the people who help this workspace', {
+            icon: sampleIcons.support,
+          }),
         ],
       },
       {
@@ -162,8 +165,9 @@ export const LongLabels: Story = {
   },
 };
 
-/** In right-to-left text the accent edge and the counts swap sides. */
+/** In right-to-left text the accent edge, the icons and the counts swap sides. */
 export const RightToLeft: Story = {
+  args: WithIcons.args,
   render: (args) => `<div dir="rtl">${column(navList(args))}</div>`,
 };
 
